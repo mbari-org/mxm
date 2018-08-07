@@ -23,12 +23,13 @@
         Tasks:
         <ul>
           <li v-for="task in plan.tasks" :key="task.taskId">
-            <router-link
-              :to="`/plans/${plan.planId}/tasks/${task.taskId}`"
-            >
-              <!-- Note: showing the associated taskDefId -->
-              {{task.taskDefId}}
-            </router-link>
+            <!-- Note: showing the associated taskDefId -->
+            <router-link :to="`/plans/${plan.planId}/tasks/${task.taskId}`">
+              {{task.taskDefId}}</router-link>
+
+            <span v-if="task.arguments && task.arguments.length">
+              ( {{task.arguments.length }} explicit arguments)
+            </span>
           </li>
         </ul>
       </div>
