@@ -1,5 +1,12 @@
 <template>
   <q-page class="q-pa-md">
+    <q-breadcrumbs active-color="secondary" color="light">
+      <q-breadcrumbs-el label="Home" to="/" />
+      <q-breadcrumbs-el label="Executors" to="/executors" />
+      <q-breadcrumbs-el label="Executor" :to="`/executors/${params.executorId}`" />
+      <q-breadcrumbs-el label="TaskDef" />
+    </q-breadcrumbs>
+
     <div v-if="taskDef">
       <h5> TaskDef: {{params.taskDefId}}
         <q-btn

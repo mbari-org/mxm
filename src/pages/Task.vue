@@ -1,5 +1,12 @@
 <template>
   <q-page class="q-pa-md">
+    <q-breadcrumbs active-color="secondary" color="light">
+      <q-breadcrumbs-el label="Home" to="/" />
+      <q-breadcrumbs-el label="Plans" to="/plans" />
+      <q-breadcrumbs-el label="Plan" :to="`/plans/${params.planId}`" />
+      <q-breadcrumbs-el label="Task" :to="`/plans/${params.planId}/tasks/${params.taskId}`" />
+    </q-breadcrumbs>
+
     <div v-if="task">
       <h5> Task: {{task.name}}
         <q-btn

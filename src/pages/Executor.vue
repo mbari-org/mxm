@@ -1,5 +1,11 @@
 <template>
   <q-page class="q-pa-md">
+    <q-breadcrumbs active-color="secondary" color="light">
+      <q-breadcrumbs-el label="Home" to="/" />
+      <q-breadcrumbs-el label="Executors" to="/executors" />
+      <q-breadcrumbs-el label="Executor" :to="`/executors/${params.executorId}`" />
+    </q-breadcrumbs>
+
     <div v-if="detailed">
       <h5> Executor: {{params.executorId}}
         <q-btn
