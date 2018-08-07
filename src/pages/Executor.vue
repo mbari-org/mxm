@@ -19,16 +19,7 @@
         :data="assetTable"
         row-key="name"
         class="q-mb-md"
-      >
-        <q-td slot="body-cell-button" slot-scope="props" :props="props"
-              style="width:5px"
-        >
-          <q-btn
-            dense round icon="arrow_forward"
-            :to="`/executors/${params.executorId}/taskdefs/${props.row.taskDefId}`"
-          />
-        </q-td>
-      </q-table>
+      />
 
       <q-table
         title="Tasks definitions"
@@ -36,14 +27,14 @@
         :data="taskDefTable"
         row-key="name"
       >
-        <q-td slot="body-cell-button" slot-scope="props" :props="props"
+        <q-td slot="body-cell-taskDefId" slot-scope="props" :props="props"
               style="width:5px"
         >
-          <q-btn
-            dense round icon="arrow_forward"
-            :to="`/executors/${params.executorId}/taskdefs/${props.row.taskDefId}`"
-          />
+          <router-link :to="`/executors/${params.executorId}/taskdefs/${props.row.taskDefId}`">
+            {{props.row.taskDefId}}
+          </router-link>
         </q-td>
+
       </q-table>
     </div>
 
@@ -92,7 +83,7 @@ export default {
       taskDefColumns: [
         {
           field: 'taskDefId',
-          name: 'ID',
+          name: 'taskDefId',
           label: 'ID',
           align: 'left',
           sortable: true
@@ -110,11 +101,6 @@ export default {
           label: 'Assets',
           align: 'left',
           sortable: true
-        },
-        {
-          field: 'button',
-          name: 'button',
-          label: ''
         }
       ],
       taskDefTable: []

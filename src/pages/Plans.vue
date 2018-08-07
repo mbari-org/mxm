@@ -17,13 +17,12 @@
         />
       </template>
 
-      <q-td slot="body-cell-button" slot-scope="props" :props="props"
+      <q-td slot="body-cell-name" slot-scope="props" :props="props"
             style="width:5px"
       >
-        <q-btn
-          dense round icon="arrow_forward"
-          :to="`/plans/${props.row.planId}`"
-        />
+        <router-link :to="`/plans/${props.row.planId}`">
+          {{props.row.name}}
+        </router-link>
       </q-td>
 
     </q-table>
@@ -37,13 +36,6 @@ export default {
       plans: [],
       columns: [
         {
-          field: 'planId',
-          name: 'ID',
-          label: 'ID',
-          align: 'left',
-          sortable: true
-        },
-        {
           field: 'name',
           name: 'name',
           label: 'Name',
@@ -56,11 +48,6 @@ export default {
           label: 'Description',
           align: 'left',
           sortable: true
-        },
-        {
-          field: 'button',
-          name: 'button',
-          label: ''
         }
       ],
       tableData: []

@@ -8,7 +8,7 @@
     </q-breadcrumbs>
 
     <div v-if="taskDef">
-      <h5> TaskDef: {{params.taskDefId}}
+      <h5> Task Definition: {{params.taskDefId}}
         <q-btn
           dense flat icon="refresh" @click="refresh"
         />

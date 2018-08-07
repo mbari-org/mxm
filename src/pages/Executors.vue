@@ -17,14 +17,14 @@
         />
       </template>
 
-      <q-td slot="body-cell-button" slot-scope="props" :props="props"
+      <q-td slot="body-cell-executorId" slot-scope="props" :props="props"
             style="width:5px"
       >
-        <q-btn
-          dense round icon="arrow_forward"
-          :to="`/executors/${props.row.executorId}`"
-        />
+        <router-link :to="`/executors/${props.row.executorId}`">
+          {{props.row.executorId}}
+        </router-link>
       </q-td>
+
     </q-table>
   </q-page>
 </template>
@@ -37,7 +37,7 @@ export default {
       columns: [
         {
           field: 'executorId',
-          name: 'ID',
+          name: 'executorId',
           label: 'ID',
           align: 'left',
           sortable: true
@@ -48,11 +48,6 @@ export default {
           label: 'httpEndpoint',
           align: 'left',
           sortable: true
-        },
-        {
-          field: 'button',
-          name: 'button',
-          label: ''
         }
       ],
       tableData: []
