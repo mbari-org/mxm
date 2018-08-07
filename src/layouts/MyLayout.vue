@@ -36,6 +36,10 @@
           <q-item-side icon="settings" />
           <q-item-main label="Executors"/>
         </q-item>
+        <q-item to="/plans">
+          <q-item-side icon="ballot" />
+          <q-item-main label="Plans"/>
+        </q-item>
       </q-list>
     </q-layout-drawer>
 

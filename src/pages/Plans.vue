@@ -1,20 +1,11 @@
 <template>
   <q-page class="q-pa-md">
     <q-table
-      title="Executors"
+      title="Plans"
       :data="tableData"
       :columns="columns"
       row-key="name"
-    >
-      <q-td slot="body-cell-button" slot-scope="props" :props="props"
-            style="width:5px"
-      >
-        <q-btn
-          dense round icon="arrow_forward"
-          :to="`/executors/${props.row.executorId}`"
-        />
-      </q-td>
-    </q-table>
+    />
   </q-page>
 </template>
 
@@ -22,19 +13,26 @@
 export default {
   data () {
     return {
-      executors: [],
+      plans: [],
       columns: [
         {
-          field: 'executorId',
+          field: 'planId',
           name: 'ID',
           label: 'ID',
           align: 'left',
           sortable: true
         },
         {
-          field: 'httpEndpoint',
-          name: 'httpEndpoint',
-          label: 'httpEndpoint',
+          field: 'name',
+          name: 'name',
+          label: 'Name',
+          align: 'left',
+          sortable: true
+        },
+        {
+          field: 'description',
+          name: 'description',
+          label: 'Description',
           align: 'left',
           sortable: true
         },
@@ -49,20 +47,20 @@ export default {
   },
 
   mounted () {
-    this.getExecutors()
+    this.getPlans()
   },
 
   methods: {
-    getExecutors () {
-      const url = `/executors`
+    getPlans () {
+      const url = `/plans`
       this.$axios({
         method: 'GET',
-        url: '/executors'
+        url: '/plans'
       })
         .then(response => {
           console.log(`GET ${url}: response=`, response)
-          this.executors = response.data || []
-          this.tableData = this.executors
+          this.plans = response.data || []
+          this.tableData = this.plans
         })
         .catch(e => {
           console.error(e)

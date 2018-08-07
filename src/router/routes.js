@@ -6,25 +6,23 @@ const routes = [
       { path: '', component: () => import('pages/Index') },
       {
         path: '/executors',
-        component: () => import('layouts/Executor'),
-        children: [
-          { path: '',
-            component: () => import('pages/Executors')
-          },
-          { path: ':executorId',
-            component: () => import('pages/Executor'),
-            children: [
-              { path: 'taskdefs',
-                component: () => import('pages/TaskDefs'),
-                children: [
-                  { path: ':taskDefId',
-                    component: () => import('pages/TaskDef')
-                  }
-                ]
-              }
-            ]
-          }
-        ]
+        component: () => import('pages/Executors')
+      },
+      {
+        path: '/executors/:executorId',
+        component: () => import('pages/Executor')
+      },
+      {
+        path: '/executors/:executorId/taskdefs',
+        component: () => import('pages/TaskDefs')
+      },
+      { path: '/executors/:executorId/taskdefs/:taskDefId',
+        component: () => import('pages/TaskDef')
+      },
+
+      {
+        path: '/plans',
+        component: () => import('pages/Plans')
       }
     ]
   }

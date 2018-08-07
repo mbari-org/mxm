@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <q-page class="q-pa-md">
     <h5> Executor: {{executorId}}</h5>
     <div>
     </div>
