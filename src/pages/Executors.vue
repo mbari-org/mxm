@@ -3,6 +3,10 @@
     <q-breadcrumbs active-color="secondary" color="light">
       <q-breadcrumbs-el label="Home" to="/" />
       <q-breadcrumbs-el label="Executors" to="/executors" />
+      <q-btn
+        dense round icon="refresh" class="q-ml-lg" size="sm"
+        @click="refresh"
+      />
     </q-breadcrumbs>
 
     <q-table
@@ -11,12 +15,6 @@
       :columns="columns"
       row-key="name"
     >
-      <template slot="top-right" slot-scope="props">
-        <q-btn
-          dense flat icon="refresh" @click="refresh"
-        />
-      </template>
-
       <q-td slot="body-cell-executorId" slot-scope="props" :props="props"
             style="width:5px"
       >

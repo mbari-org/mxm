@@ -5,13 +5,14 @@
       <q-breadcrumbs-el label="Executors" to="/executors" />
       <q-breadcrumbs-el label="Executor" :to="`/executors/${params.executorId}`" />
       <q-breadcrumbs-el label="TaskDef" />
+      <q-btn
+        dense round icon="refresh" class="q-ml-lg" size="sm"
+        @click="refresh"
+      />
     </q-breadcrumbs>
 
     <div v-if="taskDef">
       <h5> Task Definition: {{params.taskDefId}}
-        <q-btn
-          dense flat icon="refresh" @click="refresh"
-        />
       </h5>
       <div>
         Description: {{ taskDef.description}}

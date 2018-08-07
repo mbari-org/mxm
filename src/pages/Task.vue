@@ -5,13 +5,14 @@
       <q-breadcrumbs-el label="Plans" to="/plans" />
       <q-breadcrumbs-el label="Plan" :to="`/plans/${params.planId}`" />
       <q-breadcrumbs-el label="Task" :to="`/plans/${params.planId}/tasks/${params.taskId}`" />
+      <q-btn
+        dense round icon="refresh" class="q-ml-lg" size="sm"
+        @click="refresh"
+      />
     </q-breadcrumbs>
 
     <div v-if="task">
-      <h5> Task: {{task.name}}
-        <q-btn
-          dense flat icon="refresh" @click="refresh"
-        />
+      <h5> Task: {{task.taskDefId}}
       </h5>
       <small>{{params.planId}}</small>
 

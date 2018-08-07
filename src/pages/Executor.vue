@@ -4,13 +4,14 @@
       <q-breadcrumbs-el label="Home" to="/" />
       <q-breadcrumbs-el label="Executors" to="/executors" />
       <q-breadcrumbs-el label="Executor" :to="`/executors/${params.executorId}`" />
+      <q-btn
+        dense round icon="refresh" class="q-ml-lg" size="sm"
+        @click="refresh"
+      />
     </q-breadcrumbs>
 
     <div v-if="detailed">
       <h5> Executor: {{params.executorId}}
-        <q-btn
-          dense flat icon="refresh" @click="refresh"
-        />
       </h5>
 
       <q-table

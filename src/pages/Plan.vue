@@ -4,13 +4,14 @@
       <q-breadcrumbs-el label="Home" to="/" />
       <q-breadcrumbs-el label="Plans" to="/plans" />
       <q-breadcrumbs-el label="Plan" :to="`/plans/${params.planId}`" />
+      <q-btn
+        dense round icon="refresh" class="q-ml-lg" size="sm"
+        @click="refresh"
+      />
     </q-breadcrumbs>
 
     <div v-if="plan">
       <h5> Plan: {{plan.name}}
-        <q-btn
-          dense flat icon="refresh" @click="refresh"
-        />
       </h5>
       <small>{{params.planId}}</small>
 
@@ -21,11 +22,12 @@
       <div>
         Tasks:
         <ul>
-          <li v-for="taskId in plan.taskIds" :key="taskId">
+          <li v-for="task in plan.tasks" :key="task.taskId">
             <router-link
-              :to="`/plans/${plan.planId}/tasks/${taskId}`"
+              :to="`/plans/${plan.planId}/tasks/${task.taskId}`"
             >
-              {{taskId}}
+              <!-- Note: showing the associated taskDefId -->
+              {{task.taskDefId}}
             </router-link>
           </li>
         </ul>
