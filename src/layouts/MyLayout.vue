@@ -16,10 +16,28 @@
           <q-icon name="menu" />
         </q-btn>
 
-        <q-toolbar-title>
-          PXS UI
+        <q-toolbar-title shrink>
+          <router-link style="color:white;text-decoration:none" to="/">PXS UI</router-link>
           <div slot="subtitle">prototype</div>
         </q-toolbar-title>
+
+        <div class="row">
+          <q-btn
+            class="col"
+            icon="settings"
+            label="Executors"
+            no-wrap no-caps
+            to="/executors"
+          />
+          <q-btn
+            class="col"
+            icon="ballot"
+            label="Plans"
+            no-wrap no-caps
+            to="/plans"
+          />
+        </div>
+
       </q-toolbar>
     </q-layout-header>
 

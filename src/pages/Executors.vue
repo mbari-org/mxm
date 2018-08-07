@@ -6,6 +6,12 @@
       :columns="columns"
       row-key="name"
     >
+      <template slot="top-right" slot-scope="props">
+        <q-btn
+          dense flat icon="refresh" @click="refresh"
+        />
+      </template>
+
       <q-td slot="body-cell-button" slot-scope="props" :props="props"
             style="width:5px"
       >
@@ -49,11 +55,11 @@ export default {
   },
 
   mounted () {
-    this.getExecutors()
+    this.refresh()
   },
 
   methods: {
-    getExecutors () {
+    refresh () {
       const url = `/executors`
       this.$axios({
         method: 'GET',

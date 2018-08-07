@@ -1,19 +1,23 @@
 <template>
   <q-page class="q-pa-md">
-    <div v-if="taskDef">
-      <h5> TaskDef: {{params.taskDefId}}
+    <div v-if="task">
+      <h5> Task: {{task.name}}
         <q-btn
           dense flat icon="refresh" @click="refresh"
         />
       </h5>
+      <small>{{params.planId}}</small>
+
       <div>
-        Description: {{ taskDef.description}}
+        Description: {{ task.description}}
       </div>
+
       <div>
-        Asset classes: {{ join(taskDef.assetClasses)}}
+        Asset ID: {{ task.assetId}}
       </div>
+
       <q-table
-        title="Parameters"
+        title="Arguments"
         :data="tableData"
         :columns="columns"
         row-key="name"
@@ -21,13 +25,8 @@
     </div>
 
     <div v-else-if="!loading">
-      Task Definition not found.
-      <div class="q-ml-md">
-        Executor: {{params.executorId}} <br/>
-        Task Definition ID: {{params.taskDefId}}
-      </div>
+      Plan/Task not found: {{params.planId}} / {{params.taskId}}
     </div>
-
   </q-page>
 </template>
 
@@ -39,34 +38,22 @@ export default {
   data () {
     return {
       loading: false,
-      taskDef: null,
+      task: null,
       join: _.join,
       columns: [
         {
-          field: 'name',
-          name: 'name',
-          label: 'Name',
+          field: 'paramName',
+          name: 'paramName',
+          label: 'Parameter',
           align: 'left',
           sortable: true
         },
         {
-          field: 'type',
-          name: 'type',
-          label: 'Type',
+          field: 'paramValue',
+          name: 'paramValue',
+          label: 'Value',
           align: 'left',
           sortable: true
-        },
-        {
-          field: 'defaultValue',
-          name: 'defaultValue',
-          label: 'Default',
-          align: 'left',
-          sortable: true
-        },
-        {
-          field: 'required',
-          name: 'required',
-          label: 'Required'
         }
       ],
       tableData: []
@@ -86,8 +73,8 @@ export default {
   methods: {
     refresh () {
       this.loading = true
-      this.taskDef = null
-      const url = `/executors/${this.params.executorId}/taskdefs/${this.params.taskDefId}`
+      this.task = null
+      const url = `/plans/${this.params.planId}/tasks/${this.params.taskId}`
       this.$axios({
         method: 'GET',
         url
@@ -95,8 +82,8 @@ export default {
         .then(response => {
           this.loading = false
           console.log(`GET ${url}: response=`, response)
-          this.taskDef = response.data || {}
-          this.tableData = this.taskDef.parameters || []
+          this.task = response.data || {}
+          this.tableData = this.task.arguments || []
         })
         .catch(e => {
           this.loading = false

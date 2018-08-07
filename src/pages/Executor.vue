@@ -1,39 +1,50 @@
 <template>
   <q-page class="q-pa-md">
-    <h5> Executor: {{params.executorId}}</h5>
-
-    <q-table
-      title="Assets"
-      :columns="assetColumns"
-      :data="assetTable"
-      row-key="name"
-      class="q-mb-md"
-    >
-      <q-td slot="body-cell-button" slot-scope="props" :props="props"
-            style="width:5px"
-      >
+    <div v-if="detailed">
+      <h5> Executor: {{params.executorId}}
         <q-btn
-          dense round icon="arrow_forward"
-          :to="`/executors/${params.executorId}/taskdefs/${props.row.taskDefId}`"
+          dense flat icon="refresh" @click="refresh"
         />
-      </q-td>
-    </q-table>
+      </h5>
 
-    <q-table
-      title="Tasks definitions"
-      :columns="taskDefColumns"
-      :data="taskDefTable"
-      row-key="name"
-    >
-      <q-td slot="body-cell-button" slot-scope="props" :props="props"
-            style="width:5px"
+      <q-table
+        title="Assets"
+        :columns="assetColumns"
+        :data="assetTable"
+        row-key="name"
+        class="q-mb-md"
       >
-        <q-btn
-          dense round icon="arrow_forward"
-          :to="`/executors/${params.executorId}/taskdefs/${props.row.taskDefId}`"
-        />
-      </q-td>
-    </q-table>
+        <q-td slot="body-cell-button" slot-scope="props" :props="props"
+              style="width:5px"
+        >
+          <q-btn
+            dense round icon="arrow_forward"
+            :to="`/executors/${params.executorId}/taskdefs/${props.row.taskDefId}`"
+          />
+        </q-td>
+      </q-table>
+
+      <q-table
+        title="Tasks definitions"
+        :columns="taskDefColumns"
+        :data="taskDefTable"
+        row-key="name"
+      >
+        <q-td slot="body-cell-button" slot-scope="props" :props="props"
+              style="width:5px"
+        >
+          <q-btn
+            dense round icon="arrow_forward"
+            :to="`/executors/${params.executorId}/taskdefs/${props.row.taskDefId}`"
+          />
+        </q-td>
+      </q-table>
+    </div>
+
+    <div v-else-if="!loading">
+      Executor not found: {{params.executorId}}
+    </div>
+
   </q-page>
 </template>
 
@@ -44,6 +55,8 @@ const _ = lodash
 export default {
   data () {
     return {
+      loading: false,
+      detailed: null,
       taskDefs: [],
       assetColumns: [
         {
@@ -109,34 +122,39 @@ export default {
   },
 
   mounted () {
-    this.getExecutor()
+    this.refresh()
   },
 
   methods: {
-    getExecutor () {
+    refresh () {
+      this.loading = true
+      this.detailed = null
       const url = `/executors/${this.params.executorId}/detailed`
       this.$axios({
         method: 'GET',
         url
       })
         .then(response => {
+          this.loading = false
           console.log(`GET ${url}: response=`, response)
-          this.assetTable = _.get(response, 'data.assets') || []
-          this.taskDefs = _.get(response, 'data.taskDefs') || []
+          this.detailed = response.data
+          this.assetTable = _.get(this.detailed, 'assets') || []
+          this.taskDefs = _.get(this.detailed, 'taskDefs') || []
           this.taskDefTable = _.map(this.taskDefs, td => {
             td.assetClassesString = _.join(td.assetClasses)
             return td
           })
         })
         .catch(e => {
+          this.loading = false
           console.error(e)
         })
     }
   },
 
   watch: {
-    '$route' (to, from) {
-      console.log('$route: to=', to, 'from=', from)
+    '$route' () {
+      this.refresh()
     }
   }
 }

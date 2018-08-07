@@ -3,7 +3,9 @@ const routes = [
     path: '/',
     component: () => import('layouts/MyLayout'),
     children: [
-      { path: '', component: () => import('pages/Index') },
+      {
+        path: '', component: () => import('pages/Index')
+      },
       {
         path: '/executors',
         component: () => import('pages/Executors')
@@ -12,17 +14,20 @@ const routes = [
         path: '/executors/:executorId',
         component: () => import('pages/Executor')
       },
-      {
-        path: '/executors/:executorId/taskdefs',
-        component: () => import('pages/TaskDefs')
-      },
       { path: '/executors/:executorId/taskdefs/:taskDefId',
         component: () => import('pages/TaskDef')
       },
-
       {
         path: '/plans',
         component: () => import('pages/Plans')
+      },
+      {
+        path: '/plans/:planId',
+        component: () => import('pages/Plan')
+      },
+      {
+        path: '/plans/:planId/tasks/:taskId',
+        component: () => import('pages/Task')
       }
     ]
   }

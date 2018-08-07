@@ -5,7 +5,23 @@
       :data="tableData"
       :columns="columns"
       row-key="name"
-    />
+    >
+      <template slot="top-right" slot-scope="props">
+        <q-btn
+          dense flat icon="refresh" @click="refresh"
+        />
+      </template>
+
+      <q-td slot="body-cell-button" slot-scope="props" :props="props"
+            style="width:5px"
+      >
+        <q-btn
+          dense round icon="arrow_forward"
+          :to="`/plans/${props.row.planId}`"
+        />
+      </q-td>
+
+    </q-table>
   </q-page>
 </template>
 
@@ -47,11 +63,11 @@ export default {
   },
 
   mounted () {
-    this.getPlans()
+    this.refresh()
   },
 
   methods: {
-    getPlans () {
+    refresh () {
       const url = `/plans`
       this.$axios({
         method: 'GET',
