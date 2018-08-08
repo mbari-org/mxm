@@ -19,25 +19,54 @@
         Description: {{ plan.description}}
       </div>
 
-      <div>
-        Tasks:
-        <ul>
-          <li>
-            <task-new-button
-              :plan-id="plan.planId"
-              :created="created"
-            />
-          </li>
-          <li v-for="task in plan.tasks" :key="task.taskId">
-            <router-link :to="`/plans/${plan.planId}/tasks/${task.taskId}`">
-              {{task.name || task.taskDefId || task.taskId}}</router-link>
+      <q-table
+        title="Tasks"
+        :data="plan.tasks"
+        :columns="taskColumns"
+        row-key="name"
+      >
+        <div slot="top-right" slot-scope="props" class="fit">
+          <task-new-button
+            :plan-id="plan.planId"
+            :created="created"
+          />
+        </div>
 
-            <span v-if="task.arguments && task.arguments.length">
-              ( {{task.arguments.length }} explicit arguments)
-            </span>
-          </li>
-        </ul>
-      </div>
+        <q-td slot="body-cell-name" slot-scope="props" :props="props"
+              style="width:5px"
+        >
+          <router-link :to="`/plans/${plan.planId}/tasks/${props.row.taskId}`">
+            {{props.row.name || props.row.taskDefId || props.row.taskId}}</router-link>
+        </q-td>
+
+        <q-td slot="body-cell-executorId" slot-scope="props" :props="props"
+              style="width:5px"
+        >
+          <router-link :to="`/executors/${props.value}`">
+            {{ props.value }}</router-link>
+        </q-td>
+
+        <q-td slot="body-cell-taskDefId" slot-scope="props" :props="props"
+              style="width:5px"
+        >
+          <router-link :to="`/executors/${props.row.executorId}/taskdefs/${props.value}`">
+            {{ props.value }}</router-link>
+        </q-td>
+
+        <q-td slot="body-cell-assetId" slot-scope="props" :props="props"
+              style="width:5px"
+        >
+          <router-link :to="`/executors/${props.row.executorId}/assets/${props.value}`">
+            {{ props.value }}</router-link>
+        </q-td>
+
+        <q-td slot="body-cell-arguments" slot-scope="props" :props="props"
+              style="width:5px"
+        >
+          {{ (props.value || []).length }}
+        </q-td>
+
+      </q-table>
 
     </div>
 
@@ -61,7 +90,65 @@ export default {
     return {
       loading: false,
       plan: null,
-      join: _.join
+      join: _.join,
+      taskColumns: [
+        {
+          field: 'name',
+          name: 'name',
+          label: 'Name',
+          align: 'left',
+          sortable: true
+        },
+        {
+          field: 'executorId',
+          name: 'executorId',
+          label: 'executorId',
+          align: 'left',
+          sortable: true
+        },
+        {
+          field: 'taskDefId',
+          name: 'taskDefId',
+          label: 'taskDefId',
+          align: 'left',
+          sortable: true
+        },
+        {
+          field: 'arguments',
+          name: 'arguments',
+          label: 'arguments',
+          align: 'left',
+          sortable: true
+        },
+        {
+          field: 'assetId',
+          name: 'assetId',
+          label: 'assetId',
+          align: 'left',
+          sortable: true
+        },
+        {
+          field: 'start',
+          name: 'start',
+          label: 'start',
+          align: 'left',
+          sortable: true
+        },
+        {
+          field: 'end',
+          name: 'end',
+          label: 'end',
+          align: 'left',
+          sortable: true
+        },
+        {
+          field: 'description',
+          name: 'description',
+          label: 'Description',
+          align: 'left',
+          sortable: true
+        }
+      ]
     }
   },
 

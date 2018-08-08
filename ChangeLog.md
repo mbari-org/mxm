@@ -1,5 +1,6 @@
 2018-08-08
 
+- use task table in plan
 - register task; other misc adjs
 
 2018-08-07
