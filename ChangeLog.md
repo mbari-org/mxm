@@ -1,6 +1,6 @@
 2018-08-07
 
-- register executor, asset
+- register executor, asset, taskdef
 
 2018-08-06
 

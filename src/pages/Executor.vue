@@ -35,6 +35,13 @@
         :data="taskDefTable"
         row-key="name"
       >
+        <div slot="top-right" slot-scope="props" class="fit">
+          <taskdef-new-button
+            :executor-id="params.executorId"
+            :created="taskDefCreated"
+          />
+        </div>
+
         <q-td slot="body-cell-taskDefId" slot-scope="props" :props="props"
               style="width:5px"
         >
@@ -55,12 +62,14 @@
 
 <script>
 import AssetNewButton from 'components/asset-new-button'
+import TaskdefNewButton from 'components/taskdef-new-button'
 import lodash from 'lodash'
 const _ = lodash
 
 export default {
   components: {
-    AssetNewButton
+    AssetNewButton,
+    TaskdefNewButton
   },
 
   data () {
@@ -146,7 +155,7 @@ export default {
           this.assetTable = _.get(this.detailed, 'assets') || []
           this.taskDefs = _.get(this.detailed, 'taskDefs') || []
           this.taskDefTable = _.map(this.taskDefs, td => {
-            td.assetClassesString = _.join(td.assetClasses)
+            td.assetClassesString = _.join(td.assetClasses, ', ')
             return td
           })
         })
@@ -158,6 +167,11 @@ export default {
 
     assetCreated (data) {
       this.assetTable.splice(0, 0, data)
+    },
+
+    taskDefCreated (data) {
+      data.assetClassesString = _.join(data.assetClasses, ', ')
+      this.taskDefTable.splice(0, 0, data)
     }
   },
 
