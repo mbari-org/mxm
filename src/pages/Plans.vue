@@ -11,10 +11,14 @@
 
     <q-table
       title="Plans"
-      :data="tableData"
+      :data="plans"
       :columns="columns"
       row-key="name"
     >
+      <div slot="top-right" slot-scope="props" class="fit">
+        <plan-new-button :created="created"/>
+      </div>
+
       <q-td slot="body-cell-name" slot-scope="props" :props="props"
             style="width:5px"
       >
@@ -28,7 +32,13 @@
 </template>
 
 <script>
+import PlanNewButton from 'components/plan-new-button'
+
 export default {
+  components: {
+    PlanNewButton
+  },
+
   data () {
     return {
       plans: [],
@@ -47,8 +57,7 @@ export default {
           align: 'left',
           sortable: true
         }
-      ],
-      tableData: []
+      ]
     }
   },
 
@@ -66,11 +75,15 @@ export default {
         .then(response => {
           console.log(`GET ${url}: response=`, response)
           this.plans = response.data || []
-          this.tableData = this.plans
+          this.plans = this.plans
         })
         .catch(e => {
           console.error(e)
         })
+    },
+
+    created (data) {
+      this.plans.splice(0, 0, data)
     }
   }
 }
