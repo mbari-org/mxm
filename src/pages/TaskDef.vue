@@ -25,7 +25,16 @@
         :data="tableData"
         :columns="columns"
         row-key="name"
-      />
+      >
+        <div slot="top-right" slot-scope="props" class="fit">
+          <parameter-new-button
+            :executor-id="params.executorId"
+            :taskdef-id="params.taskDefId"
+            :created="created"
+          />
+        </div>
+
+      </q-table>
     </div>
 
     <div v-else-if="!loading">
@@ -40,10 +49,15 @@
 </template>
 
 <script>
+import ParameterNewButton from 'components/parameter-new-button'
 import lodash from 'lodash'
 const _ = lodash
 
 export default {
+  components: {
+    ParameterNewButton
+  },
+
   data () {
     return {
       loading: false,
@@ -65,6 +79,11 @@ export default {
           sortable: true
         },
         {
+          field: 'required',
+          name: 'required',
+          label: 'Required'
+        },
+        {
           field: 'defaultValue',
           name: 'defaultValue',
           label: 'Default',
@@ -72,9 +91,11 @@ export default {
           sortable: true
         },
         {
-          field: 'required',
-          name: 'required',
-          label: 'Required'
+          field: 'description',
+          name: 'description',
+          label: 'Description',
+          align: 'left',
+          sortable: true
         }
       ],
       tableData: []
@@ -110,6 +131,10 @@ export default {
           this.loading = false
           console.error(e)
         })
+    },
+
+    created (data) {
+      this.tableData.splice(0, 0, data)
     }
   },
 
