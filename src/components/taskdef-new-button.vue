@@ -18,7 +18,7 @@
 
         <div class="q-pa-lg">
           <q-field
-            label="ID:"
+            label="Task Definition ID:"
             :error="!taskDefId.length"
             :label-width="4"
           >
@@ -33,13 +33,14 @@
 
           <q-field
             label="Asset Classes:"
+            :error="!assetClassesString.length"
             :label-width="4"
           >
             <q-input
               class="bg-light-blue-1"
-              v-model.trim="assetClasses"
+              v-model.trim="assetClassesString"
               type="text"
-              placeholder="Comma-separated list of names"
+              placeholder="Comma-separated list of class names"
               style="width:24em"
             />
           </q-field>
@@ -99,7 +100,7 @@ export default {
     return {
       dialogOpened: false,
       taskDefId: '',
-      assetClasses: '',
+      assetClassesString: '',
       description: ''
     }
   },
@@ -113,18 +114,17 @@ export default {
   methods: {
     openDialog () {
       this.taskDefId = ''
-      this.assetClasses = ''
+      this.assetClassesString = ''
       this.description = ''
       this.dialogOpened = true
     },
 
     submit () {
       const data = {
-        taskDefId: this.taskDefId,
-        assetClasses: this.assetClasses
+        taskDefId: this.taskDefId
       }
-      if (this.assetClasses) {
-        data.assetClasses = this.assetClasses.split(/\s*,\s*/)
+      if (this.assetClassesString) {
+        data.assetClasses = this.assetClassesString.split(/\s*,\s*/)
       }
       if (this.description) {
         data.description = this.description

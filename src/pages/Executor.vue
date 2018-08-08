@@ -120,7 +120,7 @@ export default {
         {
           field: 'assetClassesString',
           name: 'assetClassesString',
-          label: 'Assets',
+          label: 'Asset Classes',
           align: 'left',
           sortable: true
         }
