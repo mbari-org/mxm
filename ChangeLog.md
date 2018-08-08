@@ -1,6 +1,6 @@
 2018-08-07
 
-- add executor
+- register executor, asset
 
 2018-08-06
 

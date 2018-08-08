@@ -20,7 +20,14 @@
         :data="assetTable"
         row-key="name"
         class="q-mb-md"
-      />
+      >
+        <div slot="top-right" slot-scope="props" class="fit">
+          <asset-new-button
+            :executor-id="params.executorId"
+            :created="assetCreated"
+          />
+        </div>
+      </q-table>
 
       <q-table
         title="Tasks definitions"
@@ -47,10 +54,15 @@
 </template>
 
 <script>
+import AssetNewButton from 'components/asset-new-button'
 import lodash from 'lodash'
 const _ = lodash
 
 export default {
+  components: {
+    AssetNewButton
+  },
+
   data () {
     return {
       loading: false,
@@ -142,6 +154,10 @@ export default {
           this.loading = false
           console.error(e)
         })
+    },
+
+    assetCreated (data) {
+      this.assetTable.splice(0, 0, data)
     }
   },
 
