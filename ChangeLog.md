@@ -1,7 +1,11 @@
+2018-08-08
+
+- register task; other misc adjs
+
 2018-08-07
 
 - require asset classes for taskdef registration
-\\- register executor, asset, taskdef, parameter, plan
+- register executor, asset, taskdef, parameter, plan
 
 2018-08-06
 

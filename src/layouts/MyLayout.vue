@@ -18,7 +18,7 @@
 
         <q-toolbar-title shrink>
           <router-link style="color:white;text-decoration:none" to="/">PXS UI</router-link>
-          <div slot="subtitle">prototype</div>
+          <div slot="subtitle">prototype v0.0.0</div>
         </q-toolbar-title>
 
         <div class="row">

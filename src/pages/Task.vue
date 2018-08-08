@@ -12,16 +12,36 @@
     </q-breadcrumbs>
 
     <div v-if="task">
-      <h5> Task: {{task.taskDefId}}
+      <h5> Task for definition: {{ task.taskDefId }}
       </h5>
-      <small>{{params.planId}}</small>
+      <small>Plan: {{ params.planId }}</small>
 
       <div>
-        Description: {{ task.description}}
+        Task ID: {{ task.taskId }}
       </div>
 
       <div>
-        Asset ID: {{ task.assetId}}
+        Task Name: {{ task.name }}
+      </div>
+
+      <div>
+        Description: {{ task.description }}
+      </div>
+
+      <div>
+        executorId: {{ task.executorId }}
+      </div>
+
+      <div>
+        Asset ID: {{ task.assetId }}
+      </div>
+
+      <div>
+        Start: {{ task.start }}
+      </div>
+
+      <div>
+        End: {{ task.end }}
       </div>
 
       <q-table

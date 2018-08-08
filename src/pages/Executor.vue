@@ -3,7 +3,7 @@
     <q-breadcrumbs active-color="secondary" color="light">
       <q-breadcrumbs-el label="Home" to="/" />
       <q-breadcrumbs-el label="Executors" to="/executors" />
-      <q-breadcrumbs-el label="Executor" :to="`/executors/${params.executorId}`" />
+      <q-breadcrumbs-el :label="params.executorId" />
       <q-btn
         dense round icon="refresh" class="q-ml-lg" size="sm"
         @click="refresh"
@@ -15,7 +15,7 @@
       </h5>
 
       <q-table
-        title="Assets"
+        title="Assets managed by this executor"
         :columns="assetColumns"
         :data="assetTable"
         row-key="name"
@@ -30,7 +30,7 @@
       </q-table>
 
       <q-table
-        title="Tasks definitions"
+        title="Tasks definitions managed by this executor"
         :columns="taskDefColumns"
         :data="taskDefTable"
         row-key="name"
