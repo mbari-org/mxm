@@ -11,10 +11,14 @@
 
     <q-table
       title="Executors"
-      :data="tableData"
+      :data="executors"
       :columns="columns"
       row-key="name"
     >
+      <div slot="top-right" slot-scope="props" class="fit">
+        <executor-new-button :created="created"/>
+      </div>
+
       <q-td slot="body-cell-executorId" slot-scope="props" :props="props"
             style="width:5px"
       >
@@ -28,7 +32,13 @@
 </template>
 
 <script>
+import ExecutorNewButton from 'components/executor-new-button'
+
 export default {
+  components: {
+    ExecutorNewButton
+  },
+
   data () {
     return {
       executors: [],
@@ -41,14 +51,20 @@ export default {
           sortable: true
         },
         {
+          field: 'description',
+          name: 'description',
+          label: 'Description',
+          align: 'left',
+          sortable: true
+        },
+        {
           field: 'httpEndpoint',
           name: 'httpEndpoint',
           label: 'httpEndpoint',
           align: 'left',
           sortable: true
         }
-      ],
-      tableData: []
+      ]
     }
   },
 
@@ -66,11 +82,14 @@ export default {
         .then(response => {
           console.log(`GET ${url}: response=`, response)
           this.executors = response.data || []
-          this.tableData = this.executors
         })
         .catch(e => {
           console.error(e)
         })
+    },
+
+    created (data) {
+      this.executors.splice(0, 0, data)
     }
   }
 }
