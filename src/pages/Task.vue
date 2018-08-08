@@ -49,7 +49,15 @@
         :data="tableData"
         :columns="columns"
         row-key="name"
-      />
+      >
+        <div slot="top-right" slot-scope="props" class="fit">
+          <argument-new-button
+            :plan-id="params.planId"
+            :task-id="params.taskId"
+            :created="created"
+          />
+        </div>
+      </q-table>
     </div>
 
     <div v-else-if="!loading">
@@ -59,10 +67,15 @@
 </template>
 
 <script>
+import ArgumentNewButton from 'components/argument-new-button'
 import lodash from 'lodash'
 const _ = lodash
 
 export default {
+  components: {
+    ArgumentNewButton
+  },
+
   data () {
     return {
       loading: false,
@@ -117,6 +130,10 @@ export default {
           this.loading = false
           console.error(e)
         })
+    },
+
+    created (data) {
+      this.tableData.splice(0, 0, data)
     }
   },
 
