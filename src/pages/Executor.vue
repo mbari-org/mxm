@@ -45,7 +45,7 @@
         <q-td slot="body-cell-taskDefId" slot-scope="props" :props="props"
               style="width:5px"
         >
-          <router-link :to="`/executors/${params.executorId}/taskdefs/${props.row.taskDefId}`">
+          <router-link :to="`/executors/${encodeURIComponent(params.executorId)}/taskdefs/${encodeURIComponent(props.row.taskDefId)}`">
             {{props.row.taskDefId}}
           </router-link>
         </q-td>
@@ -143,7 +143,7 @@ export default {
     refresh () {
       this.loading = true
       this.detailed = null
-      const url = `/executors/${this.params.executorId}/detailed`
+      const url = `/executors/${encodeURIComponent(this.params.executorId)}/detailed`
       this.$axios({
         method: 'GET',
         url

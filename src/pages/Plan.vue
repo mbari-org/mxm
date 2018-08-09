@@ -3,7 +3,7 @@
     <q-breadcrumbs active-color="secondary" color="light">
       <q-breadcrumbs-el label="Home" to="/" />
       <q-breadcrumbs-el label="Plans" to="/plans" />
-      <q-breadcrumbs-el label="Plan" :to="`/plans/${params.planId}`" />
+      <q-breadcrumbs-el label="Plan" :to="`/plans/${encodeURIComponent(params.planId)}`" />
       <q-btn
         dense round icon="refresh" class="q-ml-lg" size="sm"
         @click="refresh"
@@ -35,28 +35,28 @@
         <q-td slot="body-cell-name" slot-scope="props" :props="props"
               style="width:5px"
         >
-          <router-link :to="`/plans/${plan.planId}/tasks/${props.row.taskId}`">
+          <router-link :to="`/plans/${encodeURIComponent(plan.planId)}/tasks/${encodeURIComponent(props.row.taskId)}`">
             {{props.row.name || props.row.taskDefId || props.row.taskId}}</router-link>
         </q-td>
 
         <q-td slot="body-cell-executorId" slot-scope="props" :props="props"
               style="width:5px"
         >
-          <router-link :to="`/executors/${props.value}`">
+          <router-link :to="`/executors/${encodeURIComponent(props.value)}`">
             {{ props.value }}</router-link>
         </q-td>
 
         <q-td slot="body-cell-taskDefId" slot-scope="props" :props="props"
               style="width:5px"
         >
-          <router-link :to="`/executors/${props.row.executorId}/taskdefs/${props.value}`">
+          <router-link :to="`/executors/${encodeURIComponent(props.row.executorId)}/taskdefs/${encodeURIComponent(props.value)}`">
             {{ props.value }}</router-link>
         </q-td>
 
         <q-td slot="body-cell-assetId" slot-scope="props" :props="props"
               style="width:5px"
         >
-          <router-link :to="`/executors/${props.row.executorId}/assets/${props.value}`">
+          <router-link :to="`/executors/${encodeURIComponent(props.row.executorId)}/assets/${encodeURIComponent(props.value)}`">
             {{ props.value }}</router-link>
         </q-td>
 
@@ -166,7 +166,7 @@ export default {
     refresh () {
       this.loading = true
       this.plan = null
-      const url = `/plans/${this.params.planId}`
+      const url = `/plans/${encodeURIComponent(this.params.planId)}`
       this.$axios({
         method: 'GET',
         url

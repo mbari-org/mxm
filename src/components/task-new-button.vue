@@ -179,7 +179,7 @@ export default {
       //   data.geometry = ...
       // }
 
-      const url = `/plans/${this.planId}/tasks`
+      const url = `/plans/${encodeURIComponent(this.planId)}/tasks`
       this.$axios({
         method: 'POST',
         url,

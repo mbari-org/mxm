@@ -22,7 +22,7 @@
       <q-td slot="body-cell-executorId" slot-scope="props" :props="props"
             style="width:5px"
       >
-        <router-link :to="`/executors/${props.row.executorId}`">
+        <router-link :to="`/executors/${encodeURIComponent(props.row.executorId)}`">
           {{props.row.executorId}}
         </router-link>
       </q-td>

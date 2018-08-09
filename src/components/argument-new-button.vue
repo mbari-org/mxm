@@ -1,7 +1,7 @@
 <template>
   <div>
     <q-modal v-model="dialogOpened"
-             content-css="min-width:60vw;min-height:300px"
+             content-css="width:400;min-height:250px"
              no-backdrop-dismiss
     >
       <q-modal-layout>
@@ -114,7 +114,7 @@ export default {
         paramValue: this.paramValue
       }
 
-      const url = `/plans/${this.planId}/tasks/${this.taskId}/arguments`
+      const url = `/plans/${encodeURIComponent(this.planId)}/tasks/${encodeURIComponent(this.taskId)}/arguments`
       this.$axios({
         method: 'POST',
         url,

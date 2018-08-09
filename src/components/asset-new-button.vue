@@ -127,7 +127,7 @@ export default {
         data.description = this.description
       }
 
-      const url = `/executors/${this.executorId}/assets`
+      const url = `/executors/${encodeURIComponent(this.executorId)}/assets`
       this.$axios({
         method: 'POST',
         url,

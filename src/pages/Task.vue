@@ -3,8 +3,8 @@
     <q-breadcrumbs active-color="secondary" color="light">
       <q-breadcrumbs-el label="Home" to="/" />
       <q-breadcrumbs-el label="Plans" to="/plans" />
-      <q-breadcrumbs-el label="Plan" :to="`/plans/${params.planId}`" />
-      <q-breadcrumbs-el label="Task" :to="`/plans/${params.planId}/tasks/${params.taskId}`" />
+      <q-breadcrumbs-el label="Plan" :to="`/plans/${encodeURIComponent(params.planId)}`" />
+      <q-breadcrumbs-el label="Task" :to="`/plans/${encodeURIComponent(params.planId)}/tasks/${encodeURIComponent(params.taskId)}`" />
       <q-btn
         dense round icon="refresh" class="q-ml-lg" size="sm"
         @click="refresh"
@@ -12,7 +12,7 @@
     </q-breadcrumbs>
 
     <div v-if="task">
-      <h5> Task for definition: {{ task.taskDefId }}
+      <h5> '{{ task.taskDefId }}' Task Instance
       </h5>
       <small>Plan: {{ params.planId }}</small>
 
@@ -115,7 +115,7 @@ export default {
     refresh () {
       this.loading = true
       this.task = null
-      const url = `/plans/${this.params.planId}/tasks/${this.params.taskId}`
+      const url = `/plans/${encodeURIComponent(this.params.planId)}/tasks/${encodeURIComponent(this.params.taskId)}`
       this.$axios({
         method: 'GET',
         url

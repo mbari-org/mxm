@@ -162,7 +162,7 @@ export default {
         data.description = this.description
       }
 
-      const url = `/executors/${this.executorId}/taskdefs/${this.taskdefId}/parameters`
+      const url = `/executors/${encodeURIComponent(this.executorId)}/taskdefs/${encodeURIComponent(this.taskdefId)}/parameters`
       this.$axios({
         method: 'POST',
         url,

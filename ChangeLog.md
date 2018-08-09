@@ -1,3 +1,7 @@
+2018-08-09
+
+- use encoded parameters (encodeURIComponent)
+
 2018-08-08
 
 - register argument

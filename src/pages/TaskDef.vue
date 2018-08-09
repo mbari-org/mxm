@@ -3,7 +3,7 @@
     <q-breadcrumbs active-color="secondary" color="light">
       <q-breadcrumbs-el label="Home" to="/" />
       <q-breadcrumbs-el label="Executors" to="/executors" />
-      <q-breadcrumbs-el :label="params.executorId" :to="`/executors/${params.executorId}`" />
+      <q-breadcrumbs-el :label="params.executorId" :to="`/executors/${encodeURIComponent(params.executorId)}`" />
       <q-breadcrumbs-el label="TaskDefs" />
       <q-breadcrumbs-el :label="params.taskDefId" />
       <q-btn
@@ -121,7 +121,7 @@ export default {
     refresh () {
       this.loading = true
       this.taskDef = null
-      const url = `/executors/${this.params.executorId}/taskdefs/${this.params.taskDefId}`
+      const url = `/executors/${encodeURIComponent(this.params.executorId)}/taskdefs/${encodeURIComponent(this.params.taskDefId)}`
       this.$axios({
         method: 'GET',
         url
