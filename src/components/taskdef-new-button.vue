@@ -89,10 +89,6 @@ export default {
     executorId: {
       type: String,
       required: true
-    },
-    created: {
-      type: Function,
-      required: true
     }
   },
 
@@ -144,7 +140,7 @@ export default {
             timeout: 1000,
             type: 'info'
           })
-          this.created(response.data)
+          this.$emit('created', response.data)
         })
         .catch(e => {
           console.error(e)

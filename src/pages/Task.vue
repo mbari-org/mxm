@@ -54,7 +54,7 @@
           <argument-new-button
             :plan-id="params.planId"
             :task-id="params.taskId"
-            :created="created"
+            v-on:created="created"
           />
         </div>
       </q-table>

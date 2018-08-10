@@ -24,7 +24,7 @@
         <div slot="top-right" slot-scope="props" class="fit">
           <asset-new-button
             :executor-id="params.executorId"
-            :created="assetCreated"
+            v-on:created="assetCreated"
           />
         </div>
       </q-table>
@@ -38,7 +38,7 @@
         <div slot="top-right" slot-scope="props" class="fit">
           <taskdef-new-button
             :executor-id="params.executorId"
-            :created="taskDefCreated"
+            v-on:created="taskDefCreated"
           />
         </div>
 

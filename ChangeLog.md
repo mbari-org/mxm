@@ -1,5 +1,9 @@
 2018-08-09
 
+- use custom event instead of property for 'created'
+
+2018-08-09
+
 - use encoded parameters (encodeURIComponent)
 
 2018-08-08

@@ -70,13 +70,6 @@
 import { Notify } from 'quasar'
 
 export default {
-  props: {
-    created: {
-      type: Function,
-      required: true
-    }
-  },
-
   data () {
     return {
       dialogOpened: false,
@@ -120,7 +113,7 @@ export default {
             timeout: 1000,
             type: 'info'
           })
-          this.created(response.data)
+          this.$emit('created', response.data)
         })
         .catch(e => {
           console.error(e)

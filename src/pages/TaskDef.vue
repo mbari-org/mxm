@@ -35,7 +35,7 @@
           <parameter-new-button
             :executor-id="params.executorId"
             :taskdef-id="params.taskDefId"
-            :created="created"
+            v-on:created="created"
           />
         </div>
 

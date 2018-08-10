@@ -28,7 +28,7 @@
         <div slot="top-right" slot-scope="props" class="fit">
           <task-new-button
             :plan-id="plan.planId"
-            :created="created"
+            v-on:created="created"
           />
         </div>
 
