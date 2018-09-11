@@ -24,7 +24,7 @@ which opens: http://localhost:8080/index.html
 As `odssadm`:
 
         sudo mkdir /var/www/html/pxs-ui
-        sudo carueda:carueda /var/www/html/pxs-ui
+        sudo chown carueda:carueda /var/www/html/pxs-ui
 
 ## Build and install
 

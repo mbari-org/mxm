@@ -1,7 +1,7 @@
 const routes = [
   {
     path: '/',
-    component: () => import('layouts/MyLayout'),
+    component: () => import('layouts/MainLayout'),
     children: [
       {
         path: '', component: () => import('pages/Index')
