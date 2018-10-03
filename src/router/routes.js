@@ -28,6 +28,11 @@ const routes = [
       {
         path: '/plans/:planId/tasks/:taskId',
         component: () => import('pages/Task')
+      },
+
+      {
+        path: '/apollo',
+        component: () => import('pages/ApolloTest')
       }
     ]
   }
