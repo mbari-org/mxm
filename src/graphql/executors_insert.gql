@@ -1,9 +1,9 @@
-mutation($executorid: String!, $httpendpoint: String!, $description: String) {
+mutation($executorId: String!, $httpEndpoint: String!, $description: String) {
   insert_executor(
     objects: [
       {
-        executorid: $executorid
-        httpendpoint: $httpendpoint
+        executorId: $executorId
+        httpEndpoint: $httpEndpoint
         description: $description
       }
     ]

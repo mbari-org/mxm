@@ -105,7 +105,6 @@
 
 <script>
   import insert_parameter from '../graphql/parameters_insert.gql'
-  import {mapKeys} from 'lodash'
   import {Notify} from 'quasar'
 
   export default {
@@ -148,16 +147,14 @@
       },
 
       submit() {
-        const reqData = {
+        const mutation = insert_parameter
+        const variables = {
           name: this.name,
           type: this.type,
           required: this.required,
           defaultValue: this.defaultValue,
           description: this.description,
         }
-
-        const mutation = insert_parameter
-        const variables = mapKeys(reqData, (value, key) => key.toLowerCase())
 
         this.$apollo.mutate({mutation, variables})
           .then((data) => {
@@ -168,7 +165,7 @@
               timeout: 1000,
               type: 'info'
             })
-            this.$emit('created', reqData)
+            this.$emit('created', variables)
           })
           .catch((error) => {
             console.error('mutation error=', error)

@@ -19,11 +19,11 @@
         <executor-new-button v-on:created="created"/>
       </div>
 
-      <q-td slot="body-cell-executorid" slot-scope="props" :props="props"
+      <q-td slot="body-cell-executorId" slot-scope="props" :props="props"
             style="width:5px"
       >
-        <router-link :to="`/executors/${encodeURIComponent(props.row.executorid)}`">
-          {{props.row.executorid}}
+        <router-link :to="`/executors/${encodeURIComponent(props.row.executorId)}`">
+          {{props.row.executorId}}
         </router-link>
       </q-td>
 
@@ -33,7 +33,7 @@
 
 <script>
   import ExecutorNewButton from 'components/executor-new-button'
-  import executors from '../graphql/executors.gql'
+  import executor from '../graphql/executors.gql'
 
   export default {
     components: {
@@ -45,8 +45,8 @@
         executor: [],
         columns: [
           {
-            field: 'executorid',
-            name: 'executorid',
+            field: 'executorId',
+            name: 'executorId',
             label: 'ID',
             align: 'left',
             sortable: true
@@ -59,8 +59,8 @@
             sortable: true
           },
           {
-            field: 'httpendpoint',
-            name: 'httpendpoint',
+            field: 'httpEndpoint',
+            name: 'httpEndpoint',
             label: 'Endpoint',
             align: 'left',
             sortable: true
@@ -70,7 +70,7 @@
     },
 
     apollo: {
-      executor: executors
+      executor
     },
 
     mounted() {
@@ -83,7 +83,7 @@
       },
 
       created(data) {
-        this.executors.splice(0, 0, data)
+        this.executor.splice(0, 0, data)
       }
     }
   }

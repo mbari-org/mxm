@@ -63,6 +63,7 @@
 <script>
 import AssetNewButton from 'components/asset-new-button'
 import TaskdefNewButton from 'components/taskdef-new-button'
+import executor from '../graphql/executor.gql'
 import lodash from 'lodash'
 const _ = lodash
 
@@ -133,6 +134,10 @@ export default {
     params () {
       return this.$route.params
     }
+  },
+
+  apollo: {
+    executor
   },
 
   mounted () {

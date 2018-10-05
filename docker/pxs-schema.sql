@@ -1,25 +1,25 @@
 create table if not exists executor
 (
-	executorid varchar not null
+	"executorId" varchar not null
 		constraint executor_pkey
 			primary key,
-	httpendpoint text not null,
+	"httpEndpoint" text not null,
 	description text
 )
 ;
 
 create table if not exists taskdef
 (
-	taskdefid varchar not null
+	"taskdefId" varchar not null
 		constraint taskdef_pkey
 			primary key,
 	description text
 )
 ;
 
-create table if not exists assetclass
+create table if not exists "assetClass"
 (
-	classname varchar not null
+	"className" varchar not null
 		constraint assetclass_pkey
 			primary key,
 	description text
@@ -28,35 +28,39 @@ create table if not exists assetclass
 
 create table if not exists asset
 (
-	assetid varchar not null
+	"assetId" varchar not null
 		constraint asset_pkey
 			primary key,
-	assetclass varchar not null
+	"assetClass" varchar not null
 		constraint assetclass_fk
-			references assetclass,
+			references "assetClass",
 	description text
 )
 ;
 
 create table if not exists executor_asset
 (
-	executorid varchar not null
+	"executorId" varchar not null
 		constraint executor_fk
 			references executor,
-	assetid varchar not null
+	"assetId" varchar not null
 		constraint asset_fk
 			references asset
 )
 ;
 
+create index if not exists executor_asset_executorid_index
+	on executor_asset ("executorId")
+;
+
 create table if not exists taskdef_assetclass
 (
-	taskdefid varchar
+	"taskdefId" varchar
 		constraint taskdef_assetclass_td_fk
 			references taskdef,
-	assetclass varchar
+	"assetClass" varchar
 		constraint taskdef_assetclass_fk
-			references assetclass
+			references "assetClass"
 )
 ;
 
@@ -67,17 +71,17 @@ create table if not exists parameter
 			primary key,
 	type varchar not null,
 	required boolean default false not null,
-	defaultvalue varchar,
+	"defaultValue" varchar,
 	description text
 )
 ;
 
 create table if not exists taskdef_param
 (
-	taskdefid varchar
+	"taskdefId" varchar
 		constraint taskdef_taskdefid_fk
 			references taskdef,
-	paramname varchar
+	"paramName" varchar
 		constraint taskdef_param_parameter_name_fk
 			references parameter
 )
@@ -85,15 +89,15 @@ create table if not exists taskdef_param
 
 create table if not exists task
 (
-	executorid varchar,
-	taskdefid varchar,
-	assetid varchar,
+	"executorId" varchar,
+	"taskdefId" varchar,
+	"assetId" varchar,
 	name text,
 	description text,
-	start timestamp with time zone,
-	"end" timestamp with time zone,
+	"startDate" timestamp with time zone,
+	"endDate" timestamp with time zone,
 	geometry json,
-	taskid varchar not null
+	"taskId" varchar not null
 		constraint task_pk
 			primary key
 )
@@ -103,7 +107,7 @@ create table if not exists plan
 (
 	name text not null,
 	description text,
-	planid varchar not null
+	"planId" varchar not null
 		constraint plan_pk
 			primary key
 )
@@ -111,10 +115,10 @@ create table if not exists plan
 
 create table if not exists plan_task
 (
-	planid varchar
+	"planId" varchar
 		constraint plan_task__planid_fk
 			references plan,
-	taskid varchar
+	"taskId" varchar
 		constraint plan_task__taskid_fk
 			references task
 )
@@ -122,9 +126,9 @@ create table if not exists plan_task
 
 create table if not exists argument
 (
-	paramname varchar
+	"paramName" varchar
 		constraint argument__paramname_fk
 			references parameter,
-	paramvalue text
+	"paramValue" text
 )
 ;
