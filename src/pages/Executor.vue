@@ -10,20 +10,26 @@
       />
     </q-breadcrumbs>
 
-    <div v-if="detailed">
-      <h5> Executor: {{params.executorId}}
+    <pre>executor={{executor}}</pre>
+
+    <div v-if="executor">
+      <h5> Executor: {{executor.executorId}}
+        - "{{executor.description}}"
       </h5>
+      <div class="q-mb-md">
+        Endpoint: {{executor.httpEndpoint}}
+      </div>
 
       <q-table
         title="Assets managed by this executor"
         :columns="assetColumns"
-        :data="assetTable"
+        :data="executor.executorAssetsByexecutorid"
         row-key="name"
         class="q-mb-md"
       >
         <div slot="top-right" slot-scope="props" class="fit">
           <asset-new-button
-            :executor-id="params.executorId"
+            :executor-id="executor.executorId"
             v-on:created="assetCreated"
           />
         </div>
@@ -37,7 +43,7 @@
       >
         <div slot="top-right" slot-scope="props" class="fit">
           <taskdef-new-button
-            :executor-id="params.executorId"
+            :executor-id="executor.executorId"
             v-on:created="taskDefCreated"
           />
         </div>
@@ -45,7 +51,7 @@
         <q-td slot="body-cell-taskDefId" slot-scope="props" :props="props"
               style="width:5px"
         >
-          <router-link :to="`/executors/${encodeURIComponent(params.executorId)}/taskdefs/${encodeURIComponent(props.row.taskDefId)}`">
+          <router-link :to="`/executors/${encodeURIComponent(executor.executorId)}/taskdefs/${encodeURIComponent(props.row.taskDefId)}`">
             {{props.row.taskDefId}}
           </router-link>
         </q-td>
@@ -87,21 +93,20 @@ export default {
           sortable: true
         },
         {
-          field: 'assetClass',
+          field: row => row.assetByassetid.assetClass,
           name: 'assetClass',
           label: 'Class',
           align: 'left',
           sortable: true
         },
         {
-          field: 'description',
+          field: row => row.assetByassetid.description,
           name: 'description',
           label: 'Description',
           align: 'left',
           sortable: true
         }
       ],
-      assetTable: [],
 
       taskDefColumns: [
         {
@@ -137,7 +142,18 @@ export default {
   },
 
   apollo: {
-    executor
+    executor: {
+      query: executor,
+      variables () {
+        return {
+          executorId: this.params.executorId
+        }
+      },
+      update(data) {
+        console.log('update: data=', data)
+        return data.executor[0]
+      },
+    }
   },
 
   mounted () {
@@ -146,32 +162,20 @@ export default {
 
   methods: {
     refresh () {
-      this.loading = true
-      this.detailed = null
-      const url = `/executors/${encodeURIComponent(this.params.executorId)}/detailed`
-      this.$axios({
-        method: 'GET',
-        url
-      })
-        .then(response => {
-          this.loading = false
-          console.log(`GET ${url}: response=`, response)
-          this.detailed = response.data
-          this.assetTable = _.get(this.detailed, 'assets') || []
-          this.taskDefs = _.get(this.detailed, 'taskDefs') || []
-          this.taskDefTable = _.map(this.taskDefs, td => {
-            td.assetClassesString = _.join(td.assetClasses, ', ')
-            return td
-          })
-        })
-        .catch(e => {
-          this.loading = false
-          console.error(e)
-        })
+      // TODO
     },
 
     assetCreated (data) {
-      this.assetTable.splice(0, 0, data)
+      console.debug('assetCreated: data=', data)
+      const asset = {
+        assetId: data.assetId,
+        assetByassetid: {
+          assetClass: data.assetClass,
+          description: data.description,
+        }
+      }
+      console.debug('assetCreated: asset=', asset)
+      this.executor.executorAssetsByexecutorid.splice(0, 0, asset)
     },
 
     taskDefCreated (data) {
@@ -183,6 +187,10 @@ export default {
   watch: {
     '$route' () {
       this.refresh()
+    },
+
+    executor (val) {
+      console.log('watch executor=', val)
     }
   }
 }

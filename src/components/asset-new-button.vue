@@ -81,6 +81,7 @@
 </template>
 
 <script>
+import insert_asset from '../graphql/assets_insert.gql'
 import { Notify } from 'quasar'
 
 export default {
@@ -115,32 +116,26 @@ export default {
     },
 
     submit () {
-      const data = {
+      const mutation = insert_asset
+      const variables = {
         assetId: this.assetId,
-        assetClass: this.assetClass
-      }
-      if (this.description) {
-        data.description = this.description
+        assetClass: this.assetClass,
+        description: this.description
       }
 
-      const url = `/executors/${encodeURIComponent(this.executorId)}/assets`
-      this.$axios({
-        method: 'POST',
-        url,
-        data
-      })
-        .then(response => {
-          console.log(`POST ${url}: response=`, response)
+      this.$apollo.mutate({mutation, variables})
+        .then((data) => {
+          console.log('mutation data=', data)
           this.dialogOpened = false
           Notify.create({
             message: 'Asset registered',
             timeout: 1000,
             type: 'info'
           })
-          this.$emit('created', response.data)
+          this.$emit('created', variables)
         })
-        .catch(e => {
-          console.error(e)
+        .catch((error) => {
+          console.error('mutation error=', error)
         })
     }
   }

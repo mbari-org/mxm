@@ -49,7 +49,7 @@ create table if not exists executor_asset
 )
 ;
 
-create index executor_asset_executorid_index
+create index executor_asset_executorId_index
 	on executor_asset ("executorId")
 ;
 

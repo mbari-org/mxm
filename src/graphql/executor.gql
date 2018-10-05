@@ -5,6 +5,10 @@ query executor($executorId: String!) {
     description
     executorAssetsByexecutorid {
       assetId
+      assetByassetid {
+        assetClass
+        description
+      }
     }
   }
 }
