@@ -1,3 +1,7 @@
+2018-10-04
+
+- some dockerized environment preps
+
 2018-10-03
 
 - experimenting with vue-apollo.

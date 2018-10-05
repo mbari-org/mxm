@@ -1,0 +1,5 @@
+FROM postgres:9.4.18-alpine
+
+LABEL maintainer="carueda@mbari.org"
+
+ADD pxs-schema.sql  /docker-entrypoint-initdb.d/
