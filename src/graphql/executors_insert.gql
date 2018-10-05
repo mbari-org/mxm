@@ -1,0 +1,13 @@
+mutation($executorid: String!, $httpendpoint: String!, $description: String) {
+  insert_executor(
+    objects: [
+      {
+        executorid: $executorid
+        httpendpoint: $httpendpoint
+        description: $description
+      }
+    ]
+  ) {
+    affected_rows
+  }
+}

@@ -1,0 +1,21 @@
+mutation(
+  $name: String!
+  $type: String!
+  $required: Boolean!
+  $description: String
+  $defaultvalue: String
+) {
+  insert_parameter(
+    objects: [
+      {
+        name: $name
+        type: $type
+        required: $required
+        description: $description
+        defaultvalue: $defaultvalue
+      }
+    ]
+  ) {
+    affected_rows
+  }
+}

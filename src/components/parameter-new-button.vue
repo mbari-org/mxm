@@ -1,7 +1,7 @@
 <template>
   <div>
     <q-modal v-model="dialogOpened"
-             content-css="min-width:60vw;min-height:300px"
+             content-css="min-width:300px;min-height:300px"
              no-backdrop-dismiss
     >
       <q-modal-layout>
@@ -104,80 +104,76 @@
 </template>
 
 <script>
-import { Notify } from 'quasar'
+  import insert_parameter from '../graphql/parameters_insert.gql'
+  import {mapKeys} from 'lodash'
+  import {Notify} from 'quasar'
 
-export default {
-  props: {
-    executorId: {
-      type: String,
-      required: true
-    },
-    taskdefId: {
-      type: String,
-      required: true
-    }
-  },
-
-  data () {
-    return {
-      dialogOpened: false,
-      name: '',
-      type: '',
-      required: true,
-      defaultValue: '',
-      description: ''
-    }
-  },
-
-  computed: {
-    okToSubmit () {
-      return this.name && this.type
-    }
-  },
-
-  methods: {
-    openDialog () {
-      this.name = ''
-      this.type = ''
-      this.required = true
-      this.defaultValue = ''
-      this.description = ''
-      this.dialogOpened = true
+  export default {
+    props: {
+      executorId: {
+        type: String,
+        required: true
+      },
+      taskdefId: {
+        type: String,
+        required: true
+      }
     },
 
-    submit () {
-      const data = {
-        name: this.name,
-        type: this.type,
-        required: this.required
+    data() {
+      return {
+        dialogOpened: false,
+        name: '',
+        type: '',
+        required: true,
+        defaultValue: '',
+        description: ''
       }
-      if (this.defaultValue) {
-        data.defaultValue = this.defaultValue
-      }
-      if (this.description) {
-        data.description = this.description
-      }
+    },
 
-      const url = `/executors/${encodeURIComponent(this.executorId)}/taskdefs/${encodeURIComponent(this.taskdefId)}/parameters`
-      this.$axios({
-        method: 'POST',
-        url,
-        data
-      })
-        .then(response => {
-          console.log(`POST ${url}: response=`, response)
-          this.dialogOpened = false
-          Notify.create({
-            message: 'Parameter created',
-            timeout: 1000,
-            type: 'info'
+    computed: {
+      okToSubmit() {
+        return this.name && this.type
+      }
+    },
+
+    methods: {
+      openDialog() {
+        this.name = ''
+        this.type = ''
+        this.required = true
+        this.defaultValue = null
+        this.description = null
+        this.dialogOpened = true
+      },
+
+      submit() {
+        const reqData = {
+          name: this.name,
+          type: this.type,
+          required: this.required,
+          defaultValue: this.defaultValue,
+          description: this.description,
+        }
+
+        const mutation = insert_parameter
+        const variables = mapKeys(reqData, (value, key) => key.toLowerCase())
+
+        this.$apollo.mutate({mutation, variables})
+          .then((data) => {
+            console.log('mutation data=', data)
+            this.dialogOpened = false
+            Notify.create({
+              message: 'Parameter created',
+              timeout: 1000,
+              type: 'info'
+            })
+            this.$emit('created', reqData)
           })
-          this.$emit('created', response.data)
-        })
-        .catch(e => {
-          console.error(e)
-        })
+          .catch((error) => {
+            console.error('mutation error=', error)
+          })
+      },
     }
   }
-}
 </script>

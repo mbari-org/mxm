@@ -1,13 +1,11 @@
 2018-10-04
 
+- prepping settings to enable graphql queries/mutations
 - some dockerized environment preps
 
 2018-10-03
 
 - experimenting with vue-apollo.
-  Using a Hasura-powered server on http://localhost:8080/v1alpha1/graphql,
-  for now against a tethysdash database set up in a pretty ad hoc manner
-  as I fisrt had to upgrade PostgresQL
 
 2018-08-09
 

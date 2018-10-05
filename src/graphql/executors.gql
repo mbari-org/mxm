@@ -1,0 +1,7 @@
+{
+  executor {
+    executorid
+    httpendpoint
+    description
+  }
+}

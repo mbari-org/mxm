@@ -1,8 +1,8 @@
 <template>
   <q-page class="q-pa-md">
     <q-breadcrumbs active-color="secondary" color="light">
-      <q-breadcrumbs-el label="Home" to="/" />
-      <q-breadcrumbs-el label="Executors" to="/executors" />
+      <q-breadcrumbs-el label="Home" to="/"/>
+      <q-breadcrumbs-el label="Executors" to="/executors"/>
       <q-btn
         dense round icon="refresh" class="q-ml-lg" size="sm"
         @click="refresh"
@@ -11,7 +11,7 @@
 
     <q-table
       title="Executors"
-      :data="executors"
+      :data="executor"
       :columns="columns"
       row-key="name"
     >
@@ -19,11 +19,11 @@
         <executor-new-button v-on:created="created"/>
       </div>
 
-      <q-td slot="body-cell-executorId" slot-scope="props" :props="props"
+      <q-td slot="body-cell-executorid" slot-scope="props" :props="props"
             style="width:5px"
       >
-        <router-link :to="`/executors/${encodeURIComponent(props.row.executorId)}`">
-          {{props.row.executorId}}
+        <router-link :to="`/executors/${encodeURIComponent(props.row.executorid)}`">
+          {{props.row.executorid}}
         </router-link>
       </q-td>
 
@@ -32,65 +32,59 @@
 </template>
 
 <script>
-import ExecutorNewButton from 'components/executor-new-button'
+  import ExecutorNewButton from 'components/executor-new-button'
+  import executors from '../graphql/executors.gql'
 
-export default {
-  components: {
-    ExecutorNewButton
-  },
-
-  data () {
-    return {
-      executors: [],
-      columns: [
-        {
-          field: 'executorId',
-          name: 'executorId',
-          label: 'ID',
-          align: 'left',
-          sortable: true
-        },
-        {
-          field: 'description',
-          name: 'description',
-          label: 'Description',
-          align: 'left',
-          sortable: true
-        },
-        {
-          field: 'httpEndpoint',
-          name: 'httpEndpoint',
-          label: 'httpEndpoint',
-          align: 'left',
-          sortable: true
-        }
-      ]
-    }
-  },
-
-  mounted () {
-    this.refresh()
-  },
-
-  methods: {
-    refresh () {
-      const url = `/executors`
-      this.$axios({
-        method: 'GET',
-        url: '/executors'
-      })
-        .then(response => {
-          console.log(`GET ${url}: response=`, response)
-          this.executors = response.data || []
-        })
-        .catch(e => {
-          console.error(e)
-        })
+  export default {
+    components: {
+      ExecutorNewButton
     },
 
-    created (data) {
-      this.executors.splice(0, 0, data)
+    data() {
+      return {
+        executor: [],
+        columns: [
+          {
+            field: 'executorid',
+            name: 'executorid',
+            label: 'ID',
+            align: 'left',
+            sortable: true
+          },
+          {
+            field: 'description',
+            name: 'description',
+            label: 'Description',
+            align: 'left',
+            sortable: true
+          },
+          {
+            field: 'httpendpoint',
+            name: 'httpendpoint',
+            label: 'Endpoint',
+            align: 'left',
+            sortable: true
+          }
+        ]
+      }
+    },
+
+    apollo: {
+      executor: executors
+    },
+
+    mounted() {
+      this.refresh()
+    },
+
+    methods: {
+      refresh() {
+        // TODO
+      },
+
+      created(data) {
+        this.executors.splice(0, 0, data)
+      }
     }
   }
-}
 </script>
