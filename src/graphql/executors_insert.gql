@@ -1,5 +1,5 @@
 mutation($executorId: String!, $httpEndpoint: String!, $description: String) {
-  insert_executor(
+  insert_executors(
     objects: [
       {
         executorId: $executorId

@@ -1,13 +1,13 @@
 <template>
   <div>
     <q-modal v-model="dialogOpened"
-             content-css="min-width:500px;min-height:300px"
+             content-css="min-width:350px;min-height:300px"
              no-backdrop-dismiss
     >
       <q-modal-layout>
         <q-toolbar slot="header">
           <q-toolbar-title>
-            Register new asset
+            Register new asset class
           </q-toolbar-title>
           <q-btn round dense
                  color="primary"
@@ -18,28 +18,16 @@
 
         <div class="q-pa-lg">
           <q-field
-            label="Asset ID:"
-            :error="!assetId.length"
+            label="Class name:"
+            :error="!className.length"
             :label-width="4"
           >
             <q-input
               class="bg-light-blue-1"
-              v-model.trim="assetId"
+              v-model.trim="className"
               type="text"
               autofocus
               style="width:24em"
-            />
-          </q-field>
-
-          <q-field
-            label="Asset Class:"
-            :error="!assetClass.length"
-            :label-width="4"
-          >
-            <!-- also using v-if trick here. TODO use some lazy-based machanism.. -->
-            <asset-class-field
-              v-if="dialogOpened"
-              v-model="assetClass"
             />
           </q-field>
 
@@ -75,59 +63,41 @@
       dense round no-caps size="sm"
       @click="openDialog"
     >
-      <q-tooltip>Register a new asset</q-tooltip>
+      <q-tooltip>Register a new asset class</q-tooltip>
     </q-btn>
 
   </div>
 </template>
 
 <script>
-import mutation from '../graphql/assets_insert.gql'
-import AssetClassField from 'components/asset-class-field'
-import AssetClassNewButton from 'components/asset-class-new-button'
-
+import mutation from '../graphql/asset_classes_insert.gql'
 import { Notify } from 'quasar'
 
 export default {
-  components: {
-    AssetClassField,
-    AssetClassNewButton,
-  },
-
-  props: {
-    executorId: {
-      type: String,
-      required: true
-    }
-  },
-
   data () {
     return {
       dialogOpened: false,
-      assetId: '',
-      assetClass: '',
+      className: '',
       description: ''
     }
   },
 
   computed: {
     okToSubmit () {
-      return this.assetId && this.assetClass
+      return this.className
     }
   },
 
   methods: {
     openDialog () {
-      this.assetId = ''
-      this.assetClass = ''
+      this.className = ''
       this.description = ''
       this.dialogOpened = true
     },
 
     submit () {
       const variables = {
-        assetId: this.assetId,
-        assetClass: this.assetClass,
+        className: this.className,
         description: this.description || null
       }
 
@@ -136,7 +106,7 @@ export default {
           console.log('mutation data=', data)
           this.dialogOpened = false
           Notify.create({
-            message: 'Asset registered',
+            message: 'Asset class registered',
             timeout: 1000,
             type: 'info'
           })
@@ -145,7 +115,7 @@ export default {
         .catch((error) => {
           console.error('mutation error=', error)
         })
-    },
+    }
   }
 }
 </script>

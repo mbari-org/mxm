@@ -1,11 +1,11 @@
 query executor($executorId: String!) {
-  executor(where: {executorId: {_eq: $executorId}}) {
+  executors(where: {executorId: {_eq: $executorId}}) {
     executorId
     httpEndpoint
     description
     executorAssetsByexecutorid {
       assetId
-      assetByassetid {
+      assetsByassetid {
         assetClass
         description
       }

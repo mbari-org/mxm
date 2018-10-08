@@ -1,0 +1,7 @@
+mutation($executorId: String!, $assetId: String!) {
+  insert_executor_asset(
+    objects: [{ executorId: $executorId, assetId: $assetId }]
+  ) {
+    affected_rows
+  }
+}

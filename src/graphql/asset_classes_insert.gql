@@ -1,0 +1,12 @@
+mutation($className: String!, $description: String) {
+  insert_assetClasses(
+    objects: [
+      {
+        className: $className,
+        description: $description
+      }
+    ]
+  ) {
+    affected_rows
+  }
+}

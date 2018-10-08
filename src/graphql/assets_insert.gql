@@ -1,5 +1,5 @@
 mutation($assetId: String!, $assetClass: String!, $description: String) {
-  insert_asset(
+  insert_assets(
     objects: [
       {
         assetId: $assetId,

@@ -81,7 +81,7 @@
 </template>
 
 <script>
-  import insert_executor from '../graphql/executors_insert.gql'
+  import mutation from '../graphql/executors_insert.gql'
   import {Notify} from 'quasar'
 
   export default {
@@ -109,7 +109,6 @@
       },
 
       submit() {
-        const mutation = insert_executor
         const variables = {
           executorId: this.executorId,
           httpEndpoint: this.httpEndpoint,

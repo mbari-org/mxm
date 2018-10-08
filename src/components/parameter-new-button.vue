@@ -104,7 +104,7 @@
 </template>
 
 <script>
-  import insert_parameter from '../graphql/parameters_insert.gql'
+  import mutation from '../graphql/parameters_insert.gql'
   import {Notify} from 'quasar'
 
   export default {
@@ -147,7 +147,6 @@
       },
 
       submit() {
-        const mutation = insert_parameter
         const variables = {
           name: this.name,
           type: this.type,

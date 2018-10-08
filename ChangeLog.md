@@ -1,3 +1,7 @@
+2018-10-08
+
+- more adjustments as moving toward graphql
+
 2018-10-04
 
 - prepping settings to enable graphql queries/mutations

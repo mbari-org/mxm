@@ -1,4 +1,4 @@
-create table if not exists executor
+create table if not exists executors
 (
 	"executorId" varchar not null
 		constraint executor_pkey
@@ -8,7 +8,7 @@ create table if not exists executor
 )
 ;
 
-create table if not exists taskdef
+create table if not exists taskdefs
 (
 	"taskdefId" varchar not null
 		constraint taskdef_pkey
@@ -17,7 +17,7 @@ create table if not exists taskdef
 )
 ;
 
-create table if not exists "assetClass"
+create table if not exists "assetClasses"
 (
 	"className" varchar not null
 		constraint assetclass_pkey
@@ -26,14 +26,14 @@ create table if not exists "assetClass"
 )
 ;
 
-create table if not exists asset
+create table if not exists assets
 (
 	"assetId" varchar not null
 		constraint asset_pkey
 			primary key,
 	"assetClass" varchar not null
 		constraint assetclass_fk
-			references "assetClass",
+			references "assetClasses",
 	description text
 )
 ;
@@ -42,10 +42,10 @@ create table if not exists executor_asset
 (
 	"executorId" varchar not null
 		constraint executor_fk
-			references executor,
+			references executors,
 	"assetId" varchar not null
 		constraint asset_fk
-			references asset
+			references assets
 )
 ;
 
@@ -57,14 +57,14 @@ create table if not exists taskdef_assetclass
 (
 	"taskdefId" varchar
 		constraint taskdef_assetclass_td_fk
-			references taskdef,
+			references taskdefs,
 	"assetClass" varchar
 		constraint taskdef_assetclass_fk
-			references "assetClass"
+			references "assetClasses"
 )
 ;
 
-create table if not exists parameter
+create table if not exists parameters
 (
 	name varchar not null
 		constraint parameter_pkey
@@ -80,14 +80,14 @@ create table if not exists taskdef_param
 (
 	"taskdefId" varchar
 		constraint taskdef_taskdefid_fk
-			references taskdef,
+			references taskdefs,
 	"paramName" varchar
 		constraint taskdef_param_parameter_name_fk
-			references parameter
+			references parameters
 )
 ;
 
-create table if not exists task
+create table if not exists tasks
 (
 	"executorId" varchar,
 	"taskdefId" varchar,
@@ -103,7 +103,7 @@ create table if not exists task
 )
 ;
 
-create table if not exists plan
+create table if not exists plans
 (
 	name text not null,
 	description text,
@@ -117,18 +117,18 @@ create table if not exists plan_task
 (
 	"planId" varchar
 		constraint plan_task__planid_fk
-			references plan,
+			references plans,
 	"taskId" varchar
 		constraint plan_task__taskid_fk
-			references task
+			references tasks
 )
 ;
 
-create table if not exists argument
+create table if not exists arguments
 (
 	"paramName" varchar
 		constraint argument__paramname_fk
-			references parameter,
+			references parameters,
 	"paramValue" text
 )
 ;
