@@ -89,9 +89,15 @@ create table if not exists taskdef_param
 
 create table if not exists tasks
 (
-	"executorId" varchar,
-	"taskdefId" varchar,
-	"assetId" varchar,
+	"executorId" varchar
+    constraint tasks_executorid_fk
+          references executors,
+	"taskdefId" varchar
+	  constraint tasks_taskdefid_fk
+	        references taskdefs,
+	"assetId" varchar
+	  constraint tasks_assetid_fk
+	        references assets,
 	name text,
 	description text,
 	"startDate" timestamp with time zone,
@@ -127,8 +133,14 @@ create table if not exists plan_task
 create table if not exists arguments
 (
 	"paramName" varchar
-		constraint argument__paramname_fk
+		constraint arguments_paramname_fk
 			references parameters,
-	"paramValue" text
+	"paramValue" text,
+	"planId" varchar not null
+		constraint arguments_planid_fk
+			references plans,
+	"taskId" varchar not null
+		constraint arguments_taskid_fk
+			references tasks
 )
 ;
