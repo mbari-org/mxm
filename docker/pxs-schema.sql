@@ -38,19 +38,19 @@ create table if not exists assets
 )
 ;
 
-create table if not exists executor_asset
+create table if not exists executor_assetClass
 (
 	"executorId" varchar not null
 		constraint executor_fk
 			references executors,
-	"assetId" varchar not null
-		constraint asset_fk
-			references assets
+	"assetClassName" varchar not null
+		constraint assetClass_fk
+			references "assetClasses"
 )
 ;
 
-create index executor_asset_executorId_index
-	on executor_asset ("executorId")
+create index executor_assetClass_executorId_index
+	on executor_assetClass ("executorId")
 ;
 
 create table if not exists taskdef_assetclass

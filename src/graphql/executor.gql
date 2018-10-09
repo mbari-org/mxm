@@ -3,10 +3,10 @@ query executor($executorId: String!) {
     executorId
     httpEndpoint
     description
-    executorAssetsByexecutorid {
-      assetId
-      assetsByassetid {
-        assetClass
+    executorAssetclasssByexecutorid {
+      assetClassName
+      assetclassesByassetclassname {
+        className
         description
       }
     }

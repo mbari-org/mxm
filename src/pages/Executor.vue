@@ -33,11 +33,10 @@
 
       <q-card class="q-mb-lg">
         <q-card-title>
-          Assets managed by this executor:
-          <asset-new-button
+          Asset classes managed by this executor:
+          <asset-class-new-button
             slot="right"
-            :executor-id="executor.executorId"
-            v-on:created="assetCreated"
+            v-on:created="assetClassCreated"
           />
 
         </q-card-title>
@@ -89,10 +88,10 @@
 </template>
 
 <script>
-import AssetNewButton from 'components/asset-new-button'
+import AssetClassNewButton from 'components/asset-class-new-button'
 import TaskdefNewButton from 'components/taskdef-new-button'
 import executor from '../graphql/executor.gql'
-import assets from '../graphql/assets.gql'
+import assetClasses from '../graphql/asset_classes.gql'
 
 // TODO mutations
 //import executor_asset_insert from '../graphql/executor_asset_insert.gql'
@@ -104,7 +103,7 @@ const debug = true
 
 export default {
   components: {
-    AssetNewButton,
+    AssetClassNewButton,
     TaskdefNewButton
   },
 
@@ -150,15 +149,14 @@ export default {
     },
 
     assetSelectOptions () {
-      console.debug('this.executor.executorAssetsByexecutorid=', this.executor.executorAssetsByexecutorid)
-      this.selectedAssets = _.map(this.executor.executorAssetsByexecutorid, a => a.assetId)
+      console.debug('this.executor.executorAssetclasssByexecutorid=', this.executor.executorAssetclasssByexecutorid)
+      this.selectedAssets = _.map(this.executor.executorAssetclasssByexecutorid, a => a.assetClassName)
 
-      console.debug('this.assets=', this.assets)
-      return _.map(this.assets, a => {
+      console.debug('this.assetClasses=', this.assetClasses)
+      return _.map(this.assetClasses, a => {
         return {
-          label: a.assetId,
-          value: a.assetId
-          //value: _.pick(a, ['assetId', 'assetByassetid.assetClass', 'assetByassetid.description'])
+          label: a.className,
+          value: a.className
         }
       })
     },
@@ -180,7 +178,7 @@ export default {
       },
     },
 
-    assets,
+    assetClasses,
   },
 
   mounted () {
@@ -196,17 +194,17 @@ export default {
       console.debug('assetSelectionChange', v)
     },
 
-    assetCreated (data) {
-      console.debug('assetCreated: data=', data)
-      const asset = {
+    assetClassCreated (data) {
+      console.debug('assetClassCreated: data=', data)
+      const assetClass = {
         assetId: data.assetId,
         assetByassetid: {
           assetClass: data.assetClass,
           description: data.description,
         }
       }
-      console.debug('assetCreated: asset=', asset)
-      this.executor.executorAssetsByexecutorid.splice(0, 0, asset)
+      console.debug('assetClassCreated: assetClass=', assetClass)
+      this.executor.executorAssetclasssByexecutorid.splice(0, 0, assetClass)
     },
 
     taskDefCreated (data) {

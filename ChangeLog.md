@@ -1,3 +1,7 @@
+2018-10-09
+
+- executor associated with assetClass (not direct asset instance)
+
 2018-10-08
 
 - more adjustments as moving toward graphql
