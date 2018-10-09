@@ -11,8 +11,7 @@
     </q-breadcrumbs>
 
     <!--<pre v-if="debug">executor={{executor}}</pre>-->
-    <!--<pre v-if="debug">selectedAssets={{selectedAssets}}</pre>-->
-    <!--<pre v-if="debug">assetSelectOptions={{assetSelectOptions}}</pre>-->
+    <!--<pre v-if="debug">executor.executorAssetclasssByexecutorid={{executor.executorAssetclasssByexecutorid}}</pre>-->
 
     <div v-if="executor">
 
@@ -32,27 +31,29 @@
       </q-card>
 
       <q-card class="q-mb-lg">
-        <q-card-title>
-          Asset classes managed by this executor:
-          <asset-class-new-button
-            slot="right"
-            v-on:created="assetClassCreated"
-          />
-
-        </q-card-title>
-        <q-card-separator />
         <q-card-main>
-          <div>
-            <q-select
-              hide-underline
-              multiple
-              chips
-              style="width:auto"
-              v-model="selectedAssets"
-              :options="assetSelectOptions"
-              @input="assetSelectionChange"
+          Asset classes managed:
+          <div class="row">
+            <q-chip
+              class="col-auto q-mr-sm"
+              v-for="c in executor.executorAssetclasssByexecutorid"
+              :key="c.assetClassName"
+              color="secondary"
+              small
+            >
+              {{c.assetClassName}}
+              <q-tooltip>
+                {{c.assetclassesByassetclassname.description}}
+              </q-tooltip>
+            </q-chip>
+
+            <asset-class-select-button
+              class="col-auto q-ml-md"
+              :exclude="myAssetClassNames"
+              v-on:selection="assetClassSelection"
             />
           </div>
+
         </q-card-main>
       </q-card>
 
@@ -88,13 +89,11 @@
 </template>
 
 <script>
-import AssetClassNewButton from 'components/asset-class-new-button'
+import AssetClassSelectButton from 'components/asset-class-select-button'
 import TaskdefNewButton from 'components/taskdef-new-button'
 import executor from '../graphql/executor.gql'
-import assetClasses from '../graphql/asset_classes.gql'
-
-// TODO mutations
-//import executor_asset_insert from '../graphql/executor_asset_insert.gql'
+import executor_asset_insert from '../graphql/executor_asset_insert.gql'
+import { Notify } from 'quasar'
 
 import lodash from 'lodash'
 const _ = lodash
@@ -103,7 +102,7 @@ const debug = true
 
 export default {
   components: {
-    AssetClassNewButton,
+    AssetClassSelectButton,
     TaskdefNewButton
   },
 
@@ -114,7 +113,7 @@ export default {
       detailed: null,
       taskDefs: [],
 
-      selectedAssets: [],
+      selectedAssetClasses: [],
 
       taskDefColumns: [
         {
@@ -148,18 +147,9 @@ export default {
       return this.$route.params
     },
 
-    assetSelectOptions () {
-      console.debug('this.executor.executorAssetclasssByexecutorid=', this.executor.executorAssetclasssByexecutorid)
-      this.selectedAssets = _.map(this.executor.executorAssetclasssByexecutorid, a => a.assetClassName)
-
-      console.debug('this.assetClasses=', this.assetClasses)
-      return _.map(this.assetClasses, a => {
-        return {
-          label: a.className,
-          value: a.className
-        }
-      })
-    },
+    myAssetClassNames () {
+      return _.map(this.executor.executorAssetclasssByexecutorid, "assetClassName")
+    }
   },
 
   apollo: {
@@ -172,13 +162,13 @@ export default {
       },
       update(data) {
         console.log('update: data=', data)
-        const executor = data.executors[0]
-        this.selectedAssets = _.map(executor.executorAssetsByexecutorid, "assetId")
-        return executor
+        if (data.executors && data.executors.length) {
+          const executor = data.executors[0]
+          return executor
+        }
+        else return null
       },
     },
-
-    assetClasses,
   },
 
   mounted () {
@@ -190,22 +180,57 @@ export default {
       this.$apollo.queries.executor.refetch()
     },
 
-    assetSelectionChange (v) {
-      console.debug('assetSelectionChange', v)
-    },
+    assetClassSelection (data) {
+      console.debug('assetClassSelection: data=', data)
+      // TODO associate any new asset classes
 
-    assetClassCreated (data) {
-      console.debug('assetClassCreated: data=', data)
-      const assetClass = {
-        assetId: data.assetId,
-        assetByassetid: {
-          assetClass: data.assetClass,
-          description: data.description,
+      const newAssetClassNames = _.difference(data, this.myAssetClassNames)
+      console.debug('assetClassSelection: newAssetClassNames=', newAssetClassNames)
+
+      const added = []
+      const next = () => {
+        const assetClassName = newAssetClassNames.pop()
+        if (assetClassName) {
+          console.debug('assetClassSelection: next=', assetClassName)
+          this.addAssetClassName(assetClassName, ok => {
+            if (ok) {
+              added.push(assetClassName)
+            }
+            next()
+          })
+        }
+        else {
+          if (added.length) {
+            Notify.create({
+              message: `Asset associated (${added.length})`,
+              timeout: 1000,
+              type: 'info'
+            })
+            this.refreshExecutor()
+          }
         }
       }
-      console.debug('assetClassCreated: assetClass=', assetClass)
-      this.executor.executorAssetclasssByexecutorid.splice(0, 0, assetClass)
+
+      next()
     },
+
+    addAssetClassName (assetClassName, next) {
+      const mutation = executor_asset_insert
+      const variables = {
+        executorId: this.executor.executorId,
+        assetClassName
+      }
+      this.$apollo.mutate({mutation, variables})
+        .then((data) => {
+          console.log('mutation data=', data)
+          next(true)
+        })
+        .catch((error) => {
+          console.error('mutation error=', error)
+          next(false)
+        })
+    },
+
 
     taskDefCreated (data) {
       data.assetClassesString = _.join(data.assetClasses, ', ')

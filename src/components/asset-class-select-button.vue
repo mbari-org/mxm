@@ -7,7 +7,12 @@
       <q-modal-layout>
         <q-toolbar slot="header">
           <q-toolbar-title>
-            Asset class selection
+            <span v-if="exclude && exclude.length">
+              Add asset classes
+            </span>
+            <span v-else>
+              Asset class selection
+            </span>
           </q-toolbar-title>
           <q-btn round dense
                  color="primary"
@@ -16,10 +21,10 @@
           />
         </q-toolbar>
 
-        <div class="q-ma-sm">
+        <div class="q-mb-sm">
           <q-list link>
             <q-item
-              v-for="c in assetClasses" :key="c.className"
+              v-for="c in selectOptions" :key="c.className"
             >
               <q-item-side>
                 <q-checkbox v-model="selection" :val="c.className"/>
@@ -36,7 +41,6 @@
               v-on:created="assetClassCreated"
             />
           </div>
-
         </div>
 
         <q-toolbar slot="footer" color="flat">
@@ -57,7 +61,14 @@
       dense round no-caps size="sm"
       @click="openDialog"
     >
-      <q-tooltip>Asset class selection</q-tooltip>
+      <q-tooltip>
+        <span v-if="exclude && exclude.length">
+          Add asset classes
+        </span>
+        <span v-else>
+          Asset class selection
+        </span>
+      </q-tooltip>
     </q-btn>
 
   </div>
@@ -76,6 +87,13 @@ export default {
     AssetClassNewButton,
   },
 
+  props: {
+    exclude: {
+      type: Array,
+      required: false
+    }
+  },
+
   data () {
     return {
       dialogOpened: false,
@@ -84,14 +102,18 @@ export default {
   },
 
   computed: {
-    assetSelectOptions () {
-      if (debug) console.debug('this.assetClasses=', this.assetClasses)
-      return _.map(this.assetClasses, a => {
-        return {
-          className: a.className,
-          description: a.description,
-        }
-      })
+    selectOptions () {
+      if (debug) console.debug('selectOptions: assetClasses=', this.assetClasses)
+      const all = _.map(this.assetClasses, a => ({
+        className: a.className,
+        description: a.description,
+      }))
+      if (this.exclude && this.exclude.length) {
+        return _.filter(all, c => !_.includes(this.exclude, c.className))
+      }
+      else {
+        return all
+      }
     },
 
     okToSubmit () {
