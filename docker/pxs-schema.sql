@@ -1,7 +1,7 @@
 create table if not exists executors
 (
 	"executorId" varchar not null
-		constraint executor_pkey
+		constraint executors_pkey
 			primary key,
 	"httpEndpoint" text not null,
 	description text
@@ -11,7 +11,7 @@ create table if not exists executors
 create table if not exists taskdefs
 (
 	"taskdefId" varchar not null
-		constraint taskdef_pkey
+		constraint taskdefs_pkey
 			primary key,
 	description text
 )
@@ -20,7 +20,7 @@ create table if not exists taskdefs
 create table if not exists "assetClasses"
 (
 	"className" varchar not null
-		constraint assetclass_pkey
+		constraint assetclasses_pkey
 			primary key,
 	description text
 )
@@ -29,7 +29,7 @@ create table if not exists "assetClasses"
 create table if not exists assets
 (
 	"assetId" varchar not null
-		constraint asset_pkey
+		constraint assets_pkey
 			primary key,
 	"assetClass" varchar not null
 		constraint assetclass_fk
@@ -38,19 +38,19 @@ create table if not exists assets
 )
 ;
 
-create table if not exists executor_assetClass
+create table if not exists executor_assetclass
 (
 	"executorId" varchar not null
-		constraint executor_fk
+		constraint executor_assetclass_executor_fk
 			references executors,
 	"assetClassName" varchar not null
-		constraint assetClass_fk
+		constraint executor_assetclass_assetclass_fk
 			references "assetClasses"
 )
 ;
 
-create index executor_assetClass_executorId_index
-	on executor_assetClass ("executorId")
+create index executor_assetclass_executorId_index
+	on executor_assetclass ("executorId")
 ;
 
 create table if not exists taskdef_assetclass
@@ -79,16 +79,19 @@ create table if not exists parameters
 create table if not exists taskdef_param
 (
 	"taskdefId" varchar
-		constraint taskdef_taskdefid_fk
+		constraint taskdef_param_taskdef_fk
 			references taskdefs,
 	"paramName" varchar
-		constraint taskdef_param_parameter_name_fk
+		constraint taskdef_param_paramname_fk
 			references parameters
 )
 ;
 
 create table if not exists tasks
 (
+	"taskId" varchar not null
+		constraint task_pk
+			primary key,
 	"executorId" varchar
     constraint tasks_executorid_fk
           references executors,
@@ -102,30 +105,27 @@ create table if not exists tasks
 	description text,
 	"startDate" timestamp with time zone,
 	"endDate" timestamp with time zone,
-	geometry json,
-	"taskId" varchar not null
-		constraint task_pk
-			primary key
+	geometry json
 )
 ;
 
 create table if not exists plans
 (
-	name text not null,
-	description text,
 	"planId" varchar not null
 		constraint plan_pk
-			primary key
+			primary key,
+	name text not null,
+	description text
 )
 ;
 
 create table if not exists plan_task
 (
 	"planId" varchar
-		constraint plan_task__planid_fk
+		constraint plan_task_planid_fk
 			references plans,
 	"taskId" varchar
-		constraint plan_task__taskid_fk
+		constraint plan_task_taskid_fk
 			references tasks
 )
 ;
