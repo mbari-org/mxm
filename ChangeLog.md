@@ -1,5 +1,6 @@
 2018-10-09
 
+- delete executor's associated asset classes
 - add executor's associated asset classes
 - add asset-class-select-button
 - executor associated with assetClass (not direct asset instance)

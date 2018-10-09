@@ -40,6 +40,8 @@
               :key="c.assetClassName"
               color="secondary"
               small
+              closable
+              @hide="removeAssetClass(c.assetClassName)"
             >
               {{c.assetClassName}}
               <q-tooltip>
@@ -93,12 +95,13 @@ import AssetClassSelectButton from 'components/asset-class-select-button'
 import TaskdefNewButton from 'components/taskdef-new-button'
 import executor from '../graphql/executor.gql'
 import executor_asset_insert from '../graphql/executor_asset_insert.gql'
+import executor_asset_delete from '../graphql/executor_asset_delete.gql'
 import { Notify } from 'quasar'
 
 import lodash from 'lodash'
 const _ = lodash
 
-const debug = true
+const debug = false
 
 export default {
   components: {
@@ -161,10 +164,9 @@ export default {
         }
       },
       update(data) {
-        console.log('update: data=', data)
+        if (debug) console.log('update: data=', data)
         if (data.executors && data.executors.length) {
-          const executor = data.executors[0]
-          return executor
+          return data.executors[0]
         }
         else return null
       },
@@ -181,17 +183,14 @@ export default {
     },
 
     assetClassSelection (data) {
-      console.debug('assetClassSelection: data=', data)
-      // TODO associate any new asset classes
-
       const newAssetClassNames = _.difference(data, this.myAssetClassNames)
-      console.debug('assetClassSelection: newAssetClassNames=', newAssetClassNames)
+      if (debug) console.debug('assetClassSelection: newAssetClassNames=', newAssetClassNames)
 
       const added = []
       const next = () => {
         const assetClassName = newAssetClassNames.pop()
         if (assetClassName) {
-          console.debug('assetClassSelection: next=', assetClassName)
+          if (debug) console.debug('assetClassSelection: next=', assetClassName)
           this.addAssetClassName(assetClassName, ok => {
             if (ok) {
               added.push(assetClassName)
@@ -222,7 +221,6 @@ export default {
       }
       this.$apollo.mutate({mutation, variables})
         .then((data) => {
-          console.log('mutation data=', data)
           next(true)
         })
         .catch((error) => {
@@ -231,6 +229,25 @@ export default {
         })
     },
 
+    removeAssetClass (assetClassName) {
+      if (debug) console.debug('removeAssetClass: assetClassName=', assetClassName)
+
+      const mutation = executor_asset_delete
+      const variables = {
+        executorId: this.executor.executorId,
+        assetClassName
+      }
+      this.$apollo.mutate({mutation, variables})
+        .then((data) => {
+          const affected_rows = _.get(data, "data.delete_executor_assetclass.affected_rows")
+          if (affected_rows) {
+            this.refreshExecutor()
+          }
+        })
+        .catch((error) => {
+          console.error('mutation error=', error)
+        })
+    },
 
     taskDefCreated (data) {
       data.assetClassesString = _.join(data.assetClasses, ', ')
