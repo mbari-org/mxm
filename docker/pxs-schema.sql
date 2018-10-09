@@ -45,12 +45,9 @@ create table if not exists executor_assetclass
 			references executors,
 	"assetClassName" varchar not null
 		constraint executor_assetclass_assetclass_fk
-			references "assetClasses"
+			references "assetClasses",
+    primary key("executorId", "assetClassName")
 )
-;
-
-create index executor_assetclass_executorId_index
-	on executor_assetclass ("executorId")
 ;
 
 create table if not exists taskdef_assetclass
@@ -58,9 +55,10 @@ create table if not exists taskdef_assetclass
 	"taskdefId" varchar
 		constraint taskdef_assetclass_td_fk
 			references taskdefs,
-	"assetClass" varchar
+	"assetClassName" varchar
 		constraint taskdef_assetclass_fk
-			references "assetClasses"
+			references "assetClasses",
+  primary key("taskdefId", "assetClassName")
 )
 ;
 
@@ -83,7 +81,8 @@ create table if not exists taskdef_param
 			references taskdefs,
 	"paramName" varchar
 		constraint taskdef_param_paramname_fk
-			references parameters
+			references parameters,
+   primary key("taskdefId", "paramName")
 )
 ;
 
@@ -126,7 +125,8 @@ create table if not exists plan_task
 			references plans,
 	"taskId" varchar
 		constraint plan_task_taskid_fk
-			references tasks
+			references tasks,
+    primary key("planId", "taskId")
 )
 ;
 
@@ -141,6 +141,7 @@ create table if not exists arguments
 			references plans,
 	"taskId" varchar not null
 		constraint arguments_taskid_fk
-			references tasks
+			references tasks,
+  primary key("planId", "taskId", "paramName")
 )
 ;
