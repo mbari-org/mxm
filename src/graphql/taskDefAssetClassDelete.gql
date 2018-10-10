@@ -1,0 +1,13 @@
+mutation($nodeId: ID!) {
+  deleteTaskdefAssetClass(
+    input: {
+      nodeId: $nodeId
+    }
+  ) {
+    taskdefAssetClass {
+      executorId
+      taskDefId
+      assetClassName
+    }
+  }
+}

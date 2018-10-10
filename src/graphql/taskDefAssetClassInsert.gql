@@ -1,0 +1,17 @@
+mutation($executorId: String!, $taskDefId: String!, $assetClassName: String!) {
+  createTaskdefAssetClass(
+    input: {
+      taskdefAssetClass: {
+        taskDefId: $taskDefId
+        executorId: $executorId
+        assetClassName: $assetClassName
+      }
+    }
+  ) {
+    taskdefAssetClass {
+      executorId
+      taskDefId
+      assetClassName
+    }
+  }
+}

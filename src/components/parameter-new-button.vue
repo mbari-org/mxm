@@ -104,8 +104,10 @@
 </template>
 
 <script>
-  import mutation from '../graphql/parameters_insert.gql'
+  import mutation from '../graphql/parametersInsert.gql'
   import {Notify} from 'quasar'
+
+  const debug = false
 
   export default {
     props: {
@@ -113,7 +115,7 @@
         type: String,
         required: true
       },
-      taskdefId: {
+      taskDefId: {
         type: String,
         required: true
       }
@@ -148,12 +150,15 @@
 
       submit() {
         const variables = {
+          executorId: this.executorId,
+          taskDefId: this.taskDefId,
           name: this.name,
           type: this.type,
           required: this.required,
           defaultValue: this.defaultValue,
           description: this.description,
         }
+        if (debug) console.debug('variables=', variables)
 
         this.$apollo.mutate({mutation, variables})
           .then((data) => {
