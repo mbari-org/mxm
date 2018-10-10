@@ -1,0 +1,15 @@
+mutation($executorId: String!, $assetClassName: String!) {
+  createExecutorAssetClass(
+    input: {
+      executorAssetClass: {
+        executorId: $executorId,
+        assetClassName: $assetClassName
+      }
+    }
+  ) {
+    executorAssetClass {
+      executorId
+      assetClassName
+    }
+  }
+}

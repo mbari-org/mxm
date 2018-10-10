@@ -1,9 +1,0 @@
-mutation($executorId: String!, $asset_className: String!) {
-  insert_executor_asset_class(
-    objects: [
-      { executorId: $executorId, asset_className: $asset_className}
-    ]
-  ) {
-    affected_rows
-  }
-}

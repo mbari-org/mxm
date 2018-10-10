@@ -76,11 +76,10 @@
 
 <script>
 import AssetClassNewButton from 'components/asset-class-new-button'
-import assetClasses from '../graphql/asset_classes.gql'
-import mutation from '../graphql/asset_classes_insert.gql'
+import allAssetClassesList from '../graphql/assetClasses.gql'
 import { Notify } from 'quasar'
 
-const debug = false
+const debug = true
 
 export default {
   components: {
@@ -98,13 +97,14 @@ export default {
     return {
       dialogOpened: false,
       selection: [],
+      allAssetClassesList: [],
     }
   },
 
   computed: {
     selectOptions () {
-      if (debug) console.debug('selectOptions: assetClasses=', this.assetClasses)
-      const all = _.map(this.assetClasses, a => ({
+      if (debug) console.debug('selectOptions: allAssetClassesList=', this.allAssetClassesList)
+      const all = _.map(this.allAssetClassesList, a => ({
         className: a.className,
         description: a.description,
       }))
@@ -122,7 +122,7 @@ export default {
   },
 
   apollo: {
-    assetClasses,
+    allAssetClassesList,
   },
 
   methods: {
@@ -138,8 +138,14 @@ export default {
 
     assetClassCreated (data) {
       if (debug) console.debug('assetClassCreated: data=', data)
-      this.$apollo.queries.assetClasses.refetch()
+      this.$apollo.queries.allAssetClassesList.refetch()
     },
-  }
+  },
+
+  watch: {
+    allAssetClassesList (val) {
+      console.log('watch allAssetClassesList=', val)
+    }
+  },
 }
 </script>

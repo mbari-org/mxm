@@ -1,0 +1,12 @@
+mutation($nodeId: ID!) {
+  deleteExecutorAssetClass(
+    input: {
+      nodeId: $nodeId
+    }
+  ) {
+    executorAssetClass {
+      executorId
+      assetClassName
+    }
+  }
+}

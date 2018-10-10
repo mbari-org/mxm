@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import assetClasses from '../graphql/asset_classes.gql'
+import assetClasses from '../graphql/assetClasses.gql'
 import AssetClassNewButton from 'components/asset-class-new-button'
 
 export default {

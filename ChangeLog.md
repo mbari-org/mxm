@@ -1,5 +1,11 @@
 2018-10-10
 
+- adjusting queries/mutations per execution of `postgraphile` as follows:
+
+      postgraphile -c postgresql://pxs@localhost:25432/pxs --schema public -o --simple-collections only
+
+   TODO adjust docker-compose to use postgraphile
+
 - looking again into PostGraphile after facing Hasura issues:
     - https://github.com/hasura/graphql-engine/issues/284
     - https://github.com/hasura/graphql-engine/issues/506

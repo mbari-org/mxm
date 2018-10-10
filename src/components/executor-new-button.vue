@@ -81,7 +81,7 @@
 </template>
 
 <script>
-  import mutation from '../graphql/executors_insert.gql'
+  import mutation from '../graphql/executorsInsert.gql'
   import {Notify} from 'quasar'
 
   export default {

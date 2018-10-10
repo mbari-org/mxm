@@ -11,7 +11,7 @@
     </q-breadcrumbs>
 
     <!--<pre v-if="debug">executor={{executor}}</pre>-->
-    <!--<pre v-if="debug">executor.executorAssetclasssByexecutorid={{executor.executorAssetclasssByexecutorid}}</pre>-->
+    <pre>executor.executorAssetClassesByExecutorIdList={{executor.executorAssetClassesByExecutorIdList}}</pre>
 
     <div v-if="executor">
 
@@ -36,16 +36,16 @@
           <div class="row">
             <q-chip
               class="col-auto q-mr-sm"
-              v-for="c in executor.executorAssetclasssByexecutorid"
+              v-for="c in executor.executorAssetClassesByExecutorIdList"
               :key="c.assetClassName"
               color="secondary"
               small
               closable
-              @hide="removeAssetClass(c.assetClassName)"
+              @hide="removeAssetClass(c.nodeId)"
             >
               {{c.assetClassName}}
               <q-tooltip>
-                {{c.assetclassesByassetclassname.description}}
+                {{c.assetClassByAssetClassName.description}}
               </q-tooltip>
             </q-chip>
 
@@ -94,12 +94,11 @@
 import AssetClassSelectButton from 'components/asset-class-select-button'
 import TaskdefNewButton from 'components/taskdef-new-button'
 import executor from '../graphql/executor.gql'
-import executor_asset_insert from '../graphql/executor_asset_insert.gql'
-import executor_asset_delete from '../graphql/executor_asset_delete.gql'
+import executorAssetClassInsert from '../graphql/executorAssetClassInsert.gql'
+import executorAssetClassDelete from '../graphql/executorAssetClassDelete.gql'
 import { Notify } from 'quasar'
 
-import lodash from 'lodash'
-const _ = lodash
+import _ from 'lodash'
 
 const debug = false
 
@@ -151,7 +150,7 @@ export default {
     },
 
     myAssetClassNames () {
-      return _.map(this.executor.executorAssetclasssByexecutorid, "assetClassName")
+      return _.map(this.executor.executorAssetClassesByExecutorIdList, "assetClassName")
     }
   },
 
@@ -165,8 +164,8 @@ export default {
       },
       update(data) {
         if (debug) console.log('update: data=', data)
-        if (data.executors && data.executors.length) {
-          return data.executors[0]
+        if (data.allExecutorsList && data.allExecutorsList.length) {
+          return data.allExecutorsList[0]
         }
         else return null
       },
@@ -214,7 +213,7 @@ export default {
     },
 
     addAssetClassName (assetClassName, next) {
-      const mutation = executor_asset_insert
+      const mutation = executorAssetClassInsert
       const variables = {
         executorId: this.executor.executorId,
         assetClassName
@@ -229,18 +228,16 @@ export default {
         })
     },
 
-    removeAssetClass (assetClassName) {
-      if (debug) console.debug('removeAssetClass: assetClassName=', assetClassName)
+    removeAssetClass (nodeId) {
+      if (debug) console.debug('removeAssetClass: nodeId=', nodeId)
 
-      const mutation = executor_asset_delete
+      const mutation = executorAssetClassDelete
       const variables = {
-        executorId: this.executor.executorId,
-        assetClassName
+        nodeId
       }
       this.$apollo.mutate({mutation, variables})
         .then((data) => {
-          const affected_rows = _.get(data, "data.delete_executor_assetclass.affected_rows")
-          if (affected_rows) {
+          if (data.data) {
             this.refreshExecutor()
           }
         })
