@@ -78,12 +78,11 @@
     },
 
     methods: {
-      refresh() {
-        // TODO
+      refresh () {
         this.$apollo.queries.allExecutorsList.refetch()
       },
 
-      created(data) {
+      created (data) {
         this.allExecutorsList.splice(0, 0, data)
       }
     },

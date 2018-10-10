@@ -11,7 +11,7 @@
     </q-breadcrumbs>
 
     <!--<pre v-if="debug">executor={{executor}}</pre>-->
-    <pre>executor.executorAssetClassesByExecutorIdList={{executor.executorAssetClassesByExecutorIdList}}</pre>
+    <!--<pre>myAssetClasses={{myAssetClasses}}</pre>-->
 
     <div v-if="executor">
 
@@ -36,7 +36,7 @@
           <div class="row">
             <q-chip
               class="col-auto q-mr-sm"
-              v-for="c in executor.executorAssetClassesByExecutorIdList"
+              v-for="c in myAssetClasses"
               :key="c.assetClassName"
               color="secondary"
               small
@@ -149,9 +149,13 @@ export default {
       return this.$route.params
     },
 
+    myAssetClasses () {
+      return this.executor && this.executor.executorAssetClassesByExecutorIdList || []
+    },
+
     myAssetClassNames () {
-      return _.map(this.executor.executorAssetClassesByExecutorIdList, "assetClassName")
-    }
+      return _.map(this.myAssetClasses, "assetClassName")
+    },
   },
 
   apollo: {
