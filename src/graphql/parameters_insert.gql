@@ -3,7 +3,7 @@ mutation(
   $type: String!
   $required: Boolean!
   $description: String
-  $defaultValue: String
+  $default_value: String
 ) {
   insert_parameters(
     objects: [
@@ -12,7 +12,7 @@ mutation(
         type: $type
         required: $required
         description: $description
-        defaultValue: $defaultValue
+        default_value: $default_value
       }
     ]
   ) {

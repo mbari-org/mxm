@@ -5,7 +5,8 @@ import VueApollo from 'vue-apollo'
 
 export default ({ app, Vue }) => {
   const httpLink = new HttpLink({
-    uri: 'http://localhost:8090/v1alpha1/graphql',
+    uri: 'http://localhost:5000/graphql', // PostGraphile
+//  uri: 'http://localhost:8090/v1alpha1/graphql', // Hasura
   })
 
   // Create the apollo client

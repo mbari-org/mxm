@@ -33,13 +33,13 @@
 
           <q-field
             label="Asset Class:"
-            :error="!assetClass.length"
+            :error="!className.length"
             :label-width="4"
           >
             <!-- also using v-if trick here. TODO use some lazy-based machanism.. -->
             <asset-class-field
               v-if="dialogOpened"
-              v-model="assetClass"
+              v-model="className"
             />
           </q-field>
 
@@ -105,21 +105,21 @@ export default {
     return {
       dialogOpened: false,
       assetId: '',
-      assetClass: '',
+      className: '',
       description: ''
     }
   },
 
   computed: {
     okToSubmit () {
-      return this.assetId && this.assetClass
+      return this.assetId && this.className
     }
   },
 
   methods: {
     openDialog () {
       this.assetId = ''
-      this.assetClass = ''
+      this.className = ''
       this.description = ''
       this.dialogOpened = true
     },
@@ -127,7 +127,7 @@ export default {
     submit () {
       const variables = {
         assetId: this.assetId,
-        assetClass: this.assetClass,
+        className: this.className,
         description: this.description || null
       }
 

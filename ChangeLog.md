@@ -1,3 +1,9 @@
+2018-10-10
+
+- looking again into PostGraphile after facing Hasura issues:
+    - https://github.com/hasura/graphql-engine/issues/284
+    - https://github.com/hasura/graphql-engine/issues/506
+
 2018-10-09
 
 - delete executor's associated asset classes

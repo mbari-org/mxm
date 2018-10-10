@@ -1,8 +1,8 @@
-mutation($executorId: String!, $assetClassName: String!) {
-  delete_executor_assetclass(where: {
+mutation($executorId: String!, $asset_className: String!) {
+  delete_executor_asset_class(where: {
     _and: [
       {executorId:     {_eq: $executorId}},
-      {assetClassName: {_eq: $assetClassName}}
+      {asset_className: {_eq: $asset_className}}
     ]
   }) {
     affected_rows

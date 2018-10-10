@@ -1,7 +1,9 @@
-query executor($executorId: String!) {
-  executors(where: {executorId: {_eq: $executorId}}) {
+query task_defs($executorId: String!, $taskDefId: String!) {
+  task_defs(where: { _and: [
+    {executorId: {_eq: $executorId}},
+    {taskDefId: {_eq: $taskDefId}}
+  ]}) {
     executorId
-    httpEndpoint
     description
     executorAssetclasssByexecutorid {
       asset_className

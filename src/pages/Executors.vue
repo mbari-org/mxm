@@ -11,7 +11,7 @@
 
     <q-table
       title="Executors"
-      :data="executors"
+      :data="allExecutors.nodes"
       :columns="columns"
       row-key="name"
     >
@@ -33,16 +33,16 @@
 
 <script>
   import ExecutorNewButton from 'components/executor-new-button'
-  import executors from '../graphql/executors.gql'
+  import allExecutors from '../graphql/executors.gql'
 
   export default {
     components: {
       ExecutorNewButton
     },
 
-    data() {
+    data () {
       return {
-        executors: [],
+        allExecutors: [],
         columns: [
           {
             field: 'executorId',
@@ -70,7 +70,7 @@
     },
 
     apollo: {
-      executors
+      allExecutors
     },
 
     mounted() {
@@ -80,11 +80,19 @@
     methods: {
       refresh() {
         // TODO
+        this.$apollo.queries.allExecutors.refetch()
       },
 
       created(data) {
-        this.executors.splice(0, 0, data)
+        this.allExecutors.splice(0, 0, data)
+      }
+    },
+
+    watch: {
+      allExecutors (val) {
+        console.log('watch allExecutors=', val)
       }
     }
+
   }
 </script>

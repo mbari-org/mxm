@@ -1,7 +1,15 @@
 {
-  executors {
-    executorId
-    httpEndpoint
-    description
+  allExecutors {
+    nodes {
+      nodeId
+      executorId
+      httpEndpoint
+      description
+      executorAssetClassesByExecutorId {
+        nodes {
+          assetClassName
+        }
+      }
+    }
   }
 }

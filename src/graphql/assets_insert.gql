@@ -1,9 +1,9 @@
-mutation($assetId: String!, $assetClass: String!, $description: String) {
+mutation($asset_id: String!, $className: String!, $description: String) {
   insert_assets(
     objects: [
       {
-        assetId: $assetId,
-        assetClass: $assetClass,
+        asset_id: $asset_id,
+        className: $className,
         description: $description
       }
     ]

@@ -1,13 +1,17 @@
 mutation($executorId: String!, $httpEndpoint: String!, $description: String) {
-  insert_executors(
-    objects: [
-      {
+  createExecutor(
+    input: {
+      executor: {
         executorId: $executorId
         httpEndpoint: $httpEndpoint
         description: $description
       }
-    ]
+    }
   ) {
-    affected_rows
+    executor {
+      executorId
+      httpEndpoint
+      description
+    }
   }
 }
