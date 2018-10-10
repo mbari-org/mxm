@@ -1,5 +1,6 @@
 2018-10-10
 
+- starting with taskDefs
 - adjusting queries/mutations per execution of `postgraphile` as follows:
 
       postgraphile -c postgresql://pxs@localhost:25432/pxs --schema public -o --simple-collections only

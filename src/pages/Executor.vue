@@ -62,7 +62,7 @@
       <q-table
         title="Tasks definitions managed by this executor"
         :columns="taskDefColumns"
-        :data="taskDefTable"
+        :data="myTaskDefs"
         row-key="name"
       >
         <div slot="top-right" slot-scope="props" class="fit">
@@ -140,7 +140,6 @@ export default {
           sortable: true
         }
       ],
-      taskDefTable: []
     }
   },
 
@@ -155,6 +154,17 @@ export default {
 
     myAssetClassNames () {
       return _.map(this.myAssetClasses, "assetClassName")
+    },
+
+    myTaskDefs () {
+      const list = this.executor && this.executor.taskDefsByExecutorIdList || []
+      _.each(list, e => {
+        e.assetClassesString = _.join(
+          _.map(e.taskdefAssetClassesByExecutorIdAndTaskDefIdList, 'assetClassName'),
+          ', '
+        )
+      })
+      return list
     },
   },
 
@@ -250,9 +260,10 @@ export default {
         })
     },
 
+    // TODO
     taskDefCreated (data) {
       data.assetClassesString = _.join(data.assetClasses, ', ')
-      this.taskDefTable.splice(0, 0, data)
+      this.myTaskDefs.splice(0, 0, data)
     }
   },
 

@@ -13,5 +13,13 @@ query executor($executorId: String!) {
         description
       }
     }
+    taskDefsByExecutorIdList {
+      nodeId
+      taskDefId
+      description
+      taskdefAssetClassesByExecutorIdAndTaskDefIdList {
+        assetClassName
+      }
+    }
   }
 }

@@ -8,7 +8,7 @@
         <q-toolbar slot="header">
           <q-toolbar-title>
             <span v-if="exclude && exclude.length">
-              Add asset classes
+              Add associated asset classes
             </span>
             <span v-else>
               Asset class selection
@@ -63,7 +63,7 @@
     >
       <q-tooltip>
         <span v-if="exclude && exclude.length">
-          Add asset classes
+          Add associated asset classes
         </span>
         <span v-else>
           Asset class selection
@@ -79,7 +79,7 @@ import AssetClassNewButton from 'components/asset-class-new-button'
 import allAssetClassesList from '../graphql/assetClasses.gql'
 import { Notify } from 'quasar'
 
-const debug = true
+const debug = false
 
 export default {
   components: {
