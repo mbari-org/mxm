@@ -1,17 +1,21 @@
 <template>
   <q-page class="q-pa-md">
     <q-breadcrumbs active-color="secondary" color="light">
-      <q-breadcrumbs-el label="Home" to="/" />
-      <q-breadcrumbs-el label="Plans" to="/plans" />
-      <q-breadcrumbs-el label="Plan" :to="`/plans/${encodeURIComponent(params.planId)}`" />
-      <q-breadcrumbs-el label="Task" :to="`/plans/${encodeURIComponent(params.planId)}/tasks/${encodeURIComponent(params.taskId)}`" />
+      <q-breadcrumbs-el label="Home" to="/"/>
+      <q-breadcrumbs-el label="Plans" to="/plans"/>
+      <q-breadcrumbs-el :label="params.planId" :to="`/plans/${encodeURIComponent(params.planId)}`"/>
+      <q-breadcrumbs-el label="Tasks"/>
+      <q-breadcrumbs-el :label="params.taskId"/>
       <q-btn
         dense round icon="refresh" class="q-ml-lg" size="sm"
-        @click="refresh"
+        @click="refreshTask"
       />
     </q-breadcrumbs>
 
     <div v-if="task">
+
+      <pre>task={{task}}</pre>
+
       <h5> '{{ task.taskDefId }}' Task Instance
       </h5>
       <small>Plan: {{ params.planId }}</small>
@@ -46,15 +50,19 @@
 
       <q-table
         title="Arguments"
-        :data="tableData"
-        :columns="columns"
+        :data="myArguments"
+        :columns="argColumns"
         row-key="name"
       >
         <div slot="top-right" slot-scope="props" class="fit">
+            <!--v-if="parameters.length"-->
           <argument-new-button
             :plan-id="params.planId"
             :task-id="params.taskId"
-            v-on:created="created"
+            :executor-id="task.executorId"
+            :task-def-id="task.taskDefId"
+            :parameters="parameters"
+            v-on:created="argumentCreated"
           />
         </div>
       </q-table>
@@ -67,78 +75,100 @@
 </template>
 
 <script>
-import ArgumentNewButton from 'components/argument-new-button'
-import _ from 'lodash'
+  import ArgumentNewButton from 'components/argument-new-button'
+  import task from '../graphql/task.gql'
 
-export default {
-  components: {
-    ArgumentNewButton
-  },
+  const debug = true
 
-  data () {
-    return {
-      loading: false,
-      task: null,
-      columns: [
-        {
-          field: 'paramName',
-          name: 'paramName',
-          label: 'Parameter',
-          align: 'left',
-          sortable: true
-        },
-        {
-          field: 'paramValue',
-          name: 'paramValue',
-          label: 'Value',
-          align: 'left',
-          sortable: true
-        }
-      ],
-      tableData: []
-    }
-  },
-
-  computed: {
-    params () {
-      return this.$route.params
-    }
-  },
-
-  mounted () {
-    this.refresh()
-  },
-
-  methods: {
-    refresh () {
-      this.loading = true
-      this.task = null
-      const url = `/plans/${encodeURIComponent(this.params.planId)}/tasks/${encodeURIComponent(this.params.taskId)}`
-      this.$axios({
-        method: 'GET',
-        url
-      })
-        .then(response => {
-          this.loading = false
-          console.log(`GET ${url}: response=`, response)
-          this.task = response.data || {}
-          this.tableData = this.task.arguments || []
-        })
-        .catch(e => {
-          this.loading = false
-          console.error(e)
-        })
+  export default {
+    components: {
+      ArgumentNewButton,
     },
 
-    created (data) {
-      this.tableData.splice(0, 0, data)
-    }
-  },
+    data() {
+      return {
+        loading: false,
+        task: null,
+        argColumns: [
+          {
+            field: 'paramName',
+            name: 'paramName',
+            label: 'Parameter',
+            align: 'left',
+            sortable: true
+          },
+          {
+            field: 'paramValue',
+            name: 'paramValue',
+            label: 'Value',
+            align: 'left',
+            sortable: true
+          },
+          {
+            field: 'description',
+            name: 'description',
+            label: 'Description',
+            align: 'left',
+            sortable: true
+          }
+        ],
+      }
+    },
 
-  watch: {
-    '$route' () {
-      this.refresh()
+    computed: {
+      params() {
+        return this.$route.params
+      },
+
+      myArguments() {
+        const list = _.get(this.task, 'argumentsByPlanIdAndTaskIdList') || []
+        return list
+      },
+
+      parameters() {
+        const all = _.get(this.task, 'taskDefByExecutorIdAndTaskDefId.parametersByExecutorIdAndTaskDefIdList') || []
+        const myArgNames = _.map(this.myArguments, 'paramName')
+        return _.filter(all, p => !_.includes(myArgNames, p.name))
+      },
+    },
+
+    apollo: {
+      task: {
+        query: task,
+        variables() {
+          return {
+            planId: this.params.planId,
+            taskId: this.params.taskId,
+          }
+        },
+        update(data) {
+          if (debug) console.log('update: data=', data)
+          if (data.taskByPlanIdAndTaskId) {
+            return data.taskByPlanIdAndTaskId
+          }
+          else return null
+        },
+      },
+    },
+
+    mounted() {
+      this.refreshTask()
+    },
+
+    methods: {
+      refreshTask() {
+        this.$apollo.queries.task.refetch()
+      },
+
+      argumentCreated(data) {
+        this.refreshTask()
+      }
+    },
+
+    watch: {
+      '$route'() {
+        this.refreshTask()
+      }
     }
   }
-}
 </script>

@@ -17,7 +17,7 @@
           Plan: {{plan.name}}
           <small>({{plan.planId}})</small>
         </q-card-title>
-        <q-card-separator />
+        <q-card-separator/>
         <q-card-main>
           <p class="text-italic">
             {{plan.description}}
@@ -65,15 +65,6 @@
           </router-link>
         </q-td>
 
-        <q-td slot="body-cell-assetId" slot-scope="props" :props="props"
-              style="width:5px"
-        >
-          <router-link
-            :to="`/executors/${encodeURIComponent(props.row.executorId)}/assets/${encodeURIComponent(props.value)}`">
-            {{ props.value }}
-          </router-link>
-        </q-td>
-
       </q-table>
 
     </div>
@@ -87,7 +78,7 @@
 <script>
   import plan from '../graphql/plan.gql'
   import TaskNewButton from 'components/task-new-button'
-  import { Notify } from 'quasar'
+  import {Notify} from 'quasar'
   import _ from 'lodash'
 
   const debug = true
@@ -167,16 +158,15 @@
         return this.$route.params
       },
 
-      myTasks () {
-        const list = this.plan && this.plan.tasksByPlanIdList || []
-        return list
+      myTasks() {
+        return _.get(this.plan, 'tasksByPlanIdList') || []
       },
     },
 
     apollo: {
       plan: {
         query: plan,
-        variables () {
+        variables() {
           return {
             planId: this.params.planId
           }
@@ -196,25 +186,25 @@
     },
 
     methods: {
-      refreshPlan () {
+      refreshPlan() {
         this.$apollo.queries.plan.refetch()
       },
 
-      taskCreated (data) {
-        this.myTasks.splice(0, 0, data)
+      taskCreated(data) {
+        this.refreshPlan()
       }
     },
 
     watch: {
-      '$route' () {
+      '$route'() {
         this.refreshPlan()
       },
 
-      plan (val) {
+      plan(val) {
         if (debug) console.log('watch plan=', val)
       },
 
-      executor (val) {
+      executor(val) {
         if (debug) console.log('watch executor=', val)
       },
     }

@@ -1,0 +1,30 @@
+mutation(
+  $planId: String!
+  $taskId: String!
+  $executorId: String!
+  $taskDefId: String!
+  $paramName: String!
+  $paramValue: String!
+) {
+  createArgument(
+    input: {
+      argument: {
+        planId: $planId
+        taskId: $taskId
+        executorId: $executorId
+        taskDefId: $taskDefId
+        paramName: $paramName
+        paramValue: $paramValue
+      }
+    }
+  ) {
+    argument {
+      planId
+      taskId
+      executorId
+      taskDefId
+      paramName
+      paramValue
+    }
+  }
+}

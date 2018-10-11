@@ -22,12 +22,9 @@
             :error="!paramName.length"
             :label-width="4"
           >
-            <q-input
-              class="bg-light-blue-1"
-              v-model.trim="paramName"
-              type="text"
-              autofocus
-              style="width:24em"
+            <parameter-select
+              :parameters="parameters"
+              v-model="paramName"
             />
           </q-field>
 
@@ -63,73 +60,95 @@
       icon="add"
       dense round no-caps size="sm"
       @click="openDialog"
-    />
+    >
+      <q-tooltip>Add explicit argument</q-tooltip>
+    </q-btn>
 
   </div>
 </template>
 
 <script>
-import { Notify } from 'quasar'
+  import mutation from '../graphql/argumentsInsert.gql'
+  import ParameterSelect from 'components/parameter-select'
+  import {Notify} from 'quasar'
 
-export default {
-  props: {
-    planId: {
-      type: String,
-      required: true
-    },
-    taskId: {
-      type: String,
-      required: true
-    }
-  },
+  const debug = true
 
-  data () {
-    return {
-      dialogOpened: false,
-      paramName: '',
-      paramValue: ''
-    }
-  },
-
-  computed: {
-    okToSubmit () {
-      return this.paramName && this.paramValue
-    }
-  },
-
-  methods: {
-    openDialog () {
-      this.paramName = ''
-      this.paramValue = ''
-      this.dialogOpened = true
+  export default {
+    components: {
+      ParameterSelect,
     },
 
-    submit () {
-      const data = {
-        paramName: this.paramName,
-        paramValue: this.paramValue
+    props: {
+      planId: {
+        type: String,
+        required: true
+      },
+      taskId: {
+        type: String,
+        required: true
+      },
+      executorId: {
+        type: String,
+        required: true
+      },
+      taskDefId: {
+        type: String,
+        required: true
+      },
+      parameters: {
+        type: Array,
+        required: true
+      },
+    },
+
+    data() {
+      return {
+        dialogOpened: false,
+        paramName: '',
+        paramValue: ''
       }
+    },
 
-      const url = `/plans/${encodeURIComponent(this.planId)}/tasks/${encodeURIComponent(this.taskId)}/arguments`
-      this.$axios({
-        method: 'POST',
-        url,
-        data
-      })
-        .then(response => {
-          console.log(`POST ${url}: response=`, response)
-          this.dialogOpened = false
-          Notify.create({
-            message: 'Argument created',
-            timeout: 1000,
-            type: 'info'
+    computed: {
+      okToSubmit() {
+        return this.paramName && this.paramValue
+      }
+    },
+
+    methods: {
+      openDialog() {
+        this.paramName = ''
+        this.paramValue = ''
+        this.dialogOpened = true
+      },
+
+      submit() {
+        const variables = {
+          planId: this.planId,
+          taskId: this.taskId,
+          executorId: this.executorId,
+          taskDefId: this.taskDefId,
+          paramName: this.paramName,
+          paramValue: this.paramValue
+        }
+        if (debug) console.debug('variables=', variables)
+
+        this.$apollo.mutate({mutation, variables})
+          .then((data) => {
+            console.log('mutation data=', data)
+            this.dialogOpened = false
+            Notify.create({
+              message: 'Argument created',
+              timeout: 1000,
+              type: 'info'
+            })
+            this.$emit('created', variables)
           })
-          this.$emit('created', response.data)
-        })
-        .catch(e => {
-          console.error(e)
-        })
+          .catch((error) => {
+            console.error('mutation error=', error)
+          })
+      }
     }
   }
-}
 </script>

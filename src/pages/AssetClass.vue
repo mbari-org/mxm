@@ -3,7 +3,7 @@
     <q-breadcrumbs active-color="secondary" color="light">
       <q-breadcrumbs-el label="Home" to="/"/>
       <q-breadcrumbs-el label="AssetClasses" to="/assetclasses"/>
-      <q-breadcrumbs-el :label="params.className" :to="`/assetclasses/${encodeURIComponent(params.className)}`"/>
+      <q-breadcrumbs-el :label="params.className"/>
       <q-btn
         dense round icon="refresh" class="q-ml-lg" size="sm"
         @click="refreshAssetClass"
