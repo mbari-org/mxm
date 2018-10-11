@@ -13,7 +13,7 @@
           @click="leftDrawerOpen = !leftDrawerOpen"
           aria-label="Menu"
         >
-          <q-icon name="menu" />
+          <q-icon name="menu"/>
         </q-btn>
 
         <q-toolbar-title shrink>
@@ -58,39 +58,39 @@
         inset-delimiter
       >
         <q-item to="/executors">
-          <q-item-side icon="settings" />
+          <q-item-side icon="settings"/>
           <q-item-main label="Executors"/>
         </q-item>
         <q-item to="/plans">
-          <q-item-side icon="ballot" />
+          <q-item-side icon="ballot"/>
           <q-item-main label="Plans"/>
         </q-item>
         <q-item to="/assetclasses">
-          <q-item-side icon="ballot" />
+          <q-item-side icon="ballot"/>
           <q-item-main label="Asset Classes"/>
         </q-item>
       </q-list>
     </q-layout-drawer>
 
     <q-page-container>
-      <router-view />
+      <router-view/>
     </q-page-container>
   </q-layout>
 </template>
 
 <script>
-import { openURL } from 'quasar'
+  import {openURL} from 'quasar'
 
-export default {
-  data () {
-    return {
-      leftDrawerOpen: false
+  export default {
+    data() {
+      return {
+        leftDrawerOpen: false
+      }
+    },
+    methods: {
+      openURL
     }
-  },
-  methods: {
-    openURL
   }
-}
 </script>
 
 <style>

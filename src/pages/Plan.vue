@@ -81,7 +81,7 @@
   import {Notify} from 'quasar'
   import _ from 'lodash'
 
-  const debug = true
+  const debug = false
 
   export default {
     components: {

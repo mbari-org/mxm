@@ -35,6 +35,8 @@
   import PlanNewButton from 'components/plan-new-button'
   import allPlansList from '../graphql/plans.gql'
 
+  const debug = false
+
   export default {
     components: {
       PlanNewButton
@@ -82,7 +84,7 @@
 
     watch: {
       allPlansList(val) {
-        console.log('watch allPlansList=', val)
+        if (debug) console.log('watch allPlansList=', val)
       }
     }
   }

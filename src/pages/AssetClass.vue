@@ -16,7 +16,7 @@
         <q-card-title>
           Asset Class: {{assetClass.className}}
         </q-card-title>
-        <q-card-separator />
+        <q-card-separator/>
         <q-card-main>
           <p class="text-italic">
             {{assetClass.description}}
@@ -50,7 +50,7 @@
 <script>
   import assetClass from '../graphql/assetClass.gql'
   import AssetNewButton from 'components/asset-new-button'
-  import { Notify } from 'quasar'
+  import {Notify} from 'quasar'
   import _ from 'lodash'
 
   const debug = true
@@ -88,7 +88,7 @@
         return this.$route.params
       },
 
-      myAssets () {
+      myAssets() {
         const list = this.assetClass && this.assetClass.assetsByClassNameList || []
         return list
       },
@@ -97,7 +97,7 @@
     apollo: {
       assetClass: {
         query: assetClass,
-        variables () {
+        variables() {
           return {
             className: this.params.className
           }
@@ -117,22 +117,22 @@
     },
 
     methods: {
-      refreshAssetClass () {
+      refreshAssetClass() {
         this.$apollo.queries.assetClass.refetch()
       },
 
-      assetCreated (data) {
+      assetCreated(data) {
         this.refreshAssetClass()
       }
     },
 
     watch: {
-      '$route' () {
+      '$route'() {
         this.refreshAssetClass()
       },
 
-      assetClass (val) {
-        console.log('watch assetClass=', val)
+      assetClass(val) {
+        if (debug) console.log('watch assetClass=', val)
       }
     }
   }

@@ -75,77 +75,77 @@
 </template>
 
 <script>
-import AssetClassNewButton from 'components/asset-class-new-button'
-import allAssetClassesList from '../graphql/assetClasses.gql'
-import { Notify } from 'quasar'
+  import AssetClassNewButton from 'components/asset-class-new-button'
+  import allAssetClassesList from '../graphql/assetClasses.gql'
+  import {Notify} from 'quasar'
 
-const debug = false
+  const debug = false
 
-export default {
-  components: {
-    AssetClassNewButton,
-  },
+  export default {
+    components: {
+      AssetClassNewButton,
+    },
 
-  props: {
-    exclude: {
-      type: Array,
-      required: false
-    }
-  },
-
-  data () {
-    return {
-      dialogOpened: false,
-      selection: [],
-      allAssetClassesList: [],
-    }
-  },
-
-  computed: {
-    selectOptions () {
-      if (debug) console.debug('selectOptions: allAssetClassesList=', this.allAssetClassesList)
-      const all = _.map(this.allAssetClassesList, a => ({
-        className: a.className,
-        description: a.description,
-      }))
-      if (this.exclude && this.exclude.length) {
-        return _.filter(all, c => !_.includes(this.exclude, c.className))
-      }
-      else {
-        return all
+    props: {
+      exclude: {
+        type: Array,
+        required: false
       }
     },
 
-    okToSubmit () {
-      return _.some(this.selection)
-    }
-  },
-
-  apollo: {
-    allAssetClassesList,
-  },
-
-  methods: {
-    openDialog () {
-      this.selection = []
-      this.dialogOpened = true
+    data() {
+      return {
+        dialogOpened: false,
+        selection: [],
+        allAssetClassesList: [],
+      }
     },
 
-    submit () {
-      this.dialogOpened = false
-      this.$emit('selection', this.selection)
+    computed: {
+      selectOptions() {
+        if (debug) console.debug('selectOptions: allAssetClassesList=', this.allAssetClassesList)
+        const all = _.map(this.allAssetClassesList, a => ({
+          className: a.className,
+          description: a.description,
+        }))
+        if (this.exclude && this.exclude.length) {
+          return _.filter(all, c => !_.includes(this.exclude, c.className))
+        }
+        else {
+          return all
+        }
+      },
+
+      okToSubmit() {
+        return _.some(this.selection)
+      }
     },
 
-    assetClassCreated (data) {
-      if (debug) console.debug('assetClassCreated: data=', data)
-      this.$apollo.queries.allAssetClassesList.refetch()
+    apollo: {
+      allAssetClassesList,
     },
-  },
 
-  watch: {
-    allAssetClassesList (val) {
-      console.log('watch allAssetClassesList=', val)
-    }
-  },
-}
+    methods: {
+      openDialog() {
+        this.selection = []
+        this.dialogOpened = true
+      },
+
+      submit() {
+        this.dialogOpened = false
+        this.$emit('selection', this.selection)
+      },
+
+      assetClassCreated(data) {
+        if (debug) console.debug('assetClassCreated: data=', data)
+        this.$apollo.queries.allAssetClassesList.refetch()
+      },
+    },
+
+    watch: {
+      allAssetClassesList(val) {
+        if (debug) console.log('watch allAssetClassesList=', val)
+      }
+    },
+  }
 </script>

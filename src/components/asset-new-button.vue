@@ -87,70 +87,69 @@
 </template>
 
 <script>
-import mutation from '../graphql/assetsInsert.gql'
-import AssetClassField from 'components/asset-class-field'
-import AssetClassNewButton from 'components/asset-class-new-button'
+  import mutation from '../graphql/assetsInsert.gql'
+  import AssetClassField from 'components/asset-class-field'
+  import AssetClassNewButton from 'components/asset-class-new-button'
+  import {Notify} from 'quasar'
 
-import { Notify } from 'quasar'
-
-export default {
-  components: {
-    AssetClassField,
-    AssetClassNewButton,
-  },
-
-  props: {
-    assetClassName: {
-      type: String,
-      required: true
-    }
-  },
-
-  data () {
-    return {
-      dialogOpened: false,
-      assetId: '',
-      className: '',
-      description: ''
-    }
-  },
-
-  computed: {
-    okToSubmit () {
-      return this.assetId && this.className
-    }
-  },
-
-  methods: {
-    openDialog () {
-      this.assetId = ''
-      this.className = this.assetClassName || ''
-      this.description = ''
-      this.dialogOpened = true
+  export default {
+    components: {
+      AssetClassField,
+      AssetClassNewButton,
     },
 
-    submit () {
-      const variables = {
-        assetId: this.assetId,
-        className: this.className,
-        description: this.description || null
+    props: {
+      assetClassName: {
+        type: String,
+        required: true
       }
-
-      this.$apollo.mutate({mutation, variables})
-        .then((data) => {
-          console.log('mutation data=', data)
-          this.dialogOpened = false
-          Notify.create({
-            message: 'Asset registered',
-            timeout: 1000,
-            type: 'info'
-          })
-          this.$emit('created', variables)
-        })
-        .catch((error) => {
-          console.error('mutation error=', error)
-        })
     },
+
+    data() {
+      return {
+        dialogOpened: false,
+        assetId: '',
+        className: '',
+        description: ''
+      }
+    },
+
+    computed: {
+      okToSubmit() {
+        return this.assetId && this.className
+      }
+    },
+
+    methods: {
+      openDialog() {
+        this.assetId = ''
+        this.className = this.assetClassName || ''
+        this.description = ''
+        this.dialogOpened = true
+      },
+
+      submit() {
+        const variables = {
+          assetId: this.assetId,
+          className: this.className,
+          description: this.description || null
+        }
+
+        this.$apollo.mutate({mutation, variables})
+          .then((data) => {
+            console.log('mutation data=', data)
+            this.dialogOpened = false
+            Notify.create({
+              message: 'Asset registered',
+              timeout: 1000,
+              type: 'info'
+            })
+            this.$emit('created', variables)
+          })
+          .catch((error) => {
+            console.error('mutation error=', error)
+          })
+      },
+    }
   }
-}
 </script>

@@ -37,11 +37,6 @@ const routes = [
         path: '/assetclasses/:className',
         component: () => import('pages/AssetClass')
       },
-
-      {
-        path: '/apollo',
-        component: () => import('pages/ApolloTest')
-      }
     ]
   }
 ]

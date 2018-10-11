@@ -14,7 +14,7 @@
 <script>
   import allExecutorsList from '../graphql/executors.gql'
 
-  const debug = true
+  const debug = false
 
   export default {
     props: {
@@ -52,7 +52,7 @@
 
     watch: {
       allExecutorsList(val) {
-        console.log('watch allExecutorsList=', val)
+        if (debug) console.log('watch allExecutorsList=', val)
       }
     },
   }

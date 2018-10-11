@@ -14,7 +14,7 @@
 
     <div v-if="task">
 
-      <pre>task={{task}}</pre>
+      <!--<pre>task={{task}}</pre>-->
 
       <h5> '{{ task.taskDefId }}' Task Instance
       </h5>
@@ -55,7 +55,7 @@
         row-key="name"
       >
         <div slot="top-right" slot-scope="props" class="fit">
-            <!--v-if="parameters.length"-->
+          <!--v-if="parameters.length"-->
           <argument-new-button
             :plan-id="params.planId"
             :task-id="params.taskId"

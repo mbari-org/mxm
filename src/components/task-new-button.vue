@@ -163,17 +163,17 @@
 
       okToSubmit() {
         return this.executorId
-            && this.taskDefId
-            && this.assetId
-            && this.taskId
-            && this.name
+          && this.taskDefId
+          && this.assetId
+          && this.taskId
+          && this.name
       }
     },
 
     apollo: {
       executor: {
         query: executor,
-        variables () {
+        variables() {
           return {
             executorId: this.executorId,
           }
@@ -243,8 +243,8 @@
     },
 
     watch: {
-      executorId (val) {
-        console.log('watch executorId=', val)
+      executorId(val) {
+        if (debug) console.log('watch executorId=', val)
         this.$apollo.queries.executor.refetch()
       }
     }

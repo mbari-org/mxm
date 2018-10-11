@@ -1,7 +1,7 @@
 <template>
   <q-page>
     <q-breadcrumbs active-color="secondary" color="light">
-      <q-breadcrumbs-el label="Home" />
+      <q-breadcrumbs-el label="Home"/>
     </q-breadcrumbs>
 
     <div class="absolute-center">
@@ -11,7 +11,7 @@
 </template>
 
 <script>
-export default {
-  name: 'PageIndex'
-}
+  export default {
+    name: 'PageIndex'
+  }
 </script>

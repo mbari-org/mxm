@@ -35,12 +35,14 @@
   import ExecutorNewButton from 'components/executor-new-button'
   import allExecutorsList from '../graphql/executors.gql'
 
+  const debug = false
+
   export default {
     components: {
       ExecutorNewButton
     },
 
-    data () {
+    data() {
       return {
         allExecutorsList: [],
         columns: [
@@ -78,18 +80,18 @@
     },
 
     methods: {
-      refresh () {
+      refresh() {
         this.$apollo.queries.allExecutorsList.refetch()
       },
 
-      created (data) {
+      created(data) {
         this.allExecutorsList.splice(0, 0, data)
       }
     },
 
     watch: {
-      allExecutorsList (val) {
-        console.log('watch allExecutorsList=', val)
+      allExecutorsList(val) {
+        if (debug) console.log('watch allExecutorsList=', val)
       }
     }
 

@@ -18,7 +18,7 @@
         <q-card-title>
           Task Definition: {{ params.taskDefId }}
         </q-card-title>
-        <q-card-separator />
+        <q-card-separator/>
         <q-card-main>
           <p class="text-italic">
             {{ taskDef.description }}
@@ -89,7 +89,7 @@
   import taskDefAssetClassInsert from '../graphql/taskDefAssetClassInsert.gql'
   import taskDefAssetClassDelete from '../graphql/taskDefAssetClassDelete.gql'
   import ParameterNewButton from 'components/parameter-new-button'
-  import { Notify } from 'quasar'
+  import {Notify} from 'quasar'
   import _ from 'lodash'
 
   const debug = false
@@ -147,15 +147,15 @@
         return this.$route.params
       },
 
-      myAssetClasses () {
+      myAssetClasses() {
         return this.taskDef && this.taskDef.taskdefAssetClassesByExecutorIdAndTaskDefIdList || []
       },
 
-      myAssetClassNames () {
+      myAssetClassNames() {
         return _.map(this.myAssetClasses, "assetClassName")
       },
 
-      myParameters () {
+      myParameters() {
         return this.taskDef && this.taskDef.parametersByExecutorIdAndTaskDefIdList || []
       },
     },
@@ -163,7 +163,7 @@
     apollo: {
       taskDef: {
         query: taskDef,
-        variables () {
+        variables() {
           return {
             executorId: this.params.executorId,
             taskDefId: this.params.taskDefId
@@ -179,16 +179,16 @@
       },
     },
 
-    mounted () {
+    mounted() {
       this.refreshTaskDef()
     },
 
     methods: {
-      refreshTaskDef () {
+      refreshTaskDef() {
         this.$apollo.queries.taskDef.refetch()
       },
 
-      assetClassSelection (data) {
+      assetClassSelection(data) {
         const newAssetClassNames = _.difference(data, this.myAssetClassNames)
         if (debug) console.debug('assetClassSelection: newAssetClassNames=', newAssetClassNames)
 
@@ -219,7 +219,7 @@
         next()
       },
 
-      addAssetClassName (assetClassName, next) {
+      addAssetClassName(assetClassName, next) {
         const mutation = taskDefAssetClassInsert
         const variables = {
           executorId: this.params.executorId,
@@ -236,7 +236,7 @@
           })
       },
 
-      removeAssetClass (nodeId) {
+      removeAssetClass(nodeId) {
         if (debug) console.debug('removeAssetClass: nodeId=', nodeId)
 
         const mutation = taskDefAssetClassDelete
@@ -254,7 +254,7 @@
           })
       },
 
-      parameterCreated (data) {
+      parameterCreated(data) {
         this.refreshTaskDef()
       }
     },

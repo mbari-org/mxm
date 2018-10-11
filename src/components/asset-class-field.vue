@@ -71,7 +71,7 @@ export default {
       this.$apollo.queries.assetClasses.refetch()
     },
 
-    atInput (val) {
+    atInput(val) {
       this.$emit('input', val)
     },
 

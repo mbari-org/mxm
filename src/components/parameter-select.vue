@@ -16,7 +16,7 @@
 <script>
   import _ from 'lodash'
 
-  const debug = true
+  const debug = false
 
   export default {
     props: {
@@ -34,7 +34,7 @@
     },
 
     computed: {
-      options () {
+      options() {
         return _.map(this.parameters, p => {
           return {
             label: p.name,
@@ -45,14 +45,14 @@
     },
 
     methods: {
-      atInput (val) {
+      atInput(val) {
         this.$emit('input', val)
       },
     },
 
     watch: {
       parameters(val) {
-        console.log('watch parameters=', val)
+        if (debug) console.log('watch parameters=', val)
       }
     },
   }

@@ -70,52 +70,52 @@
 </template>
 
 <script>
-import mutation from '../graphql/assetClassesInsert.gql'
-import { Notify } from 'quasar'
+  import mutation from '../graphql/assetClassesInsert.gql'
+  import {Notify} from 'quasar'
 
-export default {
-  data () {
-    return {
-      dialogOpened: false,
-      className: '',
-      description: ''
-    }
-  },
-
-  computed: {
-    okToSubmit () {
-      return this.className
-    }
-  },
-
-  methods: {
-    openDialog () {
-      this.className = ''
-      this.description = ''
-      this.dialogOpened = true
+  export default {
+    data() {
+      return {
+        dialogOpened: false,
+        className: '',
+        description: ''
+      }
     },
 
-    submit () {
-      const variables = {
-        className: this.className,
-        description: this.description || null
+    computed: {
+      okToSubmit() {
+        return this.className
       }
+    },
 
-      this.$apollo.mutate({mutation, variables})
-        .then((data) => {
-          console.log('mutation data=', data)
-          this.dialogOpened = false
-          Notify.create({
-            message: 'Asset class registered',
-            timeout: 1000,
-            type: 'info'
+    methods: {
+      openDialog() {
+        this.className = ''
+        this.description = ''
+        this.dialogOpened = true
+      },
+
+      submit() {
+        const variables = {
+          className: this.className,
+          description: this.description || null
+        }
+
+        this.$apollo.mutate({mutation, variables})
+          .then((data) => {
+            console.log('mutation data=', data)
+            this.dialogOpened = false
+            Notify.create({
+              message: 'Asset class registered',
+              timeout: 1000,
+              type: 'info'
+            })
+            this.$emit('created', variables)
           })
-          this.$emit('created', variables)
-        })
-        .catch((error) => {
-          console.error('mutation error=', error)
-        })
+          .catch((error) => {
+            console.error('mutation error=', error)
+          })
+      }
     }
   }
-}
 </script>

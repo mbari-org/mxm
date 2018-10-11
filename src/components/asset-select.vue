@@ -14,7 +14,7 @@
 </template>
 
 <script>
-  const debug = true
+  const debug = false
 
   export default {
     props: {
@@ -32,7 +32,7 @@
     },
 
     computed: {
-      options () {
+      options() {
         const list = []
         _.each(this.assetClasses, e => {
           const instances = _.get(e, 'assetClassByAssetClassName.assetsByClassNameList') || []
@@ -49,14 +49,14 @@
     },
 
     methods: {
-      atInput (val) {
+      atInput(val) {
         this.$emit('input', val)
       },
     },
 
     watch: {
       assetClasses(val) {
-        console.log('watch assetClasses=', val)
+        if (debug) console.log('watch assetClasses=', val)
       }
     },
   }

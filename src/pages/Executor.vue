@@ -273,7 +273,7 @@ export default {
     },
 
     executor (val) {
-      console.log('watch executor=', val)
+      if(debug) console.log('watch executor=', val)
     }
   }
 }

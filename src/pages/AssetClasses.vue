@@ -82,7 +82,7 @@
 
     watch: {
       allAssetClassesList(val) {
-        console.log('watch allAssetClassesList=', val)
+        if (debug) console.log('watch allAssetClassesList=', val)
       }
     }
   }
