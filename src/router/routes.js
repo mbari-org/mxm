@@ -29,6 +29,14 @@ const routes = [
         path: '/plans/:planId/tasks/:taskId',
         component: () => import('pages/Task')
       },
+      {
+        path: '/assetclasses',
+        component: () => import('pages/AssetClasses')
+      },
+      {
+        path: '/assetclasses/:className',
+        component: () => import('pages/AssetClass')
+      },
 
       {
         path: '/apollo',

@@ -8,6 +8,7 @@
         <q-toolbar slot="header">
           <q-toolbar-title>
             Register new asset
+            {{ assetClassName ? ` of class '${assetClassName}'` : '' }}
           </q-toolbar-title>
           <q-btn round dense
                  color="primary"
@@ -32,6 +33,7 @@
           </q-field>
 
           <q-field
+            v-if="!assetClassName"
             label="Asset Class:"
             :error="!className.length"
             :label-width="4"
@@ -75,14 +77,17 @@
       dense round no-caps size="sm"
       @click="openDialog"
     >
-      <q-tooltip>Register a new asset</q-tooltip>
+      <q-tooltip>
+        Register a new asset
+        {{ assetClassName ? ` of class '${assetClassName}'` : '' }}
+      </q-tooltip>
     </q-btn>
 
   </div>
 </template>
 
 <script>
-import mutation from '../graphql/assets_insert.gql'
+import mutation from '../graphql/assetsInsert.gql'
 import AssetClassField from 'components/asset-class-field'
 import AssetClassNewButton from 'components/asset-class-new-button'
 
@@ -95,7 +100,7 @@ export default {
   },
 
   props: {
-    executorId: {
+    assetClassName: {
       type: String,
       required: true
     }
@@ -119,7 +124,7 @@ export default {
   methods: {
     openDialog () {
       this.assetId = ''
-      this.className = ''
+      this.className = this.assetClassName || ''
       this.description = ''
       this.dialogOpened = true
     },

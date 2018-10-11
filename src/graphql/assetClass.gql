@@ -1,0 +1,12 @@
+query ($className: String!) {
+  allAssetClassesList(condition: {
+    className: $className
+  }) {
+    className
+    description
+    assetsByClassNameList {
+      assetId
+      description
+    }
+  }
+}

@@ -3,7 +3,7 @@
     <q-breadcrumbs active-color="secondary" color="light">
       <q-breadcrumbs-el label="Home" to="/"/>
       <q-breadcrumbs-el label="Plans" to="/plans"/>
-      <q-breadcrumbs-el label="Plan" :to="`/plans/${encodeURIComponent(params.planId)}`"/>
+      <q-breadcrumbs-el :label="params.planId" :to="`/plans/${encodeURIComponent(params.planId)}`"/>
       <q-btn
         dense round icon="refresh" class="q-ml-lg" size="sm"
         @click="refreshPlan"

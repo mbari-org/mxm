@@ -36,6 +36,13 @@
             no-wrap no-caps
             to="/plans"
           />
+          <q-btn
+            class="col"
+            icon="ballot"
+            label="Asset Classes"
+            no-wrap no-caps
+            to="/assetclasses"
+          />
         </div>
 
       </q-toolbar>
@@ -57,6 +64,10 @@
         <q-item to="/plans">
           <q-item-side icon="ballot" />
           <q-item-main label="Plans"/>
+        </q-item>
+        <q-item to="/assetclasses">
+          <q-item-side icon="ballot" />
+          <q-item-main label="Asset Classes"/>
         </q-item>
       </q-list>
     </q-layout-drawer>

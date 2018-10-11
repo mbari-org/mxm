@@ -1,3 +1,7 @@
+2018-10-11
+
+- expose Asset Classes and Asset Class page
+
 2018-10-10
 
 - adjusting dispatch for plans and tasks

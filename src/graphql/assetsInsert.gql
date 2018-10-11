@@ -1,0 +1,17 @@
+mutation($assetId: String!, $className: String!, $description: String) {
+  createAsset(
+    input: {
+      asset: {
+        assetId: $assetId
+        className: $className
+        description: $description
+      }
+    }
+  ) {
+    asset {
+      assetId
+      className
+      description
+    }
+  }
+}
