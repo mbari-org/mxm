@@ -11,6 +11,10 @@ query executor($executorId: String!) {
       assetClassByAssetClassName {
         className
         description
+        assetsByClassNameList {
+          assetId
+          description
+        }
       }
     }
     taskDefsByExecutorIdList {

@@ -68,8 +68,7 @@
 
 <script>
 import ArgumentNewButton from 'components/argument-new-button'
-import lodash from 'lodash'
-const _ = lodash
+import _ from 'lodash'
 
 export default {
   components: {
@@ -80,7 +79,6 @@ export default {
     return {
       loading: false,
       task: null,
-      join: _.join,
       columns: [
         {
           field: 'paramName',

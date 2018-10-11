@@ -104,7 +104,6 @@
       return {
         loading: false,
         taskDef: null,
-        join: _.join,
         columns: [
           {
             field: 'name',

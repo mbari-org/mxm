@@ -25,6 +25,7 @@
         </q-card-main>
       </q-card>
 
+      <!--<pre>myTasks={{myTasks}}</pre>-->
 
       <q-table
         title="Tasks"
@@ -73,12 +74,6 @@
           </router-link>
         </q-td>
 
-        <q-td slot="body-cell-arguments" slot-scope="props" :props="props"
-              style="width:5px"
-        >
-          {{ (props.value || []).length }}
-        </q-td>
-
       </q-table>
 
     </div>
@@ -106,7 +101,6 @@
       return {
         loading: false,
         plan: null,
-        join: _.join,
         taskColumns: [
           {
             field: 'name',
@@ -116,54 +110,54 @@
             sortable: true
           },
           {
+            field: 'description',
+            name: 'description',
+            label: 'Description',
+            align: 'left',
+            sortable: true
+          },
+          {
             field: 'executorId',
             name: 'executorId',
-            label: 'executorId',
+            label: 'Executor',
             align: 'left',
             sortable: true
           },
           {
             field: 'taskDefId',
             name: 'taskDefId',
-            label: 'taskDefId',
-            align: 'left',
-            sortable: true
-          },
-          {
-            field: 'arguments',
-            name: 'arguments',
-            label: 'arguments',
+            label: 'TaskDef',
             align: 'left',
             sortable: true
           },
           {
             field: 'assetId',
             name: 'assetId',
-            label: 'assetId',
+            label: 'Asset',
             align: 'left',
             sortable: true
           },
           {
             field: 'start',
             name: 'start',
-            label: 'start',
+            label: 'Start',
             align: 'left',
             sortable: true
           },
           {
             field: 'end',
             name: 'end',
-            label: 'end',
+            label: 'End',
             align: 'left',
             sortable: true
           },
           {
-            field: 'description',
-            name: 'description',
-            label: 'Description',
+            field: 'geometry',
+            name: 'geometry',
+            label: 'Geometry',
             align: 'left',
-            sortable: true
-          }
+            sortable: false
+          },
         ]
       }
     },
@@ -216,9 +210,13 @@
         this.refreshPlan()
       },
 
+      plan (val) {
+        if (debug) console.log('watch plan=', val)
+      },
+
       executor (val) {
-        console.log('watch executor=', val)
-      }
+        if (debug) console.log('watch executor=', val)
+      },
     }
   }
 </script>
