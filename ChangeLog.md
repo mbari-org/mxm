@@ -1,5 +1,6 @@
 2018-10-11
 
+- remove axios
 - more on task and argument dispatch
 - more on plan and task dispatch
 - expose Asset Classes and Asset Class page
