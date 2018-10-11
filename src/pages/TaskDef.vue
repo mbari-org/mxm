@@ -256,7 +256,7 @@
       },
 
       parameterCreated (data) {
-        this.myParameters.splice(0, 0, data)
+        this.refreshTaskDef()
       }
     },
 

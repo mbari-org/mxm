@@ -1,0 +1,21 @@
+mutation(
+  $executorId: String!
+  $taskDefId: String!
+  $description: String
+) {
+  createTaskDef(
+    input: {
+      taskDef: {
+        executorId: $executorId
+        taskDefId: $taskDefId
+        description: $description
+      }
+    }
+  ) {
+    taskDef {
+      executorId
+      taskDefId
+      description
+    }
+  }
+}

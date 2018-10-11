@@ -1,0 +1,36 @@
+mutation(
+  $planId: String!
+  $taskId: String!
+  $executorId: String!
+  $taskDefId: String!
+  $assetId: String!
+  $name: String!
+  $description: String
+) {
+  createTask(
+    input: {
+      task: {
+        planId: $planId
+        taskId: $taskId
+        executorId: $executorId
+        taskDefId: $taskDefId
+        assetId: $assetId
+        name: $name
+        description: $description
+      }
+    }
+  ) {
+    task {
+      planId
+      taskId
+      executorId
+      taskDefId
+      assetId
+      name
+      description
+      startDate
+      endDate
+      geometry
+    }
+  }
+}

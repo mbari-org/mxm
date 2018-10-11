@@ -1,5 +1,6 @@
 2018-10-10
 
+- adjusting dispatch for plans and tasks
 - initial dispatch of taskDefs
   TODO: assetClasses currently associated with executors *and* tasksDefs;
       decide on the following:

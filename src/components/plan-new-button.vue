@@ -18,6 +18,20 @@
 
         <div class="q-pa-lg">
           <q-field
+            label="Plan ID:"
+            :error="!planId.length"
+            :label-width="4"
+          >
+            <q-input
+              class="bg-light-blue-1"
+              v-model.trim="planId"
+              type="text"
+              autofocus
+              style="width:24em"
+            />
+          </q-field>
+
+          <q-field
             label="Name:"
             :error="!name.length"
             :label-width="4"
@@ -67,58 +81,55 @@
 </template>
 
 <script>
-import { Notify } from 'quasar'
+  import mutation from '../graphql/plansInsert.gql'
+  import {Notify} from 'quasar'
 
-export default {
-  data () {
-    return {
-      dialogOpened: false,
-      name: '',
-      description: ''
-    }
-  },
-
-  computed: {
-    okToSubmit () {
-      return this.name
-    }
-  },
-
-  methods: {
-    openDialog () {
-      this.name = ''
-      this.description = ''
-      this.dialogOpened = true
+  export default {
+    data() {
+      return {
+        dialogOpened: false,
+        planId: '',
+        name: '',
+        description: ''
+      }
     },
 
-    submit () {
-      const data = {
-        name: this.name
+    computed: {
+      okToSubmit() {
+        return this.planId && this.name
       }
-      if (this.description) {
-        data.description = this.description
-      }
+    },
 
-      const url = `/plans`
-      this.$axios({
-        method: 'POST',
-        url,
-        data
-      })
-        .then(response => {
-          console.log(`POST ${url}: response=`, response)
-          this.dialogOpened = false
-          Notify.create({
-            message: 'Plan created',
-            timeout: 1000,
-            type: 'info'
+    methods: {
+      openDialog() {
+        this.planId = ''
+        this.name = ''
+        this.description = ''
+        this.dialogOpened = true
+      },
+
+      submit() {
+        const variables = {
+          planId: this.planId,
+          name: this.name,
+          description: this.description
+        }
+
+        this.$apollo.mutate({mutation, variables})
+          .then((data) => {
+            console.log('mutation data=', data)
+            this.dialogOpened = false
+            Notify.create({
+              message: 'Plan created',
+              timeout: 1000,
+              type: 'info'
+            })
+            this.$emit('created', variables)
           })
-          this.$emit('created', response.data)
-        })
-        .catch(e => {
-          console.error(e)
-        })
+          .catch((error) => {
+            console.error('mutation error=', error)
+          })
+      }
     }
   }
-}
 </script>
