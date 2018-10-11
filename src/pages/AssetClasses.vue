@@ -35,6 +35,8 @@
   import AssetClassNewButton from 'components/asset-class-new-button'
   import allAssetClassesList from '../graphql/assetClasses.gql'
 
+  const debug = false
+
   export default {
     components: {
       AssetClassNewButton

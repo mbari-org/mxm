@@ -35,16 +35,6 @@ create table if not exists task_defs
 )
 ;
 
-create table if not exists executor_asset_class
-(
-	executor_id varchar not null,
-	asset_class_name varchar not null,
-  foreign key (executor_id) references executors,
-  foreign key (asset_class_name) references asset_classes,
-  primary key (executor_id, asset_class_name)
-)
-;
-
 create table if not exists taskdef_asset_class
 (
 	executor_id varchar not null,

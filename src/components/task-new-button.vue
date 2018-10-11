@@ -158,7 +158,17 @@
       },
 
       assetClasses() {
-        return this.executor && this.executor.executorAssetClassesByExecutorIdList || []
+        const list = []
+        const taskDefs = this.executor && this.executor.taskDefsByExecutorIdList || []
+        if (taskDefs.length) {
+          _.each(taskDefs, td => {
+            const classes = td.taskdefAssetClassesByExecutorIdAndTaskDefIdList || []
+            _.each(classes, c => {
+              list.push(c)
+            })
+          })
+        }
+        return list
       },
 
       okToSubmit() {
@@ -179,7 +189,7 @@
           }
         },
         update(data) {
-          if (debug) console.log('update: data=', data)
+          if (debug) console.log('task-new-button update: data=', data)
           if (data.allExecutorsList && data.allExecutorsList.length) {
             return data.allExecutorsList[0]
           }
@@ -246,7 +256,11 @@
       executorId(val) {
         if (debug) console.log('watch executorId=', val)
         this.$apollo.queries.executor.refetch()
-      }
+      },
+
+      assetClasses(val) {
+        if (debug) console.log('watch assetClasses=', val)
+      },
     }
   }
 </script>

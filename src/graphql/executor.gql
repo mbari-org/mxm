@@ -5,24 +5,17 @@ query executor($executorId: String!) {
     executorId
     httpEndpoint
     description
-    executorAssetClassesByExecutorIdList {
-      nodeId
-      assetClassName
-      assetClassByAssetClassName {
-        className
-        description
-        assetsByClassNameList {
-          assetId
-          description
-        }
-      }
-    }
     taskDefsByExecutorIdList {
       nodeId
       taskDefId
       description
       taskdefAssetClassesByExecutorIdAndTaskDefIdList {
         assetClassName
+        assetClassByAssetClassName {
+          assetsByClassNameList {
+            assetId
+          }
+        }
       }
     }
   }

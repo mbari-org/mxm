@@ -1,5 +1,6 @@
 2018-10-11
 
+- assetClasses now only associated with tasksDefs
 - remove axios
 - more on task and argument dispatch
 - more on plan and task dispatch
@@ -9,10 +10,6 @@
 
 - adjusting dispatch for plans and tasks
 - initial dispatch of taskDefs
-  TODO: assetClasses currently associated with executors *and* tasksDefs;
-      decide on the following:
-      - verify that association on taskDef is from list of those in executor
-      - or, do this association on only one of those entities
 
 - adjusting queries/mutations per execution of `postgraphile` as follows:
 
