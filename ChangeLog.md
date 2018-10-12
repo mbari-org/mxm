@@ -1,5 +1,6 @@
 2018-10-11
 
+- update quasar-framework to 0.17.17 (CLI 0.17.20)
 - assetClasses now only associated with tasksDefs
 - remove axios
 - more on task and argument dispatch
