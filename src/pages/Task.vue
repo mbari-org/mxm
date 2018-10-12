@@ -25,10 +25,6 @@
           <table>
             <tbody>
             <tr>
-              <td>Task Def:</td>
-              <td>{{ task.taskDefId }}</td>
-            </tr>
-            <tr>
               <td>Task Name:</td>
               <td>{{ task.name }}</td>
             </tr>
@@ -41,8 +37,20 @@
               </td>
             </tr>
             <tr>
+              <td>Task Def:</td>
+              <td>
+                <router-link :to="`/executors/${encodeURIComponent(task.executorId)}/taskdefs/${encodeURIComponent(task.taskDefId)}`">
+                  {{ task.taskDefId }}
+                </router-link>
+              </td>
+            </tr>
+            <tr>
               <td>Executor:</td>
-              <td>{{ task.executorId }}</td>
+              <td>
+                <router-link :to="`/executors/${encodeURIComponent(task.executorId)}`">
+                  {{ task.executorId }}
+                </router-link>
+              </td>
             </tr>
             <tr>
               <td>Asset:</td>
