@@ -1,10 +1,15 @@
+2018-10-12
+
+- task dispatch:
+    - has an "argument" table with all parameters
+    - displayed values as given in explicit arguments or from defaultValue
+    - 'Save' button to update arguments so only the overridden
+      parameters are saved as arguments
+
+  TODO concept of task status, task submission, etc
+
 2018-10-11
 
-- prepping task dispatch:
-    - table with all parameters
-    - displayed values as given in explicit arguments or from default
-    - TODO button 'Save' to update arguments soe only the overriden
-      parameters are saved as arguments
 - update quasar-framework to 0.17.17 (CLI 0.17.20)
 - assetClasses now only associated with tasksDefs
 - remove axios

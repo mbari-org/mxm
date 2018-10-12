@@ -61,16 +61,7 @@
         </q-card-main>
       </q-card>
 
-      <q-search
-        v-if="myArguments"
-        class="col-10"
-        color="secondary"
-        v-model="filter"
-        placeholder="Filter"
-        clearable
-      />
       <q-table
-        title="Arguments"
         :data="myArguments"
         :columns="argColumns"
         row-key="paramName"
@@ -78,6 +69,41 @@
         :pagination.sync="pagination"
         :filter="filter"
       >
+        <div slot="top-left" slot-scope="props" class="row items-center">
+          <div class="col-auto q-headline">
+            Arguments
+          </div>
+
+          <div class="q-ml-md row">
+            <q-search
+              v-if="myArguments"
+              class="col"
+              color="secondary"
+              v-model="filter"
+              placeholder="Filter"
+              clearable
+            />
+          </div>
+        </div>
+
+        <div slot="top-right" slot-scope="props">
+          <div class="q-ml-md row">
+            <q-btn
+              class="col-auto"
+              dense size="sm"
+              icon="save"
+              color="primary"
+              no-wrap no-caps
+              :disable="savingArgs"
+              :loading="savingArgs"
+              @click="saveArguments"
+            />
+            <div style="color:gray;font-size:small" class="col-auto vertical-middle text-weight-light q-ml-sm">
+              Overridden parameters: {{parametersChanged().length}}
+            </div>
+          </div>
+        </div>
+
         <q-tr slot="body" slot-scope="props" :props="props">
           <q-td key="paramName" :props="props"
                 style="width:5px"
@@ -90,18 +116,10 @@
           <q-td key="paramValue" :props="props"
                 style="width:5px"
           >
-            <!--NOTE: comparing string versions-->
-            <div v-if="`${props.row.paramValue}` !== `${props.row.defaultValue}`">
-              <span class="bg-cyan-2 text-bold q-pa-sm">
-                {{ props.row.paramValue }}
-              </span>
-              <q-tooltip>
-                Default value:
-                <span class="text-bold">{{props.row.defaultValue}}</span>
-              </q-tooltip>
-            </div>
-            <div v-else>
+            <div :class="'round-borders q-pa-xs ' +
+                  (props.row.paramValue !== props.row.defaultValue ? 'bg-green-11 text-bold' : 'bg-green-1')">
               {{ props.row.paramValue }}
+              <q-tooltip>Click to edit</q-tooltip>
             </div>
 
             <q-popup-edit
@@ -115,7 +133,6 @@
                   v-model.trim="props.row.paramValue"
                   clearable
                   :clear-value="props.row.defaultValue"
-                  type="number"
                   :error="!props.row.paramValue"
                 />
               </q-field>
@@ -147,15 +164,20 @@
 <script>
   import task from '../graphql/task.gql'
   import Vue from 'vue'
+  import argumentInsert from '../graphql/argumentInsert.gql'
+  import argumentUpdate from '../graphql/argumentUpdate.gql'
+  import argumentDelete from '../graphql/argumentDelete.gql'
+  import {Notify} from 'quasar'
   import _ from 'lodash'
 
-  const debug = true
+  const debug = false
 
   export default {
     data() {
       return {
         loading: false,
         task: null,
+        savingArgs: false,
         myArguments: [],
         argColumns: [
           {
@@ -208,7 +230,7 @@
         },
         update(data) {
           let res = null
-          if (debug) console.log('update: data=', data)
+          if (debug) console.debug('update: data=', data)
           if (data.taskByPlanIdAndTaskId) {
             res = data.taskByPlanIdAndTaskId
           }
@@ -229,21 +251,17 @@
         this.$apollo.queries.task.refetch()
       },
 
-      argumentCreated() {
-        this.refreshTask()
-      },
-
       setMyArguments(task) {
-        console.debug('setMyArguments task=', task)
-        const explicitArguments = _.get(task, 'argumentsByPlanIdAndTaskIdList') || []
+        if (debug) console.debug('setMyArguments task=', task)
+        const alreadySavedArgs = _.get(task, 'argumentsByPlanIdAndTaskIdList') || []
         const parameters = _.get(task, 'taskDefByExecutorIdAndTaskDefId.parametersByExecutorIdAndTaskDefIdList') || []
 
-        console.debug('explicitArguments=', explicitArguments)
+        if (debug) console.debug('alreadySavedArgs=', alreadySavedArgs)
 
         this.myArguments = _.map(parameters, p => {
-          const arg = _.find(explicitArguments, {paramName: p.name})
+          const arg = _.find(alreadySavedArgs, {paramName: p.name})
           const paramValue = arg && arg.paramValue || p.defaultValue
-          console.debug('FIND p.name=', p.name, 'arg=', arg, 'paramValue=', paramValue)
+          // console.debug('FIND p.name=', p.name, 'arg=', arg, 'paramValue=', paramValue)
           return {
             paramName: p.name,
             type: p.type,
@@ -255,9 +273,162 @@
       },
 
       validateValue(val) {
-        console.debug('validateValue val=', val)
+        // TODO proper validation
+        // for now, just force to be a non-empty string
+        if (debug) console.debug('validateValue val=', val)
         return !!val
-      }
+      },
+
+      parametersChanged() {
+        return _.filter(this.myArguments, a => a.paramValue !== a.defaultValue)
+      },
+
+      saveArguments() {
+        if (this.savingArgs) {
+          return
+        }
+        this.savingArgs = true
+
+        const alreadySavedArgs = _.get(this.task, 'argumentsByPlanIdAndTaskIdList') || []
+        if (debug) console.debug('saveArguments: alreadySavedArgs=', alreadySavedArgs)
+
+        let numInserted = 0
+        let numUpdated = 0
+        let numDeleted = 0
+
+        const argList = _.clone(this.myArguments)
+        const nextArg = () => {
+          const arg = argList.pop()
+          if (!arg) {
+            if (debug) console.debug('saveArguments DONE: numInserted=', numInserted,
+              'numUpdated=', numUpdated, 'numDeleted=', numDeleted)
+
+            let message;
+            if (numInserted || numUpdated || numDeleted) {
+              message = `Arguments updated`
+              this.refreshTask()
+            }
+            else {
+              message = `No changed arguments`
+            }
+            Notify.create({
+              message,
+              timeout: 1000,
+              type: 'info'
+            })
+            this.savingArgs = false
+            return
+          }
+
+          if (debug) console.debug('saveArguments: checking', arg.paramName,
+            'v=', arg.paramValue, 'dv=', arg.defaultValue)
+
+          const alreadySavedArg = _.find(alreadySavedArgs, x => x.paramName == arg.paramName)
+          if (debug) console.debug(arg.paramName, 'alreadySavedArg=', alreadySavedArg)
+
+          if (arg.paramValue !== arg.defaultValue) {
+            if (alreadySavedArg) {
+              if (alreadySavedArg.paramValue !== arg.paramValue) {
+                if (debug) console.debug(arg.paramName, 'UPDATING', arg.paramName)
+                this.updateArgument(alreadySavedArg.nodeId, arg.paramValue, ok => {
+                  if (ok) {
+                    numUpdated++
+                  }
+                  nextArg()
+                })
+              }
+              else nextArg()
+            }
+            else {
+              if (debug) console.debug(arg.paramName, 'INSERTING', arg.paramName)
+              this.insertArgument(arg.paramName, arg.paramValue, ok => {
+                if (ok) {
+                  numInserted++
+                }
+                nextArg()
+              })
+            }
+          }
+          else {
+            // arg has the default value.
+            if (alreadySavedArg) {
+              if (debug) console.debug(arg.paramName, 'DELETING', arg.paramName)
+              this.deleteArgument(alreadySavedArg.nodeId, ok => {
+                if (ok) {
+                  numDeleted++
+                }
+                nextArg()
+              })
+            }
+            else nextArg()
+          }
+        }
+
+        if (debug) console.debug('saveArguments START')
+        nextArg()
+      },
+
+      insertArgument(paramName, paramValue, next) {
+        const mutation = argumentInsert
+        const variables = {
+          planId: this.params.planId,
+          taskId: this.params.taskId,
+          executorId: this.task.executorId,
+          taskDefId: this.task.taskDefId,
+          paramName,
+          paramValue
+        }
+        if (debug) console.debug('insertArgument: variables=', variables)
+
+        this.$apollo.mutate({mutation, variables})
+          .then((data) => {
+            if (debug) console.debug('insertArgument: mutation data=', data)
+            next(true)
+          })
+          .catch((error) => {
+            console.error('insertArgument: mutation error=', error)
+            next(false)
+          })
+      },
+
+      updateArgument(nodeId, paramValue, next) {
+        const mutation = argumentUpdate
+        const variables = {
+          input: {
+            nodeId,
+            argumentPatch: {
+              paramValue
+            }
+          }
+        }
+        this.$apollo.mutate({mutation, variables})
+          .then((data) => {
+            if (debug) console.debug('updateArgument: mutation data=', data)
+            next(true)
+          })
+          .catch((error) => {
+            console.error('updateArgument: mutation error=', error)
+            next(false)
+          })
+      },
+
+      deleteArgument(nodeId, next) {
+        const mutation = argumentDelete
+        const variables = {
+          input: {
+            nodeId
+          }
+        }
+        this.$apollo.mutate({mutation, variables})
+          .then((data) => {
+            if (debug) console.debug('deleteArgument: mutation data=', data)
+            next(true)
+          })
+          .catch((error) => {
+            console.error('deleteArgument: mutation error=', error)
+            next(false)
+          })
+      },
     },
 
     watch: {

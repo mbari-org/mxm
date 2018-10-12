@@ -1,0 +1,21 @@
+mutation updateArgument($input: UpdateArgumentInput!) {
+  updateArgument(input: $input) {
+    argument {
+      planId
+      taskId
+      executorId
+      taskDefId
+      paramName
+      paramValue
+    }
+  }
+}
+
+# variables: {
+#  "input": {
+#    "nodeId": "asasasas",
+#    "argumentPatch": {
+#      "paramValue": "3131"
+#    }
+#  }
+#}
