@@ -1,5 +1,10 @@
 2018-10-11
 
+- prepping task dispatch:
+    - table with all parameters
+    - displayed values as given in explicit arguments or from default
+    - TODO button 'Save' to update arguments soe only the overriden
+      parameters are saved as arguments
 - update quasar-framework to 0.17.17 (CLI 0.17.20)
 - assetClasses now only associated with tasksDefs
 - remove axios
