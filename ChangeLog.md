@@ -1,13 +1,56 @@
+2018-10-12
+
+- task dispatch:
+    - has an "argument" table with all parameters
+    - displayed values as given in explicit arguments or from defaultValue
+    - 'Save' button to update arguments so only the overridden
+      parameters are saved as arguments
+
+  TODO concept of task status, task submission, etc
+
+2018-10-11
+
+- update quasar-framework to 0.17.17 (CLI 0.17.20)
+- assetClasses now only associated with tasksDefs
+- remove axios
+- more on task and argument dispatch
+- more on plan and task dispatch
+- expose Asset Classes and Asset Class page
+
+2018-10-10
+
+- adjusting dispatch for plans and tasks
+- initial dispatch of taskDefs
+
+- adjusting queries/mutations per execution of `postgraphile` as follows:
+
+      postgraphile -c postgresql://pxs@localhost:25432/pxs --schema public -o --simple-collections only
+
+   TODO adjust docker-compose to use postgraphile
+
+- looking again into PostGraphile after facing Hasura issues:
+    - https://github.com/hasura/graphql-engine/issues/284
+    - https://github.com/hasura/graphql-engine/issues/506
+
+2018-10-09
+
+- delete executor's associated asset classes
+- add executor's associated asset classes
+- add asset-class-select-button
+- executor associated with assetClass (not direct asset instance)
+
+2018-10-08
+
+- more adjustments as moving toward graphql
+
 2018-10-04
 
+- prepping settings to enable graphql queries/mutations
 - some dockerized environment preps
 
 2018-10-03
 
 - experimenting with vue-apollo.
-  Using a Hasura-powered server on http://localhost:8080/v1alpha1/graphql,
-  for now against a tethysdash database set up in a pretty ad hoc manner
-  as I fisrt had to upgrade PostgresQL
 
 2018-08-09
 

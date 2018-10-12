@@ -1,13 +1,14 @@
 <template>
   <div>
     <q-modal v-model="dialogOpened"
-             content-css="min-width:60vw;min-height:300px"
+             content-css="min-width:500px;min-height:300px"
              no-backdrop-dismiss
     >
       <q-modal-layout>
         <q-toolbar slot="header">
           <q-toolbar-title>
             Register new asset
+            {{ assetClassName ? ` of class '${assetClassName}'` : '' }}
           </q-toolbar-title>
           <q-btn round dense
                  color="primary"
@@ -32,15 +33,15 @@
           </q-field>
 
           <q-field
+            v-if="!assetClassName"
             label="Asset Class:"
-            :error="!assetClass.length"
+            :error="!className.length"
             :label-width="4"
           >
-            <q-input
-              class="bg-light-blue-1"
-              v-model.trim="assetClass"
-              type="text"
-              style="width:24em"
+            <!-- also using v-if trick here. TODO use some lazy-based machanism.. -->
+            <asset-class-field
+              v-if="dialogOpened"
+              v-model="className"
             />
           </q-field>
 
@@ -75,74 +76,80 @@
       icon="add"
       dense round no-caps size="sm"
       @click="openDialog"
-    />
+    >
+      <q-tooltip>
+        Register a new asset
+        {{ assetClassName ? ` of class '${assetClassName}'` : '' }}
+      </q-tooltip>
+    </q-btn>
 
   </div>
 </template>
 
 <script>
-import { Notify } from 'quasar'
+  import mutation from '../graphql/assetsInsert.gql'
+  import AssetClassField from 'components/asset-class-field'
+  import AssetClassNewButton from 'components/asset-class-new-button'
+  import {Notify} from 'quasar'
 
-export default {
-  props: {
-    executorId: {
-      type: String,
-      required: true
-    }
-  },
-
-  data () {
-    return {
-      dialogOpened: false,
-      assetId: '',
-      assetClass: '',
-      description: ''
-    }
-  },
-
-  computed: {
-    okToSubmit () {
-      return this.assetId && this.assetClass
-    }
-  },
-
-  methods: {
-    openDialog () {
-      this.assetId = ''
-      this.assetClass = ''
-      this.description = ''
-      this.dialogOpened = true
+  export default {
+    components: {
+      AssetClassField,
+      AssetClassNewButton,
     },
 
-    submit () {
-      const data = {
-        assetId: this.assetId,
-        assetClass: this.assetClass
+    props: {
+      assetClassName: {
+        type: String,
+        required: true
       }
-      if (this.description) {
-        data.description = this.description
-      }
+    },
 
-      const url = `/executors/${encodeURIComponent(this.executorId)}/assets`
-      this.$axios({
-        method: 'POST',
-        url,
-        data
-      })
-        .then(response => {
-          console.log(`POST ${url}: response=`, response)
-          this.dialogOpened = false
-          Notify.create({
-            message: 'Asset registered',
-            timeout: 1000,
-            type: 'info'
+    data() {
+      return {
+        dialogOpened: false,
+        assetId: '',
+        className: '',
+        description: ''
+      }
+    },
+
+    computed: {
+      okToSubmit() {
+        return this.assetId && this.className
+      }
+    },
+
+    methods: {
+      openDialog() {
+        this.assetId = ''
+        this.className = this.assetClassName || ''
+        this.description = ''
+        this.dialogOpened = true
+      },
+
+      submit() {
+        const variables = {
+          assetId: this.assetId,
+          className: this.className,
+          description: this.description || null
+        }
+
+        this.$apollo.mutate({mutation, variables})
+          .then((data) => {
+            console.log('mutation data=', data)
+            this.dialogOpened = false
+            Notify.create({
+              message: 'Asset registered',
+              timeout: 1000,
+              type: 'info'
+            })
+            this.$emit('created', variables)
           })
-          this.$emit('created', response.data)
-        })
-        .catch(e => {
-          console.error(e)
-        })
+          .catch((error) => {
+            console.error('mutation error=', error)
+          })
+      },
     }
   }
-}
 </script>

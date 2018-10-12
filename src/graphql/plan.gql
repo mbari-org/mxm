@@ -1,0 +1,20 @@
+query ($planId: String!) {
+  allPlansList(condition: {
+    planId: $planId
+  }) {
+    planId
+    name
+    description
+    tasksByPlanIdList {
+      taskId
+      executorId
+      taskDefId
+      assetId
+      name
+      description
+      startDate
+      endDate
+      geometry
+    }
+  }
+}

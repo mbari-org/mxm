@@ -2,6 +2,8 @@ version: '3.6'
 services:
   pxspostgres:
     image: mbari/pxspostgres:0.0.1
+    ports:
+    - "25432:5432"
     restart: always
     volumes:
     - db_data:/var/lib/postgresql/data

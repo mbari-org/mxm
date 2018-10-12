@@ -29,11 +29,14 @@ const routes = [
         path: '/plans/:planId/tasks/:taskId',
         component: () => import('pages/Task')
       },
-
       {
-        path: '/apollo',
-        component: () => import('pages/ApolloTest')
-      }
+        path: '/assetclasses',
+        component: () => import('pages/AssetClasses')
+      },
+      {
+        path: '/assetclasses/:className',
+        component: () => import('pages/AssetClass')
+      },
     ]
   }
 ]

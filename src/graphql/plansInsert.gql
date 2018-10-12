@@ -1,0 +1,17 @@
+mutation($planId: String!, $name: String!, $description: String) {
+  createPlan(
+    input: {
+      plan: {
+        planId: $planId
+        name: $name
+        description: $description
+      }
+    }
+  ) {
+    plan {
+      planId
+      name
+      description
+    }
+  }
+}

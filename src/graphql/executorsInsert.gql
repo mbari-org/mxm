@@ -1,0 +1,17 @@
+mutation($executorId: String!, $httpEndpoint: String!, $description: String) {
+  createExecutor(
+    input: {
+      executor: {
+        executorId: $executorId
+        httpEndpoint: $httpEndpoint
+        description: $description
+      }
+    }
+  ) {
+    executor {
+      executorId
+      httpEndpoint
+      description
+    }
+  }
+}

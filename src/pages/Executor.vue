@@ -1,43 +1,43 @@
 <template>
   <q-page class="q-pa-md">
     <q-breadcrumbs active-color="secondary" color="light">
-      <q-breadcrumbs-el label="Home" to="/" />
-      <q-breadcrumbs-el label="Executors" to="/executors" />
-      <q-breadcrumbs-el :label="params.executorId" />
+      <q-breadcrumbs-el label="Home" to="/"/>
+      <q-breadcrumbs-el label="Executors" to="/executors"/>
+      <q-breadcrumbs-el :label="params.executorId"/>
       <q-btn
         dense round icon="refresh" class="q-ml-lg" size="sm"
-        @click="refresh"
+        @click="refreshExecutor"
       />
     </q-breadcrumbs>
 
-    <div v-if="detailed">
-      <h5> Executor: {{params.executorId}}
-      </h5>
+    <!--<pre v-if="debug">executor={{executor}}</pre>-->
 
-      <q-table
-        title="Assets managed by this executor"
-        :columns="assetColumns"
-        :data="assetTable"
-        row-key="name"
-        class="q-mb-md"
-      >
-        <div slot="top-right" slot-scope="props" class="fit">
-          <asset-new-button
-            :executor-id="params.executorId"
-            v-on:created="assetCreated"
-          />
-        </div>
-      </q-table>
+    <div v-if="executor">
+
+      <q-card class="q-mb-md">
+        <q-card-title>
+          Executor: {{executor.executorId}}
+        </q-card-title>
+        <q-card-separator/>
+        <q-card-main>
+          <p class="text-italic">
+            {{executor.description}}
+          </p>
+          <div>
+            Endpoint: {{executor.httpEndpoint}}
+          </div>
+        </q-card-main>
+      </q-card>
 
       <q-table
         title="Tasks definitions managed by this executor"
         :columns="taskDefColumns"
-        :data="taskDefTable"
+        :data="myTaskDefs"
         row-key="name"
       >
         <div slot="top-right" slot-scope="props" class="fit">
           <taskdef-new-button
-            :executor-id="params.executorId"
+            :executor-id="executor.executorId"
             v-on:created="taskDefCreated"
           />
         </div>
@@ -45,7 +45,8 @@
         <q-td slot="body-cell-taskDefId" slot-scope="props" :props="props"
               style="width:5px"
         >
-          <router-link :to="`/executors/${encodeURIComponent(params.executorId)}/taskdefs/${encodeURIComponent(props.row.taskDefId)}`">
+          <router-link
+            :to="`/executors/${encodeURIComponent(executor.executorId)}/taskdefs/${encodeURIComponent(props.row.taskDefId)}`">
             {{props.row.taskDefId}}
           </router-link>
         </q-td>
@@ -61,124 +62,143 @@
 </template>
 
 <script>
-import AssetNewButton from 'components/asset-new-button'
-import TaskdefNewButton from 'components/taskdef-new-button'
-import lodash from 'lodash'
-const _ = lodash
+  import TaskdefNewButton from 'components/taskdef-new-button'
+  import executor from '../graphql/executor.gql'
+  import {Notify} from 'quasar'
+  import _ from 'lodash'
 
-export default {
-  components: {
-    AssetNewButton,
-    TaskdefNewButton
-  },
+  const debug = false
 
-  data () {
-    return {
-      loading: false,
-      detailed: null,
-      taskDefs: [],
-      assetColumns: [
-        {
-          field: 'assetId',
-          name: 'assetId',
-          label: 'ID',
-          align: 'left',
-          sortable: true
-        },
-        {
-          field: 'assetClass',
-          name: 'assetClass',
-          label: 'Class',
-          align: 'left',
-          sortable: true
-        },
-        {
-          field: 'description',
-          name: 'description',
-          label: 'Description',
-          align: 'left',
-          sortable: true
-        }
-      ],
-      assetTable: [],
-
-      taskDefColumns: [
-        {
-          field: 'taskDefId',
-          name: 'taskDefId',
-          label: 'ID',
-          align: 'left',
-          sortable: true
-        },
-        {
-          field: 'description',
-          name: 'description',
-          label: 'Description',
-          align: 'left',
-          sortable: true
-        },
-        {
-          field: 'assetClassesString',
-          name: 'assetClassesString',
-          label: 'Asset Classes',
-          align: 'left',
-          sortable: true
-        }
-      ],
-      taskDefTable: []
-    }
-  },
-
-  computed: {
-    params () {
-      return this.$route.params
-    }
-  },
-
-  mounted () {
-    this.refresh()
-  },
-
-  methods: {
-    refresh () {
-      this.loading = true
-      this.detailed = null
-      const url = `/executors/${encodeURIComponent(this.params.executorId)}/detailed`
-      this.$axios({
-        method: 'GET',
-        url
-      })
-        .then(response => {
-          this.loading = false
-          console.log(`GET ${url}: response=`, response)
-          this.detailed = response.data
-          this.assetTable = _.get(this.detailed, 'assets') || []
-          this.taskDefs = _.get(this.detailed, 'taskDefs') || []
-          this.taskDefTable = _.map(this.taskDefs, td => {
-            td.assetClassesString = _.join(td.assetClasses, ', ')
-            return td
-          })
-        })
-        .catch(e => {
-          this.loading = false
-          console.error(e)
-        })
+  export default {
+    components: {
+      TaskdefNewButton
     },
 
-    assetCreated (data) {
-      this.assetTable.splice(0, 0, data)
+    data() {
+      return {
+        debug,
+        loading: false,
+        detailed: null,
+        taskDefs: [],
+
+        selectedAssetClasses: [],
+
+        taskDefColumns: [
+          {
+            field: 'taskDefId',
+            name: 'taskDefId',
+            label: 'ID',
+            align: 'left',
+            sortable: true
+          },
+          {
+            field: 'description',
+            name: 'description',
+            label: 'Description',
+            align: 'left',
+            sortable: true
+          },
+          {
+            field: 'assetClassesString',
+            name: 'assetClassesString',
+            label: 'Asset Classes',
+            align: 'left',
+            sortable: true
+          }
+        ],
+      }
     },
 
-    taskDefCreated (data) {
-      data.assetClassesString = _.join(data.assetClasses, ', ')
-      this.taskDefTable.splice(0, 0, data)
-    }
-  },
+    computed: {
+      params() {
+        return this.$route.params
+      },
 
-  watch: {
-    '$route' () {
-      this.refresh()
+      myTaskDefs() {
+        const list = this.executor && this.executor.taskDefsByExecutorIdList || []
+        _.each(list, e => {
+          e.assetClassesString = _.join(
+            _.map(e.taskdefAssetClassesByExecutorIdAndTaskDefIdList, 'assetClassName'),
+            ', '
+          )
+        })
+        return list
+      },
+    },
+
+    apollo: {
+      executor: {
+        query: executor,
+        variables() {
+          return {
+            executorId: this.params.executorId
+          }
+        },
+        update(data) {
+          if (debug) console.log('update: data=', data)
+          if (data.allExecutorsList && data.allExecutorsList.length) {
+            return data.allExecutorsList[0]
+          }
+          else return null
+        },
+      },
+    },
+
+    mounted() {
+      this.refreshExecutor()
+    },
+
+    methods: {
+      refreshExecutor() {
+        this.$apollo.queries.executor.refetch()
+      },
+
+      assetClassSelection(data) {
+        const newAssetClassNames = _.difference(data, this.myAssetClassNames)
+        if (debug) console.debug('assetClassSelection: newAssetClassNames=', newAssetClassNames)
+
+        const added = []
+        const next = () => {
+          const assetClassName = newAssetClassNames.pop()
+          if (assetClassName) {
+            if (debug) console.debug('assetClassSelection: next=', assetClassName)
+            this.addAssetClassName(assetClassName, ok => {
+              if (ok) {
+                added.push(assetClassName)
+              }
+              next()
+            })
+          }
+          else {
+            if (added.length) {
+              Notify.create({
+                message: `Asset associated (${added.length})`,
+                timeout: 1000,
+                type: 'info'
+              })
+              this.refreshExecutor()
+            }
+          }
+        }
+
+        next()
+      },
+
+      // TODO
+      taskDefCreated(data) {
+        data.assetClassesString = _.join(data.assetClasses, ', ')
+        this.myTaskDefs.splice(0, 0, data)
+      }
+    },
+
+    watch: {
+      '$route'() {
+        this.refreshExecutor()
+      },
+
+      executor(val) {
+        if (debug) console.log('watch executor=', val)
+      }
     }
   }
-}
 </script>

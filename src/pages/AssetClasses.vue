@@ -2,28 +2,28 @@
   <q-page class="q-pa-md">
     <q-breadcrumbs active-color="secondary" color="light">
       <q-breadcrumbs-el label="Home" to="/"/>
-      <q-breadcrumbs-el label="Plans" to="/plans"/>
+      <q-breadcrumbs-el label="AssetClasses" to="/assetclasses"/>
       <q-btn
         dense round icon="refresh" class="q-ml-lg" size="sm"
-        @click="refreshPlans"
+        @click="refreshAssetClasses"
       />
     </q-breadcrumbs>
 
     <q-table
-      title="Plans"
-      :data="allPlansList"
+      title="Asset Classes"
+      :data="allAssetClassesList"
       :columns="columns"
-      row-key="name"
+      row-key="className"
     >
       <div slot="top-right" slot-scope="props" class="fit">
-        <plan-new-button v-on:created="planCreated"/>
+        <asset-class-new-button v-on:created="assetClassCreated"/>
       </div>
 
-      <q-td slot="body-cell-name" slot-scope="props" :props="props"
+      <q-td slot="body-cell-className" slot-scope="props" :props="props"
             style="width:5px"
       >
-        <router-link :to="`/plans/${encodeURIComponent(props.row.planId)}`">
-          {{props.row.name}}
+        <router-link :to="`/assetclasses/${encodeURIComponent(props.row.className)}`">
+          {{props.row.className}}
         </router-link>
       </q-td>
 
@@ -32,23 +32,23 @@
 </template>
 
 <script>
-  import PlanNewButton from 'components/plan-new-button'
-  import allPlansList from '../graphql/plans.gql'
+  import AssetClassNewButton from 'components/asset-class-new-button'
+  import allAssetClassesList from '../graphql/assetClasses.gql'
 
   const debug = false
 
   export default {
     components: {
-      PlanNewButton
+      AssetClassNewButton
     },
 
     data() {
       return {
-        allPlansList: [],
+        allAssetClassesList: [],
         columns: [
           {
-            field: 'name',
-            name: 'name',
+            field: 'className',
+            name: 'className',
             label: 'Name',
             align: 'left',
             sortable: true
@@ -65,26 +65,26 @@
     },
 
     apollo: {
-      allPlansList,
+      allAssetClassesList,
     },
 
     mounted() {
-      this.refreshPlans()
+      this.refreshAssetClasses()
     },
 
     methods: {
-      refreshPlans() {
-        this.$apollo.queries.allPlansList.refetch()
+      refreshAssetClasses() {
+        this.$apollo.queries.allAssetClassesList.refetch()
       },
 
-      planCreated(data) {
-        this.refreshPlans()
+      assetClassCreated(data) {
+        this.refreshAssetClasses()
       }
     },
 
     watch: {
-      allPlansList(val) {
-        if (debug) console.log('watch allPlansList=', val)
+      allAssetClassesList(val) {
+        if (debug) console.log('watch allAssetClassesList=', val)
       }
     }
   }

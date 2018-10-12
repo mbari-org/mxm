@@ -1,8 +1,8 @@
 <template>
   <q-page class="q-pa-md">
     <q-breadcrumbs active-color="secondary" color="light">
-      <q-breadcrumbs-el label="Home" to="/" />
-      <q-breadcrumbs-el label="Executors" to="/executors" />
+      <q-breadcrumbs-el label="Home" to="/"/>
+      <q-breadcrumbs-el label="Executors" to="/executors"/>
       <q-btn
         dense round icon="refresh" class="q-ml-lg" size="sm"
         @click="refresh"
@@ -11,7 +11,7 @@
 
     <q-table
       title="Executors"
-      :data="executors"
+      :data="allExecutorsList"
       :columns="columns"
       row-key="name"
     >
@@ -32,65 +32,68 @@
 </template>
 
 <script>
-import ExecutorNewButton from 'components/executor-new-button'
+  import ExecutorNewButton from 'components/executor-new-button'
+  import allExecutorsList from '../graphql/executors.gql'
 
-export default {
-  components: {
-    ExecutorNewButton
-  },
+  const debug = false
 
-  data () {
-    return {
-      executors: [],
-      columns: [
-        {
-          field: 'executorId',
-          name: 'executorId',
-          label: 'ID',
-          align: 'left',
-          sortable: true
-        },
-        {
-          field: 'description',
-          name: 'description',
-          label: 'Description',
-          align: 'left',
-          sortable: true
-        },
-        {
-          field: 'httpEndpoint',
-          name: 'httpEndpoint',
-          label: 'httpEndpoint',
-          align: 'left',
-          sortable: true
-        }
-      ]
-    }
-  },
-
-  mounted () {
-    this.refresh()
-  },
-
-  methods: {
-    refresh () {
-      const url = `/executors`
-      this.$axios({
-        method: 'GET',
-        url: '/executors'
-      })
-        .then(response => {
-          console.log(`GET ${url}: response=`, response)
-          this.executors = response.data || []
-        })
-        .catch(e => {
-          console.error(e)
-        })
+  export default {
+    components: {
+      ExecutorNewButton
     },
 
-    created (data) {
-      this.executors.splice(0, 0, data)
+    data() {
+      return {
+        allExecutorsList: [],
+        columns: [
+          {
+            field: 'executorId',
+            name: 'executorId',
+            label: 'ID',
+            align: 'left',
+            sortable: true
+          },
+          {
+            field: 'description',
+            name: 'description',
+            label: 'Description',
+            align: 'left',
+            sortable: true
+          },
+          {
+            field: 'httpEndpoint',
+            name: 'httpEndpoint',
+            label: 'Endpoint',
+            align: 'left',
+            sortable: true
+          }
+        ]
+      }
+    },
+
+    apollo: {
+      allExecutorsList
+    },
+
+    mounted() {
+      this.refresh()
+    },
+
+    methods: {
+      refresh() {
+        this.$apollo.queries.allExecutorsList.refetch()
+      },
+
+      created(data) {
+        this.allExecutorsList.splice(0, 0, data)
+      }
+    },
+
+    watch: {
+      allExecutorsList(val) {
+        if (debug) console.log('watch allExecutorsList=', val)
+      }
     }
+
   }
-}
 </script>

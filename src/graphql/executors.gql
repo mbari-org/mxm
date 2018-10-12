@@ -1,0 +1,8 @@
+{
+  allExecutorsList {
+    nodeId
+    executorId
+    httpEndpoint
+    description
+  }
+}

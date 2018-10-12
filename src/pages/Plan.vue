@@ -1,34 +1,42 @@
 <template>
   <q-page class="q-pa-md">
     <q-breadcrumbs active-color="secondary" color="light">
-      <q-breadcrumbs-el label="Home" to="/" />
-      <q-breadcrumbs-el label="Plans" to="/plans" />
-      <q-breadcrumbs-el label="Plan" :to="`/plans/${encodeURIComponent(params.planId)}`" />
+      <q-breadcrumbs-el label="Home" to="/"/>
+      <q-breadcrumbs-el label="Plans" to="/plans"/>
+      <q-breadcrumbs-el :label="params.planId" :to="`/plans/${encodeURIComponent(params.planId)}`"/>
       <q-btn
         dense round icon="refresh" class="q-ml-lg" size="sm"
-        @click="refresh"
+        @click="refreshPlan"
       />
     </q-breadcrumbs>
 
     <div v-if="plan">
-      <h5> Plan: {{plan.name}}
-      </h5>
-      <small>{{plan.planId}}</small>
 
-      <div>
-        Description: {{ plan.description}}
-      </div>
+      <q-card class="q-mb-md">
+        <q-card-title>
+          Plan: {{plan.name}}
+          <small>({{plan.planId}})</small>
+        </q-card-title>
+        <q-card-separator/>
+        <q-card-main>
+          <p class="text-italic">
+            {{plan.description}}
+          </p>
+        </q-card-main>
+      </q-card>
+
+      <!--<pre>myTasks={{myTasks}}</pre>-->
 
       <q-table
         title="Tasks"
-        :data="plan.tasks"
+        :data="myTasks"
         :columns="taskColumns"
         row-key="name"
       >
         <div slot="top-right" slot-scope="props" class="fit">
           <task-new-button
             :plan-id="plan.planId"
-            v-on:created="created"
+            v-on:created="taskCreated"
           />
         </div>
 
@@ -36,34 +44,25 @@
               style="width:5px"
         >
           <router-link :to="`/plans/${encodeURIComponent(plan.planId)}/tasks/${encodeURIComponent(props.row.taskId)}`">
-            {{props.row.name || props.row.taskDefId || props.row.taskId}}</router-link>
+            {{props.row.name || props.row.taskDefId || props.row.taskId}}
+          </router-link>
         </q-td>
 
         <q-td slot="body-cell-executorId" slot-scope="props" :props="props"
               style="width:5px"
         >
           <router-link :to="`/executors/${encodeURIComponent(props.value)}`">
-            {{ props.value }}</router-link>
+            {{ props.value }}
+          </router-link>
         </q-td>
 
         <q-td slot="body-cell-taskDefId" slot-scope="props" :props="props"
               style="width:5px"
         >
-          <router-link :to="`/executors/${encodeURIComponent(props.row.executorId)}/taskdefs/${encodeURIComponent(props.value)}`">
-            {{ props.value }}</router-link>
-        </q-td>
-
-        <q-td slot="body-cell-assetId" slot-scope="props" :props="props"
-              style="width:5px"
-        >
-          <router-link :to="`/executors/${encodeURIComponent(props.row.executorId)}/assets/${encodeURIComponent(props.value)}`">
-            {{ props.value }}</router-link>
-        </q-td>
-
-        <q-td slot="body-cell-arguments" slot-scope="props" :props="props"
-              style="width:5px"
-        >
-          {{ (props.value || []).length }}
+          <router-link
+            :to="`/executors/${encodeURIComponent(props.row.executorId)}/taskdefs/${encodeURIComponent(props.value)}`">
+            {{ props.value }}
+          </router-link>
         </q-td>
 
       </q-table>
@@ -77,123 +76,137 @@
 </template>
 
 <script>
-import TaskNewButton from 'components/task-new-button'
-import lodash from 'lodash'
-const _ = lodash
+  import plan from '../graphql/plan.gql'
+  import TaskNewButton from 'components/task-new-button'
+  import {Notify} from 'quasar'
+  import _ from 'lodash'
 
-export default {
-  components: {
-    TaskNewButton
-  },
+  const debug = false
 
-  data () {
-    return {
-      loading: false,
-      plan: null,
-      join: _.join,
-      taskColumns: [
-        {
-          field: 'name',
-          name: 'name',
-          label: 'Name',
-          align: 'left',
-          sortable: true
-        },
-        {
-          field: 'executorId',
-          name: 'executorId',
-          label: 'executorId',
-          align: 'left',
-          sortable: true
-        },
-        {
-          field: 'taskDefId',
-          name: 'taskDefId',
-          label: 'taskDefId',
-          align: 'left',
-          sortable: true
-        },
-        {
-          field: 'arguments',
-          name: 'arguments',
-          label: 'arguments',
-          align: 'left',
-          sortable: true
-        },
-        {
-          field: 'assetId',
-          name: 'assetId',
-          label: 'assetId',
-          align: 'left',
-          sortable: true
-        },
-        {
-          field: 'start',
-          name: 'start',
-          label: 'start',
-          align: 'left',
-          sortable: true
-        },
-        {
-          field: 'end',
-          name: 'end',
-          label: 'end',
-          align: 'left',
-          sortable: true
-        },
-        {
-          field: 'description',
-          name: 'description',
-          label: 'Description',
-          align: 'left',
-          sortable: true
-        }
-      ]
-    }
-  },
-
-  computed: {
-    params () {
-      return this.$route.params
-    }
-  },
-
-  mounted () {
-    this.refresh()
-  },
-
-  methods: {
-    refresh () {
-      this.loading = true
-      this.plan = null
-      const url = `/plans/${encodeURIComponent(this.params.planId)}`
-      this.$axios({
-        method: 'GET',
-        url
-      })
-        .then(response => {
-          this.loading = false
-          console.log(`GET ${url}: response=`, response)
-          this.plan = response.data || {}
-          if (!this.plan.tasks) {
-            this.plan.tasks = []
-          }
-        })
-        .catch(e => {
-          this.loading = false
-          console.error(e)
-        })
+  export default {
+    components: {
+      TaskNewButton
     },
 
-    created (data) {
-      this.plan.tasks.splice(0, 0, data)
-    }
-  },
+    data() {
+      return {
+        loading: false,
+        plan: null,
+        taskColumns: [
+          {
+            field: 'name',
+            name: 'name',
+            label: 'Name',
+            align: 'left',
+            sortable: true
+          },
+          {
+            field: 'description',
+            name: 'description',
+            label: 'Description',
+            align: 'left',
+            sortable: true
+          },
+          {
+            field: 'executorId',
+            name: 'executorId',
+            label: 'Executor',
+            align: 'left',
+            sortable: true
+          },
+          {
+            field: 'taskDefId',
+            name: 'taskDefId',
+            label: 'TaskDef',
+            align: 'left',
+            sortable: true
+          },
+          {
+            field: 'assetId',
+            name: 'assetId',
+            label: 'Asset',
+            align: 'left',
+            sortable: true
+          },
+          {
+            field: 'start',
+            name: 'start',
+            label: 'Start',
+            align: 'left',
+            sortable: true
+          },
+          {
+            field: 'end',
+            name: 'end',
+            label: 'End',
+            align: 'left',
+            sortable: true
+          },
+          {
+            field: 'geometry',
+            name: 'geometry',
+            label: 'Geometry',
+            align: 'left',
+            sortable: false
+          },
+        ]
+      }
+    },
 
-  watch: {
-    '$route' () {
-      this.refresh()
+    computed: {
+      params() {
+        return this.$route.params
+      },
+
+      myTasks() {
+        return _.get(this.plan, 'tasksByPlanIdList') || []
+      },
+    },
+
+    apollo: {
+      plan: {
+        query: plan,
+        variables() {
+          return {
+            planId: this.params.planId
+          }
+        },
+        update(data) {
+          if (debug) console.log('update: data=', data)
+          if (data.allPlansList && data.allPlansList.length) {
+            return data.allPlansList[0]
+          }
+          else return null
+        },
+      },
+    },
+
+    mounted() {
+      this.refreshPlan()
+    },
+
+    methods: {
+      refreshPlan() {
+        this.$apollo.queries.plan.refetch()
+      },
+
+      taskCreated(data) {
+        this.refreshPlan()
+      }
+    },
+
+    watch: {
+      '$route'() {
+        this.refreshPlan()
+      },
+
+      plan(val) {
+        if (debug) console.log('watch plan=', val)
+      },
+
+      executor(val) {
+        if (debug) console.log('watch executor=', val)
+      },
     }
   }
-}
 </script>

@@ -81,61 +81,55 @@
 </template>
 
 <script>
-import { Notify } from 'quasar'
+  import mutation from '../graphql/executorsInsert.gql'
+  import {Notify} from 'quasar'
 
-export default {
-  data () {
-    return {
-      dialogOpened: false,
-      executorId: '',
-      httpEndpoint: '',
-      description: ''
-    }
-  },
-
-  computed: {
-    okToSubmit () {
-      return this.executorId
-    }
-  },
-
-  methods: {
-    openDialog () {
-      this.executorId = ''
-      this.httpEndpoint = ''
-      this.description = ''
-      this.dialogOpened = true
+  export default {
+    data() {
+      return {
+        dialogOpened: false,
+        executorId: '',
+        httpEndpoint: '',
+        description: ''
+      }
     },
 
-    submit () {
-      const data = {
-        executorId: this.executorId,
-        httpEndpoint: this.httpEndpoint
+    computed: {
+      okToSubmit() {
+        return this.executorId
       }
-      if (this.description) {
-        data.description = this.description
-      }
+    },
 
-      const url = '/executors'
-      this.$axios({
-        method: 'POST',
-        url,
-        data
-      })
-        .then(response => {
-          console.log(`POST ${url}: response=`, response)
-          this.dialogOpened = false
-          Notify.create({
-            message: 'Executor created',
-            timeout: 1000,
-            type: 'info'
+    methods: {
+      openDialog() {
+        this.executorId = ''
+        this.httpEndpoint = ''
+        this.description = null
+        this.dialogOpened = true
+      },
+
+      submit() {
+        const variables = {
+          executorId: this.executorId,
+          httpEndpoint: this.httpEndpoint,
+          description: this.description
+        }
+
+        this.$apollo.mutate({mutation, variables})
+          .then((data) => {
+            console.log('mutation data=', data)
+            this.dialogOpened = false
+            Notify.create({
+              message: 'Executor created',
+              timeout: 1000,
+              type: 'info'
+            })
+            this.$emit('created', variables)
           })
-          this.$emit('created', response.data)
-        })
-        .catch(e => {
-          console.error(e)
-        })
+          .catch((error) => {
+            console.error('mutation error=', error)
+          })
+      }
     }
   }
-}
 </script>

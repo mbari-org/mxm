@@ -1,0 +1,32 @@
+mutation(
+  $executorId: String!
+  $taskDefId: String!
+  $name: String!
+  $type: String!
+  $required: Boolean!
+  $defaultValue: String
+  $description: String
+) {
+  createParameter(
+    input: {
+      parameter: {
+        executorId: $executorId
+        taskDefId: $taskDefId
+        description: $description
+        name: $name
+        type: $type
+        defaultValue: $defaultValue
+        required: $required
+      }
+    }
+  ) {
+    parameter {
+      executorId
+      taskDefId
+      description
+      name
+      type
+      required
+    }
+  }
+}

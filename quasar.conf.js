@@ -4,7 +4,6 @@ module.exports = function (ctx) {
   return {
     // app plugins (/src/plugins)
     plugins: [
-      'axios',
       'apollo'
     ],
     css: [
@@ -31,6 +30,11 @@ module.exports = function (ctx) {
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
           exclude: /(node_modules|quasar)/
+        })
+        cfg.module.rules.push({
+          test: /\.(graphql|gql)$/,
+          exclude: /node_modules/,
+          loader: 'graphql-tag/loader'
         })
       }
     },

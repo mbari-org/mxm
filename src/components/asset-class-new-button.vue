@@ -1,13 +1,13 @@
 <template>
   <div>
     <q-modal v-model="dialogOpened"
-             content-css="min-width:60vw;min-height:300px"
+             content-css="min-width:350px;min-height:300px"
              no-backdrop-dismiss
     >
       <q-modal-layout>
         <q-toolbar slot="header">
           <q-toolbar-title>
-            Add Plan
+            Register new asset class
           </q-toolbar-title>
           <q-btn round dense
                  color="primary"
@@ -18,27 +18,13 @@
 
         <div class="q-pa-lg">
           <q-field
-            label="Plan ID:"
-            :error="!planId.length"
+            label="Class name:"
+            :error="!className.length"
             :label-width="4"
           >
             <q-input
               class="bg-light-blue-1"
-              v-model.trim="planId"
-              type="text"
-              autofocus
-              style="width:24em"
-            />
-          </q-field>
-
-          <q-field
-            label="Name:"
-            :error="!name.length"
-            :label-width="4"
-          >
-            <q-input
-              class="bg-light-blue-1"
-              v-model.trim="name"
+              v-model.trim="className"
               type="text"
               autofocus
               style="width:24em"
@@ -56,6 +42,7 @@
               style="width:24em"
             />
           </q-field>
+
         </div>
 
         <q-toolbar slot="footer" color="flat">
@@ -75,44 +62,43 @@
       icon="add"
       dense round no-caps size="sm"
       @click="openDialog"
-    />
+    >
+      <q-tooltip>Register a new asset class</q-tooltip>
+    </q-btn>
 
   </div>
 </template>
 
 <script>
-  import mutation from '../graphql/plansInsert.gql'
+  import mutation from '../graphql/assetClassesInsert.gql'
   import {Notify} from 'quasar'
 
   export default {
     data() {
       return {
         dialogOpened: false,
-        planId: '',
-        name: '',
+        className: '',
         description: ''
       }
     },
 
     computed: {
       okToSubmit() {
-        return this.planId && this.name
+        return this.className
       }
     },
 
     methods: {
       openDialog() {
-        this.planId = ''
-        this.name = ''
+        this.className = ''
         this.description = ''
         this.dialogOpened = true
       },
 
       submit() {
         const variables = {
-          planId: this.planId,
-          name: this.name,
-          description: this.description
+          className: this.className,
+          description: this.description || null
         }
 
         this.$apollo.mutate({mutation, variables})
@@ -120,7 +106,7 @@
             console.log('mutation data=', data)
             this.dialogOpened = false
             Notify.create({
-              message: 'Plan created',
+              message: 'Asset class registered',
               timeout: 1000,
               type: 'info'
             })

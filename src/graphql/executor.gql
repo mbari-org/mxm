@@ -1,0 +1,22 @@
+query executor($executorId: String!) {
+  allExecutorsList(condition: {
+    executorId: $executorId
+  }) {
+    executorId
+    httpEndpoint
+    description
+    taskDefsByExecutorIdList {
+      nodeId
+      taskDefId
+      description
+      taskdefAssetClassesByExecutorIdAndTaskDefIdList {
+        assetClassName
+        assetClassByAssetClassName {
+          assetsByClassNameList {
+            assetId
+          }
+        }
+      }
+    }
+  }
+}

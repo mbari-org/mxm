@@ -1,130 +1,103 @@
-create table if not exists executor
+create table if not exists asset_classes
 (
-	executorid varchar not null
-		constraint executor_pkey
-			primary key,
-	httpendpoint text not null,
-	description text
+	class_name varchar not null,
+	description varchar,
+	primary key (class_name)
 )
 ;
 
-create table if not exists taskdef
+create table if not exists assets
 (
-	taskdefid varchar not null
-		constraint taskdef_pkey
-			primary key,
-	description text
+	asset_id varchar not null,
+	class_name varchar not null,
+	description varchar,
+	foreign key (class_name) references asset_classes,
+	primary key (asset_id)
 )
 ;
 
-create table if not exists assetclass
+create table if not exists executors
 (
-	classname varchar not null
-		constraint assetclass_pkey
-			primary key,
-	description text
+	executor_id varchar not null,
+	http_endpoint varchar not null,
+	description varchar,
+	primary key (executor_id)
 )
 ;
 
-create table if not exists asset
+create table if not exists task_defs
 (
-	assetid varchar not null
-		constraint asset_pkey
-			primary key,
-	assetclass varchar not null
-		constraint assetclass_fk
-			references assetclass,
-	description text
+	executor_id varchar not null,
+	task_def_id varchar not null,
+	description varchar,
+  foreign key (executor_id) references executors,
+  primary key (executor_id, task_def_id)
 )
 ;
 
-create table if not exists executor_asset
+create table if not exists taskdef_asset_class
 (
-	executorid varchar not null
-		constraint executor_fk
-			references executor,
-	assetid varchar not null
-		constraint asset_fk
-			references asset
+	executor_id varchar not null,
+	task_def_id varchar not null,
+	asset_class_name varchar not null,
+  foreign key (executor_id, task_def_id) references task_defs,
+  foreign key (asset_class_name) references asset_classes,
+  primary key (executor_id, task_def_id, asset_class_name)
 )
 ;
 
-create table if not exists taskdef_assetclass
+create table if not exists parameters
 (
-	taskdefid varchar
-		constraint taskdef_assetclass_td_fk
-			references taskdef,
-	assetclass varchar
-		constraint taskdef_assetclass_fk
-			references assetclass
-)
-;
-
-create table if not exists parameter
-(
-	name varchar not null
-		constraint parameter_pkey
-			primary key,
+	executor_id varchar not null,
+	task_def_id varchar not null,
+	name varchar not null,
 	type varchar not null,
 	required boolean default false not null,
-	defaultvalue varchar,
-	description text
+	default_value varchar,
+	description varchar,
+  foreign key (executor_id, task_def_id) references task_defs,
+  primary key (executor_id, task_def_id, name)
 )
 ;
 
-create table if not exists taskdef_param
+create table if not exists plans
 (
-	taskdefid varchar
-		constraint taskdef_taskdefid_fk
-			references taskdef,
-	paramname varchar
-		constraint taskdef_param_parameter_name_fk
-			references parameter
+	plan_id varchar not null,
+	name varchar not null,
+	description varchar,
+  primary key (plan_id)
 )
 ;
 
-create table if not exists task
+create table if not exists tasks
 (
-	executorid varchar,
-	taskdefid varchar,
-	assetid varchar,
-	name text,
-	description text,
-	start timestamp with time zone,
-	"end" timestamp with time zone,
+	plan_id varchar not null,
+	task_id varchar not null,
+	executor_id varchar not null,
+	task_def_id varchar not null,
+	asset_id varchar not null,
+	name varchar,
+	description varchar,
+	start_date timestamp with time zone,
+	end_date timestamp with time zone,
 	geometry json,
-	taskid varchar not null
-		constraint task_pk
-			primary key
+  foreign key (plan_id) references plans,
+  foreign key (executor_id, task_def_id) references task_defs,
+  foreign key (asset_id) references assets,
+  primary key (plan_id, task_id)
 )
 ;
 
-create table if not exists plan
+create table if not exists arguments
 (
-	name text not null,
-	description text,
-	planid varchar not null
-		constraint plan_pk
-			primary key
-)
-;
-
-create table if not exists plan_task
-(
-	planid varchar
-		constraint plan_task__planid_fk
-			references plan,
-	taskid varchar
-		constraint plan_task__taskid_fk
-			references task
-)
-;
-
-create table if not exists argument
-(
-	paramname varchar
-		constraint argument__paramname_fk
-			references parameter,
-	paramvalue text
+	plan_id varchar not null,
+	task_id varchar not null,
+	executor_id varchar not null,
+	task_def_id varchar not null,
+	param_name varchar not null,
+	param_value varchar not null,
+  primary key (plan_id, task_id, param_name),
+  foreign key (plan_id, task_id) references tasks (plan_id, task_id),
+  foreign key (executor_id, task_def_id, param_name) references parameters
 )
 ;

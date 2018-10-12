@@ -1,0 +1,8 @@
+{
+  allPlansList {
+    nodeId
+    planId
+    name
+    description
+  }
+}

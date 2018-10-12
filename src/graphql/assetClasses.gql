@@ -1,0 +1,6 @@
+{
+  allAssetClassesList {
+    className
+    description
+  }
+}

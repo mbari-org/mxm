@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "apollo-boost": "^0.1.16",
-    "axios": "^0.18.0",
     "graphql": "^14.0.2",
     "vue-apollo": "^3.0.0-beta.25"
   },
@@ -27,7 +26,7 @@
     "eslint-plugin-promise": "^3.7.0",
     "eslint-plugin-standard": "^3.0.1",
     "eslint-plugin-vue": "^4.3.0",
-    "quasar-cli": "^0.17.0",
+    "quasar-cli": "^0.17.20",
     "strip-ansi": "=3.0.1"
   },
   "engines": {
