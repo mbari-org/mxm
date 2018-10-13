@@ -7,7 +7,7 @@
       <q-modal-layout>
         <q-toolbar slot="header">
           <q-toolbar-title>
-            Register new task definition for '{{executorId}}'
+            Register new mission definition for '{{executorId}}'
           </q-toolbar-title>
           <q-btn round dense
                  color="primary"
@@ -18,13 +18,13 @@
 
         <div class="q-pa-lg">
           <q-field
-            label="Task Definition ID:"
-            :error="!taskDefId.length"
+            label="Mission Definition ID:"
+            :error="!missionDefId.length"
             :label-width="4"
           >
             <q-input
               class="bg-light-blue-1"
-              v-model.trim="taskDefId"
+              v-model.trim="missionDefId"
               type="text"
               autofocus
               style="width:24em"
@@ -68,7 +68,7 @@
 </template>
 
 <script>
-  import mutation from '../graphql/taskDefsInsert.gql'
+  import mutation from '../graphql/missionDefInsert.gql'
   import {Notify} from 'quasar'
 
   const debug = true
@@ -84,20 +84,20 @@
     data() {
       return {
         dialogOpened: false,
-        taskDefId: '',
+        missionDefId: '',
         description: ''
       }
     },
 
     computed: {
       okToSubmit() {
-        return this.taskDefId
+        return this.missionDefId
       }
     },
 
     methods: {
       openDialog() {
-        this.taskDefId = ''
+        this.missionDefId = ''
         this.description = ''
         this.dialogOpened = true
       },
@@ -105,7 +105,7 @@
       submit() {
         const variables = {
           executorId: this.executorId,
-          taskDefId: this.taskDefId,
+          missionDefId: this.missionDefId,
           description: this.description,
         }
         if (debug) console.debug('variables=', variables)
@@ -115,7 +115,7 @@
             console.log('mutation data=', data)
             this.dialogOpened = false
             Notify.create({
-              message: 'Task definition created',
+              message: 'Mission definition created',
               timeout: 1000,
               type: 'info'
             })

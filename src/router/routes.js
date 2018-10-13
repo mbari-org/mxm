@@ -14,16 +14,16 @@ const routes = [
         path: '/executors/:executorId',
         component: () => import('pages/Executor')
       },
-      { path: '/executors/:executorId/taskdefs/:taskDefId',
-        component: () => import('pages/TaskDef')
+      { path: '/executors/:executorId/missiondefs/:missionDefId',
+        component: () => import('pages/MissionDef')
       },
       {
-        path: '/tasks',
-        component: () => import('pages/Tasks')
+        path: '/missions',
+        component: () => import('pages/Missions')
       },
       {
-        path: '/tasks/:taskId',
-        component: () => import('pages/Task')
+        path: '/missions/:missionId',
+        component: () => import('pages/Mission')
       },
       {
         path: '/assetclasses',

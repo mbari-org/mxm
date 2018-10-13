@@ -2,65 +2,65 @@
   <q-page class="q-pa-md">
     <q-breadcrumbs active-color="secondary" color="light">
       <q-breadcrumbs-el label="Home" to="/"/>
-      <q-breadcrumbs-el label="Tasks"/>
-      <q-breadcrumbs-el :label="params.taskId"/>
+      <q-breadcrumbs-el label="Missions"/>
+      <q-breadcrumbs-el :label="params.missionId"/>
       <q-btn
         dense round icon="refresh" class="q-ml-lg" size="sm"
-        @click="refreshTask"
+        @click="refreshMission"
       />
     </q-breadcrumbs>
 
-    <div v-if="task">
+    <div v-if="mission">
 
-      <!--<pre>task={{task}}</pre>-->
+      <!--<pre>mission={{mission}}</pre>-->
 
       <q-card class="q-mb-md">
         <q-card-title>
-          Task: '{{ task.taskId }}'
+          Mission: '{{ mission.missionId }}'
         </q-card-title>
         <q-card-separator/>
         <q-card-main>
           <table>
             <tbody>
             <tr>
-              <td>Task Name:</td>
-              <td>{{ task.name }}</td>
+              <td>Mission Name:</td>
+              <td>{{ mission.name }}</td>
             </tr>
             <tr>
               <td>Description:</td>
               <td>
                 <p class="text-italic">
-                  {{ task.description }}
+                  {{ mission.description }}
                 </p>
               </td>
             </tr>
             <tr>
-              <td>Task Def:</td>
+              <td>Mission Def:</td>
               <td>
-                <router-link :to="`/executors/${encodeURIComponent(task.executorId)}/taskdefs/${encodeURIComponent(task.taskDefId)}`">
-                  {{ task.taskDefId }}
+                <router-link :to="`/executors/${encodeURIComponent(mission.executorId)}/missiondefs/${encodeURIComponent(mission.missionDefId)}`">
+                  {{ mission.missionDefId }}
                 </router-link>
               </td>
             </tr>
             <tr>
               <td>Executor:</td>
               <td>
-                <router-link :to="`/executors/${encodeURIComponent(task.executorId)}`">
-                  {{ task.executorId }}
+                <router-link :to="`/executors/${encodeURIComponent(mission.executorId)}`">
+                  {{ mission.executorId }}
                 </router-link>
               </td>
             </tr>
             <tr>
               <td>Asset:</td>
-              <td>{{ task.assetId }}</td>
+              <td>{{ mission.assetId }}</td>
             </tr>
-            <tr v-if="task.start">
+            <tr v-if="mission.start">
               <td>Start:</td>
-              <td>{{ task.start }}</td>
+              <td>{{ mission.start }}</td>
             </tr>
-            <tr v-if="task.end">
+            <tr v-if="mission.end">
               <td>End:</td>
-              <td>{{ task.end }}</td>
+              <td>{{ mission.end }}</td>
             </tr>
             </tbody>
           </table>
@@ -162,13 +162,13 @@
     </div>
 
     <div v-else-if="!loading" class="text-negative">
-      Task not found: '{{params.taskId}}'
+      Mission not found: '{{params.missionId}}'
     </div>
   </q-page>
 </template>
 
 <script>
-  import task from '../graphql/task.gql'
+  import mission from '../graphql/mission.gql'
   import Vue from 'vue'
   import argumentInsert from '../graphql/argumentInsert.gql'
   import argumentUpdate from '../graphql/argumentUpdate.gql'
@@ -182,7 +182,7 @@
     data() {
       return {
         loading: false,
-        task: null,
+        mission: null,
         savingArgs: false,
         myArguments: [],
         argColumns: [
@@ -226,18 +226,18 @@
     },
 
     apollo: {
-      task: {
-        query: task,
+      mission: {
+        query: mission,
         variables() {
           return {
-            taskId: this.params.taskId,
+            missionId: this.params.missionId,
           }
         },
         update(data) {
           let res = null
           if (debug) console.debug('update: data=', data)
-          if (data.taskByTaskId) {
-            res = data.taskByTaskId
+          if (data.missionByMissionId) {
+            res = data.missionByMissionId
           }
           Vue.nextTick(() => {
             this.setMyArguments(res)
@@ -248,18 +248,18 @@
     },
 
     mounted() {
-      this.refreshTask()
+      this.refreshMission()
     },
 
     methods: {
-      refreshTask() {
-        this.$apollo.queries.task.refetch()
+      refreshMission() {
+        this.$apollo.queries.mission.refetch()
       },
 
-      setMyArguments(task) {
-        if (debug) console.debug('setMyArguments task=', task)
-        const alreadySavedArgs = _.get(task, 'argumentsByTaskIdList') || []
-        const parameters = _.get(task, 'taskDefByExecutorIdAndTaskDefId.parametersByExecutorIdAndTaskDefIdList') || []
+      setMyArguments(mission) {
+        if (debug) console.debug('setMyArguments mission=', mission)
+        const alreadySavedArgs = _.get(mission, 'argumentsByMissionIdList') || []
+        const parameters = _.get(mission, 'missionDefByExecutorIdAndMissionDefId.parametersByExecutorIdAndMissionDefIdList') || []
 
         if (debug) console.debug('alreadySavedArgs=', alreadySavedArgs)
 
@@ -294,7 +294,7 @@
         }
         this.savingArgs = true
 
-        const alreadySavedArgs = _.get(this.task, 'argumentsByTaskIdList') || []
+        const alreadySavedArgs = _.get(this.mission, 'argumentsByMissionIdList') || []
         if (debug) console.debug('saveArguments: alreadySavedArgs=', alreadySavedArgs)
 
         let numInserted = 0
@@ -311,7 +311,7 @@
             let message;
             if (numInserted || numUpdated || numDeleted) {
               message = `Arguments updated`
-              this.refreshTask()
+              this.refreshMission()
             }
             else {
               message = `No changed arguments`
@@ -376,9 +376,9 @@
       insertArgument(paramName, paramValue, next) {
         const mutation = argumentInsert
         const variables = {
-          taskId: this.params.taskId,
-          executorId: this.task.executorId,
-          taskDefId: this.task.taskDefId,
+          missionId: this.params.missionId,
+          executorId: this.mission.executorId,
+          missionDefId: this.mission.missionDefId,
           paramName,
           paramValue
         }
@@ -437,7 +437,7 @@
 
     watch: {
       '$route'() {
-        this.refreshTask()
+        this.refreshMission()
       }
     }
   }

@@ -30,24 +30,24 @@
       </q-card>
 
       <q-table
-        title="Tasks definitions managed by this executor"
-        :columns="taskDefColumns"
-        :data="myTaskDefs"
+        title="Mission definitions managed by this executor"
+        :columns="missionDefColumns"
+        :data="myMissionDefs"
         row-key="name"
       >
         <div slot="top-right" slot-scope="props" class="fit">
-          <taskdef-new-button
+          <mission-def-new-button
             :executor-id="executor.executorId"
-            v-on:created="taskDefCreated"
+            v-on:created="missionDefCreated"
           />
         </div>
 
-        <q-td slot="body-cell-taskDefId" slot-scope="props" :props="props"
+        <q-td slot="body-cell-missionDefId" slot-scope="props" :props="props"
               style="width:5px"
         >
           <router-link
-            :to="`/executors/${encodeURIComponent(executor.executorId)}/taskdefs/${encodeURIComponent(props.row.taskDefId)}`">
-            {{props.row.taskDefId}}
+            :to="`/executors/${encodeURIComponent(executor.executorId)}/missiondefs/${encodeURIComponent(props.row.missionDefId)}`">
+            {{props.row.missionDefId}}
           </router-link>
         </q-td>
 
@@ -62,7 +62,7 @@
 </template>
 
 <script>
-  import TaskdefNewButton from 'components/taskdef-new-button'
+  import MissionDefNewButton from 'components/mission-def-new-button'
   import executor from '../graphql/executor.gql'
   import {Notify} from 'quasar'
   import _ from 'lodash'
@@ -71,7 +71,7 @@
 
   export default {
     components: {
-      TaskdefNewButton
+      MissionDefNewButton
     },
 
     data() {
@@ -79,14 +79,14 @@
         debug,
         loading: false,
         detailed: null,
-        taskDefs: [],
+        missionDefs: [],
 
         selectedAssetClasses: [],
 
-        taskDefColumns: [
+        missionDefColumns: [
           {
-            field: 'taskDefId',
-            name: 'taskDefId',
+            field: 'missionDefId',
+            name: 'missionDefId',
             label: 'ID',
             align: 'left',
             sortable: true
@@ -114,11 +114,11 @@
         return this.$route.params
       },
 
-      myTaskDefs() {
-        const list = this.executor && this.executor.taskDefsByExecutorIdList || []
+      myMissionDefs() {
+        const list = this.executor && this.executor.missionDefsByExecutorIdList || []
         _.each(list, e => {
           e.assetClassesString = _.join(
-            _.map(e.taskdefAssetClassesByExecutorIdAndTaskDefIdList, 'assetClassName'),
+            _.map(e.missionDefAssetClassesByExecutorIdAndMissionDefIdList, 'assetClassName'),
             ', '
           )
         })
@@ -185,9 +185,9 @@
       },
 
       // TODO
-      taskDefCreated(data) {
+      missionDefCreated(data) {
         data.assetClassesString = _.join(data.assetClasses, ', ')
-        this.myTaskDefs.splice(0, 0, data)
+        this.myMissionDefs.splice(0, 0, data)
       }
     },
 

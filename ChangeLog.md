@@ -1,5 +1,6 @@
 2018-10-12
 
+- model renaming: from "task" to "mission"
 - model simplification: remove "plan"
 
 - task dispatch:

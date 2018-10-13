@@ -32,9 +32,9 @@
           <q-btn
             class="col"
             icon="ballot"
-            label="Tasks"
+            label="Missions"
             no-wrap no-caps
-            to="/tasks"
+            to="/missions"
           />
           <q-btn
             class="col"
@@ -61,9 +61,9 @@
           <q-item-side icon="settings"/>
           <q-item-main label="Executors"/>
         </q-item>
-        <q-item to="/tasks">
+        <q-item to="/missions">
           <q-item-side icon="ballot"/>
-          <q-item-main label="Tasks"/>
+          <q-item-main label="Missions"/>
         </q-item>
         <q-item to="/assetclasses">
           <q-item-side icon="ballot"/>

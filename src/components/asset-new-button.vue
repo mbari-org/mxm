@@ -87,7 +87,7 @@
 </template>
 
 <script>
-  import mutation from '../graphql/assetsInsert.gql'
+  import mutation from '../graphql/assetInsert.gql'
   import AssetClassField from 'components/asset-class-field'
   import AssetClassNewButton from 'components/asset-class-new-button'
   import {Notify} from 'quasar'

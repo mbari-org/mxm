@@ -1,0 +1,17 @@
+mutation($executorId: String!, $missionDefId: String!, $assetClassName: String!) {
+  createMissionDefAssetClass(
+    input: {
+      missionDefAssetClass: {
+        missionDefId: $missionDefId
+        executorId: $executorId
+        assetClassName: $assetClassName
+      }
+    }
+  ) {
+    missionDefAssetClass {
+      executorId
+      missionDefId
+      assetClassName
+    }
+  }
+}

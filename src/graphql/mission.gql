@@ -1,25 +1,25 @@
-query task($taskId: String!) {
-  taskByTaskId(taskId: $taskId) {
+query mission($missionId: String!) {
+  missionByMissionId(missionId: $missionId) {
     nodeId
-    taskId
+    missionId
     name
     assetId
-    taskDefId
+    missionDefId
     description
     executorId
-    argumentsByTaskIdList {
+    argumentsByMissionIdList {
       nodeId
       paramName
       paramValue
-      parameterByExecutorIdAndTaskDefIdAndParamName {
+      parameterByExecutorIdAndMissionDefIdAndParamName {
         type
         required
         defaultValue
         description
       }
     }
-    taskDefByExecutorIdAndTaskDefId {
-      parametersByExecutorIdAndTaskDefIdList {
+    missionDefByExecutorIdAndMissionDefId {
+      parametersByExecutorIdAndMissionDefIdList {
         name
         type
         required

@@ -1,12 +1,12 @@
 mutation($nodeId: ID!) {
-  deleteTaskdefAssetClass(
+  deleteMissionDefAssetClass(
     input: {
       nodeId: $nodeId
     }
   ) {
-    taskdefAssetClass {
+    missionDefAssetClass {
       executorId
-      taskDefId
+      missionDefId
       assetClassName
     }
   }

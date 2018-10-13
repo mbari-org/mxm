@@ -1,9 +1,9 @@
 mutation updateArgument($input: UpdateArgumentInput!) {
   updateArgument(input: $input) {
     argument {
-      taskId
+      missionId
       executorId
-      taskDefId
+      missionDefId
       paramName
       paramValue
     }

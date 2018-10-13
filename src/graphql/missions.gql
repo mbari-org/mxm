@@ -1,7 +1,7 @@
 {
-  allTasksList {
+  allMissionsList {
     nodeId
-    taskId
+    missionId
     executorId
     assetId
     name

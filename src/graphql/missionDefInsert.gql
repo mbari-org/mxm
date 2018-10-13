@@ -1,20 +1,20 @@
 mutation(
   $executorId: String!
-  $taskDefId: String!
+  $missionDefId: String!
   $description: String
 ) {
-  createTaskDef(
+  createMissionDef(
     input: {
-      taskDef: {
+      missionDef: {
         executorId: $executorId
-        taskDefId: $taskDefId
+        missionDefId: $missionDefId
         description: $description
       }
     }
   ) {
-    taskDef {
+    missionDef {
       executorId
-      taskDefId
+      missionDefId
       description
     }
   }
