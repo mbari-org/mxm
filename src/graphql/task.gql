@@ -1,14 +1,13 @@
-query task($planId: String!, $taskId: String!) {
-  taskByPlanIdAndTaskId(planId: $planId, taskId: $taskId) {
+query task($taskId: String!) {
+  taskByTaskId(taskId: $taskId) {
     nodeId
-    planId
     taskId
     name
     assetId
     taskDefId
     description
     executorId
-    argumentsByPlanIdAndTaskIdList {
+    argumentsByTaskIdList {
       nodeId
       paramName
       paramValue

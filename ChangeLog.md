@@ -1,5 +1,7 @@
 2018-10-12
 
+- model simplification: remove "plan"
+
 - task dispatch:
     - has an "argument" table with all parameters
     - displayed values as given in explicit arguments or from defaultValue

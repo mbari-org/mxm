@@ -18,15 +18,11 @@ const routes = [
         component: () => import('pages/TaskDef')
       },
       {
-        path: '/plans',
-        component: () => import('pages/Plans')
+        path: '/tasks',
+        component: () => import('pages/Tasks')
       },
       {
-        path: '/plans/:planId',
-        component: () => import('pages/Plan')
-      },
-      {
-        path: '/plans/:planId/tasks/:taskId',
+        path: '/tasks/:taskId',
         component: () => import('pages/Task')
       },
       {

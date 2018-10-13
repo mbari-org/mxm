@@ -2,8 +2,6 @@
   <q-page class="q-pa-md">
     <q-breadcrumbs active-color="secondary" color="light">
       <q-breadcrumbs-el label="Home" to="/"/>
-      <q-breadcrumbs-el label="Plans" to="/plans"/>
-      <q-breadcrumbs-el :label="params.planId" :to="`/plans/${encodeURIComponent(params.planId)}`"/>
       <q-breadcrumbs-el label="Tasks"/>
       <q-breadcrumbs-el :label="params.taskId"/>
       <q-btn
@@ -232,15 +230,14 @@
         query: task,
         variables() {
           return {
-            planId: this.params.planId,
             taskId: this.params.taskId,
           }
         },
         update(data) {
           let res = null
           if (debug) console.debug('update: data=', data)
-          if (data.taskByPlanIdAndTaskId) {
-            res = data.taskByPlanIdAndTaskId
+          if (data.taskByTaskId) {
+            res = data.taskByTaskId
           }
           Vue.nextTick(() => {
             this.setMyArguments(res)
@@ -261,7 +258,7 @@
 
       setMyArguments(task) {
         if (debug) console.debug('setMyArguments task=', task)
-        const alreadySavedArgs = _.get(task, 'argumentsByPlanIdAndTaskIdList') || []
+        const alreadySavedArgs = _.get(task, 'argumentsByTaskIdList') || []
         const parameters = _.get(task, 'taskDefByExecutorIdAndTaskDefId.parametersByExecutorIdAndTaskDefIdList') || []
 
         if (debug) console.debug('alreadySavedArgs=', alreadySavedArgs)
@@ -297,7 +294,7 @@
         }
         this.savingArgs = true
 
-        const alreadySavedArgs = _.get(this.task, 'argumentsByPlanIdAndTaskIdList') || []
+        const alreadySavedArgs = _.get(this.task, 'argumentsByTaskIdList') || []
         if (debug) console.debug('saveArguments: alreadySavedArgs=', alreadySavedArgs)
 
         let numInserted = 0
@@ -379,7 +376,6 @@
       insertArgument(paramName, paramValue, next) {
         const mutation = argumentInsert
         const variables = {
-          planId: this.params.planId,
           taskId: this.params.taskId,
           executorId: this.task.executorId,
           taskDefId: this.task.taskDefId,

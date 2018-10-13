@@ -1,0 +1,13 @@
+{
+  allTasksList {
+    nodeId
+    taskId
+    executorId
+    assetId
+    name
+    description
+    startDate
+    endDate
+    geometry
+  }
+}

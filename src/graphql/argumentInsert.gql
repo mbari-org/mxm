@@ -1,5 +1,4 @@
 mutation(
-  $planId: String!
   $taskId: String!
   $executorId: String!
   $taskDefId: String!
@@ -9,7 +8,6 @@ mutation(
   createArgument(
     input: {
       argument: {
-        planId: $planId
         taskId: $taskId
         executorId: $executorId
         taskDefId: $taskDefId
@@ -19,7 +17,6 @@ mutation(
     }
   ) {
     argument {
-      planId
       taskId
       executorId
       taskDefId

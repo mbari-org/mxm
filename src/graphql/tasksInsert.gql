@@ -1,5 +1,4 @@
 mutation(
-  $planId: String!
   $taskId: String!
   $executorId: String!
   $taskDefId: String!
@@ -10,7 +9,6 @@ mutation(
   createTask(
     input: {
       task: {
-        planId: $planId
         taskId: $taskId
         executorId: $executorId
         taskDefId: $taskDefId
@@ -21,7 +19,6 @@ mutation(
     }
   ) {
     task {
-      planId
       taskId
       executorId
       taskDefId

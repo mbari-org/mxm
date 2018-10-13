@@ -7,7 +7,7 @@
       <q-modal-layout>
         <q-toolbar slot="header">
           <q-toolbar-title>
-            Register new task for plan '{{planId}}'
+            Register new task
           </q-toolbar-title>
           <q-btn round dense
                  color="primary"
@@ -117,7 +117,9 @@
   import ExecutorSelect from 'components/executor-select'
   import TaskDefSelect from 'components/task-def-select'
   import AssetSelect from 'components/asset-select'
+  import _ from 'lodash'
   import {Notify} from 'quasar'
+
 
   const debug = true
 
@@ -126,13 +128,6 @@
       ExecutorSelect,
       TaskDefSelect,
       AssetSelect,
-    },
-
-    props: {
-      planId: {
-        type: String,
-        required: true
-      }
     },
 
     data() {
@@ -211,11 +206,11 @@
         this.startDate = new Date()
         this.endDate = new Date()
         this.dialogOpened = true
+        this.$apollo.queries.executor.refetch()
       },
 
       submit() {
         const variables = {
-          planId: this.planId,
           taskId: this.taskId,
           executorId: this.executorId,
           taskDefId: this.taskDefId,

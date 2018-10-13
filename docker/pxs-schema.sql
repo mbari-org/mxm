@@ -60,18 +60,8 @@ create table if not exists parameters
 )
 ;
 
-create table if not exists plans
-(
-	plan_id varchar not null,
-	name varchar not null,
-	description varchar,
-  primary key (plan_id)
-)
-;
-
 create table if not exists tasks
 (
-	plan_id varchar not null,
 	task_id varchar not null,
 	executor_id varchar not null,
 	task_def_id varchar not null,
@@ -81,23 +71,21 @@ create table if not exists tasks
 	start_date timestamp with time zone,
 	end_date timestamp with time zone,
 	geometry json,
-  foreign key (plan_id) references plans,
   foreign key (executor_id, task_def_id) references task_defs,
   foreign key (asset_id) references assets,
-  primary key (plan_id, task_id)
+  primary key (task_id)
 )
 ;
 
 create table if not exists arguments
 (
-	plan_id varchar not null,
 	task_id varchar not null,
 	executor_id varchar not null,
 	task_def_id varchar not null,
 	param_name varchar not null,
 	param_value varchar not null,
-  primary key (plan_id, task_id, param_name),
-  foreign key (plan_id, task_id) references tasks (plan_id, task_id),
+  primary key (task_id, param_name),
+  foreign key (task_id) references tasks (task_id),
   foreign key (executor_id, task_def_id, param_name) references parameters
 )
 ;

@@ -2,27 +2,27 @@
   <q-page class="q-pa-md">
     <q-breadcrumbs active-color="secondary" color="light">
       <q-breadcrumbs-el label="Home" to="/"/>
-      <q-breadcrumbs-el label="Plans" to="/plans"/>
+      <q-breadcrumbs-el label="Tasks" to="/tasks"/>
       <q-btn
         dense round icon="refresh" class="q-ml-lg" size="sm"
-        @click="refreshPlans"
+        @click="refreshTasks"
       />
     </q-breadcrumbs>
 
     <q-table
-      title="Plans"
-      :data="allPlansList"
+      title="Tasks"
+      :data="allTasksList"
       :columns="columns"
       row-key="name"
     >
       <div slot="top-right" slot-scope="props" class="fit">
-        <plan-new-button v-on:created="planCreated"/>
+        <task-new-button v-on:created="taskCreated"/>
       </div>
 
       <q-td slot="body-cell-name" slot-scope="props" :props="props"
             style="width:5px"
       >
-        <router-link :to="`/plans/${encodeURIComponent(props.row.planId)}`">
+        <router-link :to="`/tasks/${encodeURIComponent(props.row.taskId)}`">
           {{props.row.name}}
         </router-link>
       </q-td>
@@ -32,19 +32,19 @@
 </template>
 
 <script>
-  import PlanNewButton from 'components/plan-new-button'
-  import allPlansList from '../graphql/plans.gql'
+  import TaskNewButton from 'components/task-new-button'
+  import allTasksList from '../graphql/tasks.gql'
 
   const debug = false
 
   export default {
     components: {
-      PlanNewButton
+      TaskNewButton
     },
 
     data() {
       return {
-        allPlansList: [],
+        allTasksList: [],
         columns: [
           {
             field: 'name',
@@ -65,26 +65,26 @@
     },
 
     apollo: {
-      allPlansList,
+      allTasksList,
     },
 
     mounted() {
-      this.refreshPlans()
+      this.refreshTasks()
     },
 
     methods: {
-      refreshPlans() {
-        this.$apollo.queries.allPlansList.refetch()
+      refreshTasks() {
+        this.$apollo.queries.allTasksList.refetch()
       },
 
-      planCreated(data) {
-        this.refreshPlans()
+      taskCreated(data) {
+        this.refreshTasks()
       }
     },
 
     watch: {
-      allPlansList(val) {
-        if (debug) console.log('watch allPlansList=', val)
+      allTasksList(val) {
+        if (debug) console.log('watch allTasksList=', val)
       }
     }
   }
