@@ -29,9 +29,9 @@
       <q-card class="q-mb-lg">
         <q-card-main>
           Associated asset classes:
-          <div class="row">
+          <div class="row q-mt-sm">
             <q-chip
-              class="col-auto q-mr-sm"
+              class="col-auto q-mr-sm shadow-5"
               v-for="c in myAssetClasses"
               :key="c.assetClassName"
               color="secondary"
@@ -39,8 +39,13 @@
               closable
               @hide="removeAssetClass(c.nodeId)"
             >
-              {{c.assetClassName}}
-              <q-tooltip>
+              <router-link
+                style="color:white;text-decoration:none"
+                :to="`/assetclasses/${encodeURIComponent(c.assetClassName)}`"
+              >
+                {{c.assetClassName}}
+              </router-link>
+              <q-tooltip v-if="c.assetClassByAssetClassName.description">
                 {{c.assetClassByAssetClassName.description}}
               </q-tooltip>
             </q-chip>

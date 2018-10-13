@@ -129,6 +129,7 @@
       openDialog() {
         this.selection = []
         this.dialogOpened = true
+        this.$apollo.queries.allAssetClassesList.refetch()
       },
 
       submit() {
