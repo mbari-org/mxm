@@ -70,7 +70,7 @@
 </template>
 
 <script>
-  import mutation from '../graphql/assetClassesInsert.gql'
+  import mutation from '../graphql/assetClassInsert.gql'
   import {Notify} from 'quasar'
 
   export default {

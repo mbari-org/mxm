@@ -2,27 +2,27 @@
   <q-page class="q-pa-md">
     <q-breadcrumbs active-color="secondary" color="light">
       <q-breadcrumbs-el label="Home" to="/"/>
-      <q-breadcrumbs-el label="Plans" to="/plans"/>
+      <q-breadcrumbs-el label="Missions" to="/missions"/>
       <q-btn
         dense round icon="refresh" class="q-ml-lg" size="sm"
-        @click="refreshPlans"
+        @click="refreshMissions"
       />
     </q-breadcrumbs>
 
     <q-table
-      title="Plans"
-      :data="allPlansList"
+      title="Missions"
+      :data="allMissionsList"
       :columns="columns"
       row-key="name"
     >
       <div slot="top-right" slot-scope="props" class="fit">
-        <plan-new-button v-on:created="planCreated"/>
+        <mission-new-button v-on:created="missionCreated"/>
       </div>
 
       <q-td slot="body-cell-name" slot-scope="props" :props="props"
             style="width:5px"
       >
-        <router-link :to="`/plans/${encodeURIComponent(props.row.planId)}`">
+        <router-link :to="`/missions/${encodeURIComponent(props.row.missionId)}`">
           {{props.row.name}}
         </router-link>
       </q-td>
@@ -32,19 +32,19 @@
 </template>
 
 <script>
-  import PlanNewButton from 'components/plan-new-button'
-  import allPlansList from '../graphql/plans.gql'
+  import MissionNewButton from 'components/mission-new-button'
+  import allMissionsList from '../graphql/missions.gql'
 
   const debug = false
 
   export default {
     components: {
-      PlanNewButton
+      MissionNewButton
     },
 
     data() {
       return {
-        allPlansList: [],
+        allMissionsList: [],
         columns: [
           {
             field: 'name',
@@ -65,26 +65,26 @@
     },
 
     apollo: {
-      allPlansList,
+      allMissionsList,
     },
 
     mounted() {
-      this.refreshPlans()
+      this.refreshMissions()
     },
 
     methods: {
-      refreshPlans() {
-        this.$apollo.queries.allPlansList.refetch()
+      refreshMissions() {
+        this.$apollo.queries.allMissionsList.refetch()
       },
 
-      planCreated(data) {
-        this.refreshPlans()
+      missionCreated(data) {
+        this.refreshMissions()
       }
     },
 
     watch: {
-      allPlansList(val) {
-        if (debug) console.log('watch allPlansList=', val)
+      allMissionsList(val) {
+        if (debug) console.log('watch allMissionsList=', val)
       }
     }
   }

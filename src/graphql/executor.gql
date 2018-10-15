@@ -5,11 +5,11 @@ query executor($executorId: String!) {
     executorId
     httpEndpoint
     description
-    taskDefsByExecutorIdList {
+    missionDefsByExecutorIdList {
       nodeId
-      taskDefId
+      missionDefId
       description
-      taskdefAssetClassesByExecutorIdAndTaskDefIdList {
+      missionDefAssetClassesByExecutorIdAndMissionDefIdList {
         assetClassName
         assetClassByAssetClassName {
           assetsByClassNameList {

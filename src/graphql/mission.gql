@@ -1,0 +1,31 @@
+query mission($missionId: String!) {
+  missionByMissionId(missionId: $missionId) {
+    nodeId
+    missionId
+    name
+    assetId
+    missionDefId
+    description
+    executorId
+    argumentsByMissionIdList {
+      nodeId
+      paramName
+      paramValue
+      parameterByExecutorIdAndMissionDefIdAndParamName {
+        type
+        required
+        defaultValue
+        description
+      }
+    }
+    missionDefByExecutorIdAndMissionDefId {
+      parametersByExecutorIdAndMissionDefIdList {
+        name
+        type
+        required
+        defaultValue
+        description
+      }
+    }
+  }
+}

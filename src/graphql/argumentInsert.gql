@@ -1,28 +1,25 @@
 mutation(
-  $planId: String!
-  $taskId: String!
+  $missionId: String!
   $executorId: String!
-  $taskDefId: String!
+  $missionDefId: String!
   $paramName: String!
   $paramValue: String!
 ) {
   createArgument(
     input: {
       argument: {
-        planId: $planId
-        taskId: $taskId
+        missionId: $missionId
         executorId: $executorId
-        taskDefId: $taskDefId
+        missionDefId: $missionDefId
         paramName: $paramName
         paramValue: $paramValue
       }
     }
   ) {
     argument {
-      planId
-      taskId
+      missionId
       executorId
-      taskDefId
+      missionDefId
       paramName
       paramValue
     }

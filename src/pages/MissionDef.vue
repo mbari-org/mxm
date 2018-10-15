@@ -4,24 +4,24 @@
       <q-breadcrumbs-el label="Home" to="/"/>
       <q-breadcrumbs-el label="Executors" to="/executors"/>
       <q-breadcrumbs-el :label="params.executorId" :to="`/executors/${encodeURIComponent(params.executorId)}`"/>
-      <q-breadcrumbs-el label="TaskDefs"/>
-      <q-breadcrumbs-el :label="params.taskDefId"/>
+      <q-breadcrumbs-el label="MissionDefs"/>
+      <q-breadcrumbs-el :label="params.missionDefId"/>
       <q-btn
         dense round icon="refresh" class="q-ml-lg" size="sm"
-        @click="refreshTaskDef"
+        @click="refreshMissionDef"
       />
     </q-breadcrumbs>
 
-    <div v-if="taskDef">
+    <div v-if="missionDef">
 
       <q-card class="q-mb-md">
         <q-card-title>
-          Task Definition: {{ params.taskDefId }}
+          Mission Definition: {{ params.missionDefId }}
         </q-card-title>
         <q-card-separator/>
         <q-card-main>
           <p class="text-italic">
-            {{ taskDef.description }}
+            {{ missionDef.description }}
           </p>
         </q-card-main>
       </q-card>
@@ -69,7 +69,7 @@
         <div slot="top-right" slot-scope="props" class="fit">
           <parameter-new-button
             :executor-id="params.executorId"
-            :task-def-id="params.taskDefId"
+            :mission-def-id="params.missionDefId"
             v-on:created="parameterCreated"
           />
         </div>
@@ -78,10 +78,10 @@
     </div>
 
     <div v-else-if="!loading">
-      Task Definition not found.
+      Mission Definition not found.
       <div class="q-ml-md">
         Executor: {{params.executorId}} <br/>
-        Task Definition ID: {{params.taskDefId}}
+        Mission Definition ID: {{params.missionDefId}}
       </div>
     </div>
 
@@ -89,10 +89,10 @@
 </template>
 
 <script>
-  import taskDef from '../graphql/taskDef.gql'
+  import missionDef from '../graphql/missionDef.gql'
   import AssetClassSelectButton from 'components/asset-class-select-button'
-  import taskDefAssetClassInsert from '../graphql/taskDefAssetClassInsert.gql'
-  import taskDefAssetClassDelete from '../graphql/taskDefAssetClassDelete.gql'
+  import missionDefAssetClassInsert from '../graphql/missionDefAssetClassInsert.gql'
+  import missionDefAssetClassDelete from '../graphql/missionDefAssetClassDelete.gql'
   import ParameterNewButton from 'components/parameter-new-button'
   import {Notify} from 'quasar'
   import _ from 'lodash'
@@ -108,7 +108,7 @@
     data() {
       return {
         loading: false,
-        taskDef: null,
+        missionDef: null,
         columns: [
           {
             field: 'name',
@@ -153,7 +153,7 @@
       },
 
       myAssetClasses() {
-        return this.taskDef && this.taskDef.taskdefAssetClassesByExecutorIdAndTaskDefIdList || []
+        return this.missionDef && this.missionDef.missionDefAssetClassesByExecutorIdAndMissionDefIdList || []
       },
 
       myAssetClassNames() {
@@ -161,23 +161,23 @@
       },
 
       myParameters() {
-        return this.taskDef && this.taskDef.parametersByExecutorIdAndTaskDefIdList || []
+        return this.missionDef && this.missionDef.parametersByExecutorIdAndMissionDefIdList || []
       },
     },
 
     apollo: {
-      taskDef: {
-        query: taskDef,
+      missionDef: {
+        query: missionDef,
         variables() {
           return {
             executorId: this.params.executorId,
-            taskDefId: this.params.taskDefId
+            missionDefId: this.params.missionDefId
           }
         },
         update(data) {
           if (debug) console.log('update: data=', data)
-          if (data.taskDefByExecutorIdAndTaskDefId) {
-            return data.taskDefByExecutorIdAndTaskDefId
+          if (data.missionDefByExecutorIdAndMissionDefId) {
+            return data.missionDefByExecutorIdAndMissionDefId
           }
           else return null
         },
@@ -185,12 +185,12 @@
     },
 
     mounted() {
-      this.refreshTaskDef()
+      this.refreshMissionDef()
     },
 
     methods: {
-      refreshTaskDef() {
-        this.$apollo.queries.taskDef.refetch()
+      refreshMissionDef() {
+        this.$apollo.queries.missionDef.refetch()
       },
 
       assetClassSelection(data) {
@@ -216,7 +216,7 @@
                 timeout: 1000,
                 type: 'info'
               })
-              this.refreshTaskDef()
+              this.refreshMissionDef()
             }
           }
         }
@@ -225,10 +225,10 @@
       },
 
       addAssetClassName(assetClassName, next) {
-        const mutation = taskDefAssetClassInsert
+        const mutation = missionDefAssetClassInsert
         const variables = {
           executorId: this.params.executorId,
-          taskDefId: this.params.taskDefId,
+          missionDefId: this.params.missionDefId,
           assetClassName
         }
         this.$apollo.mutate({mutation, variables})
@@ -244,14 +244,14 @@
       removeAssetClass(nodeId) {
         if (debug) console.debug('removeAssetClass: nodeId=', nodeId)
 
-        const mutation = taskDefAssetClassDelete
+        const mutation = missionDefAssetClassDelete
         const variables = {
           nodeId
         }
         this.$apollo.mutate({mutation, variables})
           .then((data) => {
             if (data.data) {
-              this.refreshTaskDef()
+              this.refreshMissionDef()
             }
           })
           .catch((error) => {
@@ -260,13 +260,13 @@
       },
 
       parameterCreated(data) {
-        this.refreshTaskDef()
+        this.refreshMissionDef()
       }
     },
 
     watch: {
       '$route'() {
-        this.refreshTaskDef()
+        this.refreshMissionDef()
       }
     }
   }

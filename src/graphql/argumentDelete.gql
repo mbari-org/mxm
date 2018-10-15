@@ -1,10 +1,9 @@
 mutation deleteArgument($input: DeleteArgumentInput!) {
   deleteArgument(input: $input) {
     argument {
-      planId
-      taskId
+      missionId
       executorId
-      taskDefId
+      missionDefId
       paramName
       paramValue
     }

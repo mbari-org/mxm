@@ -1,0 +1,13 @@
+{
+  allMissionsList {
+    nodeId
+    missionId
+    executorId
+    assetId
+    name
+    description
+    startDate
+    endDate
+    geometry
+  }
+}

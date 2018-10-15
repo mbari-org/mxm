@@ -7,7 +7,7 @@
       <q-modal-layout>
         <q-toolbar slot="header">
           <q-toolbar-title>
-            Register new task for plan '{{planId}}'
+            Register new mission
           </q-toolbar-title>
           <q-btn round dense
                  color="primary"
@@ -28,13 +28,13 @@
           </q-field>
 
           <q-field
-            label="Task Definition:"
-            :error="!taskDefId.length"
+            label="Mission Definition:"
+            :error="!missionDefId.length"
             :label-width="4"
           >
-            <task-def-select
-              :task-defs="taskDefs"
-              v-model="taskDefId"
+            <mission-def-select
+              :mission-defs="missionDefs"
+              v-model="missionDefId"
             />
           </q-field>
 
@@ -50,20 +50,20 @@
           </q-field>
 
           <q-field
-            label="Task ID:"
-            :error="!taskId.length"
+            label="Mission ID:"
+            :error="!missionId.length"
             :label-width="4"
           >
             <q-input
               class="bg-light-blue-1"
-              v-model.trim="taskId"
+              v-model.trim="missionId"
               type="text"
               style="width:24em"
             />
           </q-field>
 
           <q-field
-            label="Task Name:"
+            label="Mission Name:"
             :error="!name.length"
             :label-width="4"
           >
@@ -76,7 +76,7 @@
           </q-field>
 
           <q-field
-            label="Task Description:"
+            label="Mission Description:"
             :label-width="4"
           >
             <q-input
@@ -113,26 +113,21 @@
 
 <script>
   import executor from '../graphql/executor.gql'
-  import mutation from '../graphql/tasksInsert.gql'
+  import mutation from '../graphql/missionInsert.gql'
   import ExecutorSelect from 'components/executor-select'
-  import TaskDefSelect from 'components/task-def-select'
+  import MissionDefSelect from 'components/mission-def-select'
   import AssetSelect from 'components/asset-select'
+  import _ from 'lodash'
   import {Notify} from 'quasar'
+
 
   const debug = true
 
   export default {
     components: {
       ExecutorSelect,
-      TaskDefSelect,
+      MissionDefSelect,
       AssetSelect,
-    },
-
-    props: {
-      planId: {
-        type: String,
-        required: true
-      }
     },
 
     data() {
@@ -140,9 +135,9 @@
         dialogOpened: false,
         executor: null,
         executorId: '',
-        taskDefId: '',
+        missionDefId: '',
         assetId: '',
-        taskId: '',
+        missionId: '',
         name: '',
         description: '',
         arguments: [],
@@ -152,17 +147,17 @@
     },
 
     computed: {
-      taskDefs() {
-        const list = this.executor && this.executor.taskDefsByExecutorIdList || []
+      missionDefs() {
+        const list = this.executor && this.executor.missionDefsByExecutorIdList || []
         return list
       },
 
       assetClasses() {
         const list = []
-        const taskDefs = this.executor && this.executor.taskDefsByExecutorIdList || []
-        if (taskDefs.length) {
-          _.each(taskDefs, td => {
-            const classes = td.taskdefAssetClassesByExecutorIdAndTaskDefIdList || []
+        const missionDefs = this.executor && this.executor.missionDefsByExecutorIdList || []
+        if (missionDefs.length) {
+          _.each(missionDefs, td => {
+            const classes = td.missionDefAssetClassesByExecutorIdAndMissionDefIdList || []
             _.each(classes, c => {
               list.push(c)
             })
@@ -173,9 +168,9 @@
 
       okToSubmit() {
         return this.executorId
-          && this.taskDefId
+          && this.missionDefId
           && this.assetId
-          && this.taskId
+          && this.missionId
           && this.name
       }
     },
@@ -189,7 +184,7 @@
           }
         },
         update(data) {
-          if (debug) console.log('task-new-button update: data=', data)
+          if (debug) console.log('mission-new-button update: data=', data)
           if (data.allExecutorsList && data.allExecutorsList.length) {
             return data.allExecutorsList[0]
           }
@@ -202,23 +197,23 @@
       openDialog() {
         this.executor = null
         this.executorId = ''
-        this.taskDefId = ''
+        this.missionDefId = ''
         this.assetId = ''
-        this.taskId = ''
+        this.missionId = ''
         this.name = ''
         this.description = ''
         this.arguments = []
         this.startDate = new Date()
         this.endDate = new Date()
         this.dialogOpened = true
+        this.$apollo.queries.executor.refetch()
       },
 
       submit() {
         const variables = {
-          planId: this.planId,
-          taskId: this.taskId,
+          missionId: this.missionId,
           executorId: this.executorId,
-          taskDefId: this.taskDefId,
+          missionDefId: this.missionDefId,
           assetId: this.assetId,
           name: this.name,
           description: this.description
@@ -240,7 +235,7 @@
             console.log('mutation data=', data)
             this.dialogOpened = false
             Notify.create({
-              message: 'Task created',
+              message: 'Mission created',
               timeout: 1000,
               type: 'info'
             })

@@ -1,13 +1,13 @@
 <template>
   <div>
     <q-modal v-model="dialogOpened"
-             content-css="min-width:60vw;min-height:300px"
+             content-css="min-width:300px;min-height:300px"
              no-backdrop-dismiss
     >
       <q-modal-layout>
         <q-toolbar slot="header">
           <q-toolbar-title>
-            Add Plan
+            Register new mission definition for '{{executorId}}'
           </q-toolbar-title>
           <q-btn round dense
                  color="primary"
@@ -18,27 +18,13 @@
 
         <div class="q-pa-lg">
           <q-field
-            label="Plan ID:"
-            :error="!planId.length"
+            label="Mission Definition ID:"
+            :error="!missionDefId.length"
             :label-width="4"
           >
             <q-input
               class="bg-light-blue-1"
-              v-model.trim="planId"
-              type="text"
-              autofocus
-              style="width:24em"
-            />
-          </q-field>
-
-          <q-field
-            label="Name:"
-            :error="!name.length"
-            :label-width="4"
-          >
-            <q-input
-              class="bg-light-blue-1"
-              v-model.trim="name"
+              v-model.trim="missionDefId"
               type="text"
               autofocus
               style="width:24em"
@@ -56,6 +42,7 @@
               style="width:24em"
             />
           </q-field>
+
         </div>
 
         <q-toolbar slot="footer" color="flat">
@@ -81,46 +68,54 @@
 </template>
 
 <script>
-  import mutation from '../graphql/plansInsert.gql'
+  import mutation from '../graphql/missionDefInsert.gql'
   import {Notify} from 'quasar'
 
+  const debug = true
+
   export default {
+    props: {
+      executorId: {
+        type: String,
+        required: true
+      }
+    },
+
     data() {
       return {
         dialogOpened: false,
-        planId: '',
-        name: '',
+        missionDefId: '',
         description: ''
       }
     },
 
     computed: {
       okToSubmit() {
-        return this.planId && this.name
+        return this.missionDefId
       }
     },
 
     methods: {
       openDialog() {
-        this.planId = ''
-        this.name = ''
+        this.missionDefId = ''
         this.description = ''
         this.dialogOpened = true
       },
 
       submit() {
         const variables = {
-          planId: this.planId,
-          name: this.name,
-          description: this.description
+          executorId: this.executorId,
+          missionDefId: this.missionDefId,
+          description: this.description,
         }
+        if (debug) console.debug('variables=', variables)
 
         this.$apollo.mutate({mutation, variables})
           .then((data) => {
             console.log('mutation data=', data)
             this.dialogOpened = false
             Notify.create({
-              message: 'Plan created',
+              message: 'Mission definition created',
               timeout: 1000,
               type: 'info'
             })

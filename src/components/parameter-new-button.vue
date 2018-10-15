@@ -104,7 +104,7 @@
 </template>
 
 <script>
-  import mutation from '../graphql/parametersInsert.gql'
+  import mutation from '../graphql/parameterInsert.gql'
   import {Notify} from 'quasar'
 
   const debug = false
@@ -115,7 +115,7 @@
         type: String,
         required: true
       },
-      taskDefId: {
+      missionDefId: {
         type: String,
         required: true
       }
@@ -151,7 +151,7 @@
       submit() {
         const variables = {
           executorId: this.executorId,
-          taskDefId: this.taskDefId,
+          missionDefId: this.missionDefId,
           name: this.name,
           type: this.type,
           required: this.required,

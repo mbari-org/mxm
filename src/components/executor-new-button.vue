@@ -1,7 +1,7 @@
 <template>
   <div>
     <q-modal v-model="dialogOpened"
-             content-css="min-width:60vw;min-height:300px"
+             content-css="min-width:600px;min-height:300px"
              no-backdrop-dismiss
     >
       <q-modal-layout>
@@ -81,7 +81,7 @@
 </template>
 
 <script>
-  import mutation from '../graphql/executorsInsert.gql'
+  import mutation from '../graphql/executorInsert.gql'
   import {Notify} from 'quasar'
 
   export default {
@@ -96,7 +96,7 @@
 
     computed: {
       okToSubmit() {
-        return this.executorId
+        return this.executorId && this.httpEndpoint
       }
     },
 

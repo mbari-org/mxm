@@ -4,10 +4,10 @@
     <q-select
       style="width:17em"
       class="bg-light-blue-1 col-auto"
-      v-model="taskDefId"
+      v-model="missionDefId"
       :options="options"
       @input="atInput"
-      placeholder="Select task definition"
+      placeholder="Select mission definition"
     />
   </div>
 
@@ -18,7 +18,7 @@
 
   export default {
     props: {
-      taskDefs: {
+      missionDefs: {
         type: Array,
         required: true
       },
@@ -27,17 +27,17 @@
 
     data() {
       return {
-        taskDefId: this.value,
+        missionDefId: this.value,
       }
     },
 
     computed: {
       options() {
-        if (debug) console.debug('taskDefs=', this.taskDefs)
-        return _.map(this.taskDefs, e => {
+        if (debug) console.debug('missionDefs=', this.missionDefs)
+        return _.map(this.missionDefs, e => {
           return {
-            label: e.taskDefId,
-            value: e.taskDefId,
+            label: e.missionDefId,
+            value: e.missionDefId,
           }
         })
       },
@@ -50,8 +50,8 @@
     },
 
     watch: {
-      taskDefs(val) {
-        if (debug) console.log('watch taskDefs=', val)
+      missionDefs(val) {
+        if (debug) console.log('watch missionDefs=', val)
       }
     },
   }

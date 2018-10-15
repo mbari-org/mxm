@@ -1,30 +1,27 @@
 mutation(
-  $planId: String!
-  $taskId: String!
+  $missionId: String!
   $executorId: String!
-  $taskDefId: String!
+  $missionDefId: String!
   $assetId: String!
   $name: String!
   $description: String
 ) {
-  createTask(
+  createMission(
     input: {
-      task: {
-        planId: $planId
-        taskId: $taskId
+      mission: {
+        missionId: $missionId
         executorId: $executorId
-        taskDefId: $taskDefId
+        missionDefId: $missionDefId
         assetId: $assetId
         name: $name
         description: $description
       }
     }
   ) {
-    task {
-      planId
-      taskId
+    mission {
+      missionId
       executorId
-      taskDefId
+      missionDefId
       assetId
       name
       description
