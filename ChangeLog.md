@@ -1,3 +1,8 @@
+2018-10-15
+
+- dockerize pxs-ui. Now, all components can be launched via docker-compose
+
+
 2018-10-12
 
 - model renaming: from "task" to "mission"

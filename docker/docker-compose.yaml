@@ -1,5 +1,29 @@
 version: '3.6'
 services:
+  pxs-ui:
+    image: mbari/pxs-ui:0.0.1
+    ports:
+    - "38080:80"
+    depends_on:
+    - graphql-engine
+    restart: always
+
+  graphql-engine:
+    image: graphile/postgraphile
+    ports:
+    - "5000:5000"
+    depends_on:
+    - "pxspostgres"
+    restart: always
+    command:
+      - --connection
+      - postgresql://pxs@pxspostgres:5432/pxs
+      - --schema
+      - public
+      - --cors
+      - --simple-collections
+      - only
+
   pxspostgres:
     image: mbari/pxspostgres:0.0.1
     ports:
@@ -12,18 +36,5 @@ services:
       # will trigger the creation of the "pxs" user and database:
       POSTGRES_USER: pxs
 
-  graphql-engine:
-    image: hasura/graphql-engine:v1.0.0-alpha22
-    ports:
-    - "8090:8080"
-    depends_on:
-    - "pxspostgres"
-    restart: always
-    environment:
-      HASURA_GRAPHQL_DATABASE_URL: postgres://pxs:@pxspostgres:5432/pxs
-    command:
-      - graphql-engine
-      - serve
-      - --enable-console
 volumes:
   db_data:
