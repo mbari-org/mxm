@@ -1,5 +1,6 @@
 2018-11-08
 
+- add description component
 - mission: show asset class
 - update mission description
 - some minor adjustments while reviewing after vacation

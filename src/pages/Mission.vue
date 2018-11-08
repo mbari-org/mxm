@@ -31,15 +31,7 @@
             <tr>
               <td>Description:</td>
               <td>
-                <div class="round-borders q-pa-xs bg-green-1"
-                     v-html=""
-                >
-                  <p v-for="(p, index) in mission.description.split('\n')" :key="index"
-                     :class="index > 0 ? 'q-mt-md' : ''"
-                  >
-                    {{p}}
-                  </p>
-                </div>
+                <description :text="mission.description" />
                 <q-popup-edit
                   v-model="mission.description"
                   title="Description"
@@ -208,6 +200,7 @@
 <script>
   import mission from '../graphql/mission.gql'
   import Vue from 'vue'
+  import description from '../components/description'
   import argumentInsert from '../graphql/argumentInsert.gql'
   import argumentUpdate from '../graphql/argumentUpdate.gql'
   import argumentDelete from '../graphql/argumentDelete.gql'
@@ -218,6 +211,10 @@
   const debug = false
 
   export default {
+    components: {
+      description,
+    },
+
     data() {
       return {
         loading: false,
