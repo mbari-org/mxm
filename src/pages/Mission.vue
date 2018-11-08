@@ -2,7 +2,7 @@
   <q-page class="q-pa-md">
     <q-breadcrumbs active-color="secondary" color="light">
       <q-breadcrumbs-el label="Home" to="/"/>
-      <q-breadcrumbs-el label="Missions"/>
+      <q-breadcrumbs-el label="Missions" to="/missions"/>
       <q-breadcrumbs-el :label="params.missionId"/>
       <q-btn
         dense round icon="refresh" class="q-ml-lg" size="sm"
@@ -16,26 +16,26 @@
 
       <q-card class="q-mb-md">
         <q-card-title>
-          Mission: '{{ mission.missionId }}'
+          Mission: <span class="text-bold">{{ mission.missionId }}</span>
         </q-card-title>
         <q-card-separator/>
         <q-card-main>
-          <table>
+          <table class="mission-table">
             <tbody>
             <tr>
-              <td>Mission Name:</td>
-              <td>{{ mission.name }}</td>
-            </tr>
-            <tr>
-              <td>Description:</td>
-              <td>
-                <p class="text-italic">
-                  {{ mission.description }}
-                </p>
+              <td>Mission&nbsp;Name:</td>
+              <td class="text-bold">
+                {{ mission.name }}
               </td>
             </tr>
             <tr>
-              <td>Mission Def:</td>
+              <td>Description:</td>
+              <td class="text-italic">
+                {{ mission.description }}
+              </td>
+            </tr>
+            <tr>
+              <td>Mission&nbsp;Def:</td>
               <td>
                 <router-link :to="`/executors/${encodeURIComponent(mission.executorId)}/missiondefs/${encodeURIComponent(mission.missionDefId)}`">
                   {{ mission.missionDefId }}
@@ -166,6 +166,13 @@
     </div>
   </q-page>
 </template>
+
+<style>
+  .mission-table td {
+    padding: 2px 4px;
+    vertical-align: top;
+  }
+</style>
 
 <script>
   import mission from '../graphql/mission.gql'

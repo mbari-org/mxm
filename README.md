@@ -13,22 +13,24 @@
 
 ### Development
 
-    npm i
+NOTE: Adjust `src/plugins/apollo.js` to set the `uri` of the
+GraphQL endpoint as appropriate.
+
+    npm install
     quasar dev
 
 which opens: http://localhost:8080/index.html
 
+## Build and install
 
-## odss-test setup
+### odss-test setup
+
+TODO adjust setup for the recent GraphQL based mechanism.
 
 As `odssadm`:
 
         sudo mkdir /var/www/html/pxs-ui
         sudo chown carueda:carueda /var/www/html/pxs-ui
-
-## Build and install
-
-NOTE: adjust `src/plugins/axios.js` to set `baseURL: '/pxs/api'`
 
 ```
 quasar build && \

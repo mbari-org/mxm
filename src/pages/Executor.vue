@@ -16,7 +16,7 @@
 
       <q-card class="q-mb-md">
         <q-card-title>
-          Executor: {{executor.executorId}}
+          Executor: <span class="text-bold">{{executor.executorId}}</span>
         </q-card-title>
         <q-card-separator/>
         <q-card-main>
@@ -48,6 +48,16 @@
           <router-link
             :to="`/executors/${encodeURIComponent(executor.executorId)}/missiondefs/${encodeURIComponent(props.row.missionDefId)}`">
             {{props.row.missionDefId}}
+          </router-link>
+        </q-td>
+
+        <q-td slot="body-cell-assetClassNames" slot-scope="props" :props="props"
+        >
+          <router-link v-for="className in props.row.assetClassNames" :key="className"
+                       :to="`/assetclasses/${encodeURIComponent(className)}`"
+                       class="q-mr-sm"
+          >
+            {{className}}
           </router-link>
         </q-td>
 
@@ -99,8 +109,8 @@
             sortable: true
           },
           {
-            field: 'assetClassesString',
-            name: 'assetClassesString',
+            field: 'assetClassNames',
+            name: 'assetClassNames',
             label: 'Asset Classes',
             align: 'left',
             sortable: true
@@ -117,10 +127,7 @@
       myMissionDefs() {
         const list = this.executor && this.executor.missionDefsByExecutorIdList || []
         _.each(list, e => {
-          e.assetClassesString = _.join(
-            _.map(e.missionDefAssetClassesByExecutorIdAndMissionDefIdList, 'assetClassName'),
-            ', '
-          )
+          e.assetClassNames = _.map(e.missionDefAssetClassesByExecutorIdAndMissionDefIdList, 'assetClassName')
         })
         return list
       },
@@ -186,7 +193,7 @@
 
       // TODO
       missionDefCreated(data) {
-        data.assetClassesString = _.join(data.assetClasses, ', ')
+        data.assetClassNames = data.assetClasses
         this.myMissionDefs.splice(0, 0, data)
       }
     },
