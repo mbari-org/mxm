@@ -1,5 +1,6 @@
 2018-11-08
 
+- update assetClass description
 - add description component
 - mission: show asset class
 - update mission description

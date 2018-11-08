@@ -18,9 +18,24 @@
         </q-card-title>
         <q-card-separator/>
         <q-card-main>
-          <p class="text-italic">
-            {{assetClass.description}}
-          </p>
+          <description :text="assetClass.description" />
+          <q-popup-edit
+            v-model="assetClass.description"
+            title="Description"
+            buttons
+            @save="updateDescription"
+          >
+            <q-field>
+              <q-input
+                v-model.trim="assetClass.description"
+                clearable
+                class="bg-green-1"
+                type="textarea"
+                rows="3"
+                :max-height="300"
+              />
+            </q-field>
+          </q-popup-edit>
         </q-card-main>
       </q-card>
 
@@ -48,16 +63,19 @@
 </template>
 
 <script>
+  import description from '../components/description'
   import assetClass from '../graphql/assetClass.gql'
   import AssetNewButton from 'components/asset-new-button'
+  import assetClassUpdate from '../graphql/assetClassUpdate.gql'
   import {Notify} from 'quasar'
   import _ from 'lodash'
 
-  const debug = true
+  const debug = false
 
   export default {
     components: {
-      AssetNewButton
+      AssetNewButton,
+      description,
     },
 
     data() {
@@ -123,7 +141,28 @@
 
       assetCreated(data) {
         this.refreshAssetClass()
-      }
+      },
+
+      updateDescription(val) {
+        if (debug) console.debug('updateDescription val=', val, 'nodeId=', this.assetClass.nodeId)
+        const mutation = assetClassUpdate
+        const variables = {
+          input: {
+            nodeId: this.assetClass.nodeId,
+            assetClassPatch: {
+              description: val
+            }
+          }
+        }
+        this.$apollo.mutate({mutation, variables})
+          .then((data) => {
+            if (debug) console.debug('updateDescription: mutation data=', data)
+            this.assetClass.description = val
+          })
+          .catch((error) => {
+            console.error('updateDescription: mutation error=', error)
+          })
+      },
     },
 
     watch: {

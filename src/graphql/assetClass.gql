@@ -2,6 +2,7 @@ query ($className: String!) {
   allAssetClassesList(condition: {
     className: $className
   }) {
+    nodeId
     className
     description
     assetsByClassNameList {
