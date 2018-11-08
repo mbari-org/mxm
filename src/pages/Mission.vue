@@ -78,7 +78,11 @@
             </tr>
             <tr>
               <td>Asset:</td>
-              <td>{{ mission.assetId }}</td>
+              <td>
+                {{ mission.assetId }}
+                (<router-link :to="`/assetclasses/${encodeURIComponent(mission.assetByAssetId.className)}`"
+                >{{ mission.assetByAssetId.className }}</router-link>)
+              </td>
             </tr>
             <tr v-if="mission.start">
               <td>Start:</td>

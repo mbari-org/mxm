@@ -4,6 +4,9 @@ query mission($missionId: String!) {
     missionId
     name
     assetId
+    assetByAssetId {
+      className
+    }
     missionDefId
     description
     executorId
