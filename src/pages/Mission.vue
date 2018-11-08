@@ -30,8 +30,34 @@
             </tr>
             <tr>
               <td>Description:</td>
-              <td class="text-italic">
-                {{ mission.description }}
+              <td>
+                <div class="round-borders q-pa-xs bg-green-1"
+                     v-html=""
+                >
+                  <p v-for="(p, index) in mission.description.split('\n')" :key="index"
+                     :class="index > 0 ? 'q-mt-md' : ''"
+                  >
+                    {{p}}
+                  </p>
+                </div>
+                <q-popup-edit
+                  v-model="mission.description"
+                  title="Description"
+                  buttons
+                  @save="updateDescription"
+                >
+                  <q-field>
+                    <q-input
+                      v-model.trim="mission.description"
+                      clearable
+                      class="bg-green-1"
+                      type="textarea"
+                      rows="3"
+                      :max-height="300"
+                    />
+                  </q-field>
+                </q-popup-edit>
+
               </td>
             </tr>
             <tr>
@@ -103,7 +129,9 @@
               :disable="savingArgs"
               :loading="savingArgs"
               @click="saveArguments"
-            />
+            >
+              <q-tooltip>Save changes in arguments</q-tooltip>
+            </q-btn>
             <div style="color:gray;font-size:small" class="col-auto vertical-middle text-weight-light q-ml-sm">
               Overridden parameters: {{parametersChanged().length}}
             </div>
@@ -125,14 +153,13 @@
             <div :class="'round-borders q-pa-xs ' +
                   (props.row.paramValue !== props.row.defaultValue ? 'bg-green-11 text-bold' : 'bg-green-1')">
               {{ props.row.paramValue }}
-              <q-tooltip>Click to edit</q-tooltip>
             </div>
 
             <q-popup-edit
               v-model="props.row.paramValue"
               :title="`${props.row.paramName}`"
               buttons
-              :validate="validateValue"
+              :validate="validateParamValue"
             >
               <q-field>
                 <q-input
@@ -180,6 +207,7 @@
   import argumentInsert from '../graphql/argumentInsert.gql'
   import argumentUpdate from '../graphql/argumentUpdate.gql'
   import argumentDelete from '../graphql/argumentDelete.gql'
+  import missionUpdate from '../graphql/missionUpdate.gql'
   import {Notify} from 'quasar'
   import _ from 'lodash'
 
@@ -284,10 +312,10 @@
         })
       },
 
-      validateValue(val) {
+      validateParamValue(val) {
         // TODO proper validation
         // for now, just force to be a non-empty string
-        if (debug) console.debug('validateValue val=', val)
+        if (debug) console.debug('validateParamValue val=', val)
         return !!val
       },
 
@@ -335,7 +363,7 @@
           if (debug) console.debug('saveArguments: checking', arg.paramName,
             'v=', arg.paramValue, 'dv=', arg.defaultValue)
 
-          const alreadySavedArg = _.find(alreadySavedArgs, x => x.paramName == arg.paramName)
+          const alreadySavedArg = _.find(alreadySavedArgs, x => x.paramName === arg.paramName)
           if (debug) console.debug(arg.paramName, 'alreadySavedArg=', alreadySavedArg)
 
           if (arg.paramValue !== arg.defaultValue) {
@@ -438,6 +466,27 @@
           .catch((error) => {
             console.error('deleteArgument: mutation error=', error)
             next(false)
+          })
+      },
+
+      updateDescription(val) {
+        console.debug('updateDescription val=', val)
+        const mutation = missionUpdate
+        const variables = {
+          input: {
+            nodeId: this.mission.nodeId,
+            missionPatch: {
+              description: val
+            }
+          }
+        }
+        this.$apollo.mutate({mutation, variables})
+          .then((data) => {
+            if (debug) console.debug('updateDescription: mutation data=', data)
+            this.mission.description = val
+          })
+          .catch((error) => {
+            console.error('updateDescription: mutation error=', error)
           })
       },
     },

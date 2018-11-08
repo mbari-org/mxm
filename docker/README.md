@@ -20,3 +20,5 @@ Creating docker_pxs-ui_1         ... done
 ```
 
 Open the PXS UI: http://localhost:38080/
+
+Open the GraphQL UI: http://localhost:5000/graphiql

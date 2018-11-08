@@ -1,0 +1,26 @@
+mutation updateMission($input: UpdateMissionInput!) {
+  updateMission(input: $input) {
+    mission {
+      nodeId
+      missionId
+      executorId
+      missionDefId
+      description
+      assetId
+      name
+      startDate
+      endDate
+      geometry
+    }
+  }
+}
+
+
+# variables: {
+#  "input": {
+#    "nodeId": "WyJtaXNzaW9ucyIsInNjaTJpbnN0MiJd",
+#    "missionPatch": {
+#      "description": "updated description ..."
+#    }
+#  }
+#}

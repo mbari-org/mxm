@@ -1,5 +1,6 @@
 2018-11-08
 
+- update mission description
 - some minor adjustments while reviewing after vacation
 
 2018-10-15
