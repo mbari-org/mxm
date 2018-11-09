@@ -1,0 +1,18 @@
+mutation updateAsset($input: UpdateAssetInput!) {
+  updateAsset(input: $input) {
+    asset {
+      nodeId
+      assetId
+      description
+    }
+  }
+}
+
+# variables: {
+#  "input": {
+#    "nodeId": "..",
+#    "assetPatch": {
+#      "description": "new description"
+#    }
+#  }
+#}

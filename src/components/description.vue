@@ -1,6 +1,6 @@
 <template>
   <div class="round-borders q-pa-xs bg-green-1">
-    <p v-for="(p, index) in text.split('\n')" :key="index"
+    <p v-for="(p, index) in (text || '').split('\n')" :key="index"
        :class="index > 0 ? 'q-mt-md' : ''"
     >
       {{p}}
@@ -13,7 +13,7 @@
     props: {
       text: {
         type: String,
-        required: true
+        required: false
       }
     },
   }

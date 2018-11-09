@@ -1,7 +1,12 @@
 {
-  assets {
+  allAssetsList {
+    nodeId
     assetId
     className
     description
+    assetClassByClassName {
+      className
+      description
+    }
   }
 }

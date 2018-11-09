@@ -1,0 +1,10 @@
+query ($assetId: String!) {
+  allAssetsList(condition: {
+    assetId: $assetId
+  }) {
+    nodeId
+    assetId
+    className
+    description
+  }
+}

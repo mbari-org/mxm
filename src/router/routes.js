@@ -33,6 +33,14 @@ const routes = [
         path: '/assetclasses/:className',
         component: () => import('pages/AssetClass')
       },
+      {
+        path: '/assets',
+        component: () => import('pages/Assets')
+      },
+      {
+        path: '/assets/:assetId',
+        component: () => import('pages/Asset')
+      },
     ]
   }
 ]

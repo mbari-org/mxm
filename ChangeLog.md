@@ -1,5 +1,6 @@
 2018-11-08
 
+- pages for asset and asset list
 - update assetClass description
 - add description component
 - mission: show asset class

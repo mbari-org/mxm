@@ -2,24 +2,32 @@
   <q-page class="q-pa-md">
     <q-breadcrumbs active-color="secondary" color="light">
       <q-breadcrumbs-el label="Home" to="/"/>
-      <q-breadcrumbs-el label="AssetClasses" to="/assetclasses"/>
+      <q-breadcrumbs-el label="Assets" to="/assets"/>
       <q-btn
         dense round icon="refresh" class="q-ml-lg" size="sm"
-        @click="refreshAssetClasses"
+        @click="refreshAssets"
       />
     </q-breadcrumbs>
 
     <q-table
-      title="Asset Classes"
-      :data="allAssetClassesList"
+      title="Assets"
+      :data="allAssetsList"
       :columns="columns"
-      row-key="className"
+      row-key="assetId"
       :rows-per-page-options="rowsPerPage"
       :pagination.sync="pagination"
     >
       <div slot="top-right" slot-scope="props" class="fit">
-        <asset-class-new-button v-on:created="assetClassCreated"/>
+        <asset-class-new-button v-on:created="assetCreated"/>
       </div>
+
+      <q-td slot="body-cell-assetId" slot-scope="props" :props="props"
+            style="width:5px"
+      >
+        <router-link :to="`/assets/${encodeURIComponent(props.row.assetId)}`">
+          {{props.row.assetId}}
+        </router-link>
+      </q-td>
 
       <q-td slot="body-cell-className" slot-scope="props" :props="props"
             style="width:5px"
@@ -35,7 +43,7 @@
 
 <script>
   import AssetClassNewButton from 'components/asset-class-new-button'
-  import allAssetClassesList from '../graphql/assetClasses.gql'
+  import allAssetsList from '../graphql/assets.gql'
 
   const debug = false
 
@@ -46,11 +54,11 @@
 
     data() {
       return {
-        allAssetClassesList: [],
+        allAssetsList: [],
         columns: [
           {
-            field: 'className',
-            name: 'className',
+            field: 'assetId',
+            name: 'assetId',
             label: 'Name',
             align: 'left',
             sortable: true
@@ -59,6 +67,13 @@
             field: 'description',
             name: 'description',
             label: 'Description',
+            align: 'left',
+            sortable: true
+          },
+          {
+            field: 'className',
+            name: 'className',
+            label: 'Class',
             align: 'left',
             sortable: true
           }
@@ -71,26 +86,26 @@
     },
 
     apollo: {
-      allAssetClassesList,
+      allAssetsList,
     },
 
     mounted() {
-      this.refreshAssetClasses()
+      this.refreshAssets()
     },
 
     methods: {
-      refreshAssetClasses() {
-        this.$apollo.queries.allAssetClassesList.refetch()
+      refreshAssets() {
+        this.$apollo.queries.allAssetsList.refetch()
       },
 
-      assetClassCreated(data) {
-        this.refreshAssetClasses()
+      assetCreated(data) {
+        this.refreshAssets()
       }
     },
 
     watch: {
-      allAssetClassesList(val) {
-        if (debug) console.log('watch allAssetClassesList=', val)
+      allAssetsList(val) {
+        if (debug) console.log('watch allAssetsList=', val)
       }
     }
   }

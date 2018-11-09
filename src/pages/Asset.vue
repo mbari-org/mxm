@@ -2,32 +2,36 @@
   <q-page class="q-pa-md">
     <q-breadcrumbs active-color="secondary" color="light">
       <q-breadcrumbs-el label="Home" to="/"/>
-      <q-breadcrumbs-el label="AssetClasses" to="/assetclasses"/>
-      <q-breadcrumbs-el :label="params.className"/>
+      <q-breadcrumbs-el label="Assets" to="/assets"/>
+      <q-breadcrumbs-el :label="params.assetId"/>
       <q-btn
         dense round icon="refresh" class="q-ml-lg" size="sm"
         @click="refreshAssetClass"
       />
     </q-breadcrumbs>
 
-    <div v-if="assetClass">
+    <div v-if="asset">
 
       <q-card class="q-mb-md">
         <q-card-title>
-          Asset Class: <span class="text-bold">{{assetClass.className}}</span>
+          Asset ID: <span class="text-bold">{{asset.assetId}}</span>
+
+          (<router-link :to="`/assetclasses/${encodeURIComponent(asset.className)}`"
+          >{{ asset.className }}</router-link>)
         </q-card-title>
+
         <q-card-separator/>
         <q-card-main>
-          <description :text="assetClass.description" />
+          <description :text="asset.description" />
           <q-popup-edit
-            v-model="assetClass.description"
+            v-model="asset.description"
             title="Description"
             buttons
             @save="updateDescription"
           >
             <q-field>
               <q-input
-                v-model.trim="assetClass.description"
+                v-model.trim="asset.description"
                 clearable
                 class="bg-green-1"
                 type="textarea"
@@ -39,47 +43,23 @@
         </q-card-main>
       </q-card>
 
-
-      <q-table
-        title="Assets"
-        :data="myAssets"
-        :columns="assetColumns"
-        row-key="assetId"
-      >
-        <div slot="top-right" slot-scope="props" class="fit">
-          <asset-new-button
-            :asset-class-name="params.className"
-            v-on:created="assetCreated"
-          />
-        </div>
-
-        <q-td slot="body-cell-assetId" slot-scope="props" :props="props"
-              style="width:5px"
-        >
-          <router-link :to="`/assets/${encodeURIComponent(props.row.assetId)}`">
-            {{props.row.assetId}}
-          </router-link>
-        </q-td>
-
-      </q-table>
-
     </div>
 
     <div v-else-if="!loading">
-      Asset Class not found: {{params.className}}
+      Asset: {{params.assetId}}
     </div>
   </q-page>
 </template>
 
 <script>
   import description from '../components/description'
-  import assetClass from '../graphql/assetClass.gql'
+  import asset from '../graphql/asset.gql'
   import AssetNewButton from 'components/asset-new-button'
-  import assetClassUpdate from '../graphql/assetClassUpdate.gql'
+  import assetUpdate from '../graphql/assetUpdate.gql'
   import {Notify} from 'quasar'
   import _ from 'lodash'
 
-  const debug = false
+  const debug = true
 
   export default {
     components: {
@@ -90,7 +70,7 @@
     data() {
       return {
         loading: false,
-        assetClass: null,
+        asset: null,
         assetColumns: [
           {
             field: 'assetId',
@@ -114,25 +94,20 @@
       params() {
         return this.$route.params
       },
-
-      myAssets() {
-        const list = this.assetClass && this.assetClass.assetsByClassNameList || []
-        return list
-      },
     },
 
     apollo: {
-      assetClass: {
-        query: assetClass,
+      asset: {
+        query: asset,
         variables() {
           return {
-            className: this.params.className
+            assetId: this.params.assetId
           }
         },
         update(data) {
           if (debug) console.log('update: data=', data)
-          if (data.allAssetClassesList && data.allAssetClassesList.length) {
-            return data.allAssetClassesList[0]
+          if (data.allAssetsList && data.allAssetsList.length) {
+            return data.allAssetsList[0]
           }
           else return null
         },
@@ -145,7 +120,7 @@
 
     methods: {
       refreshAssetClass() {
-        this.$apollo.queries.assetClass.refetch()
+        this.$apollo.queries.asset.refetch()
       },
 
       assetCreated(data) {
@@ -153,12 +128,12 @@
       },
 
       updateDescription(val) {
-        if (debug) console.debug('updateDescription val=', val, 'nodeId=', this.assetClass.nodeId)
-        const mutation = assetClassUpdate
+        if (debug) console.debug('updateDescription val=', val, 'nodeId=', this.asset.nodeId)
+        const mutation = assetUpdate
         const variables = {
           input: {
-            nodeId: this.assetClass.nodeId,
-            assetClassPatch: {
+            nodeId: this.asset.nodeId,
+            assetPatch: {
               description: val
             }
           }
@@ -166,7 +141,7 @@
         this.$apollo.mutate({mutation, variables})
           .then((data) => {
             if (debug) console.debug('updateDescription: mutation data=', data)
-            this.assetClass.description = val
+            this.asset.description = val
           })
           .catch((error) => {
             console.error('updateDescription: mutation error=', error)
@@ -179,8 +154,8 @@
         this.refreshAssetClass()
       },
 
-      assetClass(val) {
-        if (debug) console.log('watch assetClass=', val)
+      asset(val) {
+        if (debug) console.log('watch asset=', val)
       }
     }
   }
