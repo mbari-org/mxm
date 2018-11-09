@@ -10,13 +10,29 @@
     </q-breadcrumbs>
 
     <q-table
-      title="Asset Classes"
       :data="allAssetClassesList"
       :columns="columns"
       row-key="className"
       :rows-per-page-options="rowsPerPage"
       :pagination.sync="pagination"
+      :filter="filter"
     >
+      <div slot="top-left" slot-scope="props" class="row items-center">
+        <div class="col-auto q-headline">
+          Asset Classes
+        </div>
+
+        <div class="q-ml-md row">
+          <q-search
+            v-if="allAssetClassesList.length"
+            class="col"
+            color="secondary"
+            v-model="filter"
+            placeholder="Filter"
+            clearable
+          />
+        </div>
+      </div>
       <div slot="top-right" slot-scope="props" class="fit">
         <asset-class-new-button v-on:created="assetClassCreated"/>
       </div>
@@ -67,6 +83,7 @@
         pagination: {
           rowsPerPage: 0
         },
+        filter: '',
       }
     },
 

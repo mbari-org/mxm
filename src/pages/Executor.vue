@@ -30,11 +30,30 @@
       </q-card>
 
       <q-table
-        title="Mission definitions managed by this executor"
         :columns="missionDefColumns"
         :data="myMissionDefs"
         row-key="name"
+        :rows-per-page-options="rowsPerPage"
+        :pagination.sync="pagination"
+        :filter="filter"
       >
+        <div slot="top-left" slot-scope="props" class="row items-center">
+          <div class="col-auto q-headline">
+            Mission definitions
+          </div>
+
+          <div class="q-ml-md row">
+            <q-search
+              v-if="myMissionDefs.length"
+              class="col"
+              color="secondary"
+              v-model="filter"
+              placeholder="Filter"
+              clearable
+            />
+          </div>
+        </div>
+
         <div slot="top-right" slot-scope="props" class="fit">
           <mission-def-new-button
             :executor-id="executor.executorId"
@@ -116,6 +135,11 @@
             sortable: true
           }
         ],
+        rowsPerPage: [0],
+        pagination: {
+          rowsPerPage: 0
+        },
+        filter: '',
       }
     },
 
