@@ -41,11 +41,30 @@
 
 
       <q-table
-        title="Assets"
         :data="myAssets"
         :columns="assetColumns"
         row-key="assetId"
+        :rows-per-page-options="rowsPerPage"
+        :pagination.sync="pagination"
+        :filter="filter"
       >
+        <div slot="top-left" slot-scope="props" class="row items-center">
+          <div class="col-auto q-headline">
+            Assets
+          </div>
+
+          <div class="q-ml-md row">
+            <q-search
+              v-if="myAssets.length"
+              class="col"
+              color="secondary"
+              v-model="filter"
+              placeholder="Filter"
+              clearable
+            />
+          </div>
+        </div>
+
         <div slot="top-right" slot-scope="props" class="fit">
           <asset-new-button
             :asset-class-name="params.className"
@@ -106,7 +125,12 @@
             align: 'left',
             sortable: true
           }
-        ]
+        ],
+        rowsPerPage: [0],
+        pagination: {
+          rowsPerPage: 0
+        },
+        filter: '',
       }
     },
 
