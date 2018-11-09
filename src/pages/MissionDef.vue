@@ -16,7 +16,7 @@
 
       <q-card class="q-mb-md">
         <q-card-title>
-          Mission Definition: {{ params.missionDefId }}
+          Mission Definition: <span class="text-bold">{{ params.missionDefId }}</span>
         </q-card-title>
         <q-card-separator/>
         <q-card-main>

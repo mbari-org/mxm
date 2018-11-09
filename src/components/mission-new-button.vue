@@ -121,7 +121,7 @@
   import {Notify} from 'quasar'
 
 
-  const debug = true
+  const debug = false
 
   export default {
     components: {
