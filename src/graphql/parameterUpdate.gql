@@ -1,0 +1,26 @@
+mutation updateParameter($input: UpdateParameterInput!) {
+  updateParameter(input: $input) {
+    parameter {
+      executorId
+      missionDefId
+      name
+      type
+      required
+      defaultValue
+      description
+    }
+  }
+}
+
+# variables: {
+#  "input": {
+#    "nodeId": "asasasas",
+#    "parameterPatch": {
+#      "name":         ".."
+#      "type":         ".."
+#      "required":     ".."
+#      "defaultValue": ".."
+#      "description":  ".."
+#    }
+#  }
+#}

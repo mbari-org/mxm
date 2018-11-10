@@ -93,6 +93,37 @@
           />
         </div>
 
+        <q-td slot="body-cell-name" slot-scope="props" :props="props"
+              style="width:5px"
+        >
+          <router-link
+            style="text-decoration:none"
+            :to="`/executors/${encodeURIComponent(params.executorId)}/MissionDefs/${encodeURIComponent(params.missionDefId)}/params/${encodeURIComponent(props.row.name)}`"
+          >{{ props.value }}
+          </router-link>
+
+        </q-td>
+
+        <q-td slot="body-cell-type" slot-scope="props" :props="props"
+              style="width:5px"
+        >{{ props.value }}
+        </q-td>
+
+        <q-td slot="body-cell-required" slot-scope="props" :props="props"
+              style="width:5px"
+        >{{ props.value }}
+        </q-td>
+
+        <q-td slot="body-cell-defaultValue" slot-scope="props" :props="props"
+              style="width:5px"
+        >{{ props.value }}
+        </q-td>
+
+        <q-td slot="body-cell-description" slot-scope="props" :props="props"
+              style="word-break:break-all;font-size:smallest;width:150px"
+        >{{ props.value }}
+        </q-td>
+
       </q-table>
     </div>
 
@@ -113,6 +144,7 @@
   import missionDefAssetClassInsert from '../graphql/missionDefAssetClassInsert.gql'
   import missionDefAssetClassDelete from '../graphql/missionDefAssetClassDelete.gql'
   import ParameterNewButton from 'components/parameter-new-button'
+  import description from 'components/description'
   import {Notify} from 'quasar'
   import _ from 'lodash'
 
@@ -121,7 +153,8 @@
   export default {
     components: {
       AssetClassSelectButton,
-      ParameterNewButton
+      ParameterNewButton,
+      description,
     },
 
     data() {
@@ -151,16 +184,14 @@
           {
             field: 'defaultValue',
             name: 'defaultValue',
-            label: 'Default',
+            label: 'Default value',
             align: 'left',
-            sortable: true
           },
           {
             field: 'description',
             name: 'description',
             label: 'Description',
             align: 'left',
-            sortable: true
           }
         ],
         rowsPerPage: [0],

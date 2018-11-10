@@ -1,0 +1,16 @@
+query ($executorId: String!, $missionDefId: String!, $paramName: String!) {
+  parameterByExecutorIdAndMissionDefIdAndName(
+    executorId: $executorId,
+    missionDefId: $missionDefId,
+    name: $paramName
+  ) {
+    nodeId
+    executorId
+    missionDefId
+    name
+    type
+    required
+    defaultValue
+    description
+  }
+}

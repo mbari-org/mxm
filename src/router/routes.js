@@ -17,6 +17,9 @@ const routes = [
       { path: '/executors/:executorId/missiondefs/:missionDefId',
         component: () => import('pages/MissionDef')
       },
+      { path: '/executors/:executorId/missiondefs/:missionDefId/params/:paramName',
+        component: () => import('pages/Parameter')
+      },
       {
         path: '/missions',
         component: () => import('pages/Missions')

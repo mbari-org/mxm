@@ -21,6 +21,24 @@ GraphQL endpoint as appropriate.
 
 which opens: http://localhost:8080/index.html
 
+Client requests using HTTPie. e.g.:
+
+```
+http post localhost:5000/graphql query='{
+ allAssetsList {
+   nodeId
+   assetId
+   className
+   description
+   assetClassByClassName {
+     className
+     description
+   }
+ }}
+'
+```
+
+
 ## Build and install
 
 ### odss-test setup
@@ -29,10 +47,10 @@ TODO adjust setup for the recent GraphQL based mechanism.
 
 As `odssadm`:
 
-        sudo mkdir /var/www/html/pxs-ui
-        sudo chown carueda:carueda /var/www/html/pxs-ui
-
 ```
+sudo mkdir /var/www/html/pxs-ui
+sudo chown carueda:carueda /var/www/html/pxs-ui
+
 quasar build && \
 (cd dist/spa-mat && tar zcf ../pxs-ui.tgz *) && \
 scp dist/pxs-ui.tgz odss-test.shore.mbari.org:/var/www/html/pxs-ui/ && \
