@@ -14,9 +14,11 @@
       />
     </q-breadcrumbs>
 
-    <div v-if="parameter">
+    <div v-if="parameter" class="q-mt-md">
 
-      Mission Definition: <span class="text-bold">{{ params.missionDefId }}</span>
+      <div class="q-mb-sm">
+        Mission Definition: <span class="text-bold">{{ params.missionDefId }}</span>
+      </div>
 
       <q-card class="q-mb-md">
         <q-card-title>
