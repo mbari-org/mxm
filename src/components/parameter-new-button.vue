@@ -1,13 +1,13 @@
 <template>
   <div>
     <q-modal v-model="dialogOpened"
-             content-css="min-width:300px;min-height:300px"
+             content-css="min-width:600px;min-height:300px"
              no-backdrop-dismiss
     >
       <q-modal-layout>
         <q-toolbar slot="header">
           <q-toolbar-title>
-            Add parameter
+            Add Parameter
           </q-toolbar-title>
           <q-btn round dense
                  color="primary"
@@ -45,12 +45,12 @@
           </q-field>
 
           <q-field
-            label="Description:"
+            label="Default Value:"
             :label-width="4"
           >
             <q-input
               class="bg-light-blue-1"
-              v-model.trim="description"
+              v-model.trim="defaultValue"
               type="text"
               style="width:24em"
             />
@@ -68,13 +68,15 @@
           </q-field>
 
           <q-field
-            label="Default Value:"
+            label="Description:"
             :label-width="4"
           >
             <q-input
               class="bg-light-blue-1"
-              v-model.trim="defaultValue"
-              type="text"
+              v-model.trim="description"
+              type="textarea"
+              rows="3"
+              :max-height="300"
               style="width:24em"
             />
           </q-field>

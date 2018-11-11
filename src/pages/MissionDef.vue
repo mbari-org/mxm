@@ -109,18 +109,18 @@
         >{{ props.value }}
         </q-td>
 
-        <q-td slot="body-cell-required" slot-scope="props" :props="props"
-              style="width:5px"
-        >{{ props.value }}
-        </q-td>
-
         <q-td slot="body-cell-defaultValue" slot-scope="props" :props="props"
               style="width:5px"
         >{{ props.value }}
         </q-td>
 
+        <q-td slot="body-cell-required" slot-scope="props" :props="props"
+              style="width:5px"
+        >{{ props.value }}
+        </q-td>
+
         <q-td slot="body-cell-description" slot-scope="props" :props="props"
-              style="word-break:break-all;font-size:smallest;width:150px"
+              style="word-break:break-all;font-size:smallest"
         >{{ props.value }}
         </q-td>
 
@@ -177,15 +177,15 @@
             sortable: true
           },
           {
-            field: 'required',
-            name: 'required',
-            label: 'Required'
-          },
-          {
             field: 'defaultValue',
             name: 'defaultValue',
             label: 'Default value',
             align: 'left',
+          },
+          {
+            field: 'required',
+            name: 'required',
+            label: 'Required'
           },
           {
             field: 'description',
