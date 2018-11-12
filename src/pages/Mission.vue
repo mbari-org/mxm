@@ -136,11 +136,13 @@
 
         <q-tr slot="body" slot-scope="props" :props="props">
           <q-td key="paramName" :props="props"
-                style="width:5px"
+                style="width:5px;font-family:monospace"
           >
-            <div class="text-bold">
-              {{ props.row.paramName }}
-            </div>
+            <router-link
+              style="text-decoration:none"
+              :to="`/executors/${encodeURIComponent(mission.executorId)}/MissionDefs/${encodeURIComponent(mission.missionDefId)}/params/${encodeURIComponent(props.row.paramName)}`"
+            >{{ props.row.paramName }}
+            </router-link>
           </q-td>
 
           <q-td key="paramValue" :props="props"

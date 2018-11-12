@@ -109,7 +109,7 @@
         </div>
 
         <q-td slot="body-cell-name" slot-scope="props" :props="props"
-              style="width:5px"
+              style="width:5px;font-family:monospace"
         >
           <router-link
             style="text-decoration:none"

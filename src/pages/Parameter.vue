@@ -22,7 +22,8 @@
 
       <q-card class="q-mb-md">
         <q-card-title>
-          Parameter: <span class="text-bold">{{ params.paramName }}</span>
+          Parameter: <span class="text-bold" style="font-family:monospace;font-size:larger"
+        >{{ params.paramName }}</span>
         </q-card-title>
         <q-card-separator/>
         <q-card-main>
