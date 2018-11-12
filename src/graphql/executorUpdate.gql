@@ -1,0 +1,10 @@
+mutation updateExecutor($input: UpdateExecutorInput!) {
+  updateExecutor(input: $input) {
+    executor {
+      nodeId
+      executorId
+      httpEndpoint
+      description
+    }
+  }
+}

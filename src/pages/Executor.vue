@@ -20,12 +20,53 @@
         </q-card-title>
         <q-card-separator/>
         <q-card-main>
-          <p class="text-italic">
-            {{executor.description}}
-          </p>
           <div>
-            Endpoint: {{executor.httpEndpoint}}
+            <description :text="executor.description"/>
+            <q-popup-edit
+              v-model="executor.description"
+              title="Description"
+              buttons
+              @save="updateDescription"
+            >
+              <q-field>
+                <q-input
+                  v-model.trim="executor.description"
+                  clearable
+                  class="bg-green-1"
+                  type="textarea"
+                  rows="3"
+                  :max-height="300"
+                />
+              </q-field>
+            </q-popup-edit>
           </div>
+
+          <table class="q-mt-sm">
+            <tbody>
+            <tr>
+              <td>Endpoint:</td>
+              <td>
+                <span class="text-bold">
+                  {{executor.httpEndpoint}}
+                </span>
+                <q-popup-edit
+                  v-model="executor.httpEndpoint"
+                  title="Endpoint"
+                  buttons
+                  @save="updateHttpEndpoint"
+                >
+                  <q-field>
+                    <q-input
+                      v-model.trim="executor.httpEndpoint"
+                      clearable
+                      class="bg-green-1"
+                    />
+                  </q-field>
+                </q-popup-edit>
+              </td>
+            </tr>
+            </tbody>
+          </table>
         </q-card-main>
       </q-card>
 
@@ -72,12 +113,13 @@
 
         <q-td slot="body-cell-assetClassNames" slot-scope="props" :props="props"
         >
-          <router-link v-for="className in props.row.assetClassNames" :key="className"
-                       :to="`/assetclasses/${encodeURIComponent(className)}`"
-                       class="q-mr-sm"
-          >
-            {{className}}
-          </router-link>
+          <span v-for="(className, index) in props.row.assetClassNames" :key="className"
+          >{{index > 0 ? ', ' : ''}}
+            <router-link :to="`/assetclasses/${encodeURIComponent(className)}`"
+                         style="text-decoration:none"
+            >{{className}}</router-link>
+
+          </span>
         </q-td>
 
       </q-table>
@@ -93,14 +135,17 @@
 <script>
   import MissionDefNewButton from 'components/mission-def-new-button'
   import executor from '../graphql/executor.gql'
+  import executorUpdate from '../graphql/executorUpdate.gql'
+  import description from '../components/description'
   import {Notify} from 'quasar'
   import _ from 'lodash'
 
-  const debug = false
+  const debug = true
 
   export default {
     components: {
-      MissionDefNewButton
+      MissionDefNewButton,
+      description,
     },
 
     data() {
@@ -219,7 +264,39 @@
       missionDefCreated(data) {
         data.assetClassNames = data.assetClasses
         this.myMissionDefs.splice(0, 0, data)
-      }
+      },
+
+      updateDescription(description) {
+        this.updateExecutor({description})
+      },
+
+      updateHttpEndpoint(httpEndpoint) {
+        this.updateExecutor({httpEndpoint})
+      },
+
+      updateExecutor(executorPatch) {
+        if (debug) console.debug('updateExecutor executorPatch=', executorPatch)
+        const mutation = executorUpdate
+        const variables = {
+          input: {
+            nodeId: this.executor.nodeId,
+            executorPatch
+          }
+        }
+        this.$apollo.mutate({mutation, variables})
+          .then((data) => {
+            if (debug) console.debug('updateDescription: mutation data=', data)
+            if (executorPatch.description) {
+              this.executor.description = executorPatch.description
+            }
+            if (executorPatch.httpEndpoint) {
+              this.executor.httpEndpoint = executorPatch.httpEndpoint
+            }
+          })
+          .catch((error) => {
+            console.error('updateDescription: mutation error=', error)
+          })
+      },
     },
 
     watch: {

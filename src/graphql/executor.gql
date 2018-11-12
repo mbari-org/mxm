@@ -2,6 +2,7 @@ query executor($executorId: String!) {
   allExecutorsList(condition: {
     executorId: $executorId
   }) {
+    nodeId
     executorId
     httpEndpoint
     description

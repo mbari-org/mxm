@@ -1,5 +1,6 @@
 2018-11-12
 
+- update executor's description and httpEndpoint
 - update missionDef description
 
 2018-11-09
