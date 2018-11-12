@@ -1,0 +1,19 @@
+mutation updateMissionDef($input: UpdateMissionDefInput!) {
+  updateMissionDef(input: $input) {
+    missionDef {
+      nodeId
+      executorId
+      missionDefId
+      description
+    }
+  }
+}
+
+# variables: {
+#  "input": {
+#    "nodeId": "..",
+#    "missionDefPatch": {
+#      "description": "updated description ..."
+#    }
+#  }
+#}

@@ -20,9 +20,24 @@
         </q-card-title>
         <q-card-separator/>
         <q-card-main>
-          <p class="text-italic">
-            {{ missionDef.description }}
-          </p>
+          <description :text="missionDef.description"/>
+          <q-popup-edit
+            v-model="missionDef.description"
+            title="Description"
+            buttons
+            @save="updateDescription"
+          >
+            <q-field>
+              <q-input
+                v-model.trim="missionDef.description"
+                clearable
+                class="bg-green-1"
+                type="textarea"
+                rows="3"
+                :max-height="300"
+              />
+            </q-field>
+          </q-popup-edit>
         </q-card-main>
       </q-card>
 
@@ -143,6 +158,7 @@
   import AssetClassSelectButton from 'components/asset-class-select-button'
   import missionDefAssetClassInsert from '../graphql/missionDefAssetClassInsert.gql'
   import missionDefAssetClassDelete from '../graphql/missionDefAssetClassDelete.gql'
+  import missionDefUpdate from '../graphql/missionDefUpdate.gql'
   import ParameterNewButton from 'components/parameter-new-button'
   import description from 'components/description'
   import {Notify} from 'quasar'
@@ -316,7 +332,28 @@
 
       parameterCreated(data) {
         this.refreshMissionDef()
-      }
+      },
+
+      updateDescription(val) {
+        if (debug) console.debug('updateDescription val=', val)
+        const mutation = missionDefUpdate
+        const variables = {
+          input: {
+            nodeId: this.missionDef.nodeId,
+            missionDefPatch: {
+              description: val
+            }
+          }
+        }
+        this.$apollo.mutate({mutation, variables})
+          .then((data) => {
+            if (debug) console.debug('updateDescription: mutation data=', data)
+            this.missionDef.description = val
+          })
+          .catch((error) => {
+            console.error('updateDescription: mutation error=', error)
+          })
+      },
     },
 
     watch: {
