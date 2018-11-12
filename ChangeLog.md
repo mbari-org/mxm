@@ -1,5 +1,6 @@
 2018-11-12
 
+- parameter: allow to change name (if foreign key constraints allow)
 - missionDef: Allow to change missionDefId, but note that this is possible
   only when there are no dependencies (foreign key constraints)
 - link to parameter in argument table

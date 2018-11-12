@@ -22,8 +22,24 @@
 
       <q-card class="q-mb-md">
         <q-card-title>
-          Parameter: <span class="text-bold" style="font-family:monospace;font-size:larger"
-        >{{ params.paramName }}</span>
+          Parameter:
+          <span class="text-bold" style="font-family:monospace;font-size:larger">
+            {{ parameter.name }}
+            <q-popup-edit
+              v-model="parameter.name"
+              title="Parameter Name"
+              buttons
+              @save="updateParameter"
+            >
+              <q-field>
+                <q-input
+                  v-model.trim="parameter.name"
+                  clearable
+                  class="bg-green-1"
+                />
+              </q-field>
+            </q-popup-edit>
+          </span>
         </q-card-title>
         <q-card-separator/>
         <q-card-main>
@@ -228,6 +244,10 @@
         this.$apollo.mutate({mutation, variables})
           .then((data) => {
             if (debug) console.debug('updateParameter: mutation data=', data)
+            if (parameterPatch.name) {
+              this.$router.replace(`/executors/${encodeURIComponent(this.parameter.executorId)}/MissionDefs/${encodeURIComponent(this.parameter.missionDefId)}/params/${encodeURIComponent(parameterPatch.name)}`)
+              return
+            }
             this.refreshParameter()
           })
           .catch((error) => {
