@@ -17,15 +17,18 @@ const routes = [
       { path: '/executors/:executorId/missiondefs/:missionDefId',
         component: () => import('pages/MissionDef')
       },
+      { path: '/executors/:executorId/missiondefs',
+        component: () => import('pages/MissionDefs')
+      },
       { path: '/executors/:executorId/missiondefs/:missionDefId/params/:paramName',
         component: () => import('pages/Parameter')
       },
       {
-        path: '/missions',
+        path: '/executors/:executorId/missions',
         component: () => import('pages/Missions')
       },
       {
-        path: '/missions/:missionId',
+        path: '/executors/:executorId/missions/:missionId',
         component: () => import('pages/Mission')
       },
       {

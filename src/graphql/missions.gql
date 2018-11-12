@@ -1,8 +1,11 @@
-{
-  allMissionsList {
+query missions($executorId: String!) {
+  allMissionsList(condition: {
+    executorId: $executorId
+  }) {
     nodeId
-    missionId
     executorId
+    missionId
+    missionDefId
     assetId
     name
     description

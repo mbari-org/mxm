@@ -2,7 +2,9 @@
   <q-page class="q-pa-md">
     <q-breadcrumbs active-color="secondary" color="light">
       <q-breadcrumbs-el label="Home" to="/"/>
-      <q-breadcrumbs-el label="Missions" to="/missions"/>
+      <q-breadcrumbs-el label="Executors" to="/executors"/>
+      <q-breadcrumbs-el :label="params.executorId" :to="`/executors/${encodeURIComponent(params.executorId)}`"/>
+      <q-breadcrumbs-el label="Missions" :to="`/executors/${encodeURIComponent(params.executorId)}/missions`"/>
       <q-breadcrumbs-el :label="params.missionId"/>
       <q-btn
         dense round icon="refresh" class="q-ml-lg" size="sm"
@@ -11,8 +13,6 @@
     </q-breadcrumbs>
 
     <div v-if="mission">
-
-      <!--<pre>mission={{mission}}</pre>-->
 
       <q-card class="q-mb-md">
         <q-card-title>

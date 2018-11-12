@@ -2,7 +2,9 @@
   <q-page class="q-pa-md">
     <q-breadcrumbs active-color="secondary" color="light">
       <q-breadcrumbs-el label="Home" to="/"/>
-      <q-breadcrumbs-el label="Missions" to="/missions"/>
+      <q-breadcrumbs-el label="Executors" to="/executors"/>
+      <q-breadcrumbs-el :label="params.executorId" :to="`/executors/${encodeURIComponent(params.executorId)}`"/>
+      <q-breadcrumbs-el label="Missions"/>
       <q-btn
         dense round icon="refresh" class="q-ml-lg" size="sm"
         @click="refreshMissions"
@@ -41,7 +43,7 @@
       <q-td slot="body-cell-name" slot-scope="props" :props="props"
             style="width:5px"
       >
-        <router-link :to="`/missions/${encodeURIComponent(props.row.missionId)}`">
+        <router-link :to="`/executors/${encodeURIComponent(params.executorId)}/missions/${encodeURIComponent(props.row.missionId)}`">
           {{props.row.name}}
         </router-link>
       </q-td>
@@ -88,8 +90,25 @@
       }
     },
 
+    computed: {
+      params() {
+        return this.$route.params
+      },
+    },
+
     apollo: {
-      allMissionsList,
+      allMissionsList: {
+        query: allMissionsList,
+        variables() {
+          return {
+            executorId: this.params.executorId
+          }
+        },
+        update(data) {
+          if (debug) console.log('update: data=', data)
+          return data.allMissionsList && data.allMissionsList || []
+        },
+      },
     },
 
     mounted() {

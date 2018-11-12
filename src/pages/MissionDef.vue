@@ -4,7 +4,7 @@
       <q-breadcrumbs-el label="Home" to="/"/>
       <q-breadcrumbs-el label="Executors" to="/executors"/>
       <q-breadcrumbs-el :label="params.executorId" :to="`/executors/${encodeURIComponent(params.executorId)}`"/>
-      <q-breadcrumbs-el label="MissionDefs"/>
+      <q-breadcrumbs-el label="MissionDefs" :to="`/executors/${encodeURIComponent(params.executorId)}/missiondefs`"/>
       <q-breadcrumbs-el :label="params.missionDefId"/>
       <q-btn
         dense round icon="refresh" class="q-ml-lg" size="sm"

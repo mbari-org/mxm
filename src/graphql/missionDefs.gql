@@ -1,0 +1,18 @@
+query missionDefs($executorId: String!) {
+  allMissionDefsList(condition: {
+    executorId: $executorId
+  }) {
+    nodeId
+    executorId
+    missionDefId
+    description
+    missionDefAssetClassesByExecutorIdAndMissionDefIdList {
+      assetClassName
+      assetClassByAssetClassName {
+        assetsByClassNameList {
+          assetId
+        }
+      }
+    }
+  }
+}

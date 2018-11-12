@@ -67,51 +67,25 @@
             </tr>
             </tbody>
           </table>
+
+          <div class="q-ma-sm">
+            <q-btn
+              class="q-mr-sm"
+              label="Mission Definitions"
+              no-wrap no-caps dense
+              :to="`/executors/${encodeURIComponent(params.executorId)}/missiondefs`"
+            />
+
+            <q-btn
+              label="Missions"
+              no-wrap no-caps dense
+              :to="`/executors/${encodeURIComponent(params.executorId)}/missions`"
+            />
+          </div>
+
         </q-card-main>
       </q-card>
 
-      <q-table
-        :columns="missionDefColumns"
-        :data="myMissionDefs"
-        row-key="name"
-        :rows-per-page-options="rowsPerPage"
-        :pagination.sync="pagination"
-        :filter="filter"
-      >
-        <div slot="top-left" slot-scope="props" class="row items-center">
-          <div class="col-auto q-headline">
-            Mission definitions
-          </div>
-
-          <div class="q-ml-md row">
-            <q-search
-              v-if="myMissionDefs.length"
-              class="col"
-              color="secondary"
-              v-model="filter"
-              placeholder="Filter"
-              clearable
-            />
-          </div>
-        </div>
-
-        <div slot="top-right" slot-scope="props" class="fit">
-          <mission-def-new-button
-            :executor-id="executor.executorId"
-            v-on:created="missionDefCreated"
-          />
-        </div>
-
-        <q-td slot="body-cell-missionDefId" slot-scope="props" :props="props"
-              style="width:5px"
-        >
-          <router-link
-            :to="`/executors/${encodeURIComponent(executor.executorId)}/missiondefs/${encodeURIComponent(props.row.missionDefId)}`">
-            {{props.row.missionDefId}}
-          </router-link>
-        </q-td>
-
-      </q-table>
     </div>
 
     <div v-else-if="!loading">
@@ -122,18 +96,16 @@
 </template>
 
 <script>
-  import MissionDefNewButton from 'components/mission-def-new-button'
   import executor from '../graphql/executor.gql'
   import executorUpdate from '../graphql/executorUpdate.gql'
   import description from '../components/description'
   import {Notify} from 'quasar'
   import _ from 'lodash'
 
-  const debug = true
+  const debug = false
 
   export default {
     components: {
-      MissionDefNewButton,
       description,
     },
 
@@ -141,42 +113,12 @@
       return {
         debug,
         loading: false,
-        detailed: null,
-        missionDefs: [],
-
-        selectedAssetClasses: [],
-
-        missionDefColumns: [
-          {
-            field: 'missionDefId',
-            name: 'missionDefId',
-            label: 'ID',
-            align: 'left',
-            sortable: true
-          },
-          {
-            field: 'description',
-            name: 'description',
-            label: 'Description',
-            align: 'left',
-            sortable: true
-          },
-        ],
-        rowsPerPage: [0],
-        pagination: {
-          rowsPerPage: 0
-        },
-        filter: '',
       }
     },
 
     computed: {
       params() {
         return this.$route.params
-      },
-
-      myMissionDefs() {
-        return this.executor && this.executor.missionDefsByExecutorIdList || []
       },
     },
 
@@ -205,41 +147,6 @@
     methods: {
       refreshExecutor() {
         this.$apollo.queries.executor.refetch()
-      },
-
-      assetClassSelection(data) {
-        const newAssetClassNames = _.difference(data, this.myAssetClassNames)
-        if (debug) console.debug('assetClassSelection: newAssetClassNames=', newAssetClassNames)
-
-        const added = []
-        const next = () => {
-          const assetClassName = newAssetClassNames.pop()
-          if (assetClassName) {
-            if (debug) console.debug('assetClassSelection: next=', assetClassName)
-            this.addAssetClassName(assetClassName, ok => {
-              if (ok) {
-                added.push(assetClassName)
-              }
-              next()
-            })
-          }
-          else {
-            if (added.length) {
-              Notify.create({
-                message: `Asset associated (${added.length})`,
-                timeout: 1000,
-                type: 'info'
-              })
-              this.refreshExecutor()
-            }
-          }
-        }
-
-        next()
-      },
-
-      missionDefCreated(data) {
-        this.myMissionDefs.splice(0, 0, data)
       },
 
       updateDescription(description) {
