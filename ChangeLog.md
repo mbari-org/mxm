@@ -1,5 +1,6 @@
 2018-11-12
 
+- fix mission-new-button to show list of assets of selected asset class
 - parameter: allow to change name (if foreign key constraints allow)
 - missionDef: Allow to change missionDefId, but note that this is possible
   only when there are no dependencies (foreign key constraints)

@@ -120,7 +120,6 @@
   import _ from 'lodash'
   import {Notify} from 'quasar'
 
-
   const debug = false
 
   export default {
@@ -148,19 +147,16 @@
 
     computed: {
       missionDefs() {
-        const list = this.executor && this.executor.missionDefsByExecutorIdList || []
-        return list
+        return this.executor && this.executor.missionDefsByExecutorIdList || []
       },
 
       assetClasses() {
         const list = []
-        const missionDefs = this.executor && this.executor.missionDefsByExecutorIdList || []
-        if (missionDefs.length) {
-          _.each(missionDefs, td => {
-            const classes = td.missionDefAssetClassesByExecutorIdAndMissionDefIdList || []
-            _.each(classes, c => {
-              list.push(c)
-            })
+        const missionDef = _.find(this.missionDefs, {missionDefId: this.missionDefId})
+        if (debug) console.debug('missionDef=', missionDef)
+        if (missionDef && missionDef.missionDefAssetClassesByExecutorIdAndMissionDefIdList) {
+          _.each(missionDef.missionDefAssetClassesByExecutorIdAndMissionDefIdList, c => {
+            list.push(c)
           })
         }
         return list
@@ -232,7 +228,7 @@
 
         this.$apollo.mutate({mutation, variables})
           .then((data) => {
-            console.log('mutation data=', data)
+            if (debug) console.debug('mutation data=', data)
             this.dialogOpened = false
             Notify.create({
               message: 'Mission created',
@@ -249,12 +245,12 @@
 
     watch: {
       executorId(val) {
-        if (debug) console.log('watch executorId=', val)
+        if (debug) console.debug('watch executorId=', val)
         this.$apollo.queries.executor.refetch()
       },
 
       assetClasses(val) {
-        if (debug) console.log('watch assetClasses=', val)
+        if (debug) console.debug('watch assetClasses=', val)
       },
     }
   }

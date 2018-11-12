@@ -56,7 +56,7 @@
 
     watch: {
       assetClasses(val) {
-        if (debug) console.log('watch assetClasses=', val)
+        if (debug) console.log('asset-select: watch assetClasses=', val)
       }
     },
   }

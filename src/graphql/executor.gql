@@ -10,6 +10,14 @@ query executor($executorId: String!) {
       nodeId
       missionDefId
       description
+      missionDefAssetClassesByExecutorIdAndMissionDefIdList {
+        assetClassName
+        assetClassByAssetClassName {
+          assetsByClassNameList {
+            assetId
+          }
+        }
+      }
     }
   }
 }
