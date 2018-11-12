@@ -1,5 +1,7 @@
 2018-11-12
 
+- missionDef: Allow to change missionDefId, but note that this is possible
+  only when there are no dependencies (foreign key constraints)
 - link to parameter in argument table
 - simplify executor page: just show id and description of missionDefs
 - update executor's description and httpEndpoint

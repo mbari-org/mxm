@@ -14,6 +14,7 @@ mutation updateMissionDef($input: UpdateMissionDefInput!) {
 #    "nodeId": "..",
 #    "missionDefPatch": {
 #      "description": "updated description ..."
+#      "missionDefId": ".."
 #    }
 #  }
 #}

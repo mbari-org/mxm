@@ -16,7 +16,24 @@
 
       <q-card class="q-mb-md">
         <q-card-title>
-          Mission Definition: <span class="text-bold">{{ params.missionDefId }}</span>
+          Mission Definition:
+          <span class="text-bold">
+            {{ params.missionDefId }}
+          <q-popup-edit
+            v-model="missionDef.missionDefId"
+            title="Mission Definition ID"
+            buttons
+            @save="updateMissionDefId"
+          >
+            <q-field>
+              <q-input
+                v-model.trim="missionDef.missionDefId"
+                clearable
+                class="bg-green-1"
+              />
+            </q-field>
+          </q-popup-edit>
+          </span>
         </q-card-title>
         <q-card-separator/>
         <q-card-main>
@@ -334,24 +351,36 @@
         this.refreshMissionDef()
       },
 
-      updateDescription(val) {
-        if (debug) console.debug('updateDescription val=', val)
+      updateMissionDefId(missionDefId) {
+        this.updateMissionDef({missionDefId})
+      },
+
+      updateDescription(description) {
+        this.updateMissionDef({description})
+      },
+
+      updateMissionDef(missionDefPatch) {
+        if (debug) console.debug('updateMissionDef missionDefPatch=', missionDefPatch)
         const mutation = missionDefUpdate
         const variables = {
           input: {
             nodeId: this.missionDef.nodeId,
-            missionDefPatch: {
-              description: val
-            }
+            missionDefPatch
           }
         }
         this.$apollo.mutate({mutation, variables})
           .then((data) => {
-            if (debug) console.debug('updateDescription: mutation data=', data)
-            this.missionDef.description = val
+            if (debug) console.debug('updateMissionDef: mutation data=', data)
+            if (missionDefPatch.missionDefId) {
+              this.$router.replace(`/executors/${encodeURIComponent(this.params.executorId)}/missiondefs/${encodeURIComponent(missionDefPatch.missionDefId)}`)
+              return
+            }
+            if (missionDefPatch.description) {
+              this.missionDef.description = missionDefPatch.description
+            }
           })
           .catch((error) => {
-            console.error('updateDescription: mutation error=', error)
+            console.error('updateMissionDef: mutation error=', error)
           })
       },
     },
