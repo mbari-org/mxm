@@ -111,17 +111,6 @@
           </router-link>
         </q-td>
 
-        <q-td slot="body-cell-assetClassNames" slot-scope="props" :props="props"
-        >
-          <span v-for="(className, index) in props.row.assetClassNames" :key="className"
-          >{{index > 0 ? ', ' : ''}}
-            <router-link :to="`/assetclasses/${encodeURIComponent(className)}`"
-                         style="text-decoration:none"
-            >{{className}}</router-link>
-
-          </span>
-        </q-td>
-
       </q-table>
     </div>
 
@@ -172,13 +161,6 @@
             align: 'left',
             sortable: true
           },
-          {
-            field: 'assetClassNames',
-            name: 'assetClassNames',
-            label: 'Asset Classes',
-            align: 'left',
-            sortable: true
-          }
         ],
         rowsPerPage: [0],
         pagination: {
@@ -194,11 +176,7 @@
       },
 
       myMissionDefs() {
-        const list = this.executor && this.executor.missionDefsByExecutorIdList || []
-        _.each(list, e => {
-          e.assetClassNames = _.map(e.missionDefAssetClassesByExecutorIdAndMissionDefIdList, 'assetClassName')
-        })
-        return list
+        return this.executor && this.executor.missionDefsByExecutorIdList || []
       },
     },
 
@@ -260,9 +238,7 @@
         next()
       },
 
-      // TODO
       missionDefCreated(data) {
-        data.assetClassNames = data.assetClasses
         this.myMissionDefs.splice(0, 0, data)
       },
 

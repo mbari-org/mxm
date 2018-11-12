@@ -1,5 +1,6 @@
 2018-11-12
 
+- simplify executor page: just show id and description of missionDefs
 - update executor's description and httpEndpoint
 - update missionDef description
 
