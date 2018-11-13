@@ -26,7 +26,7 @@ $ docker-compose up -d
 
 Open the PXS UI: http://localhost:38080/
 
-Open the GraphQL UI: http://localhost:5000/graphiql
+Open the GraphQL UI: http://localhost:5000/pxs-graphiql
 
 # tsauv
 
@@ -51,7 +51,7 @@ Added the following in `/etc/httpd/conf.d/tsauv.conf`:
   </Location>
 ```
 
-Ans also the following, in particular to have a working
+And also the following, in particular to have a working
 graphiql interface (at http://tsauv.shore.mbari.org/pxs-graphiql)
 because latest available postgraphile docker image is still 4.0.1,
 which does not properly have references to js resources
