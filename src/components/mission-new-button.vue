@@ -1,13 +1,13 @@
 <template>
   <div>
     <q-modal v-model="dialogOpened"
-             content-css="min-width:400px;min-height:400px"
+             content-css="min-width:600px;min-height:400px"
              no-backdrop-dismiss
     >
       <q-modal-layout>
         <q-toolbar slot="header">
           <q-toolbar-title>
-            Register new mission
+            Register new mission (for '{{executorId}}')
           </q-toolbar-title>
           <q-btn round dense
                  color="primary"
@@ -17,15 +17,6 @@
         </q-toolbar>
 
         <div class="q-pa-lg">
-          <q-field
-            label="Executor:"
-            :error="!executorId.length"
-            :label-width="4"
-          >
-            <executor-select
-              v-model="executorId"
-            />
-          </q-field>
 
           <q-field
             label="Mission Definition:"
@@ -129,11 +120,17 @@
       AssetSelect,
     },
 
+    props: {
+      executorId: {
+        type: String,
+        required: true,
+      }
+    },
+
     data() {
       return {
         dialogOpened: false,
         executor: null,
-        executorId: '',
         missionDefId: '',
         assetId: '',
         missionId: '',
@@ -163,8 +160,7 @@
       },
 
       okToSubmit() {
-        return this.executorId
-          && this.missionDefId
+        return this.missionDefId
           && this.assetId
           && this.missionId
           && this.name
@@ -192,7 +188,6 @@
     methods: {
       openDialog() {
         this.executor = null
-        this.executorId = ''
         this.missionDefId = ''
         this.assetId = ''
         this.missionId = ''

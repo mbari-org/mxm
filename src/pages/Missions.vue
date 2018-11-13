@@ -37,7 +37,10 @@
       </div>
 
       <div slot="top-right" slot-scope="props" class="fit">
-        <mission-new-button v-on:created="missionCreated"/>
+        <mission-new-button
+          :executor-id="params.executorId"
+          v-on:created="missionCreated"
+        />
       </div>
 
       <q-td slot="body-cell-name" slot-scope="props" :props="props"
