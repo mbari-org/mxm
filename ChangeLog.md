@@ -1,3 +1,9 @@
+2018-11-13
+
+- docker related adjustments while deploying on tsauv
+    - PXS at      http://tsauv.shore.mbari.org/pxs/
+    - graphiql at http://tsauv.shore.mbari.org/pxs-graphiql
+
 2018-11-12
 
 - organize routes so missionDefs and missions are shown under Executor

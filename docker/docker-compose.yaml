@@ -1,7 +1,8 @@
 version: '3.6'
 services:
-  pxs-ui:
-    image: mbari/pxs-ui:0.0.1
+  pxs:
+    container_name: pxs
+    image: mbari/pxs:0.0.1
     ports:
     - "38080:80"
     depends_on:
@@ -9,11 +10,12 @@ services:
     restart: always
 
   graphql-engine:
+    container_name: postgraphile
     image: graphile/postgraphile
     ports:
     - "5000:5000"
     depends_on:
-    - "pxspostgres"
+    - pxspostgres
     restart: always
     command:
       - --connection
@@ -23,8 +25,13 @@ services:
       - --cors
       - --simple-collections
       - only
+      - --graphql
+      - /pxs-graphql
+      - --graphiql
+      - /pxs-graphiql
 
   pxspostgres:
+    container_name: pxspostgres
     image: mbari/pxspostgres:0.0.1
     ports:
     - "25432:5432"

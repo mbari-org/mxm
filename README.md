@@ -39,25 +39,17 @@ http post localhost:5000/graphql query='{
 ```
 
 
-## Build and install
+## Build
 
-### odss-test setup
-
-TODO adjust setup for the recent GraphQL based mechanism.
-
-As `odssadm`:
+NOTE: Again, see if there's any adjustment needed in
+`src/plugins/apollo.js`, then:
 
 ```
-sudo mkdir /var/www/html/pxs-ui
-sudo chown carueda:carueda /var/www/html/pxs-ui
-
-quasar build && \
-(cd dist/spa-mat && tar zcf ../pxs-ui.tgz *) && \
-scp dist/pxs-ui.tgz odss-test.shore.mbari.org:/var/www/html/pxs-ui/ && \
-ssh odss-test.shore.mbari.org <<'EOF'
-  cd /var/www/html/pxs-ui/
-  tar xf pxs-ui.tgz
-EOF
+$ quasar build
 ```
 
-Open http://odss-test.shore.mbari.org/pxs-ui
+### Install
+
+See `docker/README.md`
+
+> TODO remove previous setup on odss-test
