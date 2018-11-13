@@ -1,5 +1,7 @@
 2018-11-13
 
+- adjustment in apollo.js to indicate `uri` for regular
+  dockerized release, and for local development
 - docker related adjustments while deploying on tsauv
     - PXS at      http://tsauv.shore.mbari.org/pxs/
     - graphiql at http://tsauv.shore.mbari.org/pxs-graphiql

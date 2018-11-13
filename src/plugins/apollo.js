@@ -5,8 +5,11 @@ import VueApollo from 'vue-apollo'
 
 export default ({ app, Vue }) => {
   const httpLink = new HttpLink({
-    // uri: 'http://localhost:5000/pxs-graphql'
+    // for regular dockerized release:
     uri: '/pxs-graphql'
+
+    // for local development (quasar dev) with dockerized postgraphile:
+    //uri: 'http://localhost:5000/pxs-graphql'
   })
 
   // Create the apollo client
