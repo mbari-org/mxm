@@ -72,24 +72,30 @@
             <q-btn
               class="q-mr-sm"
               label="Mission Definitions"
+              color="secondary"
               no-wrap no-caps dense
               :to="`/executors/${encodeURIComponent(params.executorId)}/missiondefs`"
             />
 
             <q-btn
+              class="q-mr-sm"
               label="Missions"
+              color="secondary"
               no-wrap no-caps dense
               :to="`/executors/${encodeURIComponent(params.executorId)}/missions`"
             />
 
             <q-btn
+              class="q-mr-sm"
               label="Asset Classes"
+              color="secondary"
               no-wrap no-caps dense
               :to="`/executors/${encodeURIComponent(params.executorId)}/assetclasses`"
             />
 
             <q-btn
               label="Assets"
+              color="secondary"
               no-wrap no-caps dense
               :to="`/executors/${encodeURIComponent(params.executorId)}/assets`"
             />

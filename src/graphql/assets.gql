@@ -1,13 +1,11 @@
-{
-  allAssetsList {
+query assets($executorId: String!) {
+  allAssetsList(condition: {
+    executorId: $executorId
+  }) {
     nodeId
     executorId
-    assetId
     className
+    assetId
     description
-    assetClassByExecutorIdAndClassName {
-      className
-      description
-    }
   }
 }

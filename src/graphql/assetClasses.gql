@@ -1,5 +1,8 @@
-{
-  allAssetClassesList {
+query assetClasses($executorId: String!) {
+  allAssetClassesList(condition: {
+    executorId: $executorId
+  }) {
+    nodeId
     executorId
     className
     description

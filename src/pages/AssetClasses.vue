@@ -99,7 +99,18 @@
     },
 
     apollo: {
-      allAssetClassesList,
+      allAssetClassesList: {
+        query: allAssetClassesList,
+        variables() {
+          return {
+            executorId: this.params.executorId
+          }
+        },
+        update(data) {
+          if (debug) console.log('update: data=', data)
+          return data.allAssetClassesList || []
+        },
+      },
     },
 
     mounted() {

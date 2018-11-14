@@ -36,13 +36,6 @@
         </div>
       </div>
 
-      <div slot="top-right" slot-scope="props" class="fit">
-        <asset-class-new-button
-          :executor-id="params.executorId"
-          v-on:created="assetCreated"
-        />
-      </div>
-
       <q-td slot="body-cell-assetId" slot-scope="props" :props="props"
             style="width:5px"
       >
@@ -64,16 +57,11 @@
 </template>
 
 <script>
-  import AssetClassNewButton from 'components/asset-class-new-button'
   import allAssetsList from '../graphql/assets.gql'
 
   const debug = false
 
   export default {
-    components: {
-      AssetClassNewButton
-    },
-
     data() {
       return {
         allAssetsList: [],
@@ -115,7 +103,18 @@
     },
 
     apollo: {
-      allAssetsList,
+      allAssetsList: {
+        query: allAssetsList,
+        variables() {
+          return {
+            executorId: this.params.executorId
+          }
+        },
+        update(data) {
+          if (debug) console.log('update: data=', data)
+          return data.allAssetsList || []
+        },
+      },
     },
 
     mounted() {
