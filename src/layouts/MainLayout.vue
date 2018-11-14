@@ -31,6 +31,8 @@
           />
         </div>
 
+        <small class="text-weight-thin q-ma-sm">pxsGraphqlUri={{pxsGraphqlUri}}</small>
+
       </q-toolbar>
     </q-layout-header>
 
@@ -57,17 +59,12 @@
 </template>
 
 <script>
-  import {openURL} from 'quasar'
-
   export default {
     data() {
       return {
         leftDrawerOpen: false
       }
     },
-    methods: {
-      openURL
-    }
   }
 </script>
 

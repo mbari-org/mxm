@@ -32,9 +32,13 @@ Open the GraphQL UI: http://localhost:5000/pxs-graphiql
 
 ## docker-compose.yml
 
-Located under `/u/carueda/pxs/` (which I git enabled),
+Located under `/opt/tsauv/pxs/` (which I git enabled),
 `docker-compose.yml` basically only adjusts the local ports
 (pxs=38080; postgraphile=25000; pxspostgres=25432).
+
+NOTE: using a subdir under `/opt/tsauv/` because this is
+an actual space under the tsauv VM (ie., not a share, which
+would cause the mounted db data volume to fail).
 
 ## apache proxy passes
 

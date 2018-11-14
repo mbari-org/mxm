@@ -2,7 +2,7 @@ version: '3.6'
 services:
   pxs:
     container_name: pxs
-    image: mbari/pxs:0.0.1
+    image: mbari/pxs:0.0.2
     ports:
     - "38080:80"
     depends_on:
