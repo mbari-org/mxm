@@ -29,13 +29,6 @@
             no-wrap no-caps
             to="/executors"
           />
-          <q-btn
-            class="col"
-            icon="ballot"
-            label="Asset Classes"
-            no-wrap no-caps
-            to="/assetclasses"
-          />
         </div>
 
       </q-toolbar>
@@ -53,10 +46,6 @@
         <q-item to="/executors">
           <q-item-side icon="settings"/>
           <q-item-main label="Executors"/>
-        </q-item>
-        <q-item to="/assetclasses">
-          <q-item-side icon="ballot"/>
-          <q-item-main label="Asset Classes"/>
         </q-item>
       </q-list>
     </q-layout-drawer>

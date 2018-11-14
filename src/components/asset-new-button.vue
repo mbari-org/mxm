@@ -7,8 +7,7 @@
       <q-modal-layout>
         <q-toolbar slot="header">
           <q-toolbar-title>
-            Register new asset
-            {{ assetClassName ? ` of class '${assetClassName}'` : '' }}
+            Register new asset of class '{{assetClassName}}' (for '{{executorId}}')
           </q-toolbar-title>
           <q-btn round dense
                  color="primary"
@@ -29,19 +28,6 @@
               type="text"
               autofocus
               style="width:24em"
-            />
-          </q-field>
-
-          <q-field
-            v-if="!assetClassName"
-            label="Asset Class:"
-            :error="!className.length"
-            :label-width="4"
-          >
-            <!-- also using v-if trick here. TODO use some lazy-based machanism.. -->
-            <asset-class-field
-              v-if="dialogOpened"
-              v-model="className"
             />
           </q-field>
 
@@ -78,8 +64,7 @@
       @click="openDialog"
     >
       <q-tooltip>
-        Register a new asset
-        {{ assetClassName ? ` of class '${assetClassName}'` : '' }}
+        Register new asset of class '{{assetClassName}}' (for '{{executorId}}')
       </q-tooltip>
     </q-btn>
 
@@ -88,17 +73,19 @@
 
 <script>
   import mutation from '../graphql/assetInsert.gql'
-  import AssetClassField from 'components/asset-class-field'
   import AssetClassNewButton from 'components/asset-class-new-button'
   import {Notify} from 'quasar'
 
   export default {
     components: {
-      AssetClassField,
       AssetClassNewButton,
     },
 
     props: {
+      executorId: {
+        type: String,
+        required: true
+      },
       assetClassName: {
         type: String,
         required: true
@@ -109,29 +96,28 @@
       return {
         dialogOpened: false,
         assetId: '',
-        className: '',
         description: ''
       }
     },
 
     computed: {
       okToSubmit() {
-        return this.assetId && this.className
+        return this.assetId
       }
     },
 
     methods: {
       openDialog() {
         this.assetId = ''
-        this.className = this.assetClassName || ''
         this.description = ''
         this.dialogOpened = true
       },
 
       submit() {
         const variables = {
+          executorId:  this.executorId,
+          className: this.assetClassName,
           assetId: this.assetId,
-          className: this.className,
           description: this.description || null
         }
 

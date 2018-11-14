@@ -24,18 +24,14 @@ which opens: http://localhost:8080/index.html
 Client requests using HTTPie. e.g.:
 
 ```
-http post localhost:5000/graphql query='{
- allAssetsList {
-   nodeId
-   assetId
-   className
-   description
-   assetClassByClassName {
-     className
-     description
-   }
- }}
-'
+http post localhost:5000/pxs-graphql query='{
+  allExecutorsList {
+    nodeId
+    executorId
+    httpEndpoint
+    description
+  }
+}'
 ```
 
 

@@ -38,6 +38,7 @@
 
           <div class="q-ma-xs">
             <asset-class-new-button
+              :executor-id="executorId"
               v-on:created="assetClassCreated"
             />
           </div>
@@ -87,6 +88,10 @@
     },
 
     props: {
+      executorId: {
+        type: String,
+        required: true
+      },
       exclude: {
         type: Array,
         required: false

@@ -12,8 +12,8 @@ query executor($executorId: String!) {
       description
       missionDefAssetClassesByExecutorIdAndMissionDefIdList {
         assetClassName
-        assetClassByAssetClassName {
-          assetsByClassNameList {
+        assetClassByExecutorIdAndAssetClassName {
+          assetsByExecutorIdAndClassNameList {
             assetId
           }
         }

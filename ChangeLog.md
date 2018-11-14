@@ -1,5 +1,17 @@
 2018-11-13
 
+TODO: review contraint about deleting a missionDef's assetClass
+  if there are mission instance referring to corresp asset instance
+
+- model change: asset_classes and assets now associated with executor.
+  The general simplifying idea is that all entities be executor specific.
+
+  This aligns better with enabling a given actual executor
+  (e.g., TethysDash) to expose all its associated definitions
+  in a more "self-contained" fashion. That is, pxs-ui could
+  eventually serve as a frontend to expose PXS functionality
+  supported by (an expanded form of) the TethysDash API.
+
 - mission-new-button: use executorId passed from Missions page
 - adjustment in apollo.js to indicate `uri` for regular
   dockerized release, and for local development

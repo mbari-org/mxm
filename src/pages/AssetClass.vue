@@ -2,7 +2,9 @@
   <q-page class="q-pa-md">
     <q-breadcrumbs active-color="secondary" color="light">
       <q-breadcrumbs-el label="Home" to="/"/>
-      <q-breadcrumbs-el label="AssetClasses" to="/assetclasses"/>
+      <q-breadcrumbs-el label="Executors" to="/executors"/>
+      <q-breadcrumbs-el :label="params.executorId" :to="`/executors/${encodeURIComponent(params.executorId)}`"/>
+      <q-breadcrumbs-el label="AssetClasses" :to="`/executors/${encodeURIComponent(params.executorId)}/assetclasses`"/>
       <q-breadcrumbs-el :label="params.className"/>
       <q-btn
         dense round icon="refresh" class="q-ml-lg" size="sm"
@@ -67,6 +69,7 @@
 
         <div slot="top-right" slot-scope="props" class="fit">
           <asset-new-button
+            :executor-id="params.executorId"
             :asset-class-name="params.className"
             v-on:created="assetCreated"
           />
@@ -75,7 +78,7 @@
         <q-td slot="body-cell-assetId" slot-scope="props" :props="props"
               style="width:5px"
         >
-          <router-link :to="`/assets/${encodeURIComponent(props.row.assetId)}`">
+          <router-link :to="`/executors/${encodeURIComponent(params.executorId)}/assets/${encodeURIComponent(props.row.assetId)}`">
             {{props.row.assetId}}
           </router-link>
         </q-td>
@@ -140,7 +143,7 @@
       },
 
       myAssets() {
-        const list = this.assetClass && this.assetClass.assetsByClassNameList || []
+        const list = this.assetClass && this.assetClass.assetsByExecutorIdAndClassNameList || []
         return list
       },
     },
@@ -150,6 +153,7 @@
         query: assetClass,
         variables() {
           return {
+            executorId: this.params.executorId,
             className: this.params.className
           }
         },

@@ -4,7 +4,7 @@ mutation updateAssetClass($input: UpdateAssetClassInput!) {
       nodeId
       className
       description
-      assetsByClassNameList {
+      assetsByExecutorIdAndClassNameList {
         assetId
       }
     }

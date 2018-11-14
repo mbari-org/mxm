@@ -72,8 +72,8 @@
               <td>Asset:</td>
               <td>
                 {{ mission.assetId }}
-                (<router-link :to="`/assetclasses/${encodeURIComponent(mission.assetByAssetId.className)}`"
-                >{{ mission.assetByAssetId.className }}</router-link>)
+                (<router-link :to="`/executors/${encodeURIComponent(params.executorId)}/assetclasses/${encodeURIComponent(mission.assetByExecutorIdAndAssetId.className)}`"
+                >{{ mission.assetByExecutorIdAndAssetId.className }}</router-link>)
               </td>
             </tr>
             <tr v-if="mission.start">

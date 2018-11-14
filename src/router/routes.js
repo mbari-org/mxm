@@ -32,19 +32,19 @@ const routes = [
         component: () => import('pages/Mission')
       },
       {
-        path: '/assetclasses',
+        path: '/executors/:executorId/assetclasses',
         component: () => import('pages/AssetClasses')
       },
       {
-        path: '/assetclasses/:className',
+        path: '/executors/:executorId/assetclasses/:className',
         component: () => import('pages/AssetClass')
       },
       {
-        path: '/assets',
+        path: '/executors/:executorId/assets',
         component: () => import('pages/Assets')
       },
       {
-        path: '/assets/:assetId',
+        path: '/executors/:executorId/assets/:assetId',
         component: () => import('pages/Asset')
       },
     ]

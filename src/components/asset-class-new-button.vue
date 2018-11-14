@@ -7,7 +7,7 @@
       <q-modal-layout>
         <q-toolbar slot="header">
           <q-toolbar-title>
-            Register new asset class
+            Register new asset class (for '{{executorId}}')
           </q-toolbar-title>
           <q-btn round dense
                  color="primary"
@@ -74,6 +74,13 @@
   import {Notify} from 'quasar'
 
   export default {
+    props: {
+      executorId: {
+        type: String,
+        required: true
+      },
+    },
+
     data() {
       return {
         dialogOpened: false,
@@ -97,6 +104,7 @@
 
       submit() {
         const variables = {
+          executorId: this.executorId,
           className: this.className,
           description: this.description || null
         }

@@ -73,18 +73,19 @@
             >
               <router-link
                 style="color:white;text-decoration:none"
-                :to="`/assetclasses/${encodeURIComponent(c.assetClassName)}`"
+                :to="`/executors/${encodeURIComponent(params.executorId)}/assetclasses/${encodeURIComponent(c.assetClassName)}`"
               >
                 {{c.assetClassName}}
               </router-link>
-              <q-tooltip v-if="c.assetClassByAssetClassName.description">
-                {{c.assetClassByAssetClassName.description}}
+              <q-tooltip v-if="c.assetClassByExecutorIdAndAssetClassName.description">
+                {{c.assetClassByExecutorIdAndAssetClassName.description}}
               </q-tooltip>
             </q-chip>
 
             <asset-class-select-button
               class="col-auto q-ml-md"
               :exclude="myAssetClassNames"
+              :executor-id="params.executorId"
               v-on:selection="assetClassSelection"
             />
           </div>

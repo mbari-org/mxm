@@ -1,10 +1,11 @@
 {
   allAssetsList {
     nodeId
+    executorId
     assetId
     className
     description
-    assetClassByClassName {
+    assetClassByExecutorIdAndClassName {
       className
       description
     }

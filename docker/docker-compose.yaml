@@ -32,16 +32,13 @@ services:
 
   pxspostgres:
     container_name: pxspostgres
-    image: mbari/pxspostgres:0.0.1
+    image: mbari/pxspostgres:0.0.2
     ports:
     - "25432:5432"
     restart: always
     volumes:
-    - db_data:/var/lib/postgresql/data
+    - ${PWD}/db_data:/var/lib/postgresql/data
 
     environment:
       # will trigger the creation of the "pxs" user and database:
       POSTGRES_USER: pxs
-
-volumes:
-  db_data:

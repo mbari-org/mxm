@@ -81,6 +81,18 @@
               no-wrap no-caps dense
               :to="`/executors/${encodeURIComponent(params.executorId)}/missions`"
             />
+
+            <q-btn
+              label="Asset Classes"
+              no-wrap no-caps dense
+              :to="`/executors/${encodeURIComponent(params.executorId)}/assetclasses`"
+            />
+
+            <q-btn
+              label="Assets"
+              no-wrap no-caps dense
+              :to="`/executors/${encodeURIComponent(params.executorId)}/assets`"
+            />
           </div>
 
         </q-card-main>

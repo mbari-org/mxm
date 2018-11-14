@@ -1,13 +1,15 @@
-mutation($className: String!, $description: String) {
+mutation($executorId:String!, $className: String!, $description: String) {
   createAssetClass(
     input: {
       assetClass: {
+        executorId: $executorId
         className: $className
         description: $description
       }
     }
   ) {
     assetClass {
+      executorId
       className
       description
     }

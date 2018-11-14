@@ -6,7 +6,7 @@ query ($executorId: String!, $missionDefId: String!) {
     missionDefAssetClassesByExecutorIdAndMissionDefIdList {
       nodeId
       assetClassName
-      assetClassByAssetClassName {
+      assetClassByExecutorIdAndAssetClassName {
         description
       }
     }

@@ -1,3 +1,5 @@
+<!-- TODO component not used; re-enable it? -->
+
 <template>
   <div class="row">
     <em v-if="retrieving" style="width:14em">
@@ -30,6 +32,10 @@ export default {
   },
 
   props: {
+    executorId: {
+      type: String,
+      required: true
+    },
     value: String,
   },
 
