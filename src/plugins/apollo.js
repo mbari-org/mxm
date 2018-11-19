@@ -5,10 +5,9 @@ import VueApollo from 'vue-apollo'
 
 export default ({ app, Vue }) => {
 
-  // for regular dockerized release: '/pxs-graphql'
-  // for local development (quasar dev) with dockerized postgraphile: 'http://localhost:5000/pxs-graphql'
-  const uri = '/pxs-graphql'
-  // const uri = 'http://localhost:5000/pxs-graphql'
+  const uri = '/pxs-graphql'                             // for regular dockerized release
+  // const uri = 'http://localhost:5000/pxs-graphql'        // for local development with dockerized postgraphile
+  // const uri = 'http://tsauv.shore.mbari.org/pxs-graphql' // for local development against TSAUV
 
   // this to facilitate showing the uri in the UI
   Vue.prototype.pxsGraphqlUri = uri
