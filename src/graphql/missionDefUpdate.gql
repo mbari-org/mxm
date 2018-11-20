@@ -1,7 +1,7 @@
 mutation updateMissionDef($input: UpdateMissionDefInput!) {
   updateMissionDef(input: $input) {
     missionDef {
-      nodeId
+      id
       executorId
       missionDefId
       description
@@ -11,7 +11,7 @@ mutation updateMissionDef($input: UpdateMissionDefInput!) {
 
 # variables: {
 #  "input": {
-#    "nodeId": "..",
+#    "id": "..",
 #    "missionDefPatch": {
 #      "description": "updated description ..."
 #      "missionDefId": ".."

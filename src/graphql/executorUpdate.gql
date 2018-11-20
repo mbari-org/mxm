@@ -1,7 +1,7 @@
 mutation updateExecutor($input: UpdateExecutorInput!) {
   updateExecutor(input: $input) {
     executor {
-      nodeId
+      id
       executorId
       httpEndpoint
       description

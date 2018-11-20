@@ -1,6 +1,6 @@
 {
   allExecutorsList {
-    nodeId
+    id
     executorId
     httpEndpoint
     description

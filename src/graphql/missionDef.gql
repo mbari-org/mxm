@@ -1,17 +1,17 @@
 query ($executorId: String!, $missionDefId: String!) {
   missionDefByExecutorIdAndMissionDefId(executorId: $executorId, missionDefId: $missionDefId) {
-    nodeId
+    id
     missionDefId
     description
     missionDefAssetClassesByExecutorIdAndMissionDefIdList {
-      nodeId
+      id
       assetClassName
       assetClassByExecutorIdAndAssetClassName {
         description
       }
     }
     parametersByExecutorIdAndMissionDefIdList {
-      nodeId
+      id
       name
       type
       required

@@ -12,7 +12,7 @@ mutation updateArgument($input: UpdateArgumentInput!) {
 
 # variables: {
 #  "input": {
-#    "nodeId": "asasasas",
+#    "id": "asasasas",
 #    "argumentPatch": {
 #      "paramValue": "3131"
 #    }

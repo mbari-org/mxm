@@ -1,7 +1,7 @@
 mutation updateMission($input: UpdateMissionInput!) {
   updateMission(input: $input) {
     mission {
-      nodeId
+      id
       missionId
       executorId
       missionDefId
@@ -18,7 +18,7 @@ mutation updateMission($input: UpdateMissionInput!) {
 
 # variables: {
 #  "input": {
-#    "nodeId": "WyJtaXNzaW9ucyIsInNjaTJpbnN0MiJd",
+#    "id": "WyJtaXNzaW9ucyIsInNjaTJpbnN0MiJd",
 #    "missionPatch": {
 #      "description": "updated description ..."
 #    }

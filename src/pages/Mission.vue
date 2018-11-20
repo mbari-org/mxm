@@ -373,7 +373,7 @@
             if (alreadySavedArg) {
               if (alreadySavedArg.paramValue !== arg.paramValue) {
                 if (debug) console.debug(arg.paramName, 'UPDATING', arg.paramName)
-                this.updateArgument(alreadySavedArg.nodeId, arg.paramValue, ok => {
+                this.updateArgument(alreadySavedArg.id, arg.paramValue, ok => {
                   if (ok) {
                     numUpdated++
                   }
@@ -396,7 +396,7 @@
             // arg has the default value.
             if (alreadySavedArg) {
               if (debug) console.debug(arg.paramName, 'DELETING', arg.paramName)
-              this.deleteArgument(alreadySavedArg.nodeId, ok => {
+              this.deleteArgument(alreadySavedArg.id, ok => {
                 if (ok) {
                   numDeleted++
                 }
@@ -433,11 +433,11 @@
           })
       },
 
-      updateArgument(nodeId, paramValue, next) {
+      updateArgument(id, paramValue, next) {
         const mutation = argumentUpdate
         const variables = {
           input: {
-            nodeId,
+            id,
             argumentPatch: {
               paramValue
             }
@@ -454,11 +454,11 @@
           })
       },
 
-      deleteArgument(nodeId, next) {
+      deleteArgument(id, next) {
         const mutation = argumentDelete
         const variables = {
           input: {
-            nodeId
+            id
           }
         }
         this.$apollo.mutate({mutation, variables})
@@ -477,7 +477,7 @@
         const mutation = missionUpdate
         const variables = {
           input: {
-            nodeId: this.mission.nodeId,
+            id: this.mission.id,
             missionPatch: {
               description: val
             }

@@ -14,7 +14,7 @@ mutation updateParameter($input: UpdateParameterInput!) {
 
 # variables: {
 #  "input": {
-#    "nodeId": "asasasas",
+#    "id": "asasasas",
 #    "parameterPatch": {
 #      "name":         ".."
 #      "type":         ".."

@@ -2,7 +2,7 @@ query assetClasses($executorId: String!) {
   allAssetClassesList(condition: {
     executorId: $executorId
   }) {
-    nodeId
+    id
     executorId
     className
     description

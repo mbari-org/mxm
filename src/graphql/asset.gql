@@ -2,7 +2,7 @@ query ($assetId: String!) {
   allAssetsList(condition: {
     assetId: $assetId
   }) {
-    nodeId
+    id
     assetId
     className
     description

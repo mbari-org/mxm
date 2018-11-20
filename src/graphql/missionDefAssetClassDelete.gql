@@ -1,7 +1,7 @@
-mutation($nodeId: ID!) {
+mutation($id: ID!) {
   deleteMissionDefAssetClass(
     input: {
-      nodeId: $nodeId
+      id: $id
     }
   ) {
     missionDefAssetClass {

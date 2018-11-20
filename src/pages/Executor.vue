@@ -180,7 +180,7 @@
         const mutation = executorUpdate
         const variables = {
           input: {
-            nodeId: this.executor.nodeId,
+            id: this.executor.id,
             executorPatch
           }
         }

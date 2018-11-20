@@ -2,7 +2,7 @@ query missions($executorId: String!) {
   allMissionsList(condition: {
     executorId: $executorId
   }) {
-    nodeId
+    id
     executorId
     missionId
     missionDefId

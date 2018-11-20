@@ -131,11 +131,11 @@
       },
 
       updateDescription(val) {
-        if (debug) console.debug('updateDescription val=', val, 'nodeId=', this.asset.nodeId)
+        if (debug) console.debug('updateDescription val=', val, 'id=', this.asset.id)
         const mutation = assetUpdate
         const variables = {
           input: {
-            nodeId: this.asset.nodeId,
+            id: this.asset.id,
             assetPatch: {
               description: val
             }

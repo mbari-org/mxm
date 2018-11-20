@@ -2,12 +2,12 @@ query executor($executorId: String!) {
   allExecutorsList(condition: {
     executorId: $executorId
   }) {
-    nodeId
+    id
     executorId
     httpEndpoint
     description
     missionDefsByExecutorIdList {
-      nodeId
+      id
       missionDefId
       description
       missionDefAssetClassesByExecutorIdAndMissionDefIdList {

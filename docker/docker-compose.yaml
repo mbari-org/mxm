@@ -2,7 +2,7 @@ version: '3.6'
 services:
   pxs:
     container_name: pxs
-    image: mbari/pxs:0.0.2
+    image: mbari/pxs:0.0.3
     ports:
     - "38080:80"
     depends_on:
@@ -25,6 +25,7 @@ services:
       - --cors
       - --simple-collections
       - only
+      - --classic-ids
       - --graphql
       - /pxs-graphql
       - --graphiql

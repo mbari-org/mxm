@@ -1,7 +1,7 @@
 mutation updateAsset($input: UpdateAssetInput!) {
   updateAsset(input: $input) {
     asset {
-      nodeId
+      id
       assetId
       description
     }
@@ -10,7 +10,7 @@ mutation updateAsset($input: UpdateAssetInput!) {
 
 # variables: {
 #  "input": {
-#    "nodeId": "..",
+#    "id": "..",
 #    "assetPatch": {
 #      "description": "new description"
 #    }

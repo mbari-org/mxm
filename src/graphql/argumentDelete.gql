@@ -12,6 +12,6 @@ mutation deleteArgument($input: DeleteArgumentInput!) {
 
 #variables: {
 #  "input": {
-#    "nodeId": ""
+#    "id": ""
 #  }
 #}

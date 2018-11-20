@@ -26,7 +26,7 @@ Client requests using HTTPie. e.g.:
 ```
 http post localhost:5000/pxs-graphql query='{
   allExecutorsList {
-    nodeId
+    id
     executorId
     httpEndpoint
     description

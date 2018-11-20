@@ -1,6 +1,6 @@
 query mission($missionId: String!) {
   missionByMissionId(missionId: $missionId) {
-    nodeId
+    id
     missionId
     name
     assetId
@@ -11,7 +11,7 @@ query mission($missionId: String!) {
     description
     executorId
     argumentsByMissionIdList {
-      nodeId
+      id
       paramName
       paramValue
       parameterByExecutorIdAndMissionDefIdAndParamName {

@@ -237,7 +237,7 @@
 
         const variables = {
           input: {
-            nodeId: this.parameter.nodeId,
+            id: this.parameter.id,
             parameterPatch
           }
         }

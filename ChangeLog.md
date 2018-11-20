@@ -1,4 +1,6 @@
-2018-11-20
+2018-11-20 0.0.3
+
+- set `--classic-ids` so Postgraphile uses `id` (as mandated by the Relay spec) instead of `nodeId`
 
 - a fix and some removals
 

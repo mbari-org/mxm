@@ -1,7 +1,7 @@
 mutation updateAssetClass($input: UpdateAssetClassInput!) {
   updateAssetClass(input: $input) {
     assetClass {
-      nodeId
+      id
       className
       description
       assetsByExecutorIdAndClassNameList {
@@ -13,7 +13,7 @@ mutation updateAssetClass($input: UpdateAssetClassInput!) {
 
 # variables: {
 #  "input": {
-#    "nodeId": "..",
+#    "id": "..",
 #    "assetClassPatch": {
 #      "description": "new description.."
 #    }

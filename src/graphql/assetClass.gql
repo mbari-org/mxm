@@ -3,7 +3,7 @@ query ($executorId: String!, $className: String!) {
     executorId:$executorId,
     className: $className
   }) {
-    nodeId
+    id
     executorId
     className
     description

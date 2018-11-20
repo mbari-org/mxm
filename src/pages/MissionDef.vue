@@ -69,7 +69,7 @@
               color="secondary"
               small
               closable
-              @hide="removeAssetClass(c.nodeId)"
+              @hide="removeAssetClass(c.id)"
             >
               <router-link
                 style="color:white;text-decoration:none"
@@ -330,12 +330,12 @@
           })
       },
 
-      removeAssetClass(nodeId) {
-        if (debug) console.debug('removeAssetClass: nodeId=', nodeId)
+      removeAssetClass(id) {
+        if (debug) console.debug('removeAssetClass: id=', id)
 
         const mutation = missionDefAssetClassDelete
         const variables = {
-          nodeId
+          id
         }
         this.$apollo.mutate({mutation, variables})
           .then((data) => {
@@ -365,7 +365,7 @@
         const mutation = missionDefUpdate
         const variables = {
           input: {
-            nodeId: this.missionDef.nodeId,
+            id: this.missionDef.id,
             missionDefPatch
           }
         }
