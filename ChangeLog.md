@@ -1,3 +1,7 @@
+2018-11-20
+
+- a fix and some removals
+
 2018-11-13
 
 TODO: review contraint about deleting a missionDef's assetClass

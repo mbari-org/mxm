@@ -105,7 +105,6 @@
 <script>
   import executor from '../graphql/executor.gql'
   import mutation from '../graphql/missionInsert.gql'
-  import ExecutorSelect from 'components/executor-select'
   import MissionDefSelect from 'components/mission-def-select'
   import AssetSelect from 'components/asset-select'
   import _ from 'lodash'
@@ -115,7 +114,6 @@
 
   export default {
     components: {
-      ExecutorSelect,
       MissionDefSelect,
       AssetSelect,
     },
