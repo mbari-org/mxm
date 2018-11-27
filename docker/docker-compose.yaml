@@ -2,7 +2,7 @@ version: '3.6'
 services:
   pxs:
     container_name: pxs
-    image: mbari/pxs:0.0.3
+    image: mbari/pxs:0.0.4
     ports:
     - "38080:80"
     depends_on:
@@ -33,7 +33,7 @@ services:
 
   pxspostgres:
     container_name: pxspostgres
-    image: mbari/pxspostgres:0.0.2
+    image: mbari/pxspostgres:0.0.3
     ports:
     - "25432:5432"
     restart: always

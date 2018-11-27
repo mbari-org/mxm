@@ -24,16 +24,16 @@
         <q-card-title>
           Parameter:
           <span class="text-bold" style="font-family:monospace;font-size:larger">
-            {{ parameter.name }}
+            {{ parameter.paramName }}
             <q-popup-edit
-              v-model="parameter.name"
+              v-model="parameter.paramName"
               title="Parameter Name"
               buttons
               @save="updateParameter"
             >
               <q-field>
                 <q-input
-                  v-model.trim="parameter.name"
+                  v-model.trim="parameter.paramName"
                   clearable
                   class="bg-green-1"
                 />
@@ -155,7 +155,6 @@
   import parameter from '../graphql/parameter.gql'
   import parameterUpdate from '../graphql/parameterUpdate.gql'
   import description from 'components/description'
-  import {Notify} from 'quasar'
   import _ from 'lodash'
 
   const debug = false
@@ -192,8 +191,8 @@
         update(data) {
           if (debug) console.log('update: data=', data)
           let parameter = null
-          if (data.parameterByExecutorIdAndMissionDefIdAndName) {
-            parameter = data.parameterByExecutorIdAndMissionDefIdAndName
+          if (data.parameterByExecutorIdAndMissionDefIdAndParamName) {
+            parameter = data.parameterByExecutorIdAndMissionDefIdAndParamName
           }
           this.original = _.cloneDeep(parameter)
           return parameter
@@ -219,8 +218,8 @@
         const mutation = parameterUpdate
         const parameterPatch = {}
 
-        if (!_.isEqual(this.parameter.name, this.original.name)) {
-          parameterPatch.name = this.parameter.name
+        if (!_.isEqual(this.parameter.paramName, this.original.paramName)) {
+          parameterPatch.paramName = this.parameter.paramName
         }
         if (!_.isEqual(this.parameter.type, this.original.type)) {
           parameterPatch.type = this.parameter.type
@@ -244,8 +243,8 @@
         this.$apollo.mutate({mutation, variables})
           .then((data) => {
             if (debug) console.debug('updateParameter: mutation data=', data)
-            if (parameterPatch.name) {
-              this.$router.replace(`/executors/${encodeURIComponent(this.parameter.executorId)}/MissionDefs/${encodeURIComponent(this.parameter.missionDefId)}/params/${encodeURIComponent(parameterPatch.name)}`)
+            if (parameterPatch.paramName) {
+              this.$router.replace(`/executors/${encodeURIComponent(this.parameter.executorId)}/MissionDefs/${encodeURIComponent(this.parameter.missionDefId)}/params/${encodeURIComponent(parameterPatch.paramName)}`)
               return
             }
             this.refreshParameter()

@@ -1,13 +1,13 @@
 query ($executorId: String!, $missionDefId: String!, $paramName: String!) {
-  parameterByExecutorIdAndMissionDefIdAndName(
+  parameterByExecutorIdAndMissionDefIdAndParamName(
     executorId: $executorId,
     missionDefId: $missionDefId,
-    name: $paramName
+    paramName: $paramName
   ) {
     id
     executorId
     missionDefId
-    name
+    paramName
     type
     required
     defaultValue

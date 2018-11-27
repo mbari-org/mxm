@@ -37,8 +37,8 @@
       options() {
         return _.map(this.parameters, p => {
           return {
-            label: p.name,
-            value: p.name,
+            label: p.paramName,
+            value: p.paramName,
           }
         })
       },

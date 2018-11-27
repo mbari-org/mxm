@@ -7,7 +7,6 @@ mutation updateMission($input: UpdateMissionInput!) {
       missionDefId
       description
       assetId
-      name
       startDate
       endDate
       geometry

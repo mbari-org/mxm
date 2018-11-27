@@ -1,7 +1,7 @@
 mutation(
   $executorId: String!
   $missionDefId: String!
-  $name: String!
+  $paramName: String!
   $type: String!
   $required: Boolean!
   $defaultValue: String
@@ -13,7 +13,7 @@ mutation(
         executorId: $executorId
         missionDefId: $missionDefId
         description: $description
-        name: $name
+        paramName: $paramName
         type: $type
         defaultValue: $defaultValue
         required: $required
@@ -24,7 +24,7 @@ mutation(
       executorId
       missionDefId
       description
-      name
+      paramName
       type
       required
     }

@@ -7,7 +7,6 @@ query missions($executorId: String!) {
     missionId
     missionDefId
     assetId
-    name
     description
     startDate
     endDate

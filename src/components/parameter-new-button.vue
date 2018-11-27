@@ -19,12 +19,12 @@
         <div class="q-pa-lg">
           <q-field
             label="Name:"
-            :error="!name.length"
+            :error="!paramName.length"
             :label-width="4"
           >
             <q-input
               class="bg-light-blue-1"
-              v-model.trim="name"
+              v-model.trim="paramName"
               type="text"
               autofocus
               style="width:24em"
@@ -126,7 +126,7 @@
     data() {
       return {
         dialogOpened: false,
-        name: '',
+        paramName: '',
         type: '',
         required: true,
         defaultValue: '',
@@ -136,13 +136,13 @@
 
     computed: {
       okToSubmit() {
-        return this.name && this.type
+        return this.paramName && this.type
       }
     },
 
     methods: {
       openDialog() {
-        this.name = ''
+        this.paramName = ''
         this.type = ''
         this.required = true
         this.defaultValue = null
@@ -154,7 +154,7 @@
         const variables = {
           executorId: this.executorId,
           missionDefId: this.missionDefId,
-          name: this.name,
+          paramName: this.paramName,
           type: this.type,
           required: this.required,
           defaultValue: this.defaultValue,

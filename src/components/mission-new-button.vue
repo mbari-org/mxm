@@ -54,19 +54,6 @@
           </q-field>
 
           <q-field
-            label="Mission Name:"
-            :error="!name.length"
-            :label-width="4"
-          >
-            <q-input
-              class="bg-light-blue-1"
-              v-model.trim="name"
-              type="text"
-              style="width:24em"
-            />
-          </q-field>
-
-          <q-field
             label="Mission Description:"
             :label-width="4"
           >
@@ -132,7 +119,6 @@
         missionDefId: '',
         assetId: '',
         missionId: '',
-        name: '',
         description: '',
         arguments: [],
         startDate: null,
@@ -161,7 +147,6 @@
         return this.missionDefId
           && this.assetId
           && this.missionId
-          && this.name
       }
     },
 
@@ -189,7 +174,6 @@
         this.missionDefId = ''
         this.assetId = ''
         this.missionId = ''
-        this.name = ''
         this.description = ''
         this.arguments = []
         this.startDate = new Date()
@@ -204,7 +188,6 @@
           executorId: this.executorId,
           missionDefId: this.missionDefId,
           assetId: this.assetId,
-          name: this.name,
           description: this.description
         }
         if (this.startDate) {

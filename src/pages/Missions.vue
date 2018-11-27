@@ -43,11 +43,11 @@
         />
       </div>
 
-      <q-td slot="body-cell-name" slot-scope="props" :props="props"
+      <q-td slot="body-cell-missionId" slot-scope="props" :props="props"
             style="width:5px"
       >
         <router-link :to="`/executors/${encodeURIComponent(params.executorId)}/missions/${encodeURIComponent(props.row.missionId)}`">
-          {{props.row.name}}
+          {{props.value}}
         </router-link>
       </q-td>
 
@@ -71,9 +71,9 @@
         allMissionsList: [],
         columns: [
           {
-            field: 'name',
-            name: 'name',
-            label: 'Name',
+            field: 'missionId',
+            name: 'missionId',
+            label: 'Mission ID',
             align: 'left',
             sortable: true
           },

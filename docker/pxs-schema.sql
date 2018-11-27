@@ -53,13 +53,13 @@ create table if not exists parameters
 (
   executor_id varchar not null,
   mission_def_id varchar not null,
-  name varchar not null,
+  param_name varchar not null,
   type varchar not null,
   required boolean default false not null,
   default_value varchar,
   description varchar,
   foreign key (executor_id, mission_def_id) references mission_defs,
-  primary key (executor_id, mission_def_id, name)
+  primary key (executor_id, mission_def_id, param_name)
 )
 ;
 
@@ -69,7 +69,6 @@ create table if not exists missions
   mission_def_id varchar not null,
   mission_id varchar not null,
   asset_id varchar not null,
-  name varchar,
   description varchar,
   start_date timestamp with time zone,
   end_date timestamp with time zone,

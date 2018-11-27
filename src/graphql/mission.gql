@@ -2,7 +2,6 @@ query mission($missionId: String!) {
   missionByMissionId(missionId: $missionId) {
     id
     missionId
-    name
     assetId
     assetByExecutorIdAndAssetId {
       className
@@ -23,7 +22,7 @@ query mission($missionId: String!) {
     }
     missionDefByExecutorIdAndMissionDefId {
       parametersByExecutorIdAndMissionDefIdList {
-        name
+        paramName
         type
         required
         defaultValue

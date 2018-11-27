@@ -3,7 +3,7 @@ mutation updateParameter($input: UpdateParameterInput!) {
     parameter {
       executorId
       missionDefId
-      name
+      paramName
       type
       required
       defaultValue
@@ -16,7 +16,7 @@ mutation updateParameter($input: UpdateParameterInput!) {
 #  "input": {
 #    "id": "asasasas",
 #    "parameterPatch": {
-#      "name":         ".."
+#      "paramName":         ".."
 #      "type":         ".."
 #      "required":     ".."
 #      "defaultValue": ".."

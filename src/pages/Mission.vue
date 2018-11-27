@@ -17,17 +17,20 @@
       <q-card class="q-mb-md">
         <q-card-title>
           Mission: <span class="text-bold">{{ mission.missionId }}</span>
+          <span class="q-ml-lg">
+            <router-link
+              :to="`/executors/${encodeURIComponent(mission.executorId)}/missiondefs/${encodeURIComponent(mission.missionDefId)}`"
+              style="color:gray; font-size:smaller; text-decoration:none"
+            >
+              ({{ mission.missionDefId }})
+              <q-tooltip>Mission Definition</q-tooltip>
+            </router-link>
+          </span>
         </q-card-title>
         <q-card-separator/>
         <q-card-main>
           <table class="mission-table">
             <tbody>
-            <tr>
-              <td>Mission&nbsp;Name:</td>
-              <td class="text-bold">
-                {{ mission.name }}
-              </td>
-            </tr>
             <tr>
               <td>Description:</td>
               <td>
@@ -53,27 +56,18 @@
               </td>
             </tr>
             <tr>
-              <td>Mission&nbsp;Def:</td>
-              <td>
-                <router-link :to="`/executors/${encodeURIComponent(mission.executorId)}/missiondefs/${encodeURIComponent(mission.missionDefId)}`">
-                  {{ mission.missionDefId }}
-                </router-link>
-              </td>
-            </tr>
-            <tr>
-              <td>Executor:</td>
-              <td>
-                <router-link :to="`/executors/${encodeURIComponent(mission.executorId)}`">
-                  {{ mission.executorId }}
-                </router-link>
-              </td>
-            </tr>
-            <tr>
               <td>Asset:</td>
               <td>
                 {{ mission.assetId }}
-                (<router-link :to="`/executors/${encodeURIComponent(params.executorId)}/assetclasses/${encodeURIComponent(mission.assetByExecutorIdAndAssetId.className)}`"
-                >{{ mission.assetByExecutorIdAndAssetId.className }}</router-link>)
+                <span class="q-ml-lg">
+                  <router-link
+                    :to="`/executors/${encodeURIComponent(params.executorId)}/assetclasses/${encodeURIComponent(mission.assetByExecutorIdAndAssetId.className)}`"
+                    style="color:gray; font-size:small; text-decoration:none"
+                  >
+                    ({{ mission.assetByExecutorIdAndAssetId.className }})
+                    <q-tooltip>Asset Class</q-tooltip>
+                  </router-link>
+                </span>
               </td>
             </tr>
             <tr v-if="mission.start">
@@ -92,7 +86,7 @@
       <q-table
         :data="myArguments"
         :columns="argColumns"
-        row-key="paramName"
+        row-key="name"
         :rows-per-page-options="rowsPerPage"
         :pagination.sync="pagination"
         :filter="filter"
@@ -302,11 +296,11 @@
         if (debug) console.debug('alreadySavedArgs=', alreadySavedArgs)
 
         this.myArguments = _.map(parameters, p => {
-          const arg = _.find(alreadySavedArgs, {paramName: p.name})
+          const arg = _.find(alreadySavedArgs, {paramName: p.paramName})
           const paramValue = arg && arg.paramValue || p.defaultValue
-          // console.debug('FIND p.name=', p.name, 'arg=', arg, 'paramValue=', paramValue)
+          // console.debug('FIND p.paramName=', p.paramName, 'arg=', arg, 'paramValue=', paramValue)
           return {
-            paramName: p.name,
+            paramName: p.paramName,
             type: p.type,
             paramValue,
             defaultValue: p.defaultValue,

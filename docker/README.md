@@ -10,14 +10,14 @@ Then:
 
 ```
 $ cd docker/
-$ ./dockerize.sh pxs 0.0.3
+$ ./dockerize.sh pxs 0.0.4
 ```
-generates image `mbari/pxs:0.0.3`
+generates image `mbari/pxs:0.0.4`
 
 ```
-$ ./dockerize.sh pxspostgres 0.0.2
+$ ./dockerize.sh pxspostgres 0.0.3
 ```
-generates image `mbari/pxspostgres:0.0.2`
+generates image `mbari/pxspostgres:0.0.3`
 
 
 ```

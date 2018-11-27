@@ -126,12 +126,12 @@
           />
         </div>
 
-        <q-td slot="body-cell-name" slot-scope="props" :props="props"
+        <q-td slot="body-cell-paramName" slot-scope="props" :props="props"
               style="width:5px;font-family:monospace"
         >
           <router-link
             style="text-decoration:none"
-            :to="`/executors/${encodeURIComponent(params.executorId)}/MissionDefs/${encodeURIComponent(params.missionDefId)}/params/${encodeURIComponent(props.row.name)}`"
+            :to="`/executors/${encodeURIComponent(params.executorId)}/MissionDefs/${encodeURIComponent(params.missionDefId)}/params/${encodeURIComponent(props.value)}`"
           >{{ props.value }}
           </router-link>
 
@@ -197,8 +197,8 @@
         missionDef: null,
         columns: [
           {
-            field: 'name',
-            name: 'name',
+            field: 'paramName',
+            name: 'paramName',
             label: 'Name',
             align: 'left',
             sortable: true

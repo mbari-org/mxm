@@ -3,7 +3,6 @@ mutation(
   $executorId: String!
   $missionDefId: String!
   $assetId: String!
-  $name: String!
   $description: String
 ) {
   createMission(
@@ -13,7 +12,6 @@ mutation(
         executorId: $executorId
         missionDefId: $missionDefId
         assetId: $assetId
-        name: $name
         description: $description
       }
     }
@@ -23,7 +21,6 @@ mutation(
       executorId
       missionDefId
       assetId
-      name
       description
       startDate
       endDate
