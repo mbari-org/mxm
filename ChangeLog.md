@@ -1,5 +1,6 @@
 2018-11-28 0.0.5
 
+- ad hoc appInfo plugin (for now only to display version)
 - add `missionStatus` attribute to mission
   with preliminary enum values
 
