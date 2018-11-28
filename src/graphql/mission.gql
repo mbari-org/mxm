@@ -1,14 +1,15 @@
 query mission($missionId: String!) {
   missionByMissionId(missionId: $missionId) {
     id
+    executorId
+    missionDefId
     missionId
+    missionStatus
     assetId
     assetByExecutorIdAndAssetId {
       className
     }
-    missionDefId
     description
-    executorId
     argumentsByMissionIdList {
       id
       paramName

@@ -91,7 +91,7 @@
 
 <script>
   import executor from '../graphql/executor.gql'
-  import mutation from '../graphql/missionInsert.gql'
+  import missionInsert from '../graphql/missionInsert.gql'
   import MissionDefSelect from 'components/mission-def-select'
   import AssetSelect from 'components/asset-select'
   import _ from 'lodash'
@@ -183,25 +183,29 @@
       },
 
       submit() {
-        const variables = {
-          missionId: this.missionId,
+        const mission = {
           executorId: this.executorId,
           missionDefId: this.missionDefId,
+          missionId: this.missionId,
+          missionStatus: 'DRAFT',
           assetId: this.assetId,
           description: this.description
         }
         if (this.startDate) {
-          variables.start = this.startDate.toISOString()
+          mission.startDate = this.startDate.toISOString()
         }
         if (this.endDate) {
-          variables.end = this.endDate.toISOString()
+          mission.endDate = this.endDate.toISOString()
         }
         // TODO geometry
         if (this.geometry) {
-          variables.geometry = this.geometry
+          mission.geometry = this.geometry
         }
+
+        const variables = {input: {mission}}
         if (debug) console.debug('variables=', variables)
 
+        const mutation = missionInsert
         this.$apollo.mutate({mutation, variables})
           .then((data) => {
             if (debug) console.debug('mutation data=', data)

@@ -70,11 +70,21 @@ create table if not exists parameters
 )
 ;
 
+create type mission_status_type as enum (
+  'draft',
+  'submitted',
+  'queued',
+  'running',
+  'terminated'
+)
+;
+
 create table if not exists missions
 (
   executor_id varchar not null,
   mission_def_id varchar not null,
   mission_id varchar not null,
+  mission_status mission_status_type not null,
   asset_id varchar not null,
   description varchar,
   start_date timestamp with time zone,

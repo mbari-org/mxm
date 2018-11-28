@@ -1,3 +1,8 @@
+2018-11-28 0.0.5
+
+- add `missionStatus` attribute to mission
+  with preliminary enum values
+
 2018-11-28 0.0.4
 
 TODO process promises in sequence

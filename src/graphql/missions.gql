@@ -4,8 +4,9 @@ query missions($executorId: String!) {
   }) {
     id
     executorId
-    missionId
     missionDefId
+    missionId
+    missionStatus
     assetId
     description
     startDate

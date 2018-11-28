@@ -1,25 +1,10 @@
-mutation(
-  $missionId: String!
-  $executorId: String!
-  $missionDefId: String!
-  $assetId: String!
-  $description: String
-) {
-  createMission(
-    input: {
-      mission: {
-        missionId: $missionId
-        executorId: $executorId
-        missionDefId: $missionDefId
-        assetId: $assetId
-        description: $description
-      }
-    }
-  ) {
+mutation($input: CreateMissionInput!) {
+  createMission(input: $input) {
     mission {
-      missionId
       executorId
       missionDefId
+      missionId
+      missionStatus
       assetId
       description
       startDate
@@ -28,3 +13,17 @@ mutation(
     }
   }
 }
+
+#    {
+#      "input": {
+#        "mission": {
+#          "executorId": "x1",
+#          "missionDefId": "tft",
+#          "missionId": "m1",
+#          "assetId": "tiny",
+#          "description": "foo",
+#          "startDate": "-30m",
+#          "missionStatus": "DRAFT"
+#        }
+#      }
+#    }

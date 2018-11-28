@@ -51,6 +51,12 @@
         </router-link>
       </q-td>
 
+      <q-td slot="body-cell-missionStatus" slot-scope="props" :props="props"
+            style="width:5px"
+      >
+        <q-chip dense>{{props.value}}</q-chip>
+      </q-td>
+
     </q-table>
   </q-page>
 </template>
@@ -82,6 +88,13 @@
             name: 'description',
             label: 'Description',
             align: 'left',
+            sortable: true
+          },
+          {
+            field: 'missionStatus',
+            name: 'missionStatus',
+            label: 'Status',
+            align: 'right',
             sortable: true
           }
         ],

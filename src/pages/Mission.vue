@@ -16,7 +16,7 @@
 
       <q-card class="q-mb-md">
         <q-card-title>
-          Mission: <span class="text-bold">{{ mission.missionId }}</span>
+          Mission: <q-chip square class="text-bold">{{ mission.missionId }}</q-chip>
           <span class="q-ml-lg">
             <router-link
               :to="`/executors/${encodeURIComponent(mission.executorId)}/missiondefs/${encodeURIComponent(mission.missionDefId)}`"
@@ -26,6 +26,9 @@
               <q-tooltip>Mission Definition</q-tooltip>
             </router-link>
           </span>
+          <span class="q-ml-lg" style="color:gray; font-size:smaller">
+            Status: <q-chip dense>{{ mission.missionStatus }}</q-chip>
+          </span>
         </q-card-title>
         <q-card-separator/>
         <q-card-main>
@@ -34,7 +37,7 @@
             <tr>
               <td>Description:</td>
               <td>
-                <description :text="mission.description" />
+                <vue-markdown :source="mission.description"/>
                 <q-popup-edit
                   v-model="mission.description"
                   title="Description"
@@ -195,12 +198,12 @@
 
 <script>
   import mission from '../graphql/mission.gql'
-  import Vue from 'vue'
-  import description from '../components/description'
   import argumentInsert from '../graphql/argumentInsert.gql'
   import argumentUpdate from '../graphql/argumentUpdate.gql'
   import argumentDelete from '../graphql/argumentDelete.gql'
   import missionUpdate from '../graphql/missionUpdate.gql'
+  import VueMarkdown from 'vue-markdown'
+  import Vue from 'vue'
   import {Notify} from 'quasar'
   import _ from 'lodash'
 
@@ -208,7 +211,7 @@
 
   export default {
     components: {
-      description,
+      VueMarkdown,
     },
 
     data() {
