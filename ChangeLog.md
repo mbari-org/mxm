@@ -1,3 +1,9 @@
+2018-11-28 0.0.4
+
+TODO process promises in sequence
+
+- complete creation of all associated entities for a new "REST0" executor
+
 2018-11-27 0.0.4
 
 - preliminary rest0 plugin to interact with REST0 executor endpoint,

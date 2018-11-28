@@ -70,7 +70,7 @@
 </template>
 
 <script>
-  import mutation from '../graphql/assetClassInsert.gql'
+  import assetClassInsert from '../graphql/assetClassInsert.gql'
   import {Notify} from 'quasar'
 
   export default {
@@ -109,6 +109,7 @@
           description: this.description || null
         }
 
+        const mutation = assetClassInsert
         this.$apollo.mutate({mutation, variables})
           .then((data) => {
             console.log('mutation data=', data)

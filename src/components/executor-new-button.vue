@@ -93,9 +93,18 @@
 
 <script>
   import executorInsert from '../graphql/executorInsert.gql'
+  import assetClassInsert from '../graphql/assetClassInsert.gql'
+  import assetInsert from '../graphql/assetInsert.gql'
   import missionDefInsert from '../graphql/missionDefInsert.gql'
+  import missionDefAssetClassInsert from '../graphql/missionDefAssetClassInsert.gql'
+  import parameterInsert from '../graphql/parameterInsert.gql'
+
   import apiTypeSelect from '../components/api-type-select'
-  import { getMissionDefs } from 'plugins/rest0'
+  import {
+    getAssetClasses,
+    getMissionDefs,
+  } from 'plugins/rest0'
+
   import {Notify} from 'quasar'
   import _ from 'lodash'
 
@@ -125,8 +134,8 @@
     methods: {
       openDialog() {
         this.executorId = ''
-        this.httpEndpoint = ''
-        this.apiType = ''
+        this.httpEndpoint = 'http://localhost:8040'
+        this.apiType = 'REST0'
         this.description = null
         this.dialogOpened = true
       },
@@ -149,50 +158,192 @@
             if (debug) console.debug('mutation data=', data)
             this.executorCreated(variables.input.executor, data)
           })
-          .catch((error) => {
+          .catch(error => {
             console.error('mutation error=', error)
           })
       },
 
       executorCreated(executor, data) {
-        if (executor.apiType === 'REST0') {
-          getMissionDefs(executor.httpEndpoint)
-            .then(missionDefs => {
-              this.createMissionDefs(executor, missionDefs)
-            })
-
-          // TODO other entities (assetClasses, assets, ...)
-        }
-        else {
+        if (executor.apiType !== 'REST0') {
           this.closeDialogAndNotify(executor)
+          return
         }
+
+        getAssetClasses(executor.httpEndpoint)
+          .then(assetClasses => {
+            this.createAssetClasses(executor, assetClasses)
+              .then(_ => {
+                getMissionDefs(executor.httpEndpoint)
+                  .then(missionDefs => {
+                    this.createMissionDefs(executor, missionDefs)
+                      .then(_ => {
+                        this.closeDialogAndNotify(executor)
+                      })
+                      .catch(error => {
+                        console.error('createMissionDefs: error=', error)
+                      })
+                  })
+              })
+              .catch(error => {
+                console.error('createMissionDefs: error=', error)
+              })
+          })
+      },
+
+      createAssetClasses(executor, assetClasses) {
+        if (debug) console.debug('assetClasses=', assetClasses)
+        return Promise.all(_.map(assetClasses, assetClass =>
+          this.createAssetClass(executor, assetClass)
+        ))
+      },
+
+      createAssetClass(executor, assetClass) {
+        return new Promise((resolve, reject) => {
+          const variables = {
+            executorId: executor.executorId,
+            className: assetClass.assetClassName,
+            description: assetClass.description || null
+          }
+          if (debug) console.debug('createAssetClass: variables=', variables)
+
+          const mutation = assetClassInsert
+          this.$apollo.mutate({mutation, variables})
+            .then(data => {
+              if (debug) console.debug('createAssetClass: mutation data=', data)
+              const assets = assetClass.assets || []
+              this.createAssets(executor, assetClass, assets)
+              resolve(data)
+            })
+            .catch(error => {
+              console.error('createAssetClass: mutation error=', error)
+              reject(error)
+            })
+        })
+      },
+
+      createAssets(executor, assetClass, assets) {
+        if (debug) console.debug('assets=', assets)
+        return Promise.all(_.map(assets, asset =>
+          this.createAsset(executor, assetClass, asset)
+        ))
+      },
+
+      createAsset(executor, assetClass, asset) {
+        return new Promise((resolve, reject) => {
+          const variables = {
+            executorId: executor.executorId,
+            className: assetClass.assetClassName,
+            assetId: asset.assetId,
+            description: asset.description || null
+          }
+          if (debug) console.debug('createAsset: variables=', variables)
+
+          const mutation = assetInsert
+          this.$apollo.mutate({mutation, variables})
+            .then(data => {
+              if (debug) console.debug('createAsset: mutation data=', data)
+              resolve(data)
+            })
+            .catch(error => {
+              console.error('createAsset: mutation error=', error)
+              reject(error)
+            })
+        })
       },
 
       createMissionDefs(executor, missionDefs) {
-        console.debug('missionDefs=', missionDefs)
-        _.each(missionDefs, missionDef => {
+        if (debug) console.debug('missionDefs=', missionDefs)
+        return Promise.all(_.map(missionDefs, missionDef =>
           this.createMissionDef(executor, missionDef)
-        })
-        // TODO do the following after the promises
-        this.closeDialogAndNotify(executor)
+        ))
       },
 
       createMissionDef(executor, missionDef) {
-        const variables = {
-          executorId: executor.executorId,
-          missionDefId: missionDef.missionDefId,
-          description: missionDef.description,
-        }
-        if (debug) console.debug('createMissionDef: variables=', variables)
+        return new Promise((resolve, reject) => {
+          const variables = {
+            executorId: executor.executorId,
+            missionDefId: missionDef.missionDefId,
+            description: missionDef.description,
+          }
+          if (debug) console.debug('createMissionDef: variables=', variables)
 
-        const mutation = missionDefInsert
-        this.$apollo.mutate({mutation, variables})
-          .then((data) => {
-            console.log('mutation data=', data)
-          })
-          .catch((error) => {
-            console.error('mutation error=', error)
-          })
+          const mutation = missionDefInsert
+          this.$apollo.mutate({mutation, variables})
+            .then(data => {
+              if (debug) console.debug('createMissionDef: mutation data=', data)
+              console.debug('createMissionDef: missionDef=', missionDef)
+              const assetClassNames = missionDef.assetClassNames || []
+              this.createAssociatedAssetClasses(executor, missionDef, assetClassNames)
+                .then(data => {
+                  const parameters = missionDef.parameters || []
+                  this.createParameters(executor, missionDef, parameters)
+                  .then(data => {
+                    resolve(data)
+                  })
+                })
+            })
+            .catch(error => {
+              console.error('createMissionDef: mutation error=', error)
+              reject(error)
+            })
+        })
+      },
+
+      createAssociatedAssetClasses(executor, missionDef, assetClassNames) {
+        if (debug) console.debug('createAssociatedAssetClasses=', assetClassNames)
+        return Promise.all(_.map(assetClassNames, assetClassName =>
+          this.createAssociatedAssetClass(executor, missionDef, assetClassName)
+        ))
+      },
+
+      createAssociatedAssetClass(executor, missionDef, assetClassName) {
+        return new Promise((resolve, reject) => {
+          const mutation = missionDefAssetClassInsert
+          const variables = {
+            executorId: executor.executorId,
+            missionDefId: missionDef.missionDefId,
+            assetClassName
+          }
+          this.$apollo.mutate({mutation, variables})
+            .then(data => {
+              resolve(data)
+            })
+            .catch(error => {
+              console.error('createAssociatedAssetClass: mutation error=', error)
+              reject(error)
+            })
+        })
+      },
+
+      createParameters(executor, missionDef, parameters) {
+        if (debug) console.debug('createParameters=', parameters)
+        return Promise.all(_.map(parameters, parameter =>
+          this.createParameter(executor, missionDef, parameter)
+        ))
+      },
+
+      createParameter(executor, missionDef, parameter) {
+        return new Promise((resolve, reject) => {
+          const mutation = parameterInsert
+          const variables = {
+            executorId: executor.executorId,
+            missionDefId: missionDef.missionDefId,
+            paramName: parameter.paramName,
+            type: parameter.type,
+            required: parameter.required,
+            defaultValue: parameter.defaultValue,
+            description: parameter.description,
+          }
+          this.$apollo.mutate({mutation, variables})
+            .then(data => {
+              console.debug(':::: ', parameter.paramName)
+              resolve(data)
+            })
+            .catch(error => {
+              console.error('createParameter: mutation error=', error)
+              reject(error)
+            })
+        })
       },
 
       closeDialogAndNotify(executor) {

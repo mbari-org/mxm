@@ -93,7 +93,7 @@
             <tr>
               <td>Description:</td>
               <td>
-                <description :text="parameter.description" />
+                <vue-markdown :source="parameter.description" />
                 <q-popup-edit
                   v-model="parameter.description"
                   title="Description"
@@ -154,14 +154,14 @@
 <script>
   import parameter from '../graphql/parameter.gql'
   import parameterUpdate from '../graphql/parameterUpdate.gql'
-  import description from 'components/description'
+  import VueMarkdown from 'vue-markdown'
   import _ from 'lodash'
 
   const debug = false
 
   export default {
     components: {
-      description,
+      VueMarkdown,
     },
 
     data() {
