@@ -96,14 +96,6 @@
 
             <q-btn
               class="q-mr-sm"
-              label="Missions"
-              color="secondary"
-              no-wrap no-caps dense
-              :to="`/executors/${encodeURIComponent(params.executorId)}/missions`"
-            />
-
-            <q-btn
-              class="q-mr-sm"
               label="Asset Classes"
               color="secondary"
               no-wrap no-caps dense
@@ -115,6 +107,16 @@
               color="secondary"
               no-wrap no-caps dense
               :to="`/executors/${encodeURIComponent(params.executorId)}/assets`"
+            />
+          </div>
+
+          <div class="q-ma-sm">
+            <q-btn
+              class="q-mr-sm"
+              label="Missions"
+              color="secondary"
+              no-wrap no-caps dense
+              :to="`/executors/${encodeURIComponent(params.executorId)}/missions`"
             />
           </div>
 
