@@ -136,8 +136,8 @@
         this.$apollo.queries.allExecutorsList.refetch()
       },
 
-      executorCreated(data) {
-        if (debug) console.debug('executorCreated data=', data)
+      executorCreated(executor) {
+        if (debug) console.debug('executorCreated executor=', executor)
         this.refresh()
       },
 

@@ -37,7 +37,7 @@
         </q-card-title>
         <q-card-separator/>
         <q-card-main>
-          <description :text="missionDef.description"/>
+          <vue-markdown :source="missionDef.description"/>
           <q-popup-edit
             v-model="missionDef.description"
             title="Description"
@@ -178,7 +178,7 @@
   import missionDefAssetClassDelete from '../graphql/missionDefAssetClassDelete.gql'
   import missionDefUpdate from '../graphql/missionDefUpdate.gql'
   import ParameterNewButton from 'components/parameter-new-button'
-  import description from 'components/description'
+  import VueMarkdown from 'vue-markdown'
   import {Notify} from 'quasar'
   import _ from 'lodash'
 
@@ -188,7 +188,7 @@
     components: {
       AssetClassSelectButton,
       ParameterNewButton,
-      description,
+      VueMarkdown,
     },
 
     data() {

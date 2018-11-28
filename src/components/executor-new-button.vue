@@ -92,8 +92,10 @@
 </template>
 
 <script>
-  import mutation from '../graphql/executorInsert.gql'
+  import executorInsert from '../graphql/executorInsert.gql'
+  import missionDefInsert from '../graphql/missionDefInsert.gql'
   import apiTypeSelect from '../components/api-type-select'
+  import { getMissionDefs } from 'plugins/rest0'
   import {Notify} from 'quasar'
   import _ from 'lodash'
 
@@ -141,21 +143,67 @@
           }
         }
 
+        const mutation = executorInsert
         this.$apollo.mutate({mutation, variables})
           .then((data) => {
-            console.log('mutation data=', data)
-            this.dialogOpened = false
-            Notify.create({
-              message: 'Executor created',
-              timeout: 1000,
-              type: 'info'
-            })
-            this.$emit('created', variables)
+            if (debug) console.debug('mutation data=', data)
+            this.executorCreated(variables.input.executor, data)
           })
           .catch((error) => {
             console.error('mutation error=', error)
           })
-      }
+      },
+
+      executorCreated(executor, data) {
+        if (executor.apiType === 'REST0') {
+          getMissionDefs(executor.httpEndpoint)
+            .then(missionDefs => {
+              this.createMissionDefs(executor, missionDefs)
+            })
+
+          // TODO other entities (assetClasses, assets, ...)
+        }
+        else {
+          this.closeDialogAndNotify(executor)
+        }
+      },
+
+      createMissionDefs(executor, missionDefs) {
+        console.debug('missionDefs=', missionDefs)
+        _.each(missionDefs, missionDef => {
+          this.createMissionDef(executor, missionDef)
+        })
+        // TODO do the following after the promises
+        this.closeDialogAndNotify(executor)
+      },
+
+      createMissionDef(executor, missionDef) {
+        const variables = {
+          executorId: executor.executorId,
+          missionDefId: missionDef.missionDefId,
+          description: missionDef.description,
+        }
+        if (debug) console.debug('createMissionDef: variables=', variables)
+
+        const mutation = missionDefInsert
+        this.$apollo.mutate({mutation, variables})
+          .then((data) => {
+            console.log('mutation data=', data)
+          })
+          .catch((error) => {
+            console.error('mutation error=', error)
+          })
+      },
+
+      closeDialogAndNotify(executor) {
+        this.dialogOpened = false
+        Notify.create({
+          message: `Executor created: ${executor.executorId}`,
+          timeout: 1000,
+          type: 'info'
+        })
+        this.$emit('created', executor)
+      },
     }
   }
 </script>

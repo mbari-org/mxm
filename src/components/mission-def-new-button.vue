@@ -68,7 +68,7 @@
 </template>
 
 <script>
-  import mutation from '../graphql/missionDefInsert.gql'
+  import missionDefInsert from '../graphql/missionDefInsert.gql'
   import {Notify} from 'quasar'
 
   const debug = true
@@ -110,6 +110,7 @@
         }
         if (debug) console.debug('variables=', variables)
 
+        const mutation = missionDefInsert
         this.$apollo.mutate({mutation, variables})
           .then((data) => {
             console.log('mutation data=', data)

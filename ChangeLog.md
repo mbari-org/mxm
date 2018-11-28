@@ -1,5 +1,7 @@
 2018-11-27 0.0.4
 
+- preliminary rest0 plugin to interact with REST0 executor endpoint,
+  initially to populate entities (missionDefs, assetsClasses, ...)
 - executor now has an `apiType` attribute.
   Two possible values at the moment:
     - `REST0`: simple REST based API
