@@ -1,5 +1,6 @@
 2018-11-27 0.0.4
 
+- set `on update cascade on delete cascade` on all foreign keys
 - minor adjustments in data tables:
     - missions: remove `name` from
     - parameters: rename `name` to `paramName`
