@@ -1,0 +1,16 @@
+mutation deleteExecutor($input: DeleteExecutorInput!) {
+  deleteExecutor(input: $input) {
+    executor {
+      id
+      executorId
+      httpEndpoint
+      description
+    }
+  }
+}
+
+#{
+#  "input": {
+#    "id": "WyJleGVjdXRvcnMiLCJ4MSJd"
+#  }
+#}

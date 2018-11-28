@@ -35,7 +35,7 @@
       </div>
 
       <div slot="top-right" slot-scope="props" class="fit">
-        <executor-new-button v-on:created="created"/>
+        <executor-new-button v-on:created="executorCreated"/>
       </div>
 
       <q-td slot="body-cell-executorId" slot-scope="props" :props="props"
@@ -46,6 +46,20 @@
         </router-link>
       </q-td>
 
+      <q-td slot="body-cell-actions" slot-scope="props" :props="props"
+            style="width:5px"
+      >
+        <q-btn
+          dense round
+          icon="delete"
+          color="negative"
+          size="xs"
+          @click="deleteExecutor(props.row)"
+        >
+          <q-tooltip>Delete executor</q-tooltip>
+        </q-btn>
+      </q-td>
+
     </q-table>
   </q-page>
 </template>
@@ -53,6 +67,7 @@
 <script>
   import ExecutorNewButton from 'components/executor-new-button'
   import allExecutorsList from '../graphql/executors.gql'
+  import executorDelete from '../graphql/executorDelete.gql'
 
   const debug = false
 
@@ -85,6 +100,12 @@
             label: 'Endpoint',
             align: 'left',
             sortable: true
+          },
+          {
+            field: 'actions',
+            name: 'actions',
+            label: 'Actions',
+            align: 'right'
           }
         ],
         rowsPerPage: [0],
@@ -108,9 +129,42 @@
         this.$apollo.queries.allExecutorsList.refetch()
       },
 
-      created(data) {
+      executorCreated(data) {
         this.allExecutorsList.splice(0, 0, data)
-      }
+      },
+
+      deleteExecutor(row) {
+        // if (debug)
+          console.debug('deleteExecutor row=', row)
+
+        this.$q.dialog({
+          title: 'Confirm',
+          message: `Are you sure you want to delete executor '${row.executorId}'` +
+            ' and all associated entities?',
+          color: 'negative',
+          ok: `Yes, delete '${row.executorId}'`,
+          cancel: true
+        }).then(() => doIt()).catch(() => {
+        })
+
+        const doIt = () => {
+          const mutation = executorDelete
+          const variables = {
+            input: {
+              id: row.id
+            }
+          }
+          this.$apollo.mutate({mutation, variables})
+            .then((data) => {
+              if (debug) console.debug('deleteExecutor: mutation data=', data)
+              this.refresh()
+              this.$q.notify('Done')
+            })
+            .catch((error) => {
+              console.error('deleteExecutor: mutation error=', error)
+            })
+        }
+      },
     },
 
     watch: {
