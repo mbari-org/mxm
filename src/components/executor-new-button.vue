@@ -56,6 +56,17 @@
             />
           </q-field>
 
+          <q-field
+            label="API Type:"
+            :error="!apiType.length"
+            :label-width="4"
+          >
+            <api-type-select
+              :value="apiType"
+              @change="val => { apiType = val }"
+            />
+          </q-field>
+
         </div>
 
         <q-toolbar slot="footer" color="flat">
@@ -82,21 +93,30 @@
 
 <script>
   import mutation from '../graphql/executorInsert.gql'
+  import apiTypeSelect from '../components/api-type-select'
   import {Notify} from 'quasar'
+  import _ from 'lodash'
+
+  const debug = false
 
   export default {
+    components: {
+      apiTypeSelect,
+    },
+
     data() {
       return {
         dialogOpened: false,
         executorId: '',
         httpEndpoint: '',
+        apiType: '',
         description: ''
       }
     },
 
     computed: {
       okToSubmit() {
-        return this.executorId && this.httpEndpoint
+        return this.executorId && this.httpEndpoint && this.apiType
       }
     },
 
@@ -104,15 +124,21 @@
       openDialog() {
         this.executorId = ''
         this.httpEndpoint = ''
+        this.apiType = ''
         this.description = null
         this.dialogOpened = true
       },
 
       submit() {
         const variables = {
-          executorId: this.executorId,
-          httpEndpoint: this.httpEndpoint,
-          description: this.description
+          input: {
+            executor: {
+              executorId: this.executorId,
+              httpEndpoint: this.httpEndpoint,
+              apiType: this.apiType,
+              description: this.description
+            }
+          }
         }
 
         this.$apollo.mutate({mutation, variables})

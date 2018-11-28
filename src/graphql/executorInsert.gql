@@ -1,17 +1,21 @@
-mutation($executorId: String!, $httpEndpoint: String!, $description: String) {
-  createExecutor(
-    input: {
-      executor: {
-        executorId: $executorId
-        httpEndpoint: $httpEndpoint
-        description: $description
-      }
-    }
-  ) {
+mutation($input: CreateExecutorInput!) {
+  createExecutor(input: $input) {
     executor {
       executorId
       httpEndpoint
+      apiType
       description
     }
   }
 }
+
+#    {
+#      "input": {
+#        "executor": {
+#          "executorId": "x1",
+#          "httpEndpoint": "h:/x1",
+#          "apiType": "REST0",
+#          "description": "..."
+#        }
+#      }
+#    }

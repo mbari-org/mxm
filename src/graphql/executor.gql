@@ -5,6 +5,7 @@ query executor($executorId: String!) {
     id
     executorId
     httpEndpoint
+    apiType
     description
     missionDefsByExecutorIdList {
       id

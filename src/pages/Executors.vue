@@ -102,6 +102,13 @@
             sortable: true
           },
           {
+            field: 'apiType',
+            name: 'apiType',
+            label: 'API Type',
+            align: 'left',
+            sortable: true
+          },
+          {
             field: 'actions',
             name: 'actions',
             label: 'Actions',
@@ -130,12 +137,12 @@
       },
 
       executorCreated(data) {
-        this.allExecutorsList.splice(0, 0, data)
+        if (debug) console.debug('executorCreated data=', data)
+        this.refresh()
       },
 
       deleteExecutor(row) {
-        // if (debug)
-          console.debug('deleteExecutor row=', row)
+        if (debug) console.debug('deleteExecutor row=', row)
 
         this.$q.dialog({
           title: 'Confirm',

@@ -65,6 +65,23 @@
                 </q-popup-edit>
               </td>
             </tr>
+            <tr>
+              <td>API Type:</td>
+              <td>
+                <span class="text-bold">
+                  {{executor.apiType}}
+                </span>
+                <q-popup-edit
+                  v-model="executor.apiType"
+                  title="API Type"
+                >
+                  <api-type-select
+                    :value="executor.apiType"
+                    v-on:change="updateApiType"
+                  />
+                </q-popup-edit>
+              </td>
+            </tr>
             </tbody>
           </table>
 
@@ -116,6 +133,7 @@
 <script>
   import executor from '../graphql/executor.gql'
   import executorUpdate from '../graphql/executorUpdate.gql'
+  import apiTypeSelect from '../components/api-type-select'
   import description from '../components/description'
   import {Notify} from 'quasar'
   import _ from 'lodash'
@@ -124,6 +142,7 @@
 
   export default {
     components: {
+      apiTypeSelect,
       description,
     },
 
@@ -172,7 +191,13 @@
       },
 
       updateHttpEndpoint(httpEndpoint) {
+        // TODO broader consequences of changing http endpoint
         this.updateExecutor({httpEndpoint})
+      },
+
+      updateApiType(apiType) {
+        // TODO broader consequences of changing API Type
+        this.updateExecutor({apiType})
       },
 
       updateExecutor(executorPatch) {
@@ -193,6 +218,15 @@
             if (executorPatch.httpEndpoint) {
               this.executor.httpEndpoint = executorPatch.httpEndpoint
             }
+            if (executorPatch.apiType) {
+              this.executor.apiType = executorPatch.apiType
+            }
+            Notify.create({
+              message: `Executor updated (${_.join(_.keys(executorPatch))})`,
+              timeout: 1000,
+              type: 'info'
+            })
+
           })
           .catch((error) => {
             console.error('updateDescription: mutation error=', error)

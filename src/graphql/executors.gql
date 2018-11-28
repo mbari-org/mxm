@@ -3,6 +3,7 @@
     id
     executorId
     httpEndpoint
+    apiType
     description
   }
 }

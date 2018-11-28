@@ -1,0 +1,23 @@
+query executorApiTypes {
+  __type(name: "ExecutorApiType") {
+    enumValues {
+      name
+    }
+  }
+}
+
+# response:
+#    {
+#      "data": {
+#        "__type": {
+#          "enumValues": [
+#            {
+#              "name": "REST0"
+#            },
+#            {
+#              "name": "GRAPHQL"
+#            }
+#          ]
+#        }
+#      }
+#    }

@@ -1,7 +1,14 @@
+create type executor_api_type as enum (
+  'rest0',
+  'graphql'
+)
+;
+
 create table if not exists executors
 (
   executor_id varchar not null,
   http_endpoint varchar not null,
+  api_type executor_api_type not null,
   description varchar,
   primary key (executor_id)
 )

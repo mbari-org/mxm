@@ -1,5 +1,12 @@
 2018-11-27 0.0.4
 
+- executor now has an `apiType` attribute.
+  Two possible values at the moment:
+    - `REST0`: simple REST based API
+    - `GRAPHQL`: More sophisticated GraphQL interface (specific TBD)
+
+  Idea is to continue experimenting with `REST0` for the TFT executor
+
 - Executors: allow to delete executor
 - set `on update cascade on delete cascade` on all foreign keys
 - minor adjustments in data tables:
