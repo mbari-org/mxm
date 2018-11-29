@@ -1,5 +1,7 @@
 2018-11-28 0.0.5
 
+- preparations for mission actions against the external executor endpoint:
+      - validate, run, cancel, check status; delete...
 - ad hoc appInfo plugin (for now only to display version)
 - add `missionStatus` attribute to mission
   with preliminary enum values

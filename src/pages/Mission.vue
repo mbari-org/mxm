@@ -17,7 +17,7 @@
       <q-card class="q-mb-md">
         <q-card-title>
           Mission: <q-chip square class="text-bold">{{ mission.missionId }}</q-chip>
-          <span class="q-ml-lg">
+          <span>
             <router-link
               :to="`/executors/${encodeURIComponent(mission.executorId)}/missiondefs/${encodeURIComponent(mission.missionDefId)}`"
               style="color:gray; font-size:smaller; text-decoration:none"
@@ -28,6 +28,13 @@
           </span>
           <span class="q-ml-lg" style="color:gray; font-size:smaller">
             Status: <q-chip dense>{{ mission.missionStatus }}</q-chip>
+            <q-btn
+              v-if="mission.missionStatus !== 'DRAFT'"
+              icon="refresh"
+              dense color="tertiary"
+              class="q-ml-sm"
+              size="xs"
+            />
           </span>
         </q-card-title>
         <q-card-separator/>
@@ -39,6 +46,7 @@
               <td>
                 <vue-markdown :source="mission.description"/>
                 <q-popup-edit
+                  v-if="mission.missionStatus === 'DRAFT'"
                   v-model="mission.description"
                   title="Description"
                   buttons
@@ -85,6 +93,46 @@
           </table>
         </q-card-main>
       </q-card>
+
+      <div class="row q-mb-sm">
+        <div style="margin-left:auto;margin-right:auto">
+          <q-btn
+            label="Validate"
+            icon="check"
+            push color="primary"
+            size="sm"
+            :disable="mission.missionStatus !== 'DRAFT'"
+            @click="validateMission"
+          />
+          <q-btn
+            label="Run"
+            icon="settings"
+            push color="primary"
+            class="q-ml-sm"
+            size="sm"
+            :disable="mission.missionStatus !== 'DRAFT'"
+            @click="runMission"
+          />
+          <q-btn
+            label="Cancel"
+            icon="cancel"
+            push color="primary"
+            class="q-ml-sm"
+            size="sm"
+            :disable="mission.missionStatus !== 'RUNNING' && mission.missionStatus !== 'QUEUED'"
+            @click="cancelMission"
+          />
+          <q-btn
+            label="Delete"
+            icon="delete"
+            push color="primary"
+            class="q-ml-sm"
+            size="sm"
+            :disable="mission.missionStatus !== 'DRAFT' && mission.missionStatus === 'TERMINATED'"
+            @click="deleteMission"
+          />
+        </div>
+      </div>
 
       <q-table
         :data="myArguments"
@@ -145,23 +193,33 @@
           <q-td key="paramValue" :props="props"
                 style="width:5px"
           >
-            <div :class="'round-borders q-pa-xs ' +
-                  (props.row.paramValue !== props.row.defaultValue ? 'bg-green-11 text-bold' : 'bg-green-1')">
+            <div
+              v-if="!props.row.paramValue && props.row.required"
+              class="round-borders q-pa-xs bg-red-12 text-bold" style="color:white"
+            > ?
+            </div>
+            <div v-else-if="(props.row.paramValue || '') !== (props.row.defaultValue || '')"
+              class="round-borders q-pa-xs bg-green-11 text-bold"
+            >
               {{ props.row.paramValue }}
+            </div>
+            <div v-else
+              class="round-borders q-pa-xs bg-green-1"
+            >
+              {{ props.row.paramValue }}&nbsp;
             </div>
 
             <q-popup-edit
+              v-if="mission.missionStatus === 'DRAFT'"
               v-model="props.row.paramValue"
               :title="`${props.row.paramName}`"
               buttons
-              :validate="validateParamValue"
             >
               <q-field>
                 <q-input
                   v-model.trim="props.row.paramValue"
                   clearable
                   :clear-value="props.row.defaultValue"
-                  :error="!props.row.paramValue"
                 />
               </q-field>
             </q-popup-edit>
@@ -307,6 +365,7 @@
             type: p.type,
             paramValue,
             defaultValue: p.defaultValue,
+            required: p.required,
             description: p.description,
           }
         })
@@ -489,6 +548,11 @@
             console.error('updateDescription: mutation error=', error)
           })
       },
+
+      validateMission() { this.$q.notify('TODO validateMission') }, // TODO
+      runMission()      { this.$q.notify('TODO runMission') }, // TODO
+      cancelMission()   { this.$q.notify('TODO cancelMission') }, // TODO
+      deleteMission()   { this.$q.notify('TODO deleteMission') }, // TODO
     },
 
     watch: {
