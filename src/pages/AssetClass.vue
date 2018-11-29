@@ -20,7 +20,7 @@
         </q-card-title>
         <q-card-separator/>
         <q-card-main>
-          <description :text="assetClass.description" />
+          <pxs-markdown :text="assetClass.description"/>
           <q-popup-edit
             v-model="assetClass.description"
             title="Description"
@@ -94,10 +94,10 @@
 </template>
 
 <script>
-  import description from '../components/description'
   import assetClass from '../graphql/assetClass.gql'
   import AssetNewButton from 'components/asset-new-button'
   import assetClassUpdate from '../graphql/assetClassUpdate.gql'
+  import PxsMarkdown from 'components/pxs-markdown'
   import {Notify} from 'quasar'
   import _ from 'lodash'
 
@@ -106,7 +106,7 @@
   export default {
     components: {
       AssetNewButton,
-      description,
+      PxsMarkdown,
     },
 
     data() {

@@ -44,7 +44,7 @@
             <tr>
               <td>Description:</td>
               <td>
-                <vue-markdown :source="mission.description"/>
+                <pxs-markdown :text="mission.description"/>
                 <q-popup-edit
                   v-if="mission.missionStatus === 'DRAFT'"
                   v-model="mission.description"
@@ -260,7 +260,7 @@
   import argumentUpdate from '../graphql/argumentUpdate.gql'
   import argumentDelete from '../graphql/argumentDelete.gql'
   import missionUpdate from '../graphql/missionUpdate.gql'
-  import VueMarkdown from 'vue-markdown'
+  import PxsMarkdown from 'components/pxs-markdown'
   import Vue from 'vue'
   import {Notify} from 'quasar'
   import _ from 'lodash'
@@ -269,7 +269,7 @@
 
   export default {
     components: {
-      VueMarkdown,
+      PxsMarkdown,
     },
 
     data() {

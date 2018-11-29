@@ -1,5 +1,6 @@
 2018-11-28 0.0.5
 
+- add `<pxs-markdown>` to unify display of descriptions
 - preparations for mission actions against the external executor endpoint:
       - validate, run, cancel, check status; delete...
 - ad hoc appInfo plugin (for now only to display version)

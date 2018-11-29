@@ -93,7 +93,7 @@
             <tr>
               <td>Description:</td>
               <td>
-                <vue-markdown :source="parameter.description" />
+                <pxs-markdown :text="parameter.description"/>
                 <q-popup-edit
                   v-model="parameter.description"
                   title="Description"
@@ -154,14 +154,14 @@
 <script>
   import parameter from '../graphql/parameter.gql'
   import parameterUpdate from '../graphql/parameterUpdate.gql'
-  import VueMarkdown from 'vue-markdown'
+  import PxsMarkdown from 'components/pxs-markdown'
   import _ from 'lodash'
 
   const debug = false
 
   export default {
     components: {
-      VueMarkdown,
+      PxsMarkdown,
     },
 
     data() {

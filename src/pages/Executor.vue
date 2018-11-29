@@ -21,7 +21,7 @@
         <q-card-separator/>
         <q-card-main>
           <div>
-            <description :text="executor.description"/>
+            <pxs-markdown :text="executor.description"/>
             <q-popup-edit
               v-model="executor.description"
               title="Description"
@@ -136,7 +136,7 @@
   import executor from '../graphql/executor.gql'
   import executorUpdate from '../graphql/executorUpdate.gql'
   import apiTypeSelect from '../components/api-type-select'
-  import description from '../components/description'
+  import PxsMarkdown from '../components/pxs-markdown'
   import {Notify} from 'quasar'
   import _ from 'lodash'
 
@@ -145,7 +145,7 @@
   export default {
     components: {
       apiTypeSelect,
-      description,
+      PxsMarkdown,
     },
 
     data() {

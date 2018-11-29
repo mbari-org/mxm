@@ -67,7 +67,6 @@
 <script>
   import MissionDefNewButton from 'components/mission-def-new-button'
   import allMissionDefsList from '../graphql/missionDefs.gql'
-  import description from '../components/description'
   import {Notify} from 'quasar'
   import _ from 'lodash'
 
@@ -76,7 +75,6 @@
   export default {
     components: {
       MissionDefNewButton,
-      description,
     },
 
     data() {
