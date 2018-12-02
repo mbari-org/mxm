@@ -92,19 +92,19 @@ create table if not exists missions
   geometry json,
   foreign key (executor_id, mission_def_id) references mission_defs on update cascade on delete cascade,
   foreign key (executor_id, asset_id) references assets on update cascade on delete cascade,
-  primary key (mission_id)
+  primary key (executor_id, mission_def_id, mission_id)
 )
 ;
 
 create table if not exists arguments
 (
-  mission_id varchar not null,
   executor_id varchar not null,
   mission_def_id varchar not null,
+  mission_id varchar not null,
   param_name varchar not null,
   param_value varchar not null,
-  primary key (mission_id, param_name),
-  foreign key (mission_id) references missions (mission_id) on update cascade on delete cascade,
-  foreign key (executor_id, mission_def_id, param_name) references parameters on update cascade on delete cascade
+  foreign key (executor_id, mission_def_id, mission_id) references missions on update cascade on delete cascade,
+  foreign key (executor_id, mission_def_id, param_name) references parameters on update cascade on delete cascade,
+  primary key (executor_id, mission_def_id, mission_id, param_name)
 )
 ;

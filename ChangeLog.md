@@ -1,3 +1,7 @@
+2018-12-01 0.0.6
+
+- missions primary key is now: (executor_id, mission_def_id, mission_id)
+
 2018-11-28 0.0.5
 
 - add `<pxs-markdown>` to unify display of descriptions

@@ -323,14 +323,16 @@
         query: mission,
         variables() {
           return {
+            executorId: this.params.executorId,
+            missionDefId: this.params.missionDefId,
             missionId: this.params.missionId,
           }
         },
         update(data) {
           let res = null
           if (debug) console.debug('update: data=', data)
-          if (data.missionByMissionId) {
-            res = data.missionByMissionId
+          if (data.missionByExecutorIdAndMissionDefIdAndMissionId) {
+            res = data.missionByExecutorIdAndMissionDefIdAndMissionId
           }
           Vue.nextTick(() => {
             this.setMyArguments(res)
@@ -351,7 +353,7 @@
 
       setMyArguments(mission) {
         if (debug) console.debug('setMyArguments mission=', mission)
-        const alreadySavedArgs = _.get(mission, 'argumentsByMissionIdList') || []
+        const alreadySavedArgs = _.get(mission, 'argumentsByExecutorIdAndMissionDefIdAndMissionIdList') || []
         const parameters = _.get(mission, 'missionDefByExecutorIdAndMissionDefId.parametersByExecutorIdAndMissionDefIdList') || []
 
         if (debug) console.debug('alreadySavedArgs=', alreadySavedArgs)
@@ -388,7 +390,7 @@
         }
         this.savingArgs = true
 
-        const alreadySavedArgs = _.get(this.mission, 'argumentsByMissionIdList') || []
+        const alreadySavedArgs = _.get(this.mission, 'argumentsByExecutorIdAndMissionDefIdAndMissionIdList') || []
         if (debug) console.debug('saveArguments: alreadySavedArgs=', alreadySavedArgs)
 
         let numInserted = 0

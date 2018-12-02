@@ -28,7 +28,7 @@ const routes = [
         component: () => import('pages/Missions')
       },
       {
-        path: '/executors/:executorId/missions/:missionId',
+        path: '/executors/:executorId/missiondefs/:missionDefId/missions/:missionId',
         component: () => import('pages/Mission')
       },
       {

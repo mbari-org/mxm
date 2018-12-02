@@ -1,5 +1,9 @@
-query mission($missionId: String!) {
-  missionByMissionId(missionId: $missionId) {
+query mission($executorId: String!, $missionDefId: String!, $missionId: String!) {
+  missionByExecutorIdAndMissionDefIdAndMissionId(
+    executorId: $executorId,
+    missionDefId: $missionDefId,
+    missionId: $missionId
+  ) {
     id
     executorId
     missionDefId
@@ -10,7 +14,7 @@ query mission($missionId: String!) {
       className
     }
     description
-    argumentsByMissionIdList {
+    argumentsByExecutorIdAndMissionDefIdAndMissionIdList {
       id
       paramName
       paramValue
