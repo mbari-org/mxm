@@ -1,8 +1,8 @@
 {
   "name": "pxs-ui",
   "version": "1.0.0",
-  "description": "PXS UI",
-  "productName": "PXS UI",
+  "description": "PXS",
+  "productName": "PXS",
   "cordovaId": "org.cordova.quasar.app",
   "author": "Carlos Rueda <carueda@mbari.org>",
   "private": true,

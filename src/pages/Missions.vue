@@ -51,6 +51,22 @@
         </router-link>
       </q-td>
 
+      <q-td slot="body-cell-missionDefId" slot-scope="props" :props="props"
+            style="width:5px"
+      >
+        <router-link :to="`/executors/${encodeURIComponent(params.executorId)}/missiondefs/${encodeURIComponent(props.value)}`">
+          {{props.value}}
+        </router-link>
+      </q-td>
+
+      <q-td slot="body-cell-assetId" slot-scope="props" :props="props"
+            style="width:5px"
+      >
+        <router-link :to="`/executors/${encodeURIComponent(params.executorId)}/assets/${encodeURIComponent(props.value)}`">
+          {{props.value}}
+        </router-link>
+      </q-td>
+
       <q-td slot="body-cell-missionStatus" slot-scope="props" :props="props"
             style="width:5px"
       >
@@ -84,9 +100,23 @@
             sortable: true
           },
           {
+            field: 'missionDefId',
+            name: 'missionDefId',
+            label: 'Definition',
+            align: 'left',
+            sortable: true
+          },
+          {
+            field: 'assetId',
+            name: 'assetId',
+            label: 'Asset',
+            align: 'left',
+            sortable: true
+          },
+          {
             field: 'description',
             name: 'description',
-            label: 'Description',
+            label: 'Mission Description',
             align: 'left',
             sortable: true
           },

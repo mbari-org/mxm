@@ -17,7 +17,7 @@
         </q-btn>
 
         <q-toolbar-title shrink>
-          <router-link style="color:white;text-decoration:none" to="/">PXS UI</router-link>
+          <router-link style="color:white;text-decoration:none" to="/">PXS</router-link>
           <div slot="subtitle">prototype {{pxsAppInfo.version}}</div>
         </q-toolbar-title>
 
