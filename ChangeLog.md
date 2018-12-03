@@ -1,3 +1,7 @@
+2018-12-03 0.0.6
+
+- open mission route right upon mission creation
+
 2018-12-01 0.0.6
 
 - missions primary key is now: (executor_id, mission_def_id, mission_id)

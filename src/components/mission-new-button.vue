@@ -17,6 +17,11 @@
         </q-toolbar>
 
         <div class="q-pa-lg">
+          <p style="color:gray;font-size:small">
+            The mission will initially be registered as a 'DRAFT.'
+            <br/>
+            You can then edit any arguments and submit it for execution.
+          </p>
 
           <q-field
             label="Mission Definition:"
@@ -71,8 +76,8 @@
           <q-toolbar-title/>
           <q-btn dense
                  :color="okToSubmit ? 'primary' : 'light'"
-                 @click="submit"
-                 label="Submit"
+                 @click="registerMission"
+                 label="Register"
                  :disable="!okToSubmit"
           />
         </q-toolbar>
@@ -182,7 +187,7 @@
         this.$apollo.queries.executor.refetch()
       },
 
-      submit() {
+      registerMission() {
         const mission = {
           executorId: this.executorId,
           missionDefId: this.missionDefId,
@@ -215,7 +220,8 @@
               timeout: 1000,
               type: 'info'
             })
-            this.$emit('created', variables)
+            this.$router.push(`/executors/${encodeURIComponent(this.executorId)}/missiondefs/${encodeURIComponent(this.missionDefId)}/missions/${encodeURIComponent(this.missionId)}`)
+            // this.$emit('created', variables)
           })
           .catch((error) => {
             console.error('mutation error=', error)
