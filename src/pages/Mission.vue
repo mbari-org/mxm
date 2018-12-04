@@ -103,7 +103,9 @@
             size="sm"
             :disable="mission.missionStatus !== 'DRAFT'"
             @click="validateMission"
-          />
+          >
+            <q-tooltip>Validate mission against external executor {{params.executorId}}</q-tooltip>
+          </q-btn>
           <q-btn
             label="Run"
             icon="settings"
@@ -112,7 +114,9 @@
             size="sm"
             :disable="mission.missionStatus !== 'DRAFT'"
             @click="runMission"
-          />
+          >
+            <q-tooltip>Request execution to the external executor {{params.executorId}}</q-tooltip>
+          </q-btn>
           <q-btn
             label="Cancel"
             icon="cancel"
@@ -121,7 +125,9 @@
             size="sm"
             :disable="mission.missionStatus !== 'RUNNING' && mission.missionStatus !== 'QUEUED'"
             @click="cancelMission"
-          />
+          >
+            <q-tooltip>Request cancelation of submitted mission to the external executor {{params.executorId}}</q-tooltip>
+          </q-btn>
           <q-btn
             label="Delete"
             icon="delete"
@@ -130,7 +136,9 @@
             size="sm"
             :disable="mission.missionStatus !== 'DRAFT' && mission.missionStatus === 'TERMINATED'"
             @click="deleteMission"
-          />
+          >
+            <q-tooltip>Delete this draft mission</q-tooltip>
+          </q-btn>
         </div>
       </div>
 
@@ -233,7 +241,7 @@
 
           <q-td key="description" :props="props"
           >
-            <pxs-markdown simple :text="props.row.description"/>
+            <pxs-markdown simple hide-empty :text="props.row.description"/>
           </q-td>
 
         </q-tr>
@@ -261,6 +269,7 @@
   import argumentUpdate from '../graphql/argumentUpdate.gql'
   import argumentDelete from '../graphql/argumentDelete.gql'
   import missionUpdate from '../graphql/missionUpdate.gql'
+  import missionDelete from '../graphql/missionDelete.gql'
   import PxsMarkdown from 'components/pxs-markdown'
   import {
     postMission,
@@ -576,14 +585,26 @@
 
       validateMission() { this.$q.notify('TODO validateMission') }, // TODO
       cancelMission()   { this.$q.notify('TODO cancelMission') }, // TODO
-      deleteMission()   { this.$q.notify('TODO deleteMission') }, // TODO
 
       runMission() {
-        const httpEndpoint = this.executor.httpEndpoint
-        //console.debug('httpEndpoint=', this.executor.httpEndpoint)
-        //console.debug('apiType=', this.executor.apiType)
+        if (this.executor.apiType !== 'REST0') {
+          this.$q.notify('TODO runMission for apiType=' + this.executor.apiType)
+          return
+        }
 
-        if (this.executor.apiType === 'REST0') {
+        this.$q.dialog({
+          title: 'Confirm',
+          message: `Submit mission '${this.mission.missionId}' for execution?`,
+          color: 'primary',
+          cancel: true
+        }).then(() => doIt()).catch(() => {
+        })
+
+        const doIt = () => {
+          const httpEndpoint = this.executor.httpEndpoint
+          //console.debug('httpEndpoint=', this.executor.httpEndpoint)
+          //console.debug('apiType=', this.executor.apiType)
+
           // console.debug('myArguments=', this.myArguments)
           const parametersChanged = this.parametersChanged()
           console.debug('parametersChanged=', parametersChanged)
@@ -615,8 +636,34 @@
               console.error('createMissionDefs: error=', error)
             })
         }
-        else {
-          this.$q.notify('TODO runMission for apiType=' + this.executor.apiType)
+      },
+
+      deleteMission() {
+        this.$q.dialog({
+          title: 'Confirm',
+          message: `Are you sure you want to delete this mission '${this.mission.missionId}'`,
+          color: 'negative',
+          ok: `Yes, delete '${this.mission.missionId}'`,
+          cancel: true
+        }).then(() => doIt()).catch(() => {
+        })
+
+        const doIt = () => {
+          const mutation = missionDelete
+          const variables = {
+            input: {
+              id: this.mission.id,
+            }
+          }
+          this.$apollo.mutate({mutation, variables})
+            .then((data) => {
+              if (debug) console.debug('deleteMission: mutation data=', data)
+              this.$router.replace(`/executors/${encodeURIComponent(this.mission.executorId)}`)
+              this.$q.notify('Done')
+            })
+            .catch((error) => {
+              console.error('deleteMission: mutation error=', error)
+            })
         }
       },
     },

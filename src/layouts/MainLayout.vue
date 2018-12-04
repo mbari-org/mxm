@@ -16,6 +16,8 @@
           <q-icon name="menu"/>
         </q-btn>
 
+        <img src="statics/new_mbari_logo.png" width="60px" class="q-ml-lg q-mr-lg">
+
         <q-toolbar-title shrink>
           <router-link style="color:white;text-decoration:none" to="/">PXS</router-link>
           <div slot="subtitle">prototype {{pxsAppInfo.version}}</div>

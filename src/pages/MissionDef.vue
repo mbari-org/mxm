@@ -154,7 +154,7 @@
 
         <q-td slot="body-cell-description" slot-scope="props" :props="props"
         >
-          <pxs-markdown simple :text="props.value"/>
+          <pxs-markdown simple hide-empty :text="props.value"/>
         </q-td>
 
       </q-table>

@@ -11,8 +11,9 @@
 </script>
 
 <style>
-  .white-space-normal {
+  .markdownText {
     white-space: normal !important;
+    line-height: 1.5;
   }
 </style>
 

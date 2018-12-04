@@ -50,19 +50,25 @@
         </router-link>
       </q-td>
 
+      <q-td slot="body-cell-description" slot-scope="props" :props="props"
+      >
+        <pxs-markdown simple hide-empty :text="props.value"/>
+      </q-td>
     </q-table>
   </q-page>
 </template>
 
 <script>
-  import AssetClassNewButton from 'components/asset-class-new-button'
   import allAssetClassesList from '../graphql/assetClasses.gql'
+  import AssetClassNewButton from 'components/asset-class-new-button'
+  import PxsMarkdown from 'components/pxs-markdown'
 
   const debug = false
 
   export default {
     components: {
-      AssetClassNewButton
+      AssetClassNewButton,
+      PxsMarkdown,
     },
 
     data() {

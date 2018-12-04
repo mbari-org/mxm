@@ -83,6 +83,10 @@
           </router-link>
         </q-td>
 
+        <q-td slot="body-cell-description" slot-scope="props" :props="props"
+        >
+          <pxs-markdown simple hide-empty :text="props.value"/>
+        </q-td>
       </q-table>
 
     </div>

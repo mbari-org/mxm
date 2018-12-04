@@ -54,6 +54,11 @@
           </router-link>
         </q-td>
 
+        <q-td slot="body-cell-description" slot-scope="props" :props="props"
+        >
+          <pxs-markdown simple hide-empty :text="props.value"/>
+        </q-td>
+
       </q-table>
     </div>
 
@@ -65,8 +70,9 @@
 </template>
 
 <script>
-  import MissionDefNewButton from 'components/mission-def-new-button'
   import allMissionDefsList from '../graphql/missionDefs.gql'
+  import MissionDefNewButton from 'components/mission-def-new-button'
+  import PxsMarkdown from 'components/pxs-markdown'
   import {Notify} from 'quasar'
   import _ from 'lodash'
 
@@ -75,6 +81,7 @@
   export default {
     components: {
       MissionDefNewButton,
+      PxsMarkdown,
     },
 
     data() {

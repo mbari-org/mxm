@@ -1,0 +1,17 @@
+mutation deleteMission($input: DeleteMissionInput!) {
+  deleteMission(input: $input) {
+    mission {
+      id
+      executorId
+      missionDefId
+      missionId
+      description
+      assetId
+    }
+  }
+}
+#    {
+#      "input": {
+#        "id": ".."
+#      }
+#    }

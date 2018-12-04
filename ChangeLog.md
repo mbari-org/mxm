@@ -1,6 +1,7 @@
 2018-12-04 0.0.6
 
-- initial mission execution
+- initial mission execution and deletion
+- some style adjs (markdown, tooltips, logo)
 
 2018-12-03 0.0.6
 

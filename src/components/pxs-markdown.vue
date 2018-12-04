@@ -7,7 +7,7 @@
       <vue-markdown
         v-if="text"
         :source="text" table-class="markdownTable"
-        :class="'white-space-normal ' + (simple ? '' : 'q-pa-sm')"
+        :class="'markdownText ' + (simple ? '' : 'q-pa-sm')"
       />
       <div v-else style="color:gray;font-style:italic">
         {{emptyMessage}}
