@@ -47,6 +47,12 @@
           <table class="mission-table">
             <tbody>
             <tr>
+              <td>Required:</td>
+              <td>
+                <q-checkbox v-model="parameter.required"/>
+              </td>
+            </tr>
+            <tr>
               <td>Type:</td>
               <td>
                 <span class="bg-green-1 q-pa-xs">
@@ -68,7 +74,7 @@
                 </q-popup-edit>
               </td>
             </tr>
-            <tr>
+            <tr v-if="parameter.defaultValue">
               <td>Default&nbsp;Value:</td>
               <td>
                 <span class="bg-green-1 q-pa-xs">
@@ -111,12 +117,6 @@
                     />
                   </q-field>
                 </q-popup-edit>
-              </td>
-            </tr>
-            <tr>
-              <td>Required:</td>
-              <td>
-                <q-checkbox v-model="parameter.required"/>
               </td>
             </tr>
             </tbody>
