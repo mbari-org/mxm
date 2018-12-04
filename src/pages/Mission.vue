@@ -177,11 +177,6 @@
               Overridden parameters: {{parametersChanged().length}}
             </div>
           </div>
-
-          <q-checkbox v-model="expandDescriptions">
-            <q-tooltip anchor="bottom right" self="top left"
-            >Expand descriptions</q-tooltip>
-          </q-checkbox>
         </div>
 
         <q-tr slot="body" slot-scope="props" :props="props">
@@ -238,23 +233,7 @@
 
           <q-td key="description" :props="props"
           >
-            <pxs-markdown
-              v-if="expandDescriptions"
-              simple
-              :text="props.row.description"
-            />
-            <div v-else>
-              {{props.row.description}}
-              <q-tooltip
-                v-if="props.row.description" anchor="bottom left" self="top middle"
-                style="width:500px"
-              >
-                <pxs-markdown
-                  simple
-                  :text="`**${props.row.paramName}**\n\n${props.row.description}`"
-                />
-              </q-tooltip>
-            </div>
+            <pxs-markdown simple :text="props.row.description"/>
           </q-td>
 
         </q-tr>
@@ -302,7 +281,6 @@
       return {
         loading: false,
         mission: null,
-        expandDescriptions: true,
         savingArgs: false,
         myArguments: [],
         argColumns: [

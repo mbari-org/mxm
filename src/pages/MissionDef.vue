@@ -124,11 +124,6 @@
             :mission-def-id="params.missionDefId"
             v-on:created="parameterCreated"
           />
-
-          <q-checkbox v-model="expandDescriptions">
-            <q-tooltip anchor="bottom right" self="top left"
-            >Expand descriptions</q-tooltip>
-          </q-checkbox>
         </div>
 
         <q-td slot="body-cell-paramName" slot-scope="props" :props="props"
@@ -159,23 +154,7 @@
 
         <q-td slot="body-cell-description" slot-scope="props" :props="props"
         >
-          <pxs-markdown
-            v-if="expandDescriptions"
-            simple
-            :text="props.value"
-          />
-          <div v-else>
-            {{props.value}}
-            <q-tooltip
-              v-if="props.value" anchor="bottom left" self="top middle"
-              style="width:500px"
-            >
-              <pxs-markdown
-                simple
-                :text="`**${props.row.paramName}**\n\n${props.value}`"
-              />
-            </q-tooltip>
-          </div>
+          <pxs-markdown simple :text="props.value"/>
         </q-td>
 
       </q-table>
@@ -216,7 +195,6 @@
       return {
         loading: false,
         missionDef: null,
-        expandDescriptions: true,
         columns: [
           {
             field: 'paramName',
