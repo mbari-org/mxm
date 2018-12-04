@@ -177,6 +177,11 @@
               Overridden parameters: {{parametersChanged().length}}
             </div>
           </div>
+
+          <q-checkbox v-model="expandDescriptions">
+            <q-tooltip anchor="bottom right" self="top left"
+            >Expand descriptions</q-tooltip>
+          </q-checkbox>
         </div>
 
         <q-tr slot="body" slot-scope="props" :props="props">
@@ -233,7 +238,23 @@
 
           <q-td key="description" :props="props"
           >
-            {{ props.row.description }}
+            <pxs-markdown
+              v-if="expandDescriptions"
+              simple
+              :text="props.row.description"
+            />
+            <div v-else>
+              {{props.row.description}}
+              <q-tooltip
+                v-if="props.row.description" anchor="bottom left" self="top middle"
+                style="width:500px"
+              >
+                <pxs-markdown
+                  simple
+                  :text="`**${props.row.paramName}**\n\n${props.row.description}`"
+                />
+              </q-tooltip>
+            </div>
           </q-td>
 
         </q-tr>
@@ -255,12 +276,17 @@
 </style>
 
 <script>
+  import executor from '../graphql/executor.gql'
   import mission from '../graphql/mission.gql'
   import argumentInsert from '../graphql/argumentInsert.gql'
   import argumentUpdate from '../graphql/argumentUpdate.gql'
   import argumentDelete from '../graphql/argumentDelete.gql'
   import missionUpdate from '../graphql/missionUpdate.gql'
   import PxsMarkdown from 'components/pxs-markdown'
+  import {
+    postMission,
+  } from 'plugins/rest0'
+
   import Vue from 'vue'
   import {Notify} from 'quasar'
   import _ from 'lodash'
@@ -276,6 +302,7 @@
       return {
         loading: false,
         mission: null,
+        expandDescriptions: true,
         savingArgs: false,
         myArguments: [],
         argColumns: [
@@ -284,6 +311,7 @@
             name: 'paramName',
             label: 'Parameter',
             align: 'left',
+            sortable: true
           },
           {
             field: 'paramValue',
@@ -296,6 +324,7 @@
             name: 'type',
             label: 'Type',
             align: 'left',
+            sortable: true
           },
           {
             field: 'description',
@@ -319,6 +348,21 @@
     },
 
     apollo: {
+      executor: {
+        query: executor,
+        variables() {
+          return {
+            executorId: this.params.executorId
+          }
+        },
+        update(data) {
+          if (debug) console.log('update: data=', data)
+          if (data.allExecutorsList && data.allExecutorsList.length) {
+            return data.allExecutorsList[0]
+          }
+          else return null
+        },
+      },
       mission: {
         query: mission,
         variables() {
@@ -349,6 +393,7 @@
     methods: {
       refreshMission() {
         this.$apollo.queries.mission.refetch()
+        this.$apollo.queries.executor.refetch()
       },
 
       setMyArguments(mission) {
@@ -552,15 +597,85 @@
       },
 
       validateMission() { this.$q.notify('TODO validateMission') }, // TODO
-      runMission()      { this.$q.notify('TODO runMission') }, // TODO
       cancelMission()   { this.$q.notify('TODO cancelMission') }, // TODO
       deleteMission()   { this.$q.notify('TODO deleteMission') }, // TODO
+
+      runMission() {
+        const httpEndpoint = this.executor.httpEndpoint
+        //console.debug('httpEndpoint=', this.executor.httpEndpoint)
+        //console.debug('apiType=', this.executor.apiType)
+
+        if (this.executor.apiType === 'REST0') {
+          // console.debug('myArguments=', this.myArguments)
+          const parametersChanged = this.parametersChanged()
+          console.debug('parametersChanged=', parametersChanged)
+          const data = _.reduce(parametersChanged, (obj, {paramName, paramValue, type}) => {
+            obj[paramName] = convertValue(paramValue, type)
+            return obj
+          }, {})
+
+          data.exercise_name = this.params.missionId
+          data.missionDefId = this.params.missionDefId
+          data.assetId = this.mission.assetId
+
+          console.debug('data=', data)
+
+          postMission(httpEndpoint, data)
+            .then(res => {
+              Notify.create({
+                message: `Mission submitted: ${JSON.stringify(res)}`,
+                timeout: 2000,
+                type: 'info'
+              })
+            })
+            .catch(error => {
+              Notify.create({
+                message: `Mission submission error: ${JSON.stringify(error)}`,
+                timeout: 2000,
+                type: 'info'
+              })
+              console.error('createMissionDefs: error=', error)
+            })
+        }
+        else {
+          this.$q.notify('TODO runMission for apiType=' + this.executor.apiType)
+        }
+      },
     },
 
     watch: {
       '$route'() {
         this.refreshMission()
       }
+    }
+  }
+
+  // TODO convertValue still pretty ad hoc
+  function convertValue(value, type) {
+    switch (type.toLowerCase()) {
+      case 'float': return parseFloat(value)
+      case 'int': return parseInt(value)
+      case 'boolean': return value && value.toLowerCase() === 'true'
+      case 'string': return value
+
+      // https://tools.ietf.org/html/rfc7946#section-3.1.1
+      case 'point': return JSON.parse(value)
+      case 'multipoint': return JSON.parse(value)
+      case 'linestring': return JSON.parse(value)
+      case 'multilinestring': return JSON.parse(value)
+      case 'polygon': return JSON.parse(value)
+      case 'multipolygon': return JSON.parse(value)
+      case 'geometrycollection': return JSON.parse(value)
+      case 'geometry': return JSON.parse(value)
+
+      // https://tools.ietf.org/html/rfc7946#section-3.2
+      case 'feature': return JSON.parse(value)
+      case 'featurecollection': return JSON.parse(value)
+
+      // https://tools.ietf.org/html/rfc7946#section-3
+      case 'geojson': return JSON.parse(value)
+
+      default: return value
     }
   }
 </script>

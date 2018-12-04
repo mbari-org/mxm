@@ -1,3 +1,7 @@
+2018-12-04 0.0.6
+
+- initial mission execution
+
 2018-12-03 0.0.6
 
 - open mission route right upon mission creation

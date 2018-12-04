@@ -10,6 +10,12 @@
   }
 </script>
 
+<style>
+  .white-space-normal {
+    white-space: normal !important;
+  }
+</style>
+
 <!-- https://divtable.com/table-styler/ -->
 <style>
   table.markdownTable {

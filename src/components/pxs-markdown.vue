@@ -1,10 +1,13 @@
 <template>
   <div>
-    <div v-if="text || !hideEmpty" class="round-borders q-pa-xs bg-light-blue-1">
+    <div
+      v-if="text || !hideEmpty"
+      :class="simple ? '' : 'round-borders bg-light-blue-1'"
+    >
       <vue-markdown
         v-if="text"
         :source="text" table-class="markdownTable"
-        class="q-ma-xs"
+        :class="'white-space-normal ' + (simple ? '' : 'q-pa-sm')"
       />
       <div v-else style="color:gray;font-style:italic">
         {{emptyMessage}}
@@ -23,6 +26,11 @@
         required: false
       },
       hideEmpty: {
+        type: Boolean,
+        required: false,
+        default: false
+      },
+      simple: {
         type: Boolean,
         required: false,
         default: false

@@ -18,7 +18,7 @@
 
         <div class="q-pa-lg">
           <p style="color:gray;font-size:small">
-            The mission will initially be registered as a 'DRAFT.'
+            The mission will initially be registered with 'DRAFT' status.
             <br/>
             You can then edit any arguments and submit it for execution.
           </p>
