@@ -19,11 +19,11 @@
           Mission: <q-chip square class="text-bold">{{ mission.missionId }}</q-chip>
           <span>
             <router-link
-              :to="`/executors/${encodeURIComponent(mission.executorId)}/missiondefs/${encodeURIComponent(mission.missionDefId)}`"
+              :to="`/executors/${encodeURIComponent(mission.executorId)}/missiontpls/${encodeURIComponent(mission.missionTplId)}`"
               style="color:gray; font-size:smaller; text-decoration:none"
             >
-              ({{ mission.missionDefId }})
-              <q-tooltip>Mission Definition</q-tooltip>
+              ({{ mission.missionTplId }})
+              <q-tooltip>Mission Template</q-tooltip>
             </router-link>
           </span>
           <span class="q-ml-lg" style="color:gray; font-size:smaller">
@@ -196,7 +196,7 @@
           >
             <router-link
               style="text-decoration:none"
-              :to="`/executors/${encodeURIComponent(mission.executorId)}/MissionDefs/${encodeURIComponent(mission.missionDefId)}/params/${encodeURIComponent(props.row.paramName)}`"
+              :to="`/executors/${encodeURIComponent(mission.executorId)}/missiontpls/${encodeURIComponent(mission.missionTplId)}/params/${encodeURIComponent(props.row.paramName)}`"
             >{{ props.row.paramName }}
             </router-link>
           </q-td>
@@ -359,15 +359,15 @@
         variables() {
           return {
             executorId: this.params.executorId,
-            missionDefId: this.params.missionDefId,
+            missionTplId: this.params.missionTplId,
             missionId: this.params.missionId,
           }
         },
         update(data) {
           let res = null
           if (debug) console.debug('update: data=', data)
-          if (data.missionByExecutorIdAndMissionDefIdAndMissionId) {
-            res = data.missionByExecutorIdAndMissionDefIdAndMissionId
+          if (data.missionByExecutorIdAndMissionTplIdAndMissionId) {
+            res = data.missionByExecutorIdAndMissionTplIdAndMissionId
           }
           Vue.nextTick(() => {
             this.setMyArguments(res)
@@ -389,8 +389,8 @@
 
       setMyArguments(mission) {
         if (debug) console.debug('setMyArguments mission=', mission)
-        const alreadySavedArgs = _.get(mission, 'argumentsByExecutorIdAndMissionDefIdAndMissionIdList') || []
-        const parameters = _.get(mission, 'missionDefByExecutorIdAndMissionDefId.parametersByExecutorIdAndMissionDefIdList') || []
+        const alreadySavedArgs = _.get(mission, 'argumentsByExecutorIdAndMissionTplIdAndMissionIdList') || []
+        const parameters = _.get(mission, 'missionTplByExecutorIdAndMissionTplId.parametersByExecutorIdAndMissionTplIdList') || []
 
         if (debug) console.debug('alreadySavedArgs=', alreadySavedArgs)
 
@@ -426,7 +426,7 @@
         }
         this.savingArgs = true
 
-        const alreadySavedArgs = _.get(this.mission, 'argumentsByExecutorIdAndMissionDefIdAndMissionIdList') || []
+        const alreadySavedArgs = _.get(this.mission, 'argumentsByExecutorIdAndMissionTplIdAndMissionIdList') || []
         if (debug) console.debug('saveArguments: alreadySavedArgs=', alreadySavedArgs)
 
         let numInserted = 0
@@ -510,7 +510,7 @@
         const variables = {
           missionId: this.params.missionId,
           executorId: this.mission.executorId,
-          missionDefId: this.mission.missionDefId,
+          missionTplId: this.mission.missionTplId,
           paramName,
           paramValue
         }
@@ -628,7 +628,7 @@
           }, {})
 
           data.exercise_name = this.params.missionId
-          data.missionDefId = this.params.missionDefId
+          data.missionTplId = this.params.missionTplId
           data.assetId = this.mission.assetId
 
           console.debug('data=', data)
@@ -656,7 +656,7 @@
                 timeout: 2000,
                 type: 'info'
               })
-              console.error('createMissionDefs: error=', error)
+              console.error('createMissionTpls: error=', error)
             })
         }
       },
@@ -678,7 +678,7 @@
             }
           })
           .catch(error => {
-            console.error('createMissionDefs: error=', error)
+            console.error('createMissionTpls: error=', error)
             if (error === 'No such mission') {
               // assume we get back to DRAFT
               Notify.create({

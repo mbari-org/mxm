@@ -14,13 +14,13 @@ const routes = [
         path: '/executors/:executorId',
         component: () => import('pages/Executor')
       },
-      { path: '/executors/:executorId/missiondefs/:missionDefId',
-        component: () => import('pages/MissionDef')
+      { path: '/executors/:executorId/missiontpls/:missionTplId',
+        component: () => import('pages/MissionTpl')
       },
-      { path: '/executors/:executorId/missiondefs',
-        component: () => import('pages/MissionDefs')
+      { path: '/executors/:executorId/missiontpls',
+        component: () => import('pages/MissionTpls')
       },
-      { path: '/executors/:executorId/missiondefs/:missionDefId/params/:paramName',
+      { path: '/executors/:executorId/missiontpls/:missionTplId/params/:paramName',
         component: () => import('pages/Parameter')
       },
       {
@@ -28,7 +28,7 @@ const routes = [
         component: () => import('pages/Missions')
       },
       {
-        path: '/executors/:executorId/missiondefs/:missionDefId/missions/:missionId',
+        path: '/executors/:executorId/missiontpls/:missionTplId/missions/:missionId',
         component: () => import('pages/Mission')
       },
       {

@@ -1,0 +1,22 @@
+query ($executorId: String!, $missionTplId: String!) {
+  missionTplByExecutorIdAndMissionTplId(executorId: $executorId, missionTplId: $missionTplId) {
+    id
+    missionTplId
+    description
+    missionTplAssetClassesByExecutorIdAndMissionTplIdList {
+      id
+      assetClassName
+      assetClassByExecutorIdAndAssetClassName {
+        description
+      }
+    }
+    parametersByExecutorIdAndMissionTplIdList {
+      id
+      paramName
+      type
+      required
+      defaultValue
+      description
+    }
+  }
+}

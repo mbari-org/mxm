@@ -117,7 +117,7 @@
         type: String,
         required: true
       },
-      missionDefId: {
+      missionTplId: {
         type: String,
         required: true
       }
@@ -153,7 +153,7 @@
       submit() {
         const variables = {
           executorId: this.executorId,
-          missionDefId: this.missionDefId,
+          missionTplId: this.missionTplId,
           paramName: this.paramName,
           type: this.type,
           required: this.required,

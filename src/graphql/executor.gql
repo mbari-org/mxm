@@ -7,11 +7,11 @@ query executor($executorId: String!) {
     httpEndpoint
     apiType
     description
-    missionDefsByExecutorIdList {
+    missionTplsByExecutorIdList {
       id
-      missionDefId
+      missionTplId
       description
-      missionDefAssetClassesByExecutorIdAndMissionDefIdList {
+      missionTplAssetClassesByExecutorIdAndMissionTplIdList {
         assetClassName
         assetClassByExecutorIdAndAssetClassName {
           assetsByExecutorIdAndClassNameList {

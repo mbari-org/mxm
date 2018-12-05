@@ -4,7 +4,7 @@ mutation updateMission($input: UpdateMissionInput!) {
       id
       missionId
       executorId
-      missionDefId
+      missionTplId
       description
       assetId
       startDate

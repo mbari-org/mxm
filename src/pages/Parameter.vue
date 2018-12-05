@@ -4,8 +4,8 @@
       <q-breadcrumbs-el label="Home" to="/"/>
       <q-breadcrumbs-el label="Executors" to="/executors"/>
       <q-breadcrumbs-el :label="params.executorId" :to="`/executors/${encodeURIComponent(params.executorId)}`"/>
-      <q-breadcrumbs-el label="MissionDefs"/>
-      <q-breadcrumbs-el :label="params.missionDefId" :to="`/executors/${encodeURIComponent(params.executorId)}/MissionDefs/${encodeURIComponent(params.missionDefId)}`"/>
+      <q-breadcrumbs-el label="MissionTemplates"/>
+      <q-breadcrumbs-el :label="params.missionTplId" :to="`/executors/${encodeURIComponent(params.executorId)}/missiontpls/${encodeURIComponent(params.missionTplId)}`"/>
       <q-breadcrumbs-el label="Params"/>
       <q-breadcrumbs-el :label="params.paramName"/>
       <q-btn
@@ -17,7 +17,7 @@
     <div v-if="parameter" class="q-mt-md">
 
       <div class="q-mb-sm">
-        Mission Definition: <span class="text-bold">{{ params.missionDefId }}</span>
+        Mission Template: <span class="text-bold">{{ params.missionTplId }}</span>
       </div>
 
       <q-card class="q-mb-md">
@@ -137,7 +137,7 @@
       Parameter not found.
       <div class="q-ml-md">
         Executor: {{params.executorId}} <br/>
-        Mission Definition ID: {{params.missionDefId}}
+        Mission Template ID: {{params.missionTplId}}
       </div>
     </div>
 
@@ -184,15 +184,15 @@
         variables() {
           return {
             executorId: this.params.executorId,
-            missionDefId: this.params.missionDefId,
+            missionTplId: this.params.missionTplId,
             paramName: this.params.paramName,
           }
         },
         update(data) {
           if (debug) console.log('update: data=', data)
           let parameter = null
-          if (data.parameterByExecutorIdAndMissionDefIdAndParamName) {
-            parameter = data.parameterByExecutorIdAndMissionDefIdAndParamName
+          if (data.parameterByExecutorIdAndMissionTplIdAndParamName) {
+            parameter = data.parameterByExecutorIdAndMissionTplIdAndParamName
           }
           this.original = _.cloneDeep(parameter)
           return parameter
@@ -244,7 +244,7 @@
           .then((data) => {
             if (debug) console.debug('updateParameter: mutation data=', data)
             if (parameterPatch.paramName) {
-              this.$router.replace(`/executors/${encodeURIComponent(this.parameter.executorId)}/MissionDefs/${encodeURIComponent(this.parameter.missionDefId)}/params/${encodeURIComponent(parameterPatch.paramName)}`)
+              this.$router.replace(`/executors/${encodeURIComponent(this.parameter.executorId)}/missionTpls/${encodeURIComponent(this.parameter.missionTplId)}/params/${encodeURIComponent(parameterPatch.paramName)}`)
               return
             }
             this.refreshParameter()

@@ -4,18 +4,18 @@
       <q-breadcrumbs-el label="Home" to="/"/>
       <q-breadcrumbs-el label="Executors" to="/executors"/>
       <q-breadcrumbs-el :label="params.executorId" :to="`/executors/${encodeURIComponent(params.executorId)}`"/>
-      <q-breadcrumbs-el label="missiondefs"/>
+      <q-breadcrumbs-el label="MissionTemplates"/>
       <q-btn
         dense round icon="refresh" class="q-ml-lg" size="sm"
-        @click="refreshMissionDefs"
+        @click="refreshMissionTpls"
       />
     </q-breadcrumbs>
 
-    <div v-if="allMissionDefsList">
+    <div v-if="allMissionTplsList">
 
       <q-table
-        :data="allMissionDefsList"
-        :columns="missionDefColumns"
+        :data="allMissionTplsList"
+        :columns="missionTplColumns"
         row-key="name"
         :rows-per-page-options="rowsPerPage"
         :pagination.sync="pagination"
@@ -23,12 +23,12 @@
       >
         <div slot="top-left" slot-scope="props" class="row items-center">
           <div class="col-auto q-headline">
-            Mission definitions
+            Mission templates
           </div>
 
           <div class="q-ml-md row">
             <q-search
-              v-if="allMissionDefsList.length"
+              v-if="allMissionTplsList.length"
               class="col"
               color="secondary"
               v-model="filter"
@@ -39,18 +39,18 @@
         </div>
 
         <div slot="top-right" slot-scope="props" class="fit">
-          <mission-def-new-button
+          <mission-tpl-new-button
             :executor-id="params.executorId"
-            v-on:created="missionDefCreated"
+            v-on:created="missionTplCreated"
           />
         </div>
 
-        <q-td slot="body-cell-missionDefId" slot-scope="props" :props="props"
+        <q-td slot="body-cell-missionTplId" slot-scope="props" :props="props"
               style="width:5px"
         >
           <router-link
-            :to="`/executors/${encodeURIComponent(params.executorId)}/missiondefs/${encodeURIComponent(props.row.missionDefId)}`">
-            {{props.row.missionDefId}}
+            :to="`/executors/${encodeURIComponent(params.executorId)}/missiontpls/${encodeURIComponent(props.row.missionTplId)}`">
+            {{props.row.missionTplId}}
           </router-link>
         </q-td>
 
@@ -70,8 +70,8 @@
 </template>
 
 <script>
-  import allMissionDefsList from '../graphql/missionDefs.gql'
-  import MissionDefNewButton from 'components/mission-def-new-button'
+  import allMissionTplsList from '../graphql/missionTpls.gql'
+  import MissionTplNewButton from 'components/mission-tpl-new-button'
   import PxsMarkdown from 'components/pxs-markdown'
   import {Notify} from 'quasar'
   import _ from 'lodash'
@@ -80,7 +80,7 @@
 
   export default {
     components: {
-      MissionDefNewButton,
+      MissionTplNewButton,
       PxsMarkdown,
     },
 
@@ -88,12 +88,12 @@
       return {
         debug,
         loading: false,
-        allMissionDefsList: [],
+        allMissionTplsList: [],
 
-        missionDefColumns: [
+        missionTplColumns: [
           {
-            field: 'missionDefId',
-            name: 'missionDefId',
+            field: 'missionTplId',
+            name: 'missionTplId',
             label: 'ID',
             align: 'left',
             sortable: true
@@ -121,8 +121,8 @@
     },
 
     apollo: {
-      allMissionDefsList: {
-        query: allMissionDefsList,
+      allMissionTplsList: {
+        query: allMissionTplsList,
         variables() {
           return {
             executorId: this.params.executorId
@@ -130,28 +130,28 @@
         },
         update(data) {
           if (debug) console.log('update: data=', data)
-          return data.allMissionDefsList && data.allMissionDefsList || []
+          return data.allMissionTplsList && data.allMissionTplsList || []
         },
       },
     },
 
     mounted() {
-      this.refreshMissionDefs()
+      this.refreshMissionTpls()
     },
 
     methods: {
-      refreshMissionDefs() {
-        this.$apollo.queries.allMissionDefsList.refetch()
+      refreshMissionTpls() {
+        this.$apollo.queries.allMissionTplsList.refetch()
       },
 
-      missionDefCreated(data) {
-        this.allMissionDefsList.splice(0, 0, data)
+      missionTplCreated(data) {
+        this.allMissionTplsList.splice(0, 0, data)
       },
     },
 
     watch: {
       '$route'() {
-        this.refreshMissionDefs()
+        this.refreshMissionTpls()
       },
 
       executor(val) {

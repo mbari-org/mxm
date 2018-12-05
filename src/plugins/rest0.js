@@ -5,7 +5,7 @@ export default ({app, router, Vue}) => {
 
 export {
   getAssetClasses,
-  getMissionDefs,
+  getMissionTpls,
   postMission,
   getMission,
 }
@@ -18,8 +18,8 @@ function getAssetClasses(httpEndpoint) {
   return doGet(httpEndpoint, 'assetclasses')
 }
 
-function getMissionDefs(httpEndpoint) {
-  return doGet(httpEndpoint, 'missiondefs')
+function getMissionTpls(httpEndpoint) {
+  return doGet(httpEndpoint, 'missiontpls')
 }
 
 function postMission(httpEndpoint, data) {

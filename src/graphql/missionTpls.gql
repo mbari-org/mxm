@@ -1,12 +1,12 @@
-query missionDefs($executorId: String!) {
-  allMissionDefsList(condition: {
+query missionTpls($executorId: String!) {
+  allMissionTplsList(condition: {
     executorId: $executorId
   }) {
     id
     executorId
-    missionDefId
+    missionTplId
     description
-    missionDefAssetClassesByExecutorIdAndMissionDefIdList {
+    missionTplAssetClassesByExecutorIdAndMissionTplIdList {
       assetClassName
       assetClassByExecutorIdAndAssetClassName {
         assetsByExecutorIdAndClassNameList {

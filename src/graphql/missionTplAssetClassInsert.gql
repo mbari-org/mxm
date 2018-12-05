@@ -1,0 +1,17 @@
+mutation($executorId: String!, $missionTplId: String!, $assetClassName: String!) {
+  createMissionTplAssetClass(
+    input: {
+      missionTplAssetClass: {
+        missionTplId: $missionTplId
+        executorId: $executorId
+        assetClassName: $assetClassName
+      }
+    }
+  ) {
+    missionTplAssetClass {
+      executorId
+      missionTplId
+      assetClassName
+    }
+  }
+}

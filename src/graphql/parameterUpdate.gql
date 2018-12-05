@@ -2,7 +2,7 @@ mutation updateParameter($input: UpdateParameterInput!) {
   updateParameter(input: $input) {
     parameter {
       executorId
-      missionDefId
+      missionTplId
       paramName
       type
       required

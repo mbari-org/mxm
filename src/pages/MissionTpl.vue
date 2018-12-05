@@ -4,30 +4,30 @@
       <q-breadcrumbs-el label="Home" to="/"/>
       <q-breadcrumbs-el label="Executors" to="/executors"/>
       <q-breadcrumbs-el :label="params.executorId" :to="`/executors/${encodeURIComponent(params.executorId)}`"/>
-      <q-breadcrumbs-el label="MissionDefs" :to="`/executors/${encodeURIComponent(params.executorId)}/missiondefs`"/>
-      <q-breadcrumbs-el :label="params.missionDefId"/>
+      <q-breadcrumbs-el label="MissionTemplates" :to="`/executors/${encodeURIComponent(params.executorId)}/missiontpls`"/>
+      <q-breadcrumbs-el :label="params.missionTplId"/>
       <q-btn
         dense round icon="refresh" class="q-ml-lg" size="sm"
-        @click="refreshMissionDef"
+        @click="refreshMissionTpl"
       />
     </q-breadcrumbs>
 
-    <div v-if="missionDef">
+    <div v-if="missionTpl">
 
       <q-card class="q-mb-md">
         <q-card-title>
-          Mission Definition:
+          Mission Template:
           <span class="text-bold">
-            {{ params.missionDefId }}
+            {{ params.missionTplId }}
           <q-popup-edit
-            v-model="missionDef.missionDefId"
-            title="Mission Definition ID"
+            v-model="missionTpl.missionTplId"
+            title="Mission Template ID"
             buttons
-            @save="updateMissionDefId"
+            @save="updateMissionTplId"
           >
             <q-field>
               <q-input
-                v-model.trim="missionDef.missionDefId"
+                v-model.trim="missionTpl.missionTplId"
                 clearable
                 class="bg-green-1"
               />
@@ -37,16 +37,16 @@
         </q-card-title>
         <q-card-separator/>
         <q-card-main>
-          <pxs-markdown :text="missionDef.description"/>
+          <pxs-markdown :text="missionTpl.description"/>
           <q-popup-edit
-            v-model="missionDef.description"
+            v-model="missionTpl.description"
             title="Description"
             buttons
             @save="updateDescription"
           >
             <q-field>
               <q-input
-                v-model.trim="missionDef.description"
+                v-model.trim="missionTpl.description"
                 clearable
                 class="bg-green-1"
                 type="textarea"
@@ -121,7 +121,7 @@
         <div slot="top-right" slot-scope="props" class="fit">
           <parameter-new-button
             :executor-id="params.executorId"
-            :mission-def-id="params.missionDefId"
+            :mission-tpl-id="params.missionTplId"
             v-on:created="parameterCreated"
           />
         </div>
@@ -131,7 +131,7 @@
         >
           <router-link
             style="text-decoration:none"
-            :to="`/executors/${encodeURIComponent(params.executorId)}/MissionDefs/${encodeURIComponent(params.missionDefId)}/params/${encodeURIComponent(props.value)}`"
+            :to="`/executors/${encodeURIComponent(params.executorId)}/missiontpls/${encodeURIComponent(params.missionTplId)}/params/${encodeURIComponent(props.value)}`"
           >{{ props.value }}
           </router-link>
 
@@ -161,10 +161,10 @@
     </div>
 
     <div v-else-if="!loading">
-      Mission Definition not found.
+      Mission Template not found.
       <div class="q-ml-md">
         Executor: {{params.executorId}} <br/>
-        Mission Definition ID: {{params.missionDefId}}
+        Mission Template ID: {{params.missionTplId}}
       </div>
     </div>
 
@@ -172,11 +172,11 @@
 </template>
 
 <script>
-  import missionDef from '../graphql/missionDef.gql'
+  import missionTpl from '../graphql/missionTpl.gql'
   import AssetClassSelectButton from 'components/asset-class-select-button'
-  import missionDefAssetClassInsert from '../graphql/missionDefAssetClassInsert.gql'
-  import missionDefAssetClassDelete from '../graphql/missionDefAssetClassDelete.gql'
-  import missionDefUpdate from '../graphql/missionDefUpdate.gql'
+  import missionTplAssetClassInsert from '../graphql/missionTplAssetClassInsert.gql'
+  import missionTplAssetClassDelete from '../graphql/missionTplAssetClassDelete.gql'
+  import missionTplUpdate from '../graphql/missionTplUpdate.gql'
   import ParameterNewButton from 'components/parameter-new-button'
   import PxsMarkdown from 'components/pxs-markdown'
   import {Notify} from 'quasar'
@@ -194,7 +194,7 @@
     data() {
       return {
         loading: false,
-        missionDef: null,
+        missionTpl: null,
         columns: [
           {
             field: 'paramName',
@@ -242,7 +242,7 @@
       },
 
       myAssetClasses() {
-        return this.missionDef && this.missionDef.missionDefAssetClassesByExecutorIdAndMissionDefIdList || []
+        return this.missionTpl && this.missionTpl.missionTplAssetClassesByExecutorIdAndMissionTplIdList || []
       },
 
       myAssetClassNames() {
@@ -250,23 +250,23 @@
       },
 
       myParameters() {
-        return this.missionDef && this.missionDef.parametersByExecutorIdAndMissionDefIdList || []
+        return this.missionTpl && this.missionTpl.parametersByExecutorIdAndMissionTplIdList || []
       },
     },
 
     apollo: {
-      missionDef: {
-        query: missionDef,
+      missionTpl: {
+        query: missionTpl,
         variables() {
           return {
             executorId: this.params.executorId,
-            missionDefId: this.params.missionDefId
+            missionTplId: this.params.missionTplId
           }
         },
         update(data) {
           if (debug) console.log('update: data=', data)
-          if (data.missionDefByExecutorIdAndMissionDefId) {
-            return data.missionDefByExecutorIdAndMissionDefId
+          if (data.missionTplByExecutorIdAndMissionTplId) {
+            return data.missionTplByExecutorIdAndMissionTplId
           }
           else return null
         },
@@ -274,12 +274,12 @@
     },
 
     mounted() {
-      this.refreshMissionDef()
+      this.refreshMissionTpl()
     },
 
     methods: {
-      refreshMissionDef() {
-        this.$apollo.queries.missionDef.refetch()
+      refreshMissionTpl() {
+        this.$apollo.queries.missionTpl.refetch()
       },
 
       assetClassSelection(data) {
@@ -305,7 +305,7 @@
                 timeout: 1000,
                 type: 'info'
               })
-              this.refreshMissionDef()
+              this.refreshMissionTpl()
             }
           }
         }
@@ -314,10 +314,10 @@
       },
 
       addAssetClassName(assetClassName, next) {
-        const mutation = missionDefAssetClassInsert
+        const mutation = missionTplAssetClassInsert
         const variables = {
           executorId: this.params.executorId,
-          missionDefId: this.params.missionDefId,
+          missionTplId: this.params.missionTplId,
           assetClassName
         }
         this.$apollo.mutate({mutation, variables})
@@ -333,14 +333,14 @@
       removeAssetClass(id) {
         if (debug) console.debug('removeAssetClass: id=', id)
 
-        const mutation = missionDefAssetClassDelete
+        const mutation = missionTplAssetClassDelete
         const variables = {
           id
         }
         this.$apollo.mutate({mutation, variables})
           .then((data) => {
             if (data.data) {
-              this.refreshMissionDef()
+              this.refreshMissionTpl()
             }
           })
           .catch((error) => {
@@ -349,46 +349,46 @@
       },
 
       parameterCreated(data) {
-        this.refreshMissionDef()
+        this.refreshMissionTpl()
       },
 
-      updateMissionDefId(missionDefId) {
-        this.updateMissionDef({missionDefId})
+      updateMissionTplId(missionTplId) {
+        this.updateMissionTpl({missionTplId})
       },
 
       updateDescription(description) {
-        this.updateMissionDef({description})
+        this.updateMissionTpl({description})
       },
 
-      updateMissionDef(missionDefPatch) {
-        if (debug) console.debug('updateMissionDef missionDefPatch=', missionDefPatch)
-        const mutation = missionDefUpdate
+      updateMissionTpl(missionTplPatch) {
+        if (debug) console.debug('updateMissionTpl missionTplPatch=', missionTplPatch)
+        const mutation = missionTplUpdate
         const variables = {
           input: {
-            id: this.missionDef.id,
-            missionDefPatch
+            id: this.missionTpl.id,
+            missionTplPatch
           }
         }
         this.$apollo.mutate({mutation, variables})
           .then((data) => {
-            if (debug) console.debug('updateMissionDef: mutation data=', data)
-            if (missionDefPatch.missionDefId) {
-              this.$router.replace(`/executors/${encodeURIComponent(this.params.executorId)}/missiondefs/${encodeURIComponent(missionDefPatch.missionDefId)}`)
+            if (debug) console.debug('updateMissionTpl: mutation data=', data)
+            if (missionTplPatch.missionTplId) {
+              this.$router.replace(`/executors/${encodeURIComponent(this.params.executorId)}/missiontpls/${encodeURIComponent(missionTplPatch.missionTplId)}`)
               return
             }
-            if (missionDefPatch.description) {
-              this.missionDef.description = missionDefPatch.description
+            if (missionTplPatch.description) {
+              this.missionTpl.description = missionTplPatch.description
             }
           })
           .catch((error) => {
-            console.error('updateMissionDef: mutation error=', error)
+            console.error('updateMissionTpl: mutation error=', error)
           })
       },
     },
 
     watch: {
       '$route'() {
-        this.refreshMissionDef()
+        this.refreshMissionTpl()
       }
     }
   }

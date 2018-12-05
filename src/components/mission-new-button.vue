@@ -24,13 +24,13 @@
           </p>
 
           <q-field
-            label="Mission Definition:"
-            :error="!missionDefId.length"
+            label="Mission Template:"
+            :error="!missionTplId.length"
             :label-width="4"
           >
-            <mission-def-select
-              :mission-defs="missionDefs"
-              v-model="missionDefId"
+            <mission-tpl-select
+              :mission-tpls="missionTpls"
+              v-model="missionTplId"
             />
           </q-field>
 
@@ -97,7 +97,7 @@
 <script>
   import executor from '../graphql/executor.gql'
   import missionInsert from '../graphql/missionInsert.gql'
-  import MissionDefSelect from 'components/mission-def-select'
+  import MissionTplSelect from 'components/mission-tpl-select'
   import AssetSelect from 'components/asset-select'
   import _ from 'lodash'
   import {Notify} from 'quasar'
@@ -106,7 +106,7 @@
 
   export default {
     components: {
-      MissionDefSelect,
+      MissionTplSelect,
       AssetSelect,
     },
 
@@ -121,7 +121,7 @@
       return {
         dialogOpened: false,
         executor: null,
-        missionDefId: '',
+        missionTplId: '',
         assetId: '',
         missionId: '',
         description: '',
@@ -132,16 +132,16 @@
     },
 
     computed: {
-      missionDefs() {
-        return this.executor && this.executor.missionDefsByExecutorIdList || []
+      missionTpls() {
+        return this.executor && this.executor.missionTplsByExecutorIdList || []
       },
 
       assetClasses() {
         const list = []
-        const missionDef = _.find(this.missionDefs, {missionDefId: this.missionDefId})
-        if (debug) console.debug('missionDef=', missionDef)
-        if (missionDef && missionDef.missionDefAssetClassesByExecutorIdAndMissionDefIdList) {
-          _.each(missionDef.missionDefAssetClassesByExecutorIdAndMissionDefIdList, c => {
+        const missionTpl = _.find(this.missionTpls, {missionTplId: this.missionTplId})
+        if (debug) console.debug('missionTpl=', missionTpl)
+        if (missionTpl && missionTpl.missionTplAssetClassesByExecutorIdAndMissionTplIdList) {
+          _.each(missionTpl.missionTplAssetClassesByExecutorIdAndMissionTplIdList, c => {
             list.push(c)
           })
         }
@@ -149,7 +149,7 @@
       },
 
       okToSubmit() {
-        return this.missionDefId
+        return this.missionTplId
           && this.assetId
           && this.missionId
       }
@@ -176,7 +176,7 @@
     methods: {
       openDialog() {
         this.executor = null
-        this.missionDefId = ''
+        this.missionTplId = ''
         this.assetId = ''
         this.missionId = ''
         this.description = ''
@@ -190,7 +190,7 @@
       registerMission() {
         const mission = {
           executorId: this.executorId,
-          missionDefId: this.missionDefId,
+          missionTplId: this.missionTplId,
           missionId: this.missionId,
           missionStatus: 'DRAFT',
           assetId: this.assetId,
@@ -220,7 +220,7 @@
               timeout: 1000,
               type: 'info'
             })
-            this.$router.push(`/executors/${encodeURIComponent(this.executorId)}/missiondefs/${encodeURIComponent(this.missionDefId)}/missions/${encodeURIComponent(this.missionId)}`)
+            this.$router.push(`/executors/${encodeURIComponent(this.executorId)}/missiontpls/${encodeURIComponent(this.missionTplId)}/missions/${encodeURIComponent(this.missionId)}`)
             // this.$emit('created', variables)
           })
           .catch((error) => {

@@ -1,12 +1,12 @@
-query ($executorId: String!, $missionDefId: String!, $paramName: String!) {
-  parameterByExecutorIdAndMissionDefIdAndParamName(
+query ($executorId: String!, $missionTplId: String!, $paramName: String!) {
+  parameterByExecutorIdAndMissionTplIdAndParamName(
     executorId: $executorId,
-    missionDefId: $missionDefId,
+    missionTplId: $missionTplId,
     paramName: $paramName
   ) {
     id
     executorId
-    missionDefId
+    missionTplId
     paramName
     type
     required

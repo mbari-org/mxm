@@ -1,7 +1,7 @@
 mutation(
   $missionId: String!
   $executorId: String!
-  $missionDefId: String!
+  $missionTplId: String!
   $paramName: String!
   $paramValue: String!
 ) {
@@ -10,7 +10,7 @@ mutation(
       argument: {
         missionId: $missionId
         executorId: $executorId
-        missionDefId: $missionDefId
+        missionTplId: $missionTplId
         paramName: $paramName
         paramValue: $paramValue
       }
@@ -19,7 +19,7 @@ mutation(
     argument {
       missionId
       executorId
-      missionDefId
+      missionTplId
       paramName
       paramValue
     }

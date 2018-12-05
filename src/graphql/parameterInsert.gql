@@ -1,6 +1,6 @@
 mutation(
   $executorId: String!
-  $missionDefId: String!
+  $missionTplId: String!
   $paramName: String!
   $type: String!
   $required: Boolean!
@@ -11,7 +11,7 @@ mutation(
     input: {
       parameter: {
         executorId: $executorId
-        missionDefId: $missionDefId
+        missionTplId: $missionTplId
         description: $description
         paramName: $paramName
         type: $type
@@ -22,7 +22,7 @@ mutation(
   ) {
     parameter {
       executorId
-      missionDefId
+      missionTplId
       description
       paramName
       type

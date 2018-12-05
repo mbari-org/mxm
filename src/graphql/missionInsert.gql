@@ -2,7 +2,7 @@ mutation($input: CreateMissionInput!) {
   createMission(input: $input) {
     mission {
       executorId
-      missionDefId
+      missionTplId
       missionId
       missionStatus
       assetId
@@ -18,7 +18,7 @@ mutation($input: CreateMissionInput!) {
 #      "input": {
 #        "mission": {
 #          "executorId": "x1",
-#          "missionDefId": "tft",
+#          "missionTplId": "tft",
 #          "missionId": "m1",
 #          "assetId": "tiny",
 #          "description": "foo",

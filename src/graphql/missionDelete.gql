@@ -3,7 +3,7 @@ mutation deleteMission($input: DeleteMissionInput!) {
     mission {
       id
       executorId
-      missionDefId
+      missionTplId
       missionId
       description
       assetId

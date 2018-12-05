@@ -46,15 +46,15 @@
       <q-td slot="body-cell-missionId" slot-scope="props" :props="props"
             style="width:5px"
       >
-        <router-link :to="`/executors/${euc(params.executorId)}/missiondefs/${euc(props.row.missionDefId)}/missions/${euc(props.row.missionId)}`">
+        <router-link :to="`/executors/${euc(params.executorId)}/missiontpls/${euc(props.row.missionTplId)}/missions/${euc(props.row.missionId)}`">
           {{props.value}}
         </router-link>
       </q-td>
 
-      <q-td slot="body-cell-missionDefId" slot-scope="props" :props="props"
+      <q-td slot="body-cell-missionTplId" slot-scope="props" :props="props"
             style="width:5px"
       >
-        <router-link :to="`/executors/${euc(params.executorId)}/missiondefs/${euc(props.value)}`">
+        <router-link :to="`/executors/${euc(params.executorId)}/missiontpls/${euc(props.value)}`">
           {{props.value}}
         </router-link>
       </q-td>
@@ -107,9 +107,9 @@
             sortable: true
           },
           {
-            field: 'missionDefId',
-            name: 'missionDefId',
-            label: 'Definition',
+            field: 'missionTplId',
+            name: 'missionTplId',
+            label: 'Template',
             align: 'left',
             sortable: true
           },

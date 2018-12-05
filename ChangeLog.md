@@ -1,3 +1,7 @@
+2018-12-05 0.0.7
+
+- "mission definition" to "mission template" general renaming
+
 2018-12-04 0.0.6
 
 - check mission status against external executor.
@@ -34,7 +38,7 @@ TODO process promises in sequence
 2018-11-27 0.0.4
 
 - preliminary rest0 plugin to interact with REST0 executor endpoint,
-  initially to populate entities (missionDefs, assetsClasses, ...)
+  initially to populate entities (missionTpls, assetsClasses, ...)
 - executor now has an `apiType` attribute.
   Two possible values at the moment:
     - `REST0`: simple REST based API
@@ -56,7 +60,7 @@ TODO process promises in sequence
 
 2018-11-13
 
-TODO: review contraint about deleting a missionDef's assetClass
+TODO: review contraint about deleting a missionTpl's assetClass
   if there are mission instance referring to corresp asset instance
 
 - model change: asset_classes and assets now associated with executor.
@@ -77,15 +81,15 @@ TODO: review contraint about deleting a missionDef's assetClass
 
 2018-11-12
 
-- organize routes so missionDefs and missions are shown under Executor
+- organize routes so missionTpls and missions are shown under Executor
 - fix mission-new-button to show list of assets of selected asset class
 - parameter: allow to change name (if foreign key constraints allow)
-- missionDef: Allow to change missionDefId, but note that this is possible
+- missionTpl: Allow to change missionTplId, but note that this is possible
   only when there are no dependencies (foreign key constraints)
 - link to parameter in argument table
-- simplify executor page: just show id and description of missionDefs
+- simplify executor page: just show id and description of missionTpls
 - update executor's description and httpEndpoint
-- update missionDef description
+- update missionTpl description
 
 2018-11-09
 

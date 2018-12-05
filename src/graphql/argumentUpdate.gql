@@ -3,7 +3,7 @@ mutation updateArgument($input: UpdateArgumentInput!) {
     argument {
       missionId
       executorId
-      missionDefId
+      missionTplId
       paramName
       paramValue
     }

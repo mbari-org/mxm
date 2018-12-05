@@ -88,10 +88,10 @@
           <div class="q-ma-sm">
             <q-btn
               class="q-mr-sm"
-              label="Mission Definitions"
+              label="Mission Templates"
               color="secondary"
               no-wrap no-caps dense
-              :to="`/executors/${encodeURIComponent(params.executorId)}/missiondefs`"
+              :to="`/executors/${encodeURIComponent(params.executorId)}/missiontpls`"
             />
 
             <q-btn

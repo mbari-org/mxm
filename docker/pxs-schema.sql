@@ -35,38 +35,38 @@ create table if not exists assets
 )
 ;
 
-create table if not exists mission_defs
+create table if not exists mission_tpls
 (
   executor_id varchar not null,
-  mission_def_id varchar not null,
+  mission_tpl_id varchar not null,
   description varchar,
   foreign key (executor_id) references executors on update cascade on delete cascade,
-  primary key (executor_id, mission_def_id)
+  primary key (executor_id, mission_tpl_id)
 )
 ;
 
-create table if not exists mission_def_asset_class
+create table if not exists mission_tpl_asset_class
 (
   executor_id varchar not null,
-  mission_def_id varchar not null,
+  mission_tpl_id varchar not null,
   asset_class_name varchar not null,
-  foreign key (executor_id, mission_def_id) references mission_defs on update cascade on delete cascade,
+  foreign key (executor_id, mission_tpl_id) references mission_tpls on update cascade on delete cascade,
   foreign key (executor_id, asset_class_name) references asset_classes on update cascade on delete cascade,
-  primary key (executor_id, mission_def_id, asset_class_name)
+  primary key (executor_id, mission_tpl_id, asset_class_name)
 )
 ;
 
 create table if not exists parameters
 (
   executor_id varchar not null,
-  mission_def_id varchar not null,
+  mission_tpl_id varchar not null,
   param_name varchar not null,
   type varchar not null,
   required boolean default false not null,
   default_value varchar,
   description varchar,
-  foreign key (executor_id, mission_def_id) references mission_defs on update cascade on delete cascade,
-  primary key (executor_id, mission_def_id, param_name)
+  foreign key (executor_id, mission_tpl_id) references mission_tpls on update cascade on delete cascade,
+  primary key (executor_id, mission_tpl_id, param_name)
 )
 ;
 
@@ -82,7 +82,7 @@ create type mission_status_type as enum (
 create table if not exists missions
 (
   executor_id varchar not null,
-  mission_def_id varchar not null,
+  mission_tpl_id varchar not null,
   mission_id varchar not null,
   mission_status mission_status_type not null,
   asset_id varchar not null,
@@ -90,21 +90,21 @@ create table if not exists missions
   start_date timestamp with time zone,
   end_date timestamp with time zone,
   geometry json,
-  foreign key (executor_id, mission_def_id) references mission_defs on update cascade on delete cascade,
+  foreign key (executor_id, mission_tpl_id) references mission_tpls on update cascade on delete cascade,
   foreign key (executor_id, asset_id) references assets on update cascade on delete cascade,
-  primary key (executor_id, mission_def_id, mission_id)
+  primary key (executor_id, mission_tpl_id, mission_id)
 )
 ;
 
 create table if not exists arguments
 (
   executor_id varchar not null,
-  mission_def_id varchar not null,
+  mission_tpl_id varchar not null,
   mission_id varchar not null,
   param_name varchar not null,
   param_value varchar not null,
-  foreign key (executor_id, mission_def_id, mission_id) references missions on update cascade on delete cascade,
-  foreign key (executor_id, mission_def_id, param_name) references parameters on update cascade on delete cascade,
-  primary key (executor_id, mission_def_id, mission_id, param_name)
+  foreign key (executor_id, mission_tpl_id, mission_id) references missions on update cascade on delete cascade,
+  foreign key (executor_id, mission_tpl_id, param_name) references parameters on update cascade on delete cascade,
+  primary key (executor_id, mission_tpl_id, mission_id, param_name)
 )
 ;

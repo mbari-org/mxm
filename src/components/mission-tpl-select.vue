@@ -4,10 +4,10 @@
     <q-select
       style="width:17em"
       class="bg-light-blue-1 col-auto"
-      v-model="missionDefId"
+      v-model="missionTplId"
       :options="options"
       @input="atInput"
-      placeholder="Select mission definition"
+      placeholder="Select mission template"
     />
   </div>
 
@@ -18,7 +18,7 @@
 
   export default {
     props: {
-      missionDefs: {
+      missionTpls: {
         type: Array,
         required: true
       },
@@ -27,17 +27,17 @@
 
     data() {
       return {
-        missionDefId: this.value,
+        missionTplId: this.value,
       }
     },
 
     computed: {
       options() {
-        if (debug) console.debug('missionDefs=', this.missionDefs)
-        return _.map(this.missionDefs, e => {
+        if (debug) console.debug('missionTpls=', this.missionTpls)
+        return _.map(this.missionTpls, e => {
           return {
-            label: e.missionDefId,
-            value: e.missionDefId,
+            label: e.missionTplId,
+            value: e.missionTplId,
           }
         })
       },
@@ -50,8 +50,8 @@
     },
 
     watch: {
-      missionDefs(val) {
-        if (debug) console.log('watch missionDefs=', val)
+      missionTpls(val) {
+        if (debug) console.log('watch missionTpls=', val)
       }
     },
   }

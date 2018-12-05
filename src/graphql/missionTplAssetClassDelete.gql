@@ -1,12 +1,12 @@
 mutation($id: ID!) {
-  deleteMissionDefAssetClass(
+  deleteMissionTplAssetClass(
     input: {
       id: $id
     }
   ) {
-    missionDefAssetClass {
+    missionTplAssetClass {
       executorId
-      missionDefId
+      missionTplId
       assetClassName
     }
   }

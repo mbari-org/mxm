@@ -7,7 +7,7 @@
       <q-modal-layout>
         <q-toolbar slot="header">
           <q-toolbar-title>
-            Register new mission definition for '{{executorId}}'
+            Register new mission template for '{{executorId}}'
           </q-toolbar-title>
           <q-btn round dense
                  color="primary"
@@ -18,13 +18,13 @@
 
         <div class="q-pa-lg">
           <q-field
-            label="Mission Definition ID:"
-            :error="!missionDefId.length"
+            label="Mission Template ID:"
+            :error="!missionTplId.length"
             :label-width="4"
           >
             <q-input
               class="bg-light-blue-1"
-              v-model.trim="missionDefId"
+              v-model.trim="missionTplId"
               type="text"
               autofocus
               style="width:24em"
@@ -68,7 +68,7 @@
 </template>
 
 <script>
-  import missionDefInsert from '../graphql/missionDefInsert.gql'
+  import missionTplInsert from '../graphql/missionTplInsert.gql'
   import {Notify} from 'quasar'
 
   const debug = true
@@ -84,20 +84,20 @@
     data() {
       return {
         dialogOpened: false,
-        missionDefId: '',
+        missionTplId: '',
         description: ''
       }
     },
 
     computed: {
       okToSubmit() {
-        return this.missionDefId
+        return this.missionTplId
       }
     },
 
     methods: {
       openDialog() {
-        this.missionDefId = ''
+        this.missionTplId = ''
         this.description = ''
         this.dialogOpened = true
       },
@@ -105,18 +105,18 @@
       submit() {
         const variables = {
           executorId: this.executorId,
-          missionDefId: this.missionDefId,
+          missionTplId: this.missionTplId,
           description: this.description,
         }
         if (debug) console.debug('variables=', variables)
 
-        const mutation = missionDefInsert
+        const mutation = missionTplInsert
         this.$apollo.mutate({mutation, variables})
           .then((data) => {
             console.log('mutation data=', data)
             this.dialogOpened = false
             Notify.create({
-              message: 'Mission definition created',
+              message: 'Mission Template created',
               timeout: 1000,
               type: 'info'
             })

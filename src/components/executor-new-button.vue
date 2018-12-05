@@ -95,14 +95,14 @@
   import executorInsert from '../graphql/executorInsert.gql'
   import assetClassInsert from '../graphql/assetClassInsert.gql'
   import assetInsert from '../graphql/assetInsert.gql'
-  import missionDefInsert from '../graphql/missionDefInsert.gql'
-  import missionDefAssetClassInsert from '../graphql/missionDefAssetClassInsert.gql'
+  import missionTplInsert from '../graphql/missionTplInsert.gql'
+  import missionTplAssetClassInsert from '../graphql/missionTplAssetClassInsert.gql'
   import parameterInsert from '../graphql/parameterInsert.gql'
 
   import apiTypeSelect from '../components/api-type-select'
   import {
     getAssetClasses,
-    getMissionDefs,
+    getMissionTpls,
   } from 'plugins/rest0'
 
   import {Notify} from 'quasar'
@@ -173,19 +173,19 @@
           .then(assetClasses => {
             this.createAssetClasses(executor, assetClasses)
               .then(_ => {
-                getMissionDefs(executor.httpEndpoint)
-                  .then(missionDefs => {
-                    this.createMissionDefs(executor, missionDefs)
+                getMissionTpls(executor.httpEndpoint)
+                  .then(missionTpls => {
+                    this.createMissionTpls(executor, missionTpls)
                       .then(_ => {
                         this.closeDialogAndNotify(executor)
                       })
                       .catch(error => {
-                        console.error('createMissionDefs: error=', error)
+                        console.error('createMissionTpls: error=', error)
                       })
                   })
               })
               .catch(error => {
-                console.error('createMissionDefs: error=', error)
+                console.error('createMissionTpls: error=', error)
               })
           })
       },
@@ -251,57 +251,57 @@
         })
       },
 
-      createMissionDefs(executor, missionDefs) {
-        if (debug) console.debug('missionDefs=', missionDefs)
-        return Promise.all(_.map(missionDefs, missionDef =>
-          this.createMissionDef(executor, missionDef)
+      createMissionTpls(executor, missionTpls) {
+        if (debug) console.debug('missionTpls=', missionTpls)
+        return Promise.all(_.map(missionTpls, missionTpl =>
+          this.createMissionTpl(executor, missionTpl)
         ))
       },
 
-      createMissionDef(executor, missionDef) {
+      createMissionTpl(executor, missionTpl) {
         return new Promise((resolve, reject) => {
           const variables = {
             executorId: executor.executorId,
-            missionDefId: missionDef.missionDefId,
-            description: missionDef.description,
+            missionTplId: missionTpl.missionTplId,
+            description: missionTpl.description,
           }
-          if (debug) console.debug('createMissionDef: variables=', variables)
+          if (debug) console.debug('createMissionTpl: variables=', variables)
 
-          const mutation = missionDefInsert
+          const mutation = missionTplInsert
           this.$apollo.mutate({mutation, variables})
             .then(data => {
-              if (debug) console.debug('createMissionDef: mutation data=', data)
-              console.debug('createMissionDef: missionDef=', missionDef)
-              const assetClassNames = missionDef.assetClassNames || []
-              this.createAssociatedAssetClasses(executor, missionDef, assetClassNames)
+              if (debug) console.debug('createMissionTpl: mutation data=', data)
+              console.debug('createMissionTpl: missionTpl=', missionTpl)
+              const assetClassNames = missionTpl.assetClassNames || []
+              this.createAssociatedAssetClasses(executor, missionTpl, assetClassNames)
                 .then(data => {
-                  const parameters = missionDef.parameters || []
-                  this.createParameters(executor, missionDef, parameters)
+                  const parameters = missionTpl.parameters || []
+                  this.createParameters(executor, missionTpl, parameters)
                   .then(data => {
                     resolve(data)
                   })
                 })
             })
             .catch(error => {
-              console.error('createMissionDef: mutation error=', error)
+              console.error('createMissionTpl: mutation error=', error)
               reject(error)
             })
         })
       },
 
-      createAssociatedAssetClasses(executor, missionDef, assetClassNames) {
+      createAssociatedAssetClasses(executor, missionTpl, assetClassNames) {
         if (debug) console.debug('createAssociatedAssetClasses=', assetClassNames)
         return Promise.all(_.map(assetClassNames, assetClassName =>
-          this.createAssociatedAssetClass(executor, missionDef, assetClassName)
+          this.createAssociatedAssetClass(executor, missionTpl, assetClassName)
         ))
       },
 
-      createAssociatedAssetClass(executor, missionDef, assetClassName) {
+      createAssociatedAssetClass(executor, missionTpl, assetClassName) {
         return new Promise((resolve, reject) => {
-          const mutation = missionDefAssetClassInsert
+          const mutation = missionTplAssetClassInsert
           const variables = {
             executorId: executor.executorId,
-            missionDefId: missionDef.missionDefId,
+            missionTplId: missionTpl.missionTplId,
             assetClassName
           }
           this.$apollo.mutate({mutation, variables})
@@ -315,19 +315,19 @@
         })
       },
 
-      createParameters(executor, missionDef, parameters) {
+      createParameters(executor, missionTpl, parameters) {
         if (debug) console.debug('createParameters=', parameters)
         return Promise.all(_.map(parameters, parameter =>
-          this.createParameter(executor, missionDef, parameter)
+          this.createParameter(executor, missionTpl, parameter)
         ))
       },
 
-      createParameter(executor, missionDef, parameter) {
+      createParameter(executor, missionTpl, parameter) {
         return new Promise((resolve, reject) => {
           const mutation = parameterInsert
           const variables = {
             executorId: executor.executorId,
-            missionDefId: missionDef.missionDefId,
+            missionTplId: missionTpl.missionTplId,
             paramName: parameter.paramName,
             type: parameter.type,
             required: parameter.required,
