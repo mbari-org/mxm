@@ -140,7 +140,13 @@
             :disable="mission.missionStatus !== 'DRAFT' && mission.missionStatus !== 'TERMINATED'"
             @click="deleteMission"
           >
-            <q-tooltip>Delete this mission (only if in DRAFT status)</q-tooltip>
+            <q-tooltip>
+              Delete this mission<br/>
+              <span style="font-size:smaller">
+                (only if in DRAFT or<br/>
+                TERMINATED status)
+              </span>
+            </q-tooltip>
           </q-btn>
         </div>
       </div>
@@ -202,7 +208,7 @@
           </q-td>
 
           <q-td key="paramValue" :props="props"
-                style="width:5px"
+                style="width:14em"
           >
             <div
               v-if="!props.row.paramValue && props.row.required"
@@ -210,14 +216,16 @@
             > ?
             </div>
             <div v-else-if="(props.row.paramValue || '') !== (props.row.defaultValue || '')"
-              class="round-borders q-pa-xs bg-green-11 text-bold"
+                 class="round-borders q-pa-xs bg-green-11"
+                 style="white-space: normal"
             >
               {{ props.row.paramValue }}
             </div>
             <div v-else
-              class="round-borders q-pa-xs bg-green-1"
+                 class="round-borders q-pa-xs bg-green-1"
+                 style="white-space: normal"
             >
-              {{ props.row.paramValue }}&nbsp;
+              {{ props.row.paramValue }}
             </div>
 
             <q-popup-edit
