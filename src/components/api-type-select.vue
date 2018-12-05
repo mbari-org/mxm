@@ -45,13 +45,6 @@
       },
     },
 
-    methods: {
-      atInput(val) {
-        if (debug) console.debug('atInput: val=', val)
-        this.$emit('input', val)
-      },
-    },
-
     watch: {
       options(val) {
         if (debug) console.log('api-type-select: watch options=', val)
