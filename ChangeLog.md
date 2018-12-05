@@ -1,5 +1,8 @@
 2018-12-05 0.0.7
 
+- add param-value-input component
+  still preliminary
+
 - "mission definition" to "mission template" general renaming
 
 2018-12-04 0.0.6

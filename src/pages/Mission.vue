@@ -208,7 +208,7 @@
           </q-td>
 
           <q-td key="paramValue" :props="props"
-                style="width:14em"
+                style="width:20em;font-family:monospace"
           >
             <div
               v-if="!props.row.paramValue && props.row.required"
@@ -229,18 +229,18 @@
             </div>
 
             <q-popup-edit
-              v-if="mission.missionStatus === 'DRAFT'"
+              :buttons="mission.missionStatus === 'DRAFT'"
               v-model="props.row.paramValue"
               :title="`${props.row.paramName}`"
-              buttons
             >
-              <q-field>
-                <q-input
-                  v-model.trim="props.row.paramValue"
-                  clearable
-                  :clear-value="props.row.defaultValue"
-                />
-              </q-field>
+              <param-value-input
+                v-model="props.row.paramValue"
+                :param-type="props.row.type"
+                :default-value="props.row.defaultValue"
+                :readonly="mission.missionStatus !== 'DRAFT'"
+                @change
+              />
+
             </q-popup-edit>
           </q-td>
 
@@ -282,6 +282,7 @@
   import missionUpdate from '../graphql/missionUpdate.gql'
   import missionDelete from '../graphql/missionDelete.gql'
   import PxsMarkdown from 'components/pxs-markdown'
+  import ParamValueInput from 'components/param-value-input'
   import {
     postMission,
     getMission,
@@ -296,6 +297,7 @@
   export default {
     components: {
       PxsMarkdown,
+      ParamValueInput,
     },
 
     data() {
