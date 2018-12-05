@@ -6,17 +6,12 @@
         :glossy="$q.theme === 'mat'"
         :inverted="$q.theme === 'ios'"
       >
-        <q-btn
-          flat
-          dense
-          round
+        <img src="statics/new_mbari_logo.png" width="60px" class="q-mr-lg">
+
+        <q-btn flat dense round icon="more_vert"
           @click="leftDrawerOpen = !leftDrawerOpen"
           aria-label="Menu"
-        >
-          <q-icon name="menu"/>
-        </q-btn>
-
-        <img src="statics/new_mbari_logo.png" width="60px" class="q-ml-lg q-mr-lg">
+        />
 
         <q-toolbar-title shrink>
           <router-link style="color:white;text-decoration:none" to="/">PXS</router-link>
