@@ -1,5 +1,16 @@
 2018-12-05 0.0.7
 
+- "importing" a new "REST0" executor is currently done with separate mutation
+  queries for the various associated entities. This of course is still a
+  preliminary implementation but the approach in general is far from ideal
+  in terms of efficiency, lack of transaction nature, and convenience.
+  It would be better to handle this kind of cases in a single nested or batch
+  mutation. Since this is rather poorly supported in Postgraphile (see
+  https://github.com/graphile/postgraphile/issues/361, where the referenced plugin
+  is still in alpha status: https://github.com/mlipscombe/postgraphile-plugin-nested-mutations),
+  consider using an alternative tool like Prisma, which does provide such support:
+  https://www.prisma.io/docs/prisma-graphql-api/reference/mutations-qwe2/
+
 - add param-value-input component
   still preliminary
 
