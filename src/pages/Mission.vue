@@ -107,7 +107,7 @@
             :disable="mission.missionStatus !== 'DRAFT'"
             @click="validateMission"
           >
-            <q-tooltip>Validate mission against external executor {{params.executorId}}</q-tooltip>
+            <q-tooltip>Validate mission against external executor</q-tooltip>
           </q-btn>
           <q-btn
             label="Run"
@@ -118,7 +118,7 @@
             :disable="mission.missionStatus !== 'DRAFT'"
             @click="runMission"
           >
-            <q-tooltip>Request execution to the external executor {{params.executorId}}</q-tooltip>
+            <q-tooltip>Request execution of this mission</q-tooltip>
           </q-btn>
           <q-btn
             label="Cancel"
@@ -129,7 +129,7 @@
             :disable="mission.missionStatus !== 'RUNNING' && mission.missionStatus !== 'QUEUED'"
             @click="cancelMission"
           >
-            <q-tooltip>Request cancelation of submitted mission to the external executor {{params.executorId}}</q-tooltip>
+            <q-tooltip>Request cancelation of submitted mission</q-tooltip>
           </q-btn>
           <q-btn
             label="Delete"
@@ -140,7 +140,7 @@
             :disable="mission.missionStatus !== 'DRAFT' && mission.missionStatus !== 'TERMINATED'"
             @click="deleteMission"
           >
-            <q-tooltip>Delete this draft mission</q-tooltip>
+            <q-tooltip>Delete this mission (only if in DRAFT status)</q-tooltip>
           </q-btn>
         </div>
       </div>

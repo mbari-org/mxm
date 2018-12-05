@@ -1,7 +1,7 @@
 2018-12-04 0.0.6
 
 - check mission status against external executor.
-  As a convenience, assuming the mission returns to the DRAFT status
+  As a convenience, have the mission return to the DRAFT status
   when the response indicates a "No such mission" error. Reason is
   that the TFT prototype currently only keeps one ongoing running mission.
 
