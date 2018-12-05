@@ -34,7 +34,10 @@
               dense color="tertiary"
               class="q-ml-sm"
               size="xs"
-            />
+              @click="checkStatus"
+            >
+              <q-tooltip>Check for status against external executor</q-tooltip>
+            </q-btn>
           </span>
         </q-card-title>
         <q-card-separator/>
@@ -134,7 +137,7 @@
             push color="primary"
             class="q-ml-sm"
             size="sm"
-            :disable="mission.missionStatus !== 'DRAFT' && mission.missionStatus === 'TERMINATED'"
+            :disable="mission.missionStatus !== 'DRAFT' && mission.missionStatus !== 'TERMINATED'"
             @click="deleteMission"
           >
             <q-tooltip>Delete this draft mission</q-tooltip>
@@ -273,6 +276,7 @@
   import PxsMarkdown from 'components/pxs-markdown'
   import {
     postMission,
+    getMission,
   } from 'plugins/rest0'
 
   import Vue from 'vue'
@@ -562,25 +566,35 @@
           })
       },
 
-      updateDescription(val) {
-        console.debug('updateDescription val=', val)
-        const mutation = missionUpdate
-        const variables = {
-          input: {
-            id: this.mission.id,
-            missionPatch: {
-              description: val
+      updateDescription(description) {
+        return this.updateMission({description})
+      },
+
+      updateMissionStatus(missionStatus) {
+        return this.updateMission({missionStatus})
+      },
+
+      updateMission(missionPatch) {
+        return new Promise((resolve, reject) => {
+          console.debug('updateMission missionPatch=', missionPatch)
+          const mutation = missionUpdate
+          const variables = {
+            input: {
+              id: this.mission.id,
+              missionPatch
             }
           }
-        }
-        this.$apollo.mutate({mutation, variables})
-          .then((data) => {
-            if (debug) console.debug('updateDescription: mutation data=', data)
-            this.mission.description = val
-          })
-          .catch((error) => {
-            console.error('updateDescription: mutation error=', error)
-          })
+          this.$apollo.mutate({mutation, variables})
+            .then((data) => {
+              if (debug) console.debug('updateMission: mutation data=', data)
+              _.assign(this.mission, missionPatch)
+              resolve(missionPatch)
+            })
+            .catch(error => {
+              console.error('updateMission: mutation error=', error)
+              reject(error)
+            })
+        })
       },
 
       validateMission() { this.$q.notify('TODO validateMission') }, // TODO
@@ -621,11 +635,20 @@
 
           postMission(httpEndpoint, data)
             .then(res => {
-              Notify.create({
-                message: `Mission submitted: ${JSON.stringify(res)}`,
-                timeout: 2000,
-                type: 'info'
-              })
+              if (!res.status) {
+                this.$q.notify("Executor reported no status")
+                return
+              }
+              const status = res.status
+              this.updateMissionStatus(status)
+                .then(_ => {
+                  Notify.create({
+                    message: `Mission submitted. Status: ${status}`,
+                    timeout: 2000,
+                    type: 'info'
+                  })
+                  this.refreshMission()
+                })
             })
             .catch(error => {
               Notify.create({
@@ -636,6 +659,46 @@
               console.error('createMissionDefs: error=', error)
             })
         }
+      },
+
+      checkStatus() {
+        getMission(this.executor.httpEndpoint, this.mission.missionId)
+          .then(res => {
+            console.debug('getMission: res=', res)
+            if (!res.status) {
+              this.$q.notify("Executor reported no status")
+              return
+            }
+            const status = res.status
+            if (this.mission.missionStatus !== status) {
+              this.updateMissionStatus(status)
+                .then(_ => {
+                  this.refreshMission()
+                })
+            }
+          })
+          .catch(error => {
+            console.error('createMissionDefs: error=', error)
+            if (error === 'No such mission') {
+              // assume we get back to DRAFT
+              Notify.create({
+                message: `No such mission in the executor. Returning to DRAFT status`,
+                timeout: 3000,
+                type: 'info'
+              })
+              this.updateMissionStatus('DRAFT')
+                .then(_ => {
+                  this.refreshMission()
+                })
+            }
+            else {
+              Notify.create({
+                message: `Mission submission error: ${JSON.stringify(error)}`,
+                timeout: 2000,
+                type: 'info'
+              })
+            }
+          })
       },
 
       deleteMission() {

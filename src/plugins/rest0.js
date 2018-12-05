@@ -7,6 +7,7 @@ export {
   getAssetClasses,
   getMissionDefs,
   postMission,
+  getMission,
 }
 
 const debug = true
@@ -25,6 +26,10 @@ function postMission(httpEndpoint, data) {
   return doPost(httpEndpoint, 'missions', data)
 }
 
+function getMission(httpEndpoint, missionId) {
+  return doGet(httpEndpoint, `missions/${missionId}`)
+}
+
 function doGet(httpEndpoint, route) {
   return new Promise((resolve, reject) => {
     const method = 'GET'
@@ -34,7 +39,12 @@ function doGet(httpEndpoint, route) {
     axios({method, url})
       .then(response => {
         if (debug) console.debug(`${method} ${url}: response=`, response)
-        resolve(response.data.data)
+        if (response.data.error) {
+          reject(response.data.error)
+        }
+        else {
+          resolve(response.data.data)
+        }
       })
       .catch(e => {
         reject(e)
