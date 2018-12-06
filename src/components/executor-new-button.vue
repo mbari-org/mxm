@@ -192,7 +192,7 @@
 
       createAssetClasses(executor, assetClasses) {
         if (debug) console.debug('assetClasses=', assetClasses)
-        return Promise.all(_.map(assetClasses, assetClass =>
+        return this.$pxsUtil.runInSequence(_.map(assetClasses, assetClass =>
           this.createAssetClass(executor, assetClass)
         ))
       },
@@ -223,7 +223,7 @@
 
       createAssets(executor, assetClass, assets) {
         if (debug) console.debug('assets=', assets)
-        return Promise.all(_.map(assets, asset =>
+        return this.$pxsUtil.runInSequence(_.map(assets, asset =>
           this.createAsset(executor, assetClass, asset)
         ))
       },
@@ -253,7 +253,7 @@
 
       createMissionTpls(executor, missionTpls) {
         if (debug) console.debug('missionTpls=', missionTpls)
-        return Promise.all(_.map(missionTpls, missionTpl =>
+        return this.$pxsUtil.runInSequence(_.map(missionTpls, missionTpl =>
           this.createMissionTpl(executor, missionTpl)
         ))
       },
@@ -271,7 +271,6 @@
           this.$apollo.mutate({mutation, variables})
             .then(data => {
               if (debug) console.debug('createMissionTpl: mutation data=', data)
-              console.debug('createMissionTpl: missionTpl=', missionTpl)
               const assetClassNames = missionTpl.assetClassNames || []
               this.createAssociatedAssetClasses(executor, missionTpl, assetClassNames)
                 .then(data => {
@@ -291,7 +290,7 @@
 
       createAssociatedAssetClasses(executor, missionTpl, assetClassNames) {
         if (debug) console.debug('createAssociatedAssetClasses=', assetClassNames)
-        return Promise.all(_.map(assetClassNames, assetClassName =>
+        return this.$pxsUtil.runInSequence(_.map(assetClassNames, assetClassName =>
           this.createAssociatedAssetClass(executor, missionTpl, assetClassName)
         ))
       },
@@ -317,12 +316,13 @@
 
       createParameters(executor, missionTpl, parameters) {
         if (debug) console.debug('createParameters=', parameters)
-        return Promise.all(_.map(parameters, parameter =>
+        return this.$pxsUtil.runInSequence(_.map(parameters, parameter =>
           this.createParameter(executor, missionTpl, parameter)
         ))
       },
 
       createParameter(executor, missionTpl, parameter) {
+        if (debug) console.debug(':::: createParameter', parameter.paramName)
         return new Promise((resolve, reject) => {
           const mutation = parameterInsert
           const variables = {
@@ -336,7 +336,6 @@
           }
           this.$apollo.mutate({mutation, variables})
             .then(data => {
-              console.debug(':::: ', parameter.paramName)
               resolve(data)
             })
             .catch(error => {
