@@ -5,7 +5,7 @@ module.exports = function (ctx) {
     // app plugins (/src/plugins)
     plugins: [
       'apollo',
-      'appInfo'
+      'pxsUtil'
     ],
     css: [
       'app.styl'
