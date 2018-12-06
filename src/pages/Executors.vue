@@ -54,7 +54,8 @@
           icon="delete"
           color="negative"
           size="xs"
-          @click="deleteExecutor(props.row)"
+          @click.exact="deleteExecutor(props.row)"
+          @click.shift.exact="doDeleteExecutor(props.row)"
         >
           <q-tooltip>Delete executor</q-tooltip>
         </q-btn>
@@ -142,35 +143,35 @@
       },
 
       deleteExecutor(row) {
-        if (debug) console.debug('deleteExecutor row=', row)
-
         this.$q.dialog({
           title: 'Confirm',
           message: `Are you sure you want to delete executor '${row.executorId}'` +
-            ' and all associated entities?',
+          ' and all associated entities?',
           color: 'negative',
           ok: `Yes, delete '${row.executorId}'`,
           cancel: true
-        }).then(() => doIt()).catch(() => {
         })
+          .then(() => this.doDeleteExecutor(row))
+          .catch(() => {
+          })
+      },
 
-        const doIt = () => {
-          const mutation = executorDelete
-          const variables = {
-            input: {
-              id: row.id
-            }
+      doDeleteExecutor(row) {
+        const mutation = executorDelete
+        const variables = {
+          input: {
+            id: row.id
           }
-          this.$apollo.mutate({mutation, variables})
-            .then((data) => {
-              if (debug) console.debug('deleteExecutor: mutation data=', data)
-              this.refresh()
-              this.$q.notify('Done')
-            })
-            .catch((error) => {
-              console.error('deleteExecutor: mutation error=', error)
-            })
         }
+        this.$apollo.mutate({mutation, variables})
+          .then((data) => {
+            if (debug) console.debug('deleteExecutor: mutation data=', data)
+            this.refresh()
+            this.$q.notify(`${row.executorId} deleted.`)
+          })
+          .catch((error) => {
+            console.error('deleteExecutor: mutation error=', error)
+          })
       },
     },
 

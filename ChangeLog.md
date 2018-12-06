@@ -1,5 +1,6 @@
 2018-12-06 0.0.7
 
+- dev convenience: shift-click to delete executor with no confirmation
 - running promises in sequence in an attempt to honor the order
   of entities as reported from external rest0 executor.
   However, for some reason this is not having visible effect
