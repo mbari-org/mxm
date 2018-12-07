@@ -22,68 +22,42 @@
               :to="`/executors/${encodeURIComponent(mission.executorId)}/missiontpls/${encodeURIComponent(mission.missionTplId)}`"
               style="color:gray; font-size:smaller; text-decoration:none"
             >
-              ({{ mission.missionTplId }})
+              {{ mission.missionTplId }}
               <q-tooltip>Mission Template</q-tooltip>
             </router-link>
           </span>
-          <span class="q-ml-lg" style="color:gray; font-size:smaller">
-            Status: <q-chip dense>{{ mission.missionStatus }}</q-chip>
-            <q-btn
-              v-if="mission.missionStatus !== 'DRAFT'"
-              icon="refresh"
-              dense color="tertiary"
-              class="q-ml-sm"
-              size="xs"
-              @click="checkStatus"
-            >
-              <q-tooltip>Check for status against external executor</q-tooltip>
-            </q-btn>
-          </span>
-        </q-card-title>
-        <q-card-separator/>
-        <q-card-main>
-          <table class="mission-table">
-            <tbody>
-            <tr>
-              <td>Description:</td>
-              <td>
-                <pxs-markdown :text="mission.description"/>
-                <q-popup-edit
-                  v-if="mission.missionStatus === 'DRAFT'"
-                  v-model="mission.description"
-                  title="Description"
-                  buttons
-                  @save="updateDescription"
-                >
-                  <q-field>
-                    <q-input
-                      v-model.trim="mission.description"
-                      clearable
-                      class="bg-green-1"
-                      type="textarea"
-                      rows="3"
-                      :max-height="300"
-                    />
-                  </q-field>
-                </q-popup-edit>
 
-              </td>
-            </tr>
-            <tr>
-              <td>Asset:</td>
-              <td>
+          <span class="q-ml-lg" style="font-size:smaller">
+            <span style="color:gray">
+              Status: <q-chip dense>{{ mission.missionStatus }}</q-chip>
+              <q-btn
+                v-if="mission.missionStatus !== 'DRAFT'"
+                icon="refresh"
+                dense color="tertiary"
+                class="q-ml-sm"
+                size="xs"
+                @click="checkStatus"
+              >
+                <q-tooltip>Check for status against external executor</q-tooltip>
+              </q-btn>
+            </span>
+            <span class="q-ml-lg" style="color:gray">
+              Asset:
+            </span>
+            <span>
+              <router-link
+                :to="`/executors/${encodeURIComponent(params.executorId)}/assets/${encodeURIComponent(mission.assetId)}`"
+                style="text-decoration:none"
+              >
                 {{ mission.assetId }}
-                <span class="q-ml-lg">
-                  <router-link
-                    :to="`/executors/${encodeURIComponent(params.executorId)}/assetclasses/${encodeURIComponent(mission.assetByExecutorIdAndAssetId.className)}`"
-                    style="color:gray; font-size:small; text-decoration:none"
-                  >
-                    ({{ mission.assetByExecutorIdAndAssetId.className }})
-                    <q-tooltip>Asset Class</q-tooltip>
-                  </router-link>
-                </span>
-              </td>
-            </tr>
+                <q-tooltip>
+                  {{ mission.assetByExecutorIdAndAssetId.className }}
+                </q-tooltip>
+              </router-link>
+            </span>
+          </span>
+          <table class="mission-table" style="font-size:smaller">
+            <tbody>
             <tr v-if="mission.start">
               <td>Start:</td>
               <td>{{ mission.start }}</td>
@@ -94,6 +68,29 @@
             </tr>
             </tbody>
           </table>
+        </q-card-title>
+
+        <q-card-separator/>
+        <q-card-main>
+          <pxs-markdown :text="mission.description"/>
+          <q-popup-edit
+            v-if="mission.missionStatus === 'DRAFT'"
+            v-model="mission.description"
+            title="Description"
+            buttons
+            @save="updateDescription"
+          >
+            <q-field>
+              <q-input
+                v-model.trim="mission.description"
+                clearable
+                class="bg-green-1"
+                type="textarea"
+                rows="3"
+                :max-height="300"
+              />
+            </q-field>
+          </q-popup-edit>
         </q-card-main>
       </q-card>
 
