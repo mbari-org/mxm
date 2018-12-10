@@ -157,40 +157,45 @@
         :filter="filter"
       >
         <div slot="top-left" slot-scope="props" class="row items-center">
-          <div class="col-auto q-headline">
-            Arguments
-          </div>
+          <div class="col">
+            <div class="row">
+              <div style="color:gray;font-size:small" class="col-auto vertical-middle text-weight-light">
+                Overridden parameters: {{parametersChanged().length}}
+              </div>
+            </div>
 
-          <div class="q-ml-md row">
-            <q-search
-              v-if="myArguments"
-              class="col"
-              color="secondary"
-              v-model="filter"
-              placeholder="Filter"
-              clearable
-            />
+            <div class="row">
+              <div class="col-auto q-headline">
+                Arguments
+              </div>
+
+              <div class="q-ml-md row">
+                <q-search
+                  v-if="myArguments"
+                  class="col"
+                  color="secondary"
+                  v-model="filter"
+                  placeholder="Filter"
+                  clearable
+                />
+              </div>
+            </div>
           </div>
         </div>
 
         <div slot="top-right" slot-scope="props">
-          <div class="q-ml-md row">
-            <q-btn
-              class="col-auto"
-              dense size="sm"
-              icon="save"
-              color="primary"
-              no-wrap no-caps
-              :disable="savingArgs"
-              :loading="savingArgs"
-              @click="saveArguments"
-            >
-              <q-tooltip>Save changes in arguments</q-tooltip>
-            </q-btn>
-            <div style="color:gray;font-size:small" class="col-auto vertical-middle text-weight-light q-ml-sm">
-              Overridden parameters: {{parametersChanged().length}}
-            </div>
-          </div>
+          <q-btn
+            class="col-auto"
+            dense size="sm"
+            icon="save"
+            color="primary"
+            no-wrap no-caps
+            :disable="savingArgs"
+            :loading="savingArgs"
+            @click="saveArguments"
+          >
+            <q-tooltip>Save changes in arguments</q-tooltip>
+          </q-btn>
         </div>
 
         <q-tr slot="body" slot-scope="props" :props="props">
@@ -230,14 +235,13 @@
               v-model="props.row.paramValue"
               :title="`${props.row.paramName}`"
             >
-              <param-value-input
+              <parameter-value-input
                 v-model="props.row.paramValue"
                 :param-type="props.row.type"
                 :default-value="props.row.defaultValue"
                 :readonly="mission.missionStatus !== 'DRAFT'"
                 @change
               />
-
             </q-popup-edit>
           </q-td>
 
@@ -279,14 +283,13 @@
   import missionUpdate from '../graphql/missionUpdate.gql'
   import missionDelete from '../graphql/missionDelete.gql'
   import PxsMarkdown from 'components/pxs-markdown'
-  import ParamValueInput from 'components/param-value-input'
+  import ParameterValueInput from 'components/parameter-value-input'
   import {
     postMission,
     getMission,
   } from 'plugins/rest0'
 
   import Vue from 'vue'
-  import {Notify} from 'quasar'
   import _ from 'lodash'
 
   const debug = false
@@ -294,7 +297,7 @@
   export default {
     components: {
       PxsMarkdown,
-      ParamValueInput,
+      ParameterValueInput,
     },
 
     data() {
@@ -455,7 +458,7 @@
             else {
               message = `No changed arguments`
             }
-            Notify.create({
+            this.$q.notify({
               message,
               timeout: 1000,
               type: 'info'
@@ -649,7 +652,7 @@
               const status = res.status
               this.updateMissionStatus(status)
                 .then(_ => {
-                  Notify.create({
+                  this.$q.notify({
                     message: `Mission submitted. Status: ${status}`,
                     timeout: 2000,
                     type: 'info'
@@ -658,7 +661,7 @@
                 })
             })
             .catch(error => {
-              Notify.create({
+              this.$q.notify({
                 message: `Mission submission error: ${JSON.stringify(error)}`,
                 timeout: 2000,
                 type: 'info'
@@ -677,6 +680,12 @@
               return
             }
             const status = res.status
+            this.$q.notify({
+              message: `Status: ${status}`,
+              timeout: 1000,
+              type: 'info',
+              position: 'top-left'
+            })
             if (this.mission.missionStatus !== status) {
               this.updateMissionStatus(status)
                 .then(_ => {
@@ -688,7 +697,7 @@
             console.error('createMissionTpls: error=', error)
             if (error === 'No such mission') {
               // assume we get back to DRAFT
-              Notify.create({
+              this.$q.notify({
                 message: `No such mission in the executor. Returning to DRAFT status`,
                 timeout: 3000,
                 type: 'info'
@@ -699,7 +708,7 @@
                 })
             }
             else {
-              Notify.create({
+              this.$q.notify({
                 message: `Mission submission error: ${JSON.stringify(error)}`,
                 timeout: 2000,
                 type: 'info'
