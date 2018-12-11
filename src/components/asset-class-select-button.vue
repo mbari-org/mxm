@@ -78,7 +78,7 @@
 <script>
   import AssetClassNewButton from 'components/asset-class-new-button'
   import allAssetClassesList from '../graphql/assetClasses.gql'
-  import {Notify} from 'quasar'
+  import _ from 'lodash'
 
   const debug = false
 

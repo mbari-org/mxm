@@ -102,8 +102,6 @@
   import AssetNewButton from 'components/asset-new-button'
   import assetClassUpdate from '../graphql/assetClassUpdate.gql'
   import PxsMarkdown from 'components/pxs-markdown'
-  import {Notify} from 'quasar'
-  import _ from 'lodash'
 
   const debug = false
 

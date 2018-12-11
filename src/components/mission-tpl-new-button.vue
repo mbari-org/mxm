@@ -69,7 +69,6 @@
 
 <script>
   import missionTplInsert from '../graphql/missionTplInsert.gql'
-  import {Notify} from 'quasar'
 
   const debug = true
 
@@ -115,7 +114,7 @@
           .then((data) => {
             console.log('mutation data=', data)
             this.dialogOpened = false
-            Notify.create({
+            this.$q.notify({
               message: 'Mission Template created',
               timeout: 1000,
               type: 'info'

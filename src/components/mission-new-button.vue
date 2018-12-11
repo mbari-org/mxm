@@ -100,7 +100,6 @@
   import MissionTplSelect from 'components/mission-tpl-select'
   import AssetSelect from 'components/asset-select'
   import _ from 'lodash'
-  import {Notify} from 'quasar'
 
   const debug = false
 
@@ -215,7 +214,7 @@
           .then((data) => {
             if (debug) console.debug('mutation data=', data)
             this.dialogOpened = false
-            Notify.create({
+            this.$q.notify({
               message: 'Mission created',
               timeout: 1000,
               type: 'info'

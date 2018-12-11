@@ -179,7 +179,6 @@
   import missionTplUpdate from '../graphql/missionTplUpdate.gql'
   import ParameterNewButton from 'components/parameter-new-button'
   import PxsMarkdown from 'components/pxs-markdown'
-  import {Notify} from 'quasar'
   import _ from 'lodash'
 
   const debug = false
@@ -300,7 +299,7 @@
           }
           else {
             if (added.length) {
-              Notify.create({
+              this.$q.notify({
                 message: `Asset associated (${added.length})`,
                 timeout: 1000,
                 type: 'info'

@@ -105,7 +105,6 @@
     getMissionTpls,
   } from 'plugins/rest0'
 
-  import {Notify} from 'quasar'
   import _ from 'lodash'
 
   const debug = false
@@ -347,7 +346,7 @@
 
       closeDialogAndNotify(executor) {
         this.dialogOpened = false
-        Notify.create({
+        this.$q.notify({
           message: `Executor created: ${executor.executorId}`,
           timeout: 1000,
           type: 'info'

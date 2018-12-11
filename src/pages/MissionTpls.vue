@@ -73,8 +73,6 @@
   import allMissionTplsList from '../graphql/missionTpls.gql'
   import MissionTplNewButton from 'components/mission-tpl-new-button'
   import PxsMarkdown from 'components/pxs-markdown'
-  import {Notify} from 'quasar'
-  import _ from 'lodash'
 
   const debug = false
 

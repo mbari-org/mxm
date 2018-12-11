@@ -74,7 +74,6 @@
 <script>
   import assetInsert from '../graphql/assetInsert.gql'
   import AssetClassNewButton from 'components/asset-class-new-button'
-  import {Notify} from 'quasar'
 
   export default {
     components: {
@@ -126,7 +125,7 @@
           .then((data) => {
             console.log('mutation data=', data)
             this.dialogOpened = false
-            Notify.create({
+            this.$q.notify({
               message: 'Asset registered',
               timeout: 1000,
               type: 'info'

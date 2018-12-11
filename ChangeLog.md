@@ -1,3 +1,7 @@
+2018-12-10 0.0.8
+
+- minor code cleanup
+
 2018-12-06 0.0.7
 
 - dev convenience: shift-click to delete executor with no confirmation

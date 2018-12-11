@@ -107,7 +107,6 @@
 
 <script>
   import parameterInsert from '../graphql/parameterInsert.gql'
-  import {Notify} from 'quasar'
 
   const debug = false
 
@@ -167,7 +166,7 @@
           .then((data) => {
             console.log('mutation data=', data)
             this.dialogOpened = false
-            Notify.create({
+            this.$q.notify({
               message: 'Parameter created',
               timeout: 1000,
               type: 'info'

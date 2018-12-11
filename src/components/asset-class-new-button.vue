@@ -71,7 +71,6 @@
 
 <script>
   import assetClassInsert from '../graphql/assetClassInsert.gql'
-  import {Notify} from 'quasar'
 
   export default {
     props: {
@@ -114,7 +113,7 @@
           .then((data) => {
             console.log('mutation data=', data)
             this.dialogOpened = false
-            Notify.create({
+            this.$q.notify({
               message: 'Asset class registered',
               timeout: 1000,
               type: 'info'

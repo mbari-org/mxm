@@ -137,7 +137,6 @@
   import executorUpdate from '../graphql/executorUpdate.gql'
   import apiTypeSelect from '../components/api-type-select'
   import PxsMarkdown from '../components/pxs-markdown'
-  import {Notify} from 'quasar'
   import _ from 'lodash'
 
   const debug = false
@@ -223,7 +222,7 @@
             if (executorPatch.apiType) {
               this.executor.apiType = executorPatch.apiType
             }
-            Notify.create({
+            this.$q.notify({
               message: `Executor updated (${_.join(_.keys(executorPatch))})`,
               timeout: 1000,
               type: 'info'
