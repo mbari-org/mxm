@@ -183,21 +183,6 @@
           </div>
         </div>
 
-        <div slot="top-right" slot-scope="props">
-          <q-btn
-            class="col-auto"
-            dense size="sm"
-            icon="save"
-            color="primary"
-            no-wrap no-caps
-            :disable="savingArgs"
-            :loading="savingArgs"
-            @click="saveArguments"
-          >
-            <q-tooltip>Save changes in arguments</q-tooltip>
-          </q-btn>
-        </div>
-
         <q-tr slot="body" slot-scope="props" :props="props">
           <q-td key="paramName" :props="props"
                 style="width:5px;font-family:monospace"
@@ -234,13 +219,13 @@
               :buttons="mission.missionStatus === 'DRAFT'"
               v-model="props.row.paramValue"
               :title="`${props.row.paramName}`"
+              @save="saveArguments"
             >
               <parameter-value-input
                 v-model="props.row.paramValue"
                 :param-type="props.row.type"
                 :default-value="props.row.defaultValue"
                 :readonly="mission.missionStatus !== 'DRAFT'"
-                @change
               />
             </q-popup-edit>
           </q-td>
@@ -450,20 +435,15 @@
             if (debug) console.debug('saveArguments DONE: numInserted=', numInserted,
               'numUpdated=', numUpdated, 'numDeleted=', numDeleted)
 
-            let message;
-            if (numInserted || numUpdated || numDeleted) {
-              message = `Arguments updated`
-              this.refreshMission()
-            }
-            else {
-              message = `No changed arguments`
-            }
-            this.$q.notify({
-              message,
-              timeout: 1000,
-              type: 'info'
-            })
             this.savingArgs = false
+            if (numInserted || numUpdated || numDeleted) {
+              this.refreshMission()
+              this.$q.notify({
+                message: `Arguments updated`,
+                timeout: 600,
+                type: 'info'
+              })
+            }
             return
           }
 

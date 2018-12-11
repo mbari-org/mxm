@@ -1,5 +1,6 @@
-2018-12-10 0.0.8
+2018-12-11 0.0.8
 
+- save mission arguments right upon value change
 - minor code cleanup
 
 2018-12-06 0.0.7
