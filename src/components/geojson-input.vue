@@ -1,20 +1,89 @@
 <template>
-  <div class="gjMap">
-    <l-map
-      ref="gjMap"
-      style="height: 100%; width: 100%"
-      :zoom="zoom"
-      :center="center"
-    >
-      <l-layer-group v-if="points">
-        <l-polyline :lat-lngs="points"
+  <table>
+    <tbody>
+    <tr>
+      <td class="gjMap">
+        <div
+          class="absolute-top-left map-buttons column items-start"
         >
-        </l-polyline>
+          <div
+            v-if="!$q.platform.is.mobile"
+            class="column q-mb-md"
+          >
+            <q-btn
+              dense glossy color="indigo-11"
+              icon="add"
+              class="shadow-8"
+              @click="doZoom(false)"
+            >
+              <q-tooltip anchor="center left" self="center right" :delay="1000">
+                Zoom in
+              </q-tooltip>
+            </q-btn>
+            <q-btn
+              v-if="!$q.platform.is.mobile"
+              dense glossy color="indigo-11"
+              icon="remove"
+              class="shadow-8"
+              @click="doZoom(true)"
+            >
+              <q-tooltip anchor="center left" self="center right" :delay="1000">
+                Zoom out
+              </q-tooltip>
+            </q-btn>
+          </div>
 
-      </l-layer-group>
+          <q-btn
+            dense glossy color="indigo-11"
+            icon="center_focus_weak"
+            class="shadow-8"
+            @click="zoomToAll()"
+          >
+            <q-tooltip anchor="center left" self="center right" :delay="1000">
+              Zoom to all apositions
+            </q-tooltip>
+          </q-btn>
+        </div>
 
-    </l-map>
-  </div>
+        <l-map
+          ref="gjMap"
+          style="height: 100%; width: 100%"
+          :zoom="zoom"
+          :center="center"
+          :options="{zoomControl:false}"
+        >
+          <l-layer-group v-if="points">
+            <l-polyline :lat-lngs="points"
+            >
+            </l-polyline>
+
+          </l-layer-group>
+
+          <div v-if="mousePos">
+            <l-circle-marker
+              :lat-lng="mousePos.latLon"
+              color="yellow"
+              :radius="mousePos.radius"
+              dash-array="5 4"
+            />
+            <l-circle-marker
+              :lat-lng="mousePos.latLon"
+              :color="mousePos.color"
+              :radius="mousePos.radius * 3"
+              dash-array="14 6"
+            />
+          </div>
+        </l-map>
+      </td>
+
+      <td style="vertical-align:top">
+        <position-table
+          :lat-lons="value"
+        />
+      </td>
+    </tr>
+    </tbody>
+  </table>
 </template>
 
 <script>
@@ -26,6 +95,8 @@
   import * as esri from 'esri-leaflet/dist/esri-leaflet'
   require('leaflet.gridlayer.googlemutant/Leaflet.GoogleMutant')
   import _ from 'lodash'
+
+  import PositionTable from 'components/position-table'
 
   const {
     LMap,
@@ -50,6 +121,7 @@
       LTooltip,
       LCircle,
       LCircleMarker,
+      PositionTable
     },
 
     props: {
@@ -86,19 +158,32 @@
 
     computed: {
       points() {
+        let points = null
         if (this.value.trim()) {
           try {
-            const points = JSON.parse(this.value)
-            points.push(points[0]) // to close loop
-            console.debug('geojson-input: points=', points)
-            return points
+            points = JSON.parse(this.value)
+            if (points.length) {
+              points.push(points[0]) // to close loop
+            }
           }
           catch (error) {
             // TODO
             console.warn(error)
           }
         }
+        if (debug) console.debug('geojson-input: points=', points)
+        return points
       }
+    },
+
+    created () {
+      this.$root.$on('evt-map-center-at', this.centerMapAt)
+      this.$root.$on('evt-map-on-mouse-pos', this.onMousePos)
+    },
+
+    destroyed () {
+      this.$root.$off('evt-map-center-at', this.centerMapAt)
+      this.$root.$off('evt-map-on-mouse-pos', this.onMousePos)
     },
 
     mounted() {
@@ -107,6 +192,49 @@
     },
 
     methods: {
+      centerMapAt (lat, lon) {
+        this.center = L.latLng(lat, lon)
+      },
+
+      onMousePos (lat, lon, vehicleName) {
+        if (lat !== undefined) {
+          this.mousePos = {
+            vehicleName,
+            latLon: [lat, lon],
+            color: '#ff0000',
+            radius: 5,
+          }
+        }
+        else {
+          this.mousePos = null
+        }
+      },
+
+      doZoom (out) {
+        const map = this.$refs.gjMap.mapObject
+        out ? map.zoomOut() : map.zoomIn()
+      },
+
+      zoomToAll () {
+        if (!this.points || !this.points.length) {
+          return
+        }
+        const min = _.reduce(this.points, (min, [lat, lon]) => ({
+          lat: min.lat ? Math.min(min.lat, lat) : lat,
+          lon: min.lon ? Math.min(min.lon, lon) : lon,
+        }))
+        const max = _.reduce(this.points, (max, [lat, lon]) => ({
+          lat: max.lat ? Math.max(max.lat, lat) : lat,
+          lon: max.lon ? Math.max(max.lon, lon) : lon,
+        }))
+
+        if (debug) console.debug('zoomToAll: min=', min, 'max=', max)
+
+        const bounds = [[max.lat, max.lon], [min.lat, min.lon]]
+
+        const map = this.$refs.gjMap.mapObject
+        map.fitBounds(bounds, { padding: [20, 20], maxZoom: 13 })
+      },
     },
   }
 
@@ -198,5 +326,13 @@
   .leaflet-control-measure h3, .leaflet-measure-resultpopup h3 {
     font-size:1em !important;
     font-weight: bold;
+  }
+</style>
+
+<style scoped>
+  .map-buttons {
+    z-index: 9999 !important;
+    margin-left: 30px;
+    margin-top: 55px;
   }
 </style>
