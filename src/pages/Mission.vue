@@ -218,10 +218,18 @@
             <q-popup-edit
               :buttons="mission.missionStatus === 'DRAFT'"
               v-model="props.row.paramValue"
-              :title="`${props.row.paramName}`"
+              :title="props.row.paramName"
+              @show="editingArgName = props.row.paramName"
+              @hide="() => { editingArgName = 'HIDE' }"
+              @close="() => { editingArgName = 'CLOSE' }"
+              @cancel="() => { editingArgName = 'CANCEL' }"
               @save="saveArguments"
             >
+              <!-- https://github.com/quasarframework/quasar/issues/2861 -->
+
               <parameter-value-input
+                v-if="editingArgName === props.row.paramName"
+                :param-name="props.row.paramName"
                 v-model="props.row.paramValue"
                 :param-type="props.row.type"
                 :default-value="props.row.defaultValue"
@@ -290,6 +298,7 @@
         loading: false,
         mission: null,
         savingArgs: false,
+        editingArgName: null,
         myArguments: [],
         argColumns: [
           {

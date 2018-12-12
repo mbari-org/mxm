@@ -1,5 +1,8 @@
 2018-12-11 0.0.8
 
+- initial preparations to edit geometries
+    - new geojson-input component to handle display and editing
+
 - save mission arguments right upon value change
 - minor code cleanup
 

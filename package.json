@@ -13,9 +13,14 @@
   "dependencies": {
     "apollo-boost": "^0.1.16",
     "axios": "^0.18.0",
+    "esri-leaflet": "^2.2.3",
     "graphql": "^14.0.2",
+    "leaflet-measure": "^3.1.0",
+    "leaflet-mouse-position": "^1.0.4",
+    "leaflet.gridlayer.googlemutant": "^0.7.0",
     "vue-apollo": "^3.0.0-beta.25",
-    "vue-markdown": "^2.2.4"
+    "vue-markdown": "^2.2.4",
+    "vue2-leaflet": "^1.2.3"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",
