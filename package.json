@@ -15,6 +15,7 @@
     "axios": "^0.18.0",
     "esri-leaflet": "^2.2.3",
     "graphql": "^14.0.2",
+    "leaflet-draw": "^1.0.4",
     "leaflet-measure": "^3.1.0",
     "leaflet-mouse-position": "^1.0.4",
     "leaflet.gridlayer.googlemutant": "^0.7.0",

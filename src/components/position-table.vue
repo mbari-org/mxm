@@ -73,7 +73,13 @@ export default {
     tableData () {
       let list
       if (typeof(this.latLons) === 'string') {
-        list = JSON.parse(this.latLons)
+        try {
+          list = JSON.parse(this.latLons)
+        }
+        catch (error) {
+          // TODO
+          console.warn(error)
+        }
       }
       else {
         list = this.latLons

@@ -52,12 +52,22 @@
           :center="center"
           :options="{zoomControl:false}"
         >
-          <l-layer-group v-if="points">
-            <l-polyline :lat-lngs="points"
-            >
-            </l-polyline>
+          <l-feature-group
+            ref="featureGroup"
+          >
+            <l-polygon
+              v-if="paramType === 'polygon' && polygons.length"
+              v-for="(poly, index) in polygons" :key="index"
+              :lat-lngs="poly"
+            />
 
-          </l-layer-group>
+            <l-circle-marker
+              v-if="paramType === 'point' && points.length"
+              v-for="(p, index) in points" :key="index"
+              :lat-lng="p"
+            />
+
+          </l-feature-group>
 
           <div v-if="mousePos">
             <l-circle-marker
@@ -77,8 +87,14 @@
       </td>
 
       <td style="vertical-align:top">
+        {{ `'${paramType}'` }} #{{polygons.length}}
         <position-table
-          :lat-lons="value"
+          v-if="paramType === 'point' || paramType === 'multipoint'"
+          :lat-lons="points"
+        />
+        <position-table
+          v-if="paramType === 'polygon' && polygons.length"
+          :lat-lons="polygons[0][0]"
         />
       </td>
     </tr>
@@ -94,6 +110,7 @@
   require('leaflet-measure/dist/leaflet-measure')
   import * as esri from 'esri-leaflet/dist/esri-leaflet'
   require('leaflet.gridlayer.googlemutant/Leaflet.GoogleMutant')
+  require('leaflet-draw/dist/leaflet.draw')
   import _ from 'lodash'
 
   import PositionTable from 'components/position-table'
@@ -101,8 +118,10 @@
   const {
     LMap,
     LMarker,
+    LFeatureGroup,
     LLayerGroup,
     LPolyline,
+    LPolygon,
     LPopup,
     LTooltip,
     LCircle,
@@ -115,8 +134,10 @@
     components: {
       LMap,
       LMarker,
+      LFeatureGroup,
       LLayerGroup,
       LPolyline,
+      LPolygon,
       LPopup,
       LTooltip,
       LCircle,
@@ -153,26 +174,9 @@
         center: L.latLng(36.83, -121.9),
         zoom: 10,
         mousePos: null,
-      }
-    },
 
-    computed: {
-      points() {
-        let points = null
-        if (this.value.trim()) {
-          try {
-            points = JSON.parse(this.value)
-            if (points.length) {
-              points.push(points[0]) // to close loop
-            }
-          }
-          catch (error) {
-            // TODO
-            console.warn(error)
-          }
-        }
-        if (debug) console.debug('geojson-input: points=', points)
-        return points
+        points: [],
+        polygons: [],
       }
     },
 
@@ -188,10 +192,72 @@
 
     mounted() {
       if (debug) console.debug(`geojson-input mounted: paramName='${this.paramName}'`)
-      initMap(this.$refs.gjMap.mapObject)
+      this.setFeatureData()
+
+      this.$nextTick(() => {
+        const map = this.$refs.gjMap.mapObject
+        console.debug('mounted: map=', map)
+
+        const featureGroup = this.$refs.featureGroup.mapObject
+        console.debug('mounted: featureGroup=', featureGroup)
+        initMap(this.paramType, map, featureGroup, this)
+      })
     },
 
     methods: {
+      setFeatureData() {
+        this.points = []
+        this.polygons = []
+
+        let json
+        if (this.value.trim()) {
+          try {
+            json = JSON.parse(this.value)
+          }
+          catch (error) { // TODO
+            console.warn(error)
+            return
+          }
+        }
+        else return
+
+        switch (this.paramType) {
+          case 'point':
+          case 'multipoint':
+            this.points = json
+            if (debug) console.debug(`setFeatureData: paramType=${this.paramType} points=`, this.points)
+            break
+
+          case 'polygon':
+          case 'multipolygon':
+            this.polygons = [[ json ]]
+            if (debug) console.debug(`setFeatureData: paramType=${this.paramType } polygons=`, this.polygons)
+            break
+
+          // TODO the other paramType's
+        }
+      },
+
+      layerCreated(layer, layerType) {
+        console.debug('layerCreated:', 'layerType=', layerType, 'layer=', layer)
+
+        switch (this.paramType) {
+          case 'point':
+          case 'multipoint':
+            if (layer._latlng) {
+              this.points.push([layer._latlng.lat, layer._latlng.lng])
+              console.debug('layerCreated: points=', this.points)
+            }
+            break
+
+          case 'polygon':
+          case 'multipolygon':
+            break
+
+          // TODO the other paramType's
+        }
+      },
+
       centerMapAt (lat, lon) {
         this.center = L.latLng(lat, lon)
       },
@@ -238,41 +304,186 @@
     },
   }
 
-  function initMap(map) {
-
+  function initMap(paramType, map, featureGroup, listener) {
+    console.debug('initMap: paramType=', paramType)
     L.DomUtil.addClass(map._container,'my-default-cursor')
 
     mousePosition.addToMap(map)
 
-    // base layers
-    ;(() => {
-      const esriOceansLayer = esri.basemapLayer('Oceans')
-      const esriOceansLabelsLayer = esri.basemapLayer('OceansLabels')
-      const esriOceansWithLabelsLayer = L.featureGroup([esriOceansLayer, esriOceansLabelsLayer])
-      const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
-      const gHybridLayer = L.gridLayer.googleMutant({type: 'hybrid'})
-      const gSatelliteLayer = L.gridLayer.googleMutant({type: 'satellite'})
-
-      // TODO leaflet or esri bug? radio button 'ESRI Oceans' seems to be always pre-selected
-      // if 'ESRI Oceans' is added, even though we are adding oceans-with-labels 1st and to the map.
-      // Also, a 2nd click on oceans-with-labels brings the one with only the labels!
-      const baseLayers = {
-        'ESRI Oceans/Labels': esriOceansWithLabelsLayer,
-        // 'ESRI Oceans': esriOceansLayer,
-        'OpenStreetMap': osmLayer,
-        'Google hybrid': gHybridLayer,
-        'Google satellite': gSatelliteLayer,
-      }
-      const controlLayers = L.control.layers(baseLayers).addTo(map)
-
-      let baseLayerName = 'ESRI Oceans/Labels'
-      baseLayers[baseLayerName].addTo(map)
-    })()
+    initBaseLayers(map)
 
     L.control.measure({
       primaryLengthUnit: 'meters', secondaryLengthUnit: 'kilometers',
       primaryAreaUnit: 'sqmeters'
     }).addTo(map)
+
+    initEditor(paramType, map, featureGroup, listener)
+  }
+
+  function initBaseLayers(map) {
+    const esriOceansLayer = esri.basemapLayer('Oceans')
+    const esriOceansLabelsLayer = esri.basemapLayer('OceansLabels')
+    const esriOceansWithLabelsLayer = L.featureGroup([esriOceansLayer, esriOceansLabelsLayer])
+    const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
+    const gHybridLayer = L.gridLayer.googleMutant({type: 'hybrid'})
+    const gSatelliteLayer = L.gridLayer.googleMutant({type: 'satellite'})
+
+    // TODO leaflet or esri bug? radio button 'ESRI Oceans' seems to be always pre-selected
+    // if 'ESRI Oceans' is added, even though we are adding oceans-with-labels 1st and to the map.
+    // Also, a 2nd click on oceans-with-labels brings the one with only the labels!
+    const baseLayers = {
+      'ESRI Oceans/Labels': esriOceansWithLabelsLayer,
+      // 'ESRI Oceans': esriOceansLayer,
+      'OpenStreetMap': osmLayer,
+      'Google hybrid': gHybridLayer,
+      'Google satellite': gSatelliteLayer,
+    }
+    const controlLayers = L.control.layers(baseLayers).addTo(map)
+
+    let baseLayerName = 'ESRI Oceans/Labels'
+    baseLayers[baseLayerName].addTo(map)
+  }
+
+  function initEditor(paramType, map, featureGroup, listener) {
+    let circle = false
+    let circlemarker = false  // {icon: new MyCustomMarker()}
+    let marker = false  // {icon: new MyCustomMarker()}
+    let rectangle = false
+    let polyline = false
+    let polygon = false
+
+    const enableMarker = () => {
+      marker = {
+        repeatMode: true
+      }
+    }
+
+    const enableCircleMarker = () => {
+      circlemarker = {
+        shapeOptions: {
+          weight: 4
+        },
+        repeatMode: true
+      }
+    }
+
+    const enablePolyline = () => {
+      polyline = {
+        shapeOptions: {
+          color: '#f357a1',
+          weight: 4
+        }
+      }
+    }
+
+    const enableRectangle = () => {
+      rectangle = {
+        shapeOptions: {
+          color: '#f357a1',
+          weight: 4
+        }
+      }
+    }
+
+    const enablePolygon = () => {
+      polygon = {
+        allowIntersection: false, // Restricts shapes to simple polygons
+        drawError: {
+          color: '#e1e100', // Color the shape will turn when intersects
+          message: '<strong>Oh snap!<strong> you can\'t draw that!' // Message that will show when intersect
+        },
+        shapeOptions: {
+          color: '#bada55'
+        }
+      }
+    }
+
+    switch (paramType) {
+      case 'point':
+        enableMarker()
+        enableCircleMarker()
+        break
+
+      case 'multipoint':
+        enableMarker()
+        enableCircleMarker()
+        break
+
+      case 'linestring':
+        enablePolyline()
+        break
+
+      case 'multilinestring':
+        enablePolyline()
+        break
+
+      case 'polygon':
+        enableRectangle()
+        enablePolygon()
+        break
+
+      case 'multipolygon':
+        enableRectangle()
+        enablePolygon()
+        break
+
+      case 'geometrycollection':
+        enableMarker()
+        enableCircleMarker()
+        enablePolyline()
+        enableRectangle()
+        enablePolygon()
+        break
+
+      case 'geometry':
+        break
+
+      case 'feature':
+      case 'featurecollection':
+        break
+
+      case 'geojson':
+        break
+    }
+
+    const options = {
+      position: 'topright',
+      draw: {
+        circle,
+        circlemarker,
+        marker,
+        rectangle,
+        polyline,
+        polygon,
+      },
+      edit: {
+        featureGroup, //REQUIRED!!
+        edit: {
+          selectedPathOptions: {
+            maintainColor: true,
+            opacity: 0.3
+          }
+        },
+        remove: true,
+      }
+    }
+
+    const drawControl = new L.Control.Draw(options)
+    map.addControl(drawControl)
+
+    map.on(L.Draw.Event.CREATED, e => {
+      console.debug('e.layerType=', e.layerType)
+      listener.layerCreated(e.layer, e.layerType)
+    })
+
+    map.on(L.Draw.Event.EDITED, e => {
+      var layers = e.layers
+      var countOfEditedLayers = 0
+      layers.eachLayer(layer => {
+        countOfEditedLayers++
+      })
+      console.debug("Edited " + countOfEditedLayers + " layers")
+    })
   }
 
   // helper related with L.control.mousePosition
@@ -301,6 +512,7 @@
 
 <style src="leaflet/dist/leaflet.css" />
 <style src="leaflet-measure/dist/leaflet-measure.css" />
+<style src="leaflet-draw/dist/leaflet.draw.css" />
 
 <style>
   .gjMap {
@@ -332,7 +544,7 @@
 <style scoped>
   .map-buttons {
     z-index: 9999 !important;
-    margin-left: 30px;
+    margin-left: 25px;
     margin-top: 55px;
   }
 </style>

@@ -3,6 +3,7 @@
 - initial preparations to edit geometries
     - new geojson-input component to handle display and editing
     - inclusion of position-table
+    - incorporate leaflet-draw
 
 - save mission arguments right upon value change
 - minor code cleanup
