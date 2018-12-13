@@ -1,9 +1,13 @@
-2018-12-12 0.0.8
+2018-12-13 0.0.8
 
 - initial preparations to edit geometries
     - new geojson-input component to handle display and editing
     - inclusion of position-table
     - incorporate leaflet-draw
+    - focusing on point, multipoint and polygon
+      TODO having issue with editing polygon: 1st edit reflected OK but
+      subsequent ones seem out-of-sync with the handlers shown by leaflet-draw
+      unless a previous cancel is performed.
 
 - save mission arguments right upon value change
 - minor code cleanup

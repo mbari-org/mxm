@@ -12,8 +12,8 @@
       @input="val => { $emit('input', val) }"
     />
 
-    <!-- TODO the following with v-else, but for now also showing the textarea -->
     <q-input
+      v-else
       class="round-borders q-pa-xs bg-green-1"
       :readonly="readonly"
       :clearable="!readonly"

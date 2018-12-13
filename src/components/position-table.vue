@@ -7,6 +7,7 @@
       row-key="index"
       :rows-per-page-options="rowsPerPage"
       :pagination.sync="pagination"
+      hide-bottom
     >
       <!-- TODO how to associate handler to whole row?
            For now, adding mouseover/out to specific columns

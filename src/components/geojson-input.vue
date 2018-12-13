@@ -55,16 +55,20 @@
           <l-feature-group
             ref="featureGroup"
           >
-            <l-polygon
-              v-if="paramType === 'polygon' && polygons.length"
-              v-for="(poly, index) in polygons" :key="index"
-              :lat-lngs="poly"
+            <l-circle-marker
+              v-if="paramType === 'point' && point.length"
+              :lat-lng="point"
             />
 
             <l-circle-marker
-              v-if="paramType === 'point' && points.length"
-              v-for="(p, index) in points" :key="index"
+              v-if="paramType === 'multipoint' && points.length"
+              v-for="(p, index) in points" :key="`${p[0]},${p[1]},${index}`"
               :lat-lng="p"
+            />
+
+            <l-polygon
+              v-if="paramType === 'polygon' && polygon.length"
+              :lat-lngs="polygon"
             />
 
           </l-feature-group>
@@ -87,15 +91,32 @@
       </td>
 
       <td style="vertical-align:top">
-        {{ `'${paramType}'` }} #{{polygons.length}}
-        <position-table
-          v-if="paramType === 'point' || paramType === 'multipoint'"
-          :lat-lons="points"
-        />
-        <position-table
-          v-if="paramType === 'polygon' && polygons.length"
-          :lat-lons="polygons[0][0]"
-        />
+        {{ `'${paramType}'` }}
+        <q-scroll-area
+          style="width:200px; height: 400px;"
+          :thumb-style="{ background: 'blue', borderRadius: '5px' }"
+        >
+          <position-table
+            v-if="paramType === 'point' && point.length"
+            :lat-lons="[point]"
+          />
+
+          <position-table
+            v-if="paramType === 'multipoint' && points.length"
+            :lat-lons="points"
+          />
+
+          <position-table
+            v-if="paramType === 'polygon' && polygon.length"
+            :lat-lons="polygon"
+          />
+
+          <div style="font-size:x-small">
+            <pre v-if="point.length">point={{point}}</pre>
+            <pre v-if="points.length">points={{points}}</pre>
+            <pre v-if="polygon.length">polygon={{polygon}}</pre>
+          </div>
+        </q-scroll-area>
       </td>
     </tr>
     </tbody>
@@ -175,8 +196,9 @@
         zoom: 10,
         mousePos: null,
 
+        point: [],
         points: [],
-        polygons: [],
+        polygon: [],
       }
     },
 
@@ -206,8 +228,9 @@
 
     methods: {
       setFeatureData() {
-        this.points = []
-        this.polygons = []
+        this.point.splice(0)
+        this.points.splice(0)
+        this.polygon.splice(0)
 
         let json
         if (this.value.trim()) {
@@ -222,36 +245,124 @@
         else return
 
         switch (this.paramType) {
-          case 'point':
-          case 'multipoint':
+          case 'point': {
+            this.point = json
+            if (debug) console.debug(`setFeatureData: paramType=${this.paramType} point=`, this.point)
+            break
+          }
+
+          case 'multipoint': {
             this.points = json
             if (debug) console.debug(`setFeatureData: paramType=${this.paramType} points=`, this.points)
             break
+          }
 
-          case 'polygon':
-          case 'multipolygon':
-            this.polygons = [[ json ]]
-            if (debug) console.debug(`setFeatureData: paramType=${this.paramType } polygons=`, this.polygons)
+          case 'polygon': {
+            this.polygon = json
+            if (debug) console.debug(`setFeatureData: paramType=${this.paramType } polygon=`, this.polygon)
             break
+          }
 
           // TODO the other paramType's
         }
       },
 
-      layerCreated(layer, layerType) {
-        console.debug('layerCreated:', 'layerType=', layerType, 'layer=', layer)
+      layerCreated(layer) {
+        console.debug('layerCreated:', 'layer=', layer)
 
         switch (this.paramType) {
-          case 'point':
-          case 'multipoint':
+          case 'point': {
+            if (layer._latlng) {
+              this.point = [layer._latlng.lat, layer._latlng.lng]
+              console.debug('layerCreated: point=', this.point)
+            }
+            break
+          }
+
+          case 'multipoint': {
             if (layer._latlng) {
               this.points.push([layer._latlng.lat, layer._latlng.lng])
               console.debug('layerCreated: points=', this.points)
             }
             break
+          }
+
+          case 'polygon': {
+            if (layer._latlngs && layer._latlngs.length) {
+              this.polygon = _.map(layer._latlngs[0], ({lat, lng}) => [lat, lng])
+              console.debug('layerCreated: polygon=', this.polygon)
+            }
+            break
+          }
+
+          // TODO the other paramType's
+        }
+      },
+
+      layersEdited() {
+        const featureGroup = this.$refs.featureGroup.mapObject
+        switch (this.paramType) {
+          case 'point': {
+            this.point.splice(0)
+            const layer = _.head(featureGroup.getLayers())
+            if (layer && layer._latlng) {
+              this.point = [layer._latlng.lat, layer._latlng.lng]
+            }
+            break
+          }
+
+          case 'multipoint': {
+            this.points.splice(0)
+            featureGroup.eachLayer(layer => {
+              if (layer && layer._latlng) {
+                this.points.push([layer._latlng.lat, layer._latlng.lng])
+              }
+            })
+            console.debug('layersEdited: points=', this.points)
+            break
+          }
+
+          case 'polygon': {
+            this.polygon.splice(0)
+            const layer = _.head(featureGroup.getLayers())
+            console.debug('---layersEdited: polygon: layer=', layer)
+            if (layer && layer._latlngs && layer._latlngs.length) {
+              _.each(layer._latlngs[0], ({lat, lng}) => {
+                this.polygon.push([lat, lng])
+              })
+            }
+            console.debug('layersEdited: polygon=', this.polygon)
+            break
+          }
+
+          // TODO the other paramType's
+        }
+      },
+
+      layersDeleted() {
+        const featureGroup = this.$refs.featureGroup.mapObject
+
+        switch (this.paramType) {
+          case 'point':
+            this.point.splice(0)
+            console.debug('layersDeleted: point=', this.point)
+            break
+
+          case 'multipoint':
+            // just grab all remaining points in featureGroup:
+            this.points.splice(0)
+            featureGroup.eachLayer(layer => {
+              console.debug('::: featureGroup layer._latlng=', layer._latlng)
+              if (layer._latlng) {
+                this.points.push([layer._latlng.lat, layer._latlng.lng])
+              }
+            })
+            console.debug('layersDeleted: points=', this.points)
+            break
 
           case 'polygon':
-          case 'multipolygon':
+            this.polygon.splice(0)
+            console.debug('layersDeleted: polygon=', this.polygon)
             break
 
           // TODO the other paramType's
@@ -352,9 +463,11 @@
     let polyline = false
     let polygon = false
 
+    let repeatMode = false
+
     const enableMarker = () => {
       marker = {
-        repeatMode: true
+        repeatMode,
       }
     }
 
@@ -363,7 +476,7 @@
         shapeOptions: {
           weight: 4
         },
-        repeatMode: true
+        repeatMode,
       }
     }
 
@@ -405,6 +518,7 @@
         break
 
       case 'multipoint':
+        repeatMode = true
         enableMarker()
         enableCircleMarker()
         break
@@ -423,11 +537,13 @@
         break
 
       case 'multipolygon':
+        repeatMode = true
         enableRectangle()
         enablePolygon()
         break
 
       case 'geometrycollection':
+        repeatMode = true
         enableMarker()
         enableCircleMarker()
         enablePolyline()
@@ -457,11 +573,11 @@
         polygon,
       },
       edit: {
-        featureGroup, //REQUIRED!!
+        featureGroup,
         edit: {
           selectedPathOptions: {
             maintainColor: true,
-            opacity: 0.3
+            opacity: 0.5
           }
         },
         remove: true,
@@ -472,17 +588,15 @@
     map.addControl(drawControl)
 
     map.on(L.Draw.Event.CREATED, e => {
-      console.debug('e.layerType=', e.layerType)
-      listener.layerCreated(e.layer, e.layerType)
+      listener.layerCreated(e.layer)
     })
 
     map.on(L.Draw.Event.EDITED, e => {
-      var layers = e.layers
-      var countOfEditedLayers = 0
-      layers.eachLayer(layer => {
-        countOfEditedLayers++
-      })
-      console.debug("Edited " + countOfEditedLayers + " layers")
+      listener.layersEdited()
+    })
+
+    map.on(L.Draw.Event.DELETED, e => {
+      listener.layersDeleted()
     })
   }
 
