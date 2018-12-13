@@ -213,12 +213,11 @@
     },
 
     mounted() {
-      if (debug) console.debug(`geojson-input mounted: paramName='${this.paramName}'`)
       this.setFeatureData()
 
       this.$nextTick(() => {
         const map = this.$refs.gjMap.mapObject
-        console.debug('mounted: map=', map)
+        if (debug) console.debug(`geojson-input mounted: paramName='${this.paramName}'`, 'map=', map)
 
         const featureGroup = this.$refs.featureGroup.mapObject
         console.debug('mounted: featureGroup=', featureGroup)
@@ -503,7 +502,6 @@
         allowIntersection: false, // Restricts shapes to simple polygons
         drawError: {
           color: '#e1e100', // Color the shape will turn when intersects
-          message: '<strong>Oh snap!<strong> you can\'t draw that!' // Message that will show when intersect
         },
         shapeOptions: {
           color: '#bada55'
