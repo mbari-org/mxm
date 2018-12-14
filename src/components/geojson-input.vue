@@ -126,7 +126,7 @@
               :lat-lons="[]"
             />
 
-            <div style="font-size:x-small">
+            <div style="font-size:x-small;color:gray">
               <pre v-if="point.length">point={{point}}</pre>
               <pre v-if="points.length">points={{points}}</pre>
               <pre v-if="polygon.length">polygon={{polygon}}</pre>
@@ -158,7 +158,7 @@
       </tr>
       </tfoot>
     </table>
-    <span style="font-family:monospace;font-size:x-small">valueString='{{valueString}}'</span>
+    <span style="font-family:monospace;font-size:x-small;color:gray">valueString='{{valueString}}'</span>
   </div>
 </template>
 

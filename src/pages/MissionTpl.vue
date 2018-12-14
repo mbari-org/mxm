@@ -137,11 +137,6 @@
             </router-link>
           </q-td>
 
-          <q-td key="type" :props="props"
-                style="width:5px"
-          >{{ props.row.type }}
-          </q-td>
-
           <q-td key="defaultValue" :props="props"
                 style="width:20em;font-family:monospace"
           >
@@ -167,6 +162,11 @@
                 readonly
               />
             </q-popup-edit>
+          </q-td>
+
+          <q-td key="type" :props="props"
+                style="width:5px"
+          >{{ props.row.type }}
           </q-td>
 
           <q-td key="required" :props="props"

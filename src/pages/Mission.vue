@@ -611,8 +611,23 @@
         })
       },
 
-      validateMission() { this.$q.notify('TODO validateMission') }, // TODO
-      cancelMission()   { this.$q.notify('TODO cancelMission') }, // TODO
+      // TODO
+      validateMission() {
+        this.$q.notify({
+          message: `TODO validateMission`,
+          timeout: 100,
+          position: 'center'
+        })
+      },
+
+      // TODO
+      cancelMission()   {
+        this.$q.notify({
+          message: `TODO cancelMission`,
+          timeout: 100,
+          position: 'center'
+        })
+      },
 
       runMission() {
         if (this.executor.apiType !== 'REST0') {
