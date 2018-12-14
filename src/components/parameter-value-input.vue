@@ -7,9 +7,8 @@
       :default-value="defaultValue"
       :readonly="readonly"
 
-      :value="value"
-      @change="val => { $emit('change', val) }"
-      @input="val => { $emit('input', val) }"
+      :value="paramValue"
+      @input="val => { paramValue = val; $emit('input', val) }"
     />
 
     <q-input

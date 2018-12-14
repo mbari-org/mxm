@@ -1,126 +1,129 @@
 <template>
-  <table>
-    <tbody>
-    <tr>
-      <td class="gjMap">
-        <div
-          class="absolute-top-left map-buttons column items-start"
-        >
+  <div>
+    <table>
+      <tbody>
+      <tr>
+        <td class="gjMap">
           <div
-            v-if="!$q.platform.is.mobile"
-            class="column q-mb-md"
+            class="absolute-top-left map-buttons column items-start"
           >
-            <q-btn
-              dense glossy color="indigo-11"
-              icon="add"
-              class="shadow-8"
-              @click="doZoom(false)"
-            >
-              <q-tooltip anchor="center left" self="center right" :delay="1000">
-                Zoom in
-              </q-tooltip>
-            </q-btn>
-            <q-btn
+            <div
               v-if="!$q.platform.is.mobile"
+              class="column q-mb-md"
+            >
+              <q-btn
+                dense glossy color="indigo-11"
+                icon="add"
+                class="shadow-8"
+                @click="doZoom(false)"
+              >
+                <q-tooltip anchor="center left" self="center right" :delay="1000">
+                  Zoom in
+                </q-tooltip>
+              </q-btn>
+              <q-btn
+                v-if="!$q.platform.is.mobile"
+                dense glossy color="indigo-11"
+                icon="remove"
+                class="shadow-8"
+                @click="doZoom(true)"
+              >
+                <q-tooltip anchor="center left" self="center right" :delay="1000">
+                  Zoom out
+                </q-tooltip>
+              </q-btn>
+            </div>
+
+            <q-btn
               dense glossy color="indigo-11"
-              icon="remove"
+              icon="center_focus_weak"
               class="shadow-8"
-              @click="doZoom(true)"
+              @click="zoomToAll()"
             >
               <q-tooltip anchor="center left" self="center right" :delay="1000">
-                Zoom out
+                Zoom to all apositions
               </q-tooltip>
             </q-btn>
           </div>
 
-          <q-btn
-            dense glossy color="indigo-11"
-            icon="center_focus_weak"
-            class="shadow-8"
-            @click="zoomToAll()"
+          <l-map
+            ref="gjMap"
+            style="height: 100%; width: 100%"
+            :zoom="zoom"
+            :center="center"
+            :options="{zoomControl:false}"
           >
-            <q-tooltip anchor="center left" self="center right" :delay="1000">
-              Zoom to all apositions
-            </q-tooltip>
-          </q-btn>
-        </div>
+            <l-feature-group
+              ref="featureGroup"
+            >
+              <l-circle-marker
+                v-if="paramType === 'point' && point.length"
+                :lat-lng="point"
+              />
 
-        <l-map
-          ref="gjMap"
-          style="height: 100%; width: 100%"
-          :zoom="zoom"
-          :center="center"
-          :options="{zoomControl:false}"
-        >
-          <l-feature-group
-            ref="featureGroup"
+              <l-circle-marker
+                v-if="paramType === 'multipoint' && points.length"
+                v-for="(p, index) in points" :key="`${p[0]},${p[1]},${index}`"
+                :lat-lng="p"
+              />
+
+              <l-polygon
+                v-if="paramType === 'polygon' && polygon.length"
+                :lat-lngs="polygon"
+              />
+
+            </l-feature-group>
+
+            <div v-if="mousePos">
+              <l-circle-marker
+                :lat-lng="mousePos.latLon"
+                color="yellow"
+                :radius="mousePos.radius"
+                dash-array="5 4"
+              />
+              <l-circle-marker
+                :lat-lng="mousePos.latLon"
+                :color="mousePos.color"
+                :radius="mousePos.radius * 3"
+                dash-array="14 6"
+              />
+            </div>
+          </l-map>
+        </td>
+
+        <td style="vertical-align:top">
+          {{ `'${paramType}'` }}
+          <q-scroll-area
+            style="width:200px; height: 400px;"
+            :thumb-style="{ background: 'blue', borderRadius: '5px' }"
           >
-            <l-circle-marker
+            <position-table
               v-if="paramType === 'point' && point.length"
-              :lat-lng="point"
+              :lat-lons="[point]"
             />
 
-            <l-circle-marker
+            <position-table
               v-if="paramType === 'multipoint' && points.length"
-              v-for="(p, index) in points" :key="`${p[0]},${p[1]},${index}`"
-              :lat-lng="p"
+              :lat-lons="points"
             />
 
-            <l-polygon
+            <position-table
               v-if="paramType === 'polygon' && polygon.length"
-              :lat-lngs="polygon"
+              :lat-lons="polygon"
             />
 
-          </l-feature-group>
-
-          <div v-if="mousePos">
-            <l-circle-marker
-              :lat-lng="mousePos.latLon"
-              color="yellow"
-              :radius="mousePos.radius"
-              dash-array="5 4"
-            />
-            <l-circle-marker
-              :lat-lng="mousePos.latLon"
-              :color="mousePos.color"
-              :radius="mousePos.radius * 3"
-              dash-array="14 6"
-            />
-          </div>
-        </l-map>
-      </td>
-
-      <td style="vertical-align:top">
-        {{ `'${paramType}'` }}
-        <q-scroll-area
-          style="width:200px; height: 400px;"
-          :thumb-style="{ background: 'blue', borderRadius: '5px' }"
-        >
-          <position-table
-            v-if="paramType === 'point' && point.length"
-            :lat-lons="[point]"
-          />
-
-          <position-table
-            v-if="paramType === 'multipoint' && points.length"
-            :lat-lons="points"
-          />
-
-          <position-table
-            v-if="paramType === 'polygon' && polygon.length"
-            :lat-lons="polygon"
-          />
-
-          <div style="font-size:x-small">
-            <pre v-if="point.length">point={{point}}</pre>
-            <pre v-if="points.length">points={{points}}</pre>
-            <pre v-if="polygon.length">polygon={{polygon}}</pre>
-          </div>
-        </q-scroll-area>
-      </td>
-    </tr>
-    </tbody>
-  </table>
+            <div style="font-size:x-small">
+              <pre v-if="point.length">point={{point}}</pre>
+              <pre v-if="points.length">points={{points}}</pre>
+              <pre v-if="polygon.length">polygon={{polygon}}</pre>
+            </div>
+          </q-scroll-area>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <span style="font-family:monospace;font-size:x-small">valueString='{{valueString}}'</span>
+  </div>
 </template>
 
 <script>
@@ -199,6 +202,8 @@
         point: [],
         points: [],
         polygon: [],
+
+        valueString: ''
       }
     },
 
@@ -213,6 +218,8 @@
     },
 
     mounted() {
+      this.valueString = this.value
+
       this.setFeatureData()
 
       this.$nextTick(() => {
@@ -269,11 +276,13 @@
       layerCreated(layer) {
         console.debug('layerCreated:', 'layer=', layer)
 
+        let json = null
         switch (this.paramType) {
           case 'point': {
             if (layer._latlng) {
               this.point = [layer._latlng.lat, layer._latlng.lng]
               console.debug('layerCreated: point=', this.point)
+              json = this.point
             }
             break
           }
@@ -281,6 +290,7 @@
           case 'multipoint': {
             if (layer._latlng) {
               this.points.push([layer._latlng.lat, layer._latlng.lng])
+              json = this.points
               console.debug('layerCreated: points=', this.points)
             }
             break
@@ -290,16 +300,23 @@
             if (layer._latlngs && layer._latlngs.length) {
               this.polygon = _.map(layer._latlngs[0], ({lat, lng}) => [lat, lng])
               console.debug('layerCreated: polygon=', this.polygon)
+              json = this.polygon
             }
             break
           }
 
           // TODO the other paramType's
         }
+        if (json) {
+          this.valueString = stringify(json)
+          console.debug('::: emiting', this.valueString)
+          this.$emit('input', this.valueString)
+        }
       },
 
       layersEdited() {
         const featureGroup = this.$refs.featureGroup.mapObject
+        let json = null
         switch (this.paramType) {
           case 'point': {
             this.point.splice(0)
@@ -307,6 +324,7 @@
             if (layer && layer._latlng) {
               this.point = [layer._latlng.lat, layer._latlng.lng]
             }
+            json = this.point
             break
           }
 
@@ -318,33 +336,39 @@
               }
             })
             console.debug('layersEdited: points=', this.points)
+            json = this.points
             break
           }
 
           case 'polygon': {
             this.polygon.splice(0)
             const layer = _.head(featureGroup.getLayers())
-            console.debug('---layersEdited: polygon: layer=', layer)
             if (layer && layer._latlngs && layer._latlngs.length) {
               _.each(layer._latlngs[0], ({lat, lng}) => {
                 this.polygon.push([lat, lng])
               })
             }
-            console.debug('layersEdited: polygon=', this.polygon)
+            json = this.polygon
             break
           }
 
           // TODO the other paramType's
         }
+
+        if (json) {
+          this.valueString = stringify(json)
+          this.$emit('input', this.valueString)
+        }
       },
 
       layersDeleted() {
         const featureGroup = this.$refs.featureGroup.mapObject
-
+        let json = null
         switch (this.paramType) {
           case 'point':
             this.point.splice(0)
             console.debug('layersDeleted: point=', this.point)
+            json = this.point
             break
 
           case 'multipoint':
@@ -357,14 +381,22 @@
               }
             })
             console.debug('layersDeleted: points=', this.points)
+            json = this.points
             break
 
           case 'polygon':
             this.polygon.splice(0)
             console.debug('layersDeleted: polygon=', this.polygon)
+            json = this.polygon
             break
 
           // TODO the other paramType's
+        }
+
+        if (json) {
+          this.valueString = stringify(json)
+          console.debug('::: emiting', this.valueString)
+          this.$emit('input', this.valueString)
         }
       },
 
@@ -619,6 +651,14 @@
       },
     }
   })()
+
+  // basically just to reduce precision of coordinates entered or edited
+  // prior to notifying parent component
+  const stringify = json => (
+    JSON.stringify(json, (k, v) => {
+      return typeof v === 'number' && v.toFixed ? +v.toFixed(6) : v
+    })
+  )
 
 </script>
 

@@ -8,6 +8,7 @@
       TODO having issue with editing polygon: 1st edit reflected OK but
       subsequent ones seem out-of-sync with the handlers shown by leaflet-draw
       unless a previous cancel is performed.
+    - emitting 'input' from geojson-input
 
 - save mission arguments right upon value change
 - minor code cleanup
