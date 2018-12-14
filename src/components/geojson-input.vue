@@ -649,16 +649,16 @@
 
         if (thePoints.length > 1) {
           const min = _.reduce(thePoints, (min, [lat, lon]) => ({
-            lat: min.lat ? Math.min(min.lat, lat) : lat,
-            lon: min.lon ? Math.min(min.lon, lon) : lon,
-          }))
+            lat: min.lat != null ? Math.min(min.lat, lat) : lat,
+            lon: min.lon != null ? Math.min(min.lon, lon) : lon,
+          }), {lat:null, lon:null})
           const max = _.reduce(thePoints, (max, [lat, lon]) => ({
-            lat: max.lat ? Math.max(max.lat, lat) : lat,
-            lon: max.lon ? Math.max(max.lon, lon) : lon,
-          }))
+            lat: max.lat != null ? Math.max(max.lat, lat) : lat,
+            lon: max.lon != null ? Math.max(max.lon, lon) : lon,
+          }), {lat:null, lon:null})
           if (debug) console.debug('zoomToAll: min=', min, 'max=', max)
           const bounds = [[max.lat, max.lon], [min.lat, min.lon]]
-          map.fitBounds(bounds, { padding: [20, 20], maxZoom: 13 })
+          map.fitBounds(bounds, { padding: [20, 20], maxZoom: 13, animate:true })
         }
         else if (thePoints.length === 1) {
           map.setView(thePoints[0], 11, {animate:true})
