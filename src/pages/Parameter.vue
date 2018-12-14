@@ -74,25 +74,26 @@
                 </q-popup-edit>
               </td>
             </tr>
-            <tr v-if="parameter.defaultValue">
+            <tr>
               <td>Default&nbsp;Value:</td>
               <td>
-                <span class="bg-green-1 q-pa-xs">
+                <div class="bg-green-1 q-pa-xs" style="width:20em;font-family:monospace">
                   {{parameter.defaultValue}}
-                </span>
+                </div>
                 <q-popup-edit
-                  v-model="parameter.defaultValue"
-                  title="Default Value"
                   buttons
+                  v-model="parameter.defaultValue"
+                  @show="editingArgName = parameter.paramName"
+                  @hide="() => { editingArgName = 'HIDE' }"
+                  @close="() => { editingArgName = 'CLOSE' }"
+                  @cancel="() => { editingArgName = 'CANCEL' }"
                 >
-                  <q-field>
-                    <q-input
-                      v-model.trim="parameter.defaultValue"
-                      clearable
-                      :clear-value="original.defaultValue"
-                      class="bg-green-1"
-                    />
-                  </q-field>
+                  <parameter-value-input
+                    v-if="editingArgName === parameter.paramName"
+                    :param-name="parameter.paramName"
+                    v-model="parameter.defaultValue"
+                    :param-type="parameter.type"
+                  />
                 </q-popup-edit>
               </td>
             </tr>
@@ -155,6 +156,7 @@
   import parameter from '../graphql/parameter.gql'
   import parameterUpdate from '../graphql/parameterUpdate.gql'
   import PxsMarkdown from 'components/pxs-markdown'
+  import ParameterValueInput from 'components/parameter-value-input'
   import _ from 'lodash'
 
   const debug = false
@@ -162,6 +164,7 @@
   export default {
     components: {
       PxsMarkdown,
+      ParameterValueInput,
     },
 
     data() {
@@ -169,6 +172,7 @@
         loading: false,
         parameter: null,
         original: null,
+        editingArgName: '',
       }
     },
 

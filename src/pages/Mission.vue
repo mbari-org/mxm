@@ -247,6 +247,12 @@
             {{ props.row.type }}
           </q-td>
 
+          <q-td key="required" :props="props"
+                style="width:5px"
+          >
+            {{ props.row.required }}
+          </q-td>
+
           <q-td key="description" :props="props"
           >
             <pxs-markdown simple hide-empty :text="props.row.description"/>
@@ -324,6 +330,11 @@
             label: 'Type',
             align: 'left',
             sortable: true
+          },
+          {
+            field: 'required',
+            name: 'required',
+            label: 'Required'
           },
           {
             field: 'description',

@@ -143,8 +143,30 @@
         </q-td>
 
         <q-td slot="body-cell-defaultValue" slot-scope="props" :props="props"
-              style="width:5px"
-        >{{ props.value }}
+              style="width:20em;font-family:monospace"
+        >
+          <div
+            class="round-borders q-pa-xs bg-green-1"
+            style="white-space: normal"
+          >
+            {{ props.value }}
+          </div>
+          <q-popup-edit
+            v-if="props.row.defaultValue"
+            v-model="props.row.defaultValue"
+            @show="editingArgName = props.row.paramName"
+            @hide="() => { editingArgName = 'HIDE' }"
+            @close="() => { editingArgName = 'CLOSE' }"
+            @cancel="() => { editingArgName = 'CANCEL' }"
+          >
+            <parameter-value-input
+              v-if="editingArgName === props.row.paramName"
+              :param-name="props.row.paramName"
+              v-model="props.row.defaultValue"
+              :param-type="props.row.type"
+              readonly
+            />
+          </q-popup-edit>
         </q-td>
 
         <q-td slot="body-cell-required" slot-scope="props" :props="props"
@@ -179,6 +201,7 @@
   import missionTplUpdate from '../graphql/missionTplUpdate.gql'
   import ParameterNewButton from 'components/parameter-new-button'
   import PxsMarkdown from 'components/pxs-markdown'
+  import ParameterValueInput from 'components/parameter-value-input'
   import _ from 'lodash'
 
   const debug = false
@@ -188,12 +211,14 @@
       AssetClassSelectButton,
       ParameterNewButton,
       PxsMarkdown,
+      ParameterValueInput,
     },
 
     data() {
       return {
         loading: false,
         missionTpl: null,
+        editingArgName: null,
         columns: [
           {
             field: 'paramName',
@@ -203,17 +228,17 @@
             sortable: true
           },
           {
+            field: 'defaultValue',
+            name: 'defaultValue',
+            label: 'Default value',
+            align: 'left',
+          },
+          {
             field: 'type',
             name: 'type',
             label: 'Type',
             align: 'left',
             sortable: true
-          },
-          {
-            field: 'defaultValue',
-            name: 'defaultValue',
-            label: 'Default value',
-            align: 'left',
           },
           {
             field: 'required',

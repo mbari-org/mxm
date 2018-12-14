@@ -1,4 +1,4 @@
-2018-12-13 0.0.8
+2018-12-14 0.0.8
 
 - initial preparations to edit geometries
     - new geojson-input component to handle display and editing
@@ -9,6 +9,7 @@
       subsequent ones seem out-of-sync with the handlers shown by leaflet-draw
       unless a previous cancel is performed.
     - emitting 'input' from geojson-input
+    - use parameter-value-input in MissionTpl (readonly for now) and Parameter
 
 - save mission arguments right upon value change
 - minor code cleanup
