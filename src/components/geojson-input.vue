@@ -231,7 +231,7 @@
 
     data () {
       return {
-        center: L.latLng(36.83, -121.9),
+        center: [36.83, -121.9],
         zoom: 10,
         mousePos: null,
 
@@ -596,15 +596,14 @@
         this.$emit('input', this.valueString)
       },
 
-      centerMapAt (lat, lon) {
-        this.center = L.latLng(lat, lon)
+      centerMapAt (latLon) {
+        this.center = latLon
       },
 
-      onMousePos (lat, lon, vehicleName) {
-        if (lat !== undefined) {
+      onMousePos (latLon) {
+        if (latLon) {
           this.mousePos = {
-            vehicleName,
-            latLon: [lat, lon],
+            latLon,
             color: '#ff0000',
             radius: 5,
           }
@@ -620,24 +619,51 @@
       },
 
       zoomToAll () {
-        if (!this.points || !this.points.length) {
-          return
-        }
-        const min = _.reduce(this.points, (min, [lat, lon]) => ({
-          lat: min.lat ? Math.min(min.lat, lat) : lat,
-          lon: min.lon ? Math.min(min.lon, lon) : lon,
-        }))
-        const max = _.reduce(this.points, (max, [lat, lon]) => ({
-          lat: max.lat ? Math.max(max.lat, lat) : lat,
-          lon: max.lon ? Math.max(max.lon, lon) : lon,
-        }))
-
-        if (debug) console.debug('zoomToAll: min=', min, 'max=', max)
-
-        const bounds = [[max.lat, max.lon], [min.lat, min.lon]]
-
         const map = this.$refs.gjMap.mapObject
-        map.fitBounds(bounds, { padding: [20, 20], maxZoom: 13 })
+
+        let thePoints = []
+        switch (this.paramType) {
+          case 'point': {
+            if (this.point.length) {
+              thePoints = [this.point]
+            }
+            break
+          }
+
+          case 'multipoint': {
+            if (this.points.length) {
+              thePoints = this.points
+            }
+            break
+          }
+
+          case 'polygon': {
+            if (this.polygon.length) {
+              thePoints = this.polygon
+            }
+            break
+          }
+
+          // TODO the other paramType's
+        }
+
+        if (thePoints.length > 1) {
+          const min = _.reduce(thePoints, (min, [lat, lon]) => ({
+            lat: min.lat ? Math.min(min.lat, lat) : lat,
+            lon: min.lon ? Math.min(min.lon, lon) : lon,
+          }))
+          const max = _.reduce(thePoints, (max, [lat, lon]) => ({
+            lat: max.lat ? Math.max(max.lat, lat) : lat,
+            lon: max.lon ? Math.max(max.lon, lon) : lon,
+          }))
+          if (debug) console.debug('zoomToAll: min=', min, 'max=', max)
+          const bounds = [[max.lat, max.lon], [min.lat, min.lon]]
+          map.fitBounds(bounds, { padding: [20, 20], maxZoom: 13 })
+        }
+        else if (thePoints.length === 1) {
+          map.setView(thePoints[0], 11, {animate:true})
+          this.centerMapAt(thePoints[0])
+        }
       },
     },
   }

@@ -93,17 +93,18 @@ export default {
 
   methods: {
     centerMapAt (row) {
-      let lat = row && row.latitude
-      let lon = row && row.longitude
+      const lat = row && row.latitude
+      const lon = row && row.longitude
       if (lat !== undefined && lon !== undefined) {
-        this.$root.$emit('evt-map-center-at', lat, lon)
+        this.$root.$emit('evt-map-center-at', [lat, lon])
       }
     },
 
     onMousePos (row) {
-      let lat = row && row.latitude
-      let lon = row && row.longitude
-      this.$root.$emit('evt-map-on-mouse-pos', lat, lon)
+      const lat = row && row.latitude
+      const lon = row && row.longitude
+      const latLon = lat !== undefined && lon !== undefined ? [lat, lon] : null
+      this.$root.$emit('evt-map-on-mouse-pos', latLon)
     },
   },
 }
