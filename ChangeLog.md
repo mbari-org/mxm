@@ -10,8 +10,9 @@
       unless a previous cancel is performed.
     - emitting 'input' from geojson-input
     - use parameter-value-input in MissionTpl (readonly for now) and Parameter
+    - follow GeoJSON in that type names are case-sensitive
     - for now, in 'Add Parameter' dialog, restricting parameter type to:
-        'float', 'integer', 'boolean', 'string', 'point', 'multipoint', 'polygon'
+        'float', 'integer', 'boolean', 'string', 'Point', 'MultiPoint', 'Polygon'
 
 - save mission arguments right upon value change
 - minor code cleanup

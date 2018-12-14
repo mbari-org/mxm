@@ -67,18 +67,18 @@
               ref="featureGroup"
             >
               <l-circle-marker
-                v-if="paramType === 'point' && point.length"
+                v-if="paramType === 'Point' && point.length"
                 :lat-lng="point"
               />
 
               <l-circle-marker
-                v-if="paramType === 'multipoint' && points.length"
+                v-if="paramType === 'MultiPoint' && points.length"
                 v-for="(p, index) in points" :key="`${p[0]},${p[1]},${index}`"
                 :lat-lng="p"
               />
 
               <l-polygon
-                v-if="paramType === 'polygon' && polygon.length"
+                v-if="paramType === 'Polygon' && polygon.length"
                 :lat-lngs="polygon"
               />
 
@@ -107,17 +107,17 @@
             :thumb-style="{ background: 'blue', borderRadius: '5px' }"
           >
             <position-table
-              v-if="paramType === 'point' && point.length"
+              v-if="paramType === 'Point' && point.length"
               :lat-lons="[point]"
             />
 
             <position-table
-              v-else-if="paramType === 'multipoint' && points.length"
+              v-else-if="paramType === 'MultiPoint' && points.length"
               :lat-lons="points"
             />
 
             <position-table
-              v-else-if="paramType === 'polygon' && polygon.length"
+              v-else-if="paramType === 'Polygon' && polygon.length"
               :lat-lons="polygon"
             />
 
@@ -275,19 +275,19 @@
           try {
             json = JSON.parse(this.valueString)
             switch (this.paramType) {
-              case 'point': {
+              case 'Point': {
                 this.point = json
                 if (debug) console.debug(`setFeatureData: paramType=${this.paramType} point=`, this.point)
                 break
               }
 
-              case 'multipoint': {
+              case 'MultiPoint': {
                 this.points = json
                 if (debug) console.debug(`setFeatureData: paramType=${this.paramType} points=`, this.points)
                 break
               }
 
-              case 'polygon': {
+              case 'Polygon': {
                 this.polygon = json
                 if (debug) console.debug(`setFeatureData: paramType=${this.paramType } polygon=`, this.polygon)
                 break
@@ -384,38 +384,38 @@
         }
 
         switch (this.paramType) {
-          case 'point':
+          case 'Point':
             repeatMode = true
             enableMarker()
             enableCircleMarker()
             break
 
-          case 'multipoint':
+          case 'MultiPoint':
             repeatMode = true
             enableMarker()
             enableCircleMarker()
             break
 
-          case 'linestring':
+          case 'LineString':
             enablePolyline()
             break
 
-          case 'multilinestring':
+          case 'MultiLineString':
             enablePolyline()
             break
 
-          case 'polygon':
+          case 'Polygon':
             enableRectangle()
             enablePolygon()
             break
 
-          case 'multipolygon':
+          case 'MultiPolygon':
             repeatMode = true
             enableRectangle()
             enablePolygon()
             break
 
-          case 'geometrycollection':
+          case 'GeometryCollection':
             repeatMode = true
             enableMarker()
             enableCircleMarker()
@@ -424,14 +424,11 @@
             enablePolygon()
             break
 
-          case 'geometry':
+          case 'Feature':
+          case 'FeatureCollection':
             break
 
-          case 'feature':
-          case 'featurecollection':
-            break
-
-          case 'geojson':
+          case 'GeoJSON':
             break
         }
 
@@ -478,7 +475,7 @@
 
         let json = null
         switch (this.paramType) {
-          case 'point': {
+          case 'Point': {
             if (layer._latlng) {
               this.point = [layer._latlng.lat, layer._latlng.lng]
               console.debug('layerCreated: point=', this.point)
@@ -487,7 +484,7 @@
             break
           }
 
-          case 'multipoint': {
+          case 'MultiPoint': {
             if (layer._latlng) {
               this.points.push([layer._latlng.lat, layer._latlng.lng])
               json = this.points
@@ -496,7 +493,7 @@
             break
           }
 
-          case 'polygon': {
+          case 'Polygon': {
             if (layer._latlngs && layer._latlngs.length) {
               this.polygon = _.map(layer._latlngs[0], ({lat, lng}) => [lat, lng])
               console.debug('layerCreated: polygon=', this.polygon)
@@ -515,7 +512,7 @@
         const featureGroup = this.$refs.featureGroup.mapObject
         let json = null
         switch (this.paramType) {
-          case 'point': {
+          case 'Point': {
             this.point.splice(0)
             const layer = _.head(featureGroup.getLayers())
             if (layer && layer._latlng) {
@@ -525,7 +522,7 @@
             break
           }
 
-          case 'multipoint': {
+          case 'MultiPoint': {
             this.points.splice(0)
             featureGroup.eachLayer(layer => {
               if (layer && layer._latlng) {
@@ -537,7 +534,7 @@
             break
           }
 
-          case 'polygon': {
+          case 'Polygon': {
             this.polygon.splice(0)
             const layer = _.head(featureGroup.getLayers())
             if (layer && layer._latlngs && layer._latlngs.length) {
@@ -559,13 +556,13 @@
         const featureGroup = this.$refs.featureGroup.mapObject
         let json = null
         switch (this.paramType) {
-          case 'point':
+          case 'Point':
             this.point.splice(0)
             console.debug('layersDeleted: point=', this.point)
             json = this.point
             break
 
-          case 'multipoint':
+          case 'MultiPoint':
             // just grab all remaining points in featureGroup:
             this.points.splice(0)
             featureGroup.eachLayer(layer => {
@@ -578,7 +575,7 @@
             json = this.points
             break
 
-          case 'polygon':
+          case 'Polygon':
             this.polygon.splice(0)
             console.debug('layersDeleted: polygon=', this.polygon)
             json = this.polygon
@@ -623,21 +620,21 @@
 
         let thePoints = []
         switch (this.paramType) {
-          case 'point': {
+          case 'Point': {
             if (this.point.length) {
               thePoints = [this.point]
             }
             break
           }
 
-          case 'multipoint': {
+          case 'MultiPoint': {
             if (this.points.length) {
               thePoints = this.points
             }
             break
           }
 
-          case 'polygon': {
+          case 'Polygon': {
             if (this.polygon.length) {
               thePoints = this.polygon
             }

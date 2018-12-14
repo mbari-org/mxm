@@ -178,7 +178,7 @@
       types() {
         return [
           'float', 'integer', 'boolean', 'string',
-          'point', 'multipoint', 'polygon',
+          'Point', 'MultiPoint', 'Polygon',
         ]
       },
 

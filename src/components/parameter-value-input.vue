@@ -69,17 +69,16 @@
 
     computed: {
       isGeojsonType() {
-        switch (this.paramType.toLowerCase()) {
-          case 'point':
-          case 'multipoint':
-          case 'linestring':
-          case 'multilinestring':
-          case 'polygon':
-          case 'multipolygon':
-          case 'geometrycollection':
-          case 'geometry':
+        switch (this.paramType) {
+          case 'Point':
+          case 'MultiPoint':
+          case 'LineString':
+          case 'MultiLineString':
+          case 'Polygon':
+          case 'MultiPolygon':
+          case 'GeometryCollection':
           // https://tools.ietf.org/html/rfc7946#section-3
-          case 'geojson':
+          case 'GeoJSON':
             return true
 
           // https://tools.ietf.org/html/rfc7946#section-3.2
@@ -96,7 +95,7 @@
         let style = "font-family:monospace"
         let rows = "1"
 
-        switch (this.paramType.toLowerCase()) {
+        switch (this.paramType) {
           case 'float':
           case 'int':
           case 'boolean':

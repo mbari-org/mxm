@@ -775,28 +775,27 @@
 
   // TODO convertValue still pretty ad hoc
   function convertValue(value, type) {
-    switch (type.toLowerCase()) {
+    switch (type) {
       case 'float': return parseFloat(value)
       case 'int': return parseInt(value)
       case 'boolean': return value && value.toLowerCase() === 'true'
       case 'string': return value
 
       // https://tools.ietf.org/html/rfc7946#section-3.1.1
-      case 'point': return JSON.parse(value)
-      case 'multipoint': return JSON.parse(value)
-      case 'linestring': return JSON.parse(value)
-      case 'multilinestring': return JSON.parse(value)
-      case 'polygon': return JSON.parse(value)
-      case 'multipolygon': return JSON.parse(value)
-      case 'geometrycollection': return JSON.parse(value)
-      case 'geometry': return JSON.parse(value)
+      case 'Point': return JSON.parse(value)
+      case 'MultiPoint': return JSON.parse(value)
+      case 'LineString': return JSON.parse(value)
+      case 'MultiLineString': return JSON.parse(value)
+      case 'Polygon': return JSON.parse(value)
+      case 'MultiPolygon': return JSON.parse(value)
+      case 'GeometryCollection': return JSON.parse(value)
 
       // https://tools.ietf.org/html/rfc7946#section-3.2
-      case 'feature': return JSON.parse(value)
-      case 'featurecollection': return JSON.parse(value)
+      case 'Feature': return JSON.parse(value)
+      case 'FeatureCollection': return JSON.parse(value)
 
       // https://tools.ietf.org/html/rfc7946#section-3
-      case 'geojson': return JSON.parse(value)
+      case 'GeoJSON': return JSON.parse(value)
 
       default: return value
     }
