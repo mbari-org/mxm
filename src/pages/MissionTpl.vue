@@ -126,59 +126,59 @@
           />
         </div>
 
-        <q-td slot="body-cell-paramName" slot-scope="props" :props="props"
-              style="width:5px;font-family:monospace"
-        >
-          <router-link
-            style="text-decoration:none"
-            :to="`/executors/${encodeURIComponent(params.executorId)}/missiontpls/${encodeURIComponent(params.missionTplId)}/params/${encodeURIComponent(props.value)}`"
-          >{{ props.value }}
-          </router-link>
-
-        </q-td>
-
-        <q-td slot="body-cell-type" slot-scope="props" :props="props"
-              style="width:5px"
-        >{{ props.value }}
-        </q-td>
-
-        <q-td slot="body-cell-defaultValue" slot-scope="props" :props="props"
-              style="width:20em;font-family:monospace"
-        >
-          <div
-            class="round-borders q-pa-xs bg-green-1"
-            style="white-space: normal"
+        <q-tr slot="body" slot-scope="props" :props="props">
+          <q-td key="paramName" :props="props"
+                style="width:5px;font-family:monospace"
           >
-            {{ props.value }}
-          </div>
-          <q-popup-edit
-            v-if="props.row.defaultValue"
-            v-model="props.row.defaultValue"
-            @show="editingArgName = props.row.paramName"
-            @hide="() => { editingArgName = 'HIDE' }"
-            @close="() => { editingArgName = 'CLOSE' }"
-            @cancel="() => { editingArgName = 'CANCEL' }"
+            <router-link
+              style="text-decoration:none"
+              :to="`/executors/${encodeURIComponent(params.executorId)}/missiontpls/${encodeURIComponent(params.missionTplId)}/params/${encodeURIComponent(props.row.paramName)}`"
+            >{{ props.row.paramName }}
+            </router-link>
+          </q-td>
+
+          <q-td key="type" :props="props"
+                style="width:5px"
+          >{{ props.row.type }}
+          </q-td>
+
+          <q-td key="defaultValue" :props="props"
+                style="width:20em;font-family:monospace"
           >
-            <parameter-value-input
-              v-if="editingArgName === props.row.paramName"
-              :param-name="props.row.paramName"
+            <div
+              class="round-borders q-pa-xs bg-green-1"
+              style="white-space: normal"
+            >
+              {{ props.row.defaultValue }}
+            </div>
+            <q-popup-edit
+              v-if="props.row.defaultValue"
               v-model="props.row.defaultValue"
-              :param-type="props.row.type"
-              readonly
-            />
-          </q-popup-edit>
-        </q-td>
+              @show="editingArgName = props.row.paramName"
+              @hide="() => { editingArgName = 'HIDE' }"
+              @close="() => { editingArgName = 'CLOSE' }"
+              @cancel="() => { editingArgName = 'CANCEL' }"
+            >
+              <parameter-value-input
+                v-if="editingArgName === props.row.paramName"
+                :param-name="props.row.paramName"
+                v-model="props.row.defaultValue"
+                :param-type="props.row.type"
+                readonly
+              />
+            </q-popup-edit>
+          </q-td>
 
-        <q-td slot="body-cell-required" slot-scope="props" :props="props"
-              style="width:5px"
-        >{{ props.value }}
-        </q-td>
+          <q-td key="required" :props="props"
+                style="width:5px"
+          >{{ props.row.required }}
+          </q-td>
 
-        <q-td slot="body-cell-description" slot-scope="props" :props="props"
-        >
-          <pxs-markdown simple hide-empty :text="props.value"/>
-        </q-td>
-
+          <q-td key="description" :props="props"
+          >
+            <pxs-markdown simple hide-empty :text="props.row.description"/>
+          </q-td>
+        </q-tr>
       </q-table>
     </div>
 
