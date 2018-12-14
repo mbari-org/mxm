@@ -14,6 +14,7 @@
     <q-input
       v-else
       class="round-borders q-pa-xs bg-green-1"
+      :stack-label="paramName"
       :readonly="readonly"
       :clearable="!readonly"
       :clear-value="defaultValue"

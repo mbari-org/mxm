@@ -192,6 +192,10 @@
               :to="`/executors/${encodeURIComponent(mission.executorId)}/missiontpls/${encodeURIComponent(mission.missionTplId)}/params/${encodeURIComponent(props.row.paramName)}`"
             >{{ props.row.paramName }}
             </router-link>
+
+            <div v-if="debug" class="bg-blue-1" style="white-space:wrap;width:200px">
+              V={{props.row.paramValue}}
+            </div>
           </q-td>
 
           <q-td key="paramValue" :props="props"
@@ -218,7 +222,6 @@
             <q-popup-edit
               :buttons="mission.missionStatus === 'DRAFT'"
               v-model="props.row.paramValue"
-              :title="props.row.paramName"
               @show="editingArgName = props.row.paramName"
               @hide="() => { editingArgName = 'HIDE' }"
               @close="() => { editingArgName = 'CLOSE' }"
@@ -295,6 +298,7 @@
 
     data() {
       return {
+        debug,
         loading: false,
         mission: null,
         savingArgs: false,
@@ -457,7 +461,7 @@
           }
 
           if (debug) console.debug('saveArguments: checking', arg.paramName,
-            'v=', arg.paramValue, 'dv=', arg.defaultValue)
+            `v='${arg.paramValue}' dv='${arg.defaultValue}'`)
 
           const alreadySavedArg = _.find(alreadySavedArgs, x => x.paramName === arg.paramName)
           if (debug) console.debug(arg.paramName, 'alreadySavedArg=', alreadySavedArg)

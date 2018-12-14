@@ -1,6 +1,16 @@
 <template>
   <div>
     <table>
+      <thead>
+        <tr>
+          <td class="text-bold">
+            {{paramName}}
+          </td>
+          <td class="text-weight-thin" style="text-align:right">
+            {{paramType}}
+          </td>
+        </tr>
+      </thead>
       <tbody>
       <tr>
         <td class="gjMap">
@@ -92,7 +102,6 @@
         </td>
 
         <td style="vertical-align:top">
-          {{ `'${paramType}'` }}
           <q-scroll-area
             style="width:200px; height: 400px;"
             :thumb-style="{ background: 'blue', borderRadius: '5px' }"
@@ -103,13 +112,18 @@
             />
 
             <position-table
-              v-if="paramType === 'multipoint' && points.length"
+              v-else-if="paramType === 'multipoint' && points.length"
               :lat-lons="points"
             />
 
             <position-table
-              v-if="paramType === 'polygon' && polygon.length"
+              v-else-if="paramType === 'polygon' && polygon.length"
               :lat-lons="polygon"
+            />
+
+            <position-table
+              v-else
+              :lat-lons="[]"
             />
 
             <div style="font-size:x-small">
@@ -121,6 +135,28 @@
         </td>
       </tr>
       </tbody>
+      <tfoot v-if="!readonly">
+      <tr>
+        <td colspan="2" style="text-align:right">
+          <q-btn
+            v-if="defaultValue"
+            icon="settings_backup_restore"
+            dense round
+            @click="setFeatureDataAndEmit(defaultValue)"
+          >
+            <q-tooltip>Reset to default value</q-tooltip>
+          </q-btn>
+          <q-btn
+            v-if="defaultValue"
+            icon="clear"
+            dense round
+            @click="setFeatureDataAndEmit()"
+          >
+            <q-tooltip>Clear all</q-tooltip>
+          </q-btn>
+        </td>
+      </tr>
+      </tfoot>
     </table>
     <span style="font-family:monospace;font-size:x-small">valueString='{{valueString}}'</span>
   </div>
@@ -152,7 +188,7 @@
     LCircleMarker,
   } = Vue2Leaflet
 
-  const debug = true
+  const debug = false
 
   export default {
     components: {
@@ -218,59 +254,223 @@
     },
 
     mounted() {
-      this.valueString = this.value
-
-      this.setFeatureData()
-
-      this.$nextTick(() => {
-        const map = this.$refs.gjMap.mapObject
-        if (debug) console.debug(`geojson-input mounted: paramName='${this.paramName}'`, 'map=', map)
-
-        const featureGroup = this.$refs.featureGroup.mapObject
-        console.debug('mounted: featureGroup=', featureGroup)
-        initMap(this.paramType, map, featureGroup, this)
-      })
+      this.setFeatureData(this.value)
+      this.$nextTick(this.initMap)
     },
 
     methods: {
-      setFeatureData() {
+      setFeatureDataAndEmit(value) {
+        const json = this.setFeatureData(value)
+        this.updateValueString(json)
+      },
+
+      setFeatureData(value) {
+        this.valueString = value || ''
         this.point.splice(0)
         this.points.splice(0)
         this.polygon.splice(0)
 
         let json
-        if (this.value.trim()) {
+        if (this.valueString.trim()) {
           try {
-            json = JSON.parse(this.value)
+            json = JSON.parse(this.valueString)
+            switch (this.paramType) {
+              case 'point': {
+                this.point = json
+                if (debug) console.debug(`setFeatureData: paramType=${this.paramType} point=`, this.point)
+                break
+              }
+
+              case 'multipoint': {
+                this.points = json
+                if (debug) console.debug(`setFeatureData: paramType=${this.paramType} points=`, this.points)
+                break
+              }
+
+              case 'polygon': {
+                this.polygon = json
+                if (debug) console.debug(`setFeatureData: paramType=${this.paramType } polygon=`, this.polygon)
+                break
+              }
+
+              // TODO the other paramType's
+            }
           }
           catch (error) { // TODO
             console.warn(error)
-            return
           }
         }
-        else return
+        return json
+      },
+
+      initMap() {
+        const map = this.$refs.gjMap.mapObject
+
+        if (debug) console.debug(`geojson-input initMap: paramName='${this.paramName}'`, 'map=', map)
+
+        L.DomUtil.addClass(map._container,'my-default-cursor')
+
+        mousePosition.addToMap(map)
+
+        initBaseLayers(map)
+
+        L.control.measure({
+          primaryLengthUnit: 'meters', secondaryLengthUnit: 'kilometers',
+          primaryAreaUnit: 'sqmeters'
+        }).addTo(map)
+
+        if (!this.readonly) {
+          this.initEditor()
+        }
+      },
+
+      initEditor() {
+        const map = this.$refs.gjMap.mapObject
+        const featureGroup = this.$refs.featureGroup.mapObject
+        if (debug) console.debug('initEditor: featureGroup=', featureGroup)
+
+        let circle = false
+        let circlemarker = false  // {icon: new MyCustomMarker()}
+        let marker = false  // {icon: new MyCustomMarker()}
+        let rectangle = false
+        let polyline = false
+        let polygon = false
+
+        let repeatMode = false
+
+        const enableMarker = () => {
+          marker = {
+            repeatMode,
+          }
+        }
+
+        const enableCircleMarker = () => {
+          circlemarker = {
+            shapeOptions: {
+              weight: 4
+            },
+            repeatMode,
+          }
+        }
+
+        const enablePolyline = () => {
+          polyline = {
+            shapeOptions: {
+              color: '#f357a1',
+              weight: 4
+            }
+          }
+        }
+
+        const enableRectangle = () => {
+          rectangle = {
+            shapeOptions: {
+              color: '#f357a1',
+              weight: 4
+            }
+          }
+        }
+
+        const enablePolygon = () => {
+          polygon = {
+            allowIntersection: false, // Restricts shapes to simple polygons
+            drawError: {
+              color: '#e1e100', // Color the shape will turn when intersects
+            },
+            shapeOptions: {
+              color: '#bada55'
+            }
+          }
+        }
 
         switch (this.paramType) {
-          case 'point': {
-            this.point = json
-            if (debug) console.debug(`setFeatureData: paramType=${this.paramType} point=`, this.point)
+          case 'point':
+            repeatMode = true
+            enableMarker()
+            enableCircleMarker()
             break
-          }
 
-          case 'multipoint': {
-            this.points = json
-            if (debug) console.debug(`setFeatureData: paramType=${this.paramType} points=`, this.points)
+          case 'multipoint':
+            repeatMode = true
+            enableMarker()
+            enableCircleMarker()
             break
-          }
 
-          case 'polygon': {
-            this.polygon = json
-            if (debug) console.debug(`setFeatureData: paramType=${this.paramType } polygon=`, this.polygon)
+          case 'linestring':
+            enablePolyline()
             break
-          }
 
-          // TODO the other paramType's
+          case 'multilinestring':
+            enablePolyline()
+            break
+
+          case 'polygon':
+            enableRectangle()
+            enablePolygon()
+            break
+
+          case 'multipolygon':
+            repeatMode = true
+            enableRectangle()
+            enablePolygon()
+            break
+
+          case 'geometrycollection':
+            repeatMode = true
+            enableMarker()
+            enableCircleMarker()
+            enablePolyline()
+            enableRectangle()
+            enablePolygon()
+            break
+
+          case 'geometry':
+            break
+
+          case 'feature':
+          case 'featurecollection':
+            break
+
+          case 'geojson':
+            break
         }
+
+        const options = {
+          position: 'topright',
+          draw: {
+            circle,
+            circlemarker,
+            marker,
+            rectangle,
+            polyline,
+            polygon,
+          },
+          edit: {
+            featureGroup,
+            edit: {
+              selectedPathOptions: {
+                maintainColor: true,
+                opacity: 0.5
+              }
+            },
+            remove: true,
+          }
+        }
+
+        const drawControl = new L.Control.Draw(options)
+        map.addControl(drawControl)
+
+        map.on(L.Draw.Event.CREATED, e => {
+          this.layerCreated(e.layer)
+        })
+
+        map.on(L.Draw.Event.EDITED, e => {
+          this.layersEdited()
+        })
+
+        map.on(L.Draw.Event.DELETED, e => {
+          this.layersDeleted()
+        })
       },
 
       layerCreated(layer) {
@@ -307,11 +507,8 @@
 
           // TODO the other paramType's
         }
-        if (json) {
-          this.valueString = stringify(json)
-          console.debug('::: emiting', this.valueString)
-          this.$emit('input', this.valueString)
-        }
+
+        this.updateValueString(json)
       },
 
       layersEdited() {
@@ -355,10 +552,7 @@
           // TODO the other paramType's
         }
 
-        if (json) {
-          this.valueString = stringify(json)
-          this.$emit('input', this.valueString)
-        }
+        this.updateValueString(json)
       },
 
       layersDeleted() {
@@ -393,11 +587,13 @@
           // TODO the other paramType's
         }
 
-        if (json) {
-          this.valueString = stringify(json)
-          console.debug('::: emiting', this.valueString)
-          this.$emit('input', this.valueString)
-        }
+        this.updateValueString(json)
+      },
+
+      updateValueString(json) {
+        this.valueString = json && stringify(json) || ''
+        console.debug(`::: updateValueString emiting '${this.valueString}'`)
+        this.$emit('input', this.valueString)
       },
 
       centerMapAt (lat, lon) {
@@ -446,22 +642,6 @@
     },
   }
 
-  function initMap(paramType, map, featureGroup, listener) {
-    console.debug('initMap: paramType=', paramType)
-    L.DomUtil.addClass(map._container,'my-default-cursor')
-
-    mousePosition.addToMap(map)
-
-    initBaseLayers(map)
-
-    L.control.measure({
-      primaryLengthUnit: 'meters', secondaryLengthUnit: 'kilometers',
-      primaryAreaUnit: 'sqmeters'
-    }).addTo(map)
-
-    initEditor(paramType, map, featureGroup, listener)
-  }
-
   function initBaseLayers(map) {
     const esriOceansLayer = esri.basemapLayer('Oceans')
     const esriOceansLabelsLayer = esri.basemapLayer('OceansLabels')
@@ -484,150 +664,6 @@
 
     let baseLayerName = 'ESRI Oceans/Labels'
     baseLayers[baseLayerName].addTo(map)
-  }
-
-  function initEditor(paramType, map, featureGroup, listener) {
-    let circle = false
-    let circlemarker = false  // {icon: new MyCustomMarker()}
-    let marker = false  // {icon: new MyCustomMarker()}
-    let rectangle = false
-    let polyline = false
-    let polygon = false
-
-    let repeatMode = false
-
-    const enableMarker = () => {
-      marker = {
-        repeatMode,
-      }
-    }
-
-    const enableCircleMarker = () => {
-      circlemarker = {
-        shapeOptions: {
-          weight: 4
-        },
-        repeatMode,
-      }
-    }
-
-    const enablePolyline = () => {
-      polyline = {
-        shapeOptions: {
-          color: '#f357a1',
-          weight: 4
-        }
-      }
-    }
-
-    const enableRectangle = () => {
-      rectangle = {
-        shapeOptions: {
-          color: '#f357a1',
-          weight: 4
-        }
-      }
-    }
-
-    const enablePolygon = () => {
-      polygon = {
-        allowIntersection: false, // Restricts shapes to simple polygons
-        drawError: {
-          color: '#e1e100', // Color the shape will turn when intersects
-        },
-        shapeOptions: {
-          color: '#bada55'
-        }
-      }
-    }
-
-    switch (paramType) {
-      case 'point':
-        enableMarker()
-        enableCircleMarker()
-        break
-
-      case 'multipoint':
-        repeatMode = true
-        enableMarker()
-        enableCircleMarker()
-        break
-
-      case 'linestring':
-        enablePolyline()
-        break
-
-      case 'multilinestring':
-        enablePolyline()
-        break
-
-      case 'polygon':
-        enableRectangle()
-        enablePolygon()
-        break
-
-      case 'multipolygon':
-        repeatMode = true
-        enableRectangle()
-        enablePolygon()
-        break
-
-      case 'geometrycollection':
-        repeatMode = true
-        enableMarker()
-        enableCircleMarker()
-        enablePolyline()
-        enableRectangle()
-        enablePolygon()
-        break
-
-      case 'geometry':
-        break
-
-      case 'feature':
-      case 'featurecollection':
-        break
-
-      case 'geojson':
-        break
-    }
-
-    const options = {
-      position: 'topright',
-      draw: {
-        circle,
-        circlemarker,
-        marker,
-        rectangle,
-        polyline,
-        polygon,
-      },
-      edit: {
-        featureGroup,
-        edit: {
-          selectedPathOptions: {
-            maintainColor: true,
-            opacity: 0.5
-          }
-        },
-        remove: true,
-      }
-    }
-
-    const drawControl = new L.Control.Draw(options)
-    map.addControl(drawControl)
-
-    map.on(L.Draw.Event.CREATED, e => {
-      listener.layerCreated(e.layer)
-    })
-
-    map.on(L.Draw.Event.EDITED, e => {
-      listener.layersEdited()
-    })
-
-    map.on(L.Draw.Event.DELETED, e => {
-      listener.layersDeleted()
-    })
   }
 
   // helper related with L.control.mousePosition
@@ -654,11 +690,16 @@
 
   // basically just to reduce precision of coordinates entered or edited
   // prior to notifying parent component
-  const stringify = json => (
-    JSON.stringify(json, (k, v) => {
-      return typeof v === 'number' && v.toFixed ? +v.toFixed(6) : v
-    })
-  )
+  const stringify = json => {
+    if (Array.isArray(json) && !json.length) {
+      return ''   // avoid returning `[]`
+    }
+    else {
+      return JSON.stringify(json, (k, v) => {
+        return typeof v === 'number' && v.toFixed ? +v.toFixed(6) : v
+      })
+    }
+  }
 
 </script>
 
