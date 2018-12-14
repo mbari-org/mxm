@@ -4,7 +4,7 @@
       <thead>
         <tr>
           <td class="text-bold">
-            {{paramName}}
+            {{paramName || '?'}}
           </td>
           <td class="text-weight-thin" style="text-align:right">
             {{paramType}}
@@ -147,7 +147,7 @@
             <q-tooltip>Reset to default value</q-tooltip>
           </q-btn>
           <q-btn
-            v-if="defaultValue"
+            v-if="defaultValue !== undefined"
             icon="clear"
             dense round
             @click="setFeatureDataAndEmit()"
@@ -208,7 +208,7 @@
     props: {
       paramName: {
         type: String,
-        required: true
+        required: false
       },
       paramType: {
         type: String,
@@ -306,7 +306,7 @@
       initMap() {
         const map = this.$refs.gjMap.mapObject
 
-        if (debug) console.debug(`geojson-input initMap: paramName='${this.paramName}'`, 'map=', map)
+        if (debug) console.debug(`geojson-input initMap: paramName=${this.paramName}`, 'map=', map)
 
         L.DomUtil.addClass(map._container,'my-default-cursor')
 

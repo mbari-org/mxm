@@ -1,7 +1,7 @@
 <template>
   <div>
     <q-modal v-model="dialogOpened"
-             content-css="min-width:600px;min-height:300px"
+             content-css="min-width:700px;min-height:300px"
              no-backdrop-dismiss
     >
       <q-modal-layout>
@@ -36,11 +36,13 @@
             :error="!type.length"
             :label-width="4"
           >
-            <q-input
+            <q-select
               class="bg-light-blue-1"
-              v-model.trim="type"
-              type="text"
-              style="width:24em"
+              style="width:12em"
+              v-model="type"
+              :options="typeOptions"
+              @input="val => {$emit('input', val)}"
+              placeholder="Select type"
             />
           </q-field>
 
@@ -48,12 +50,31 @@
             label="Default Value:"
             :label-width="4"
           >
-            <q-input
-              class="bg-light-blue-1"
-              v-model.trim="defaultValue"
-              type="text"
-              style="width:24em"
-            />
+            <div
+              class="bg-green-1 q-pa-xs"
+              style="width:24em;font-family:monospace"
+            >
+              {{defaultValue}}&nbsp;
+            </div>
+
+            <q-popup-edit
+              v-if="type.length"
+              buttons
+              v-model="defaultValue"
+              @show="popupEditVisible = true"
+              @hide="() => { popupEditVisible = false }"
+              @close="() => { popupEditVisible = false }"
+              @cancel="() => { popupEditVisible = false }"
+              @save="() => { popupEditVisible = false }"
+            >
+              <parameter-value-input
+                v-if="popupEditVisible"
+                :param-name="paramName"
+                v-model="defaultValue"
+                :param-type="type"
+                :default-value="''"
+              />
+            </q-popup-edit>
           </q-field>
 
           <q-field
@@ -71,14 +92,26 @@
             label="Description:"
             :label-width="4"
           >
-            <q-input
-              class="bg-light-blue-1"
-              v-model.trim="description"
-              type="textarea"
-              rows="3"
-              :max-height="300"
-              style="width:24em"
+            <pxs-markdown :text="description"
+                          style="width:24em"
             />
+            <q-popup-edit
+              v-model="description"
+              title="Description"
+              buttons
+            >
+              <q-field>
+                <q-input
+                  style="width:30em"
+                  v-model.trim="description"
+                  clearable
+                  class="bg-green-1"
+                  type="textarea"
+                  rows="5"
+                  :max-height="300"
+                />
+              </q-field>
+            </q-popup-edit>
           </q-field>
 
         </div>
@@ -107,6 +140,8 @@
 
 <script>
   import parameterInsert from '../graphql/parameterInsert.gql'
+  import PxsMarkdown from 'components/pxs-markdown'
+  import ParameterValueInput from 'components/parameter-value-input'
 
   const debug = false
 
@@ -122,6 +157,11 @@
       }
     },
 
+    components: {
+      PxsMarkdown,
+      ParameterValueInput,
+    },
+
     data() {
       return {
         dialogOpened: false,
@@ -129,11 +169,26 @@
         type: '',
         required: true,
         defaultValue: '',
-        description: ''
+        description: '',
+        popupEditVisible: false,
       }
     },
 
     computed: {
+      types() {
+        return [
+          'float', 'integer', 'boolean', 'string',
+          'point', 'multipoint', 'polygon',
+        ]
+      },
+
+      typeOptions() {
+        return _.map(this.types, t => ({
+          label: t,
+          value: t
+        }))
+      },
+
       okToSubmit() {
         return this.paramName && this.type
       }
@@ -146,6 +201,7 @@
         this.required = true
         this.defaultValue = null
         this.description = null
+        this.popupEditVisible = false
         this.dialogOpened = true
       },
 
