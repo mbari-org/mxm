@@ -330,8 +330,10 @@
             paramName: parameter.paramName,
             type: parameter.type,
             required: parameter.required,
-            defaultValue: parameter.defaultValue,
             description: parameter.description,
+          }
+          if (parameter.defaultValue) {
+            variables.defaultValue = '' + parameter.defaultValue
           }
           this.$apollo.mutate({mutation, variables})
             .then(data => {
