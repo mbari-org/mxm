@@ -1,4 +1,4 @@
-# PXS UI
+# PXS
 
 **WIP**
 
@@ -47,5 +47,3 @@ $ quasar build
 ### Install
 
 See `docker/README.md`
-
-> TODO remove previous setup on odss-test
