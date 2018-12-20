@@ -1,5 +1,6 @@
 2018-12-19 0.0.8
 
+- complete 0.0.8 release
 - stringify defaultValue if given when inserting parameter
 - rename project to 'pxs' (from 'pxs-ui')
 

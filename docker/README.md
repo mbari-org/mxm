@@ -1,23 +1,21 @@
-# Local development
+# Building the images
 
 Under this project's root directory:
 
+Adjust the GraphQL enpoint URI in `src/plugins/apollo.js`
+depending on how you are going to run the UI below.
+
 ```
 $ quasar build
-```
-
-Then:
-
-```
 $ cd docker/
-$ ./dockerize.sh pxs 0.0.5
+$ ./dockerize.sh pxs 0.0.8
 ```
-generates image `mbari/pxs:0.0.5`
+generates image `mbari/pxs:0.0.8`
 
 ```
-$ ./dockerize.sh pxspostgres 0.0.5
+$ ./dockerize.sh pxspostgres 0.0.7
 ```
-generates image `mbari/pxspostgres:0.0.5`
+generates image `mbari/pxspostgres:0.0.7`
 
 
 ```
@@ -25,6 +23,8 @@ $ docker-compose up -d
 ```
 
 Open the PXS UI: http://localhost:38080/
+(again, this will be functional depending on the indicated GraphQL
+endpoint, proxy-passes in place, etc.)
 
 Open the GraphQL UI: http://localhost:5000/pxs-graphiql
 
