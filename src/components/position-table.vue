@@ -9,35 +9,33 @@
       :pagination.sync="pagination"
       hide-bottom
     >
-      <!-- TODO how to associate handler to whole row?
-           For now, adding mouseover/out to specific columns
-      -->
-      <q-td slot="body-cell-centerCol" slot-scope="props" :props="props"
-            style="width:1px"
+      <q-tr slot="body" slot-scope="props" :props="props"
             @mouseover.native="onMousePos(props.row)" @mouseout.native="onMousePos()"
       >
-        <q-btn
-          round dense icon="album"
-          size="xs" class="q-mr-xs"
-          @click="centerMapAt(props.row)"
+        <q-td key="centerCol" :props="props"
+              style="width:1px"
         >
-          <q-tooltip :delay="2000">
-            Center map at this position
-          </q-tooltip>
-        </q-btn>
-      </q-td>
+          <q-btn
+            round dense icon="album"
+            size="xs" class="q-mr-xs"
+            @click="centerMapAt(props.row)"
+          >
+            <q-tooltip :delay="2000">
+              Center map at this position
+            </q-tooltip>
+          </q-btn>
+        </q-td>
 
-      <q-td slot="body-cell-latitude" slot-scope="props" :props="props"
-            style="white-space:nowrap;width:5px"
-            @mouseover.native="onMousePos(props.row)" @mouseout.native="onMousePos()"
-      >{{ props.value }}
-      </q-td>
+        <q-td key="latitude" :props="props"
+              style="white-space:nowrap;width:5px"
+        >{{ props.row.latitude.toFixed(4) }}
+        </q-td>
 
-      <q-td slot="body-cell-longitude" slot-scope="props" :props="props"
-            style="white-space:nowrap;width:5px"
-            @mouseover.native="onMousePos(props.row)" @mouseout.native="onMousePos()"
-      >{{ props.value }}
-      </q-td>
+        <q-td key="longitude" :props="props"
+              style="white-space:nowrap;width:5px"
+        >{{ props.row.longitude.toFixed(4) }}
+        </q-td>
+      </q-tr>
 
     </q-table>
 
@@ -60,8 +58,8 @@ export default {
     return {
       columns: [
         {name: 'centerCol',   field: 'centerCol',   label: '',        align: 'center' },
-        {name: 'latitude',    field: row => row.latitude.toFixed(4),  label: 'Lat', align: 'left' },
-        {name: 'longitude',   field: row => row.longitude.toFixed(4), label: 'Lon', align: 'left' },
+        {name: 'latitude',    field: 'latitude',    label: 'Lat',     align: 'left' },
+        {name: 'longitude',   field: 'longitude',   label: 'Lon',     align: 'left' },
       ],
       rowsPerPage: [0],
       pagination: {

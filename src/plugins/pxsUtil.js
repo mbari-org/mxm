@@ -10,7 +10,7 @@ const runInSequence = (promises) => (
 export default ({ app, Vue }) => {
   Vue.prototype.$pxsUtil = {
     appInfo: {
-      version: 'v0.0.8',
+      version: 'v0.0.9',
     },
     runInSequence,
   }

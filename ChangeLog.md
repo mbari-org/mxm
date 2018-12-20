@@ -1,3 +1,7 @@
+2018-12-20 0.0.9
+
+- position-table: use `q-tr` to associate mouse handlers to whole row
+
 2018-12-19 0.0.8
 
 - complete 0.0.8 release
