@@ -2,8 +2,7 @@
   <q-page class="q-pa-md">
     <q-breadcrumbs active-color="secondary" color="light">
       <q-breadcrumbs-el label="Home" to="/"/>
-      <q-breadcrumbs-el label="Executors" to="/executors"/>
-      <q-breadcrumbs-el :label="params.executorId" :to="`/executors/${encodeURIComponent(params.executorId)}`"/>
+      <q-breadcrumbs-el :label="params.executorId" :to="`/${encodeURIComponent(params.executorId)}`"/>
       <q-breadcrumbs-el label="MissionTemplates"/>
       <q-btn
         dense round icon="refresh" class="q-ml-lg" size="sm"
@@ -49,7 +48,7 @@
               style="width:5px"
         >
           <router-link
-            :to="`/executors/${encodeURIComponent(params.executorId)}/missiontpls/${encodeURIComponent(props.row.missionTplId)}`">
+            :to="`/${encodeURIComponent(params.executorId)}/missiontpls/${encodeURIComponent(props.row.missionTplId)}`">
             {{props.row.missionTplId}}
           </router-link>
         </q-td>

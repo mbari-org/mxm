@@ -2,10 +2,9 @@
   <q-page class="q-pa-md">
     <q-breadcrumbs active-color="secondary" color="light">
       <q-breadcrumbs-el label="Home" to="/"/>
-      <q-breadcrumbs-el label="Executors" to="/executors"/>
-      <q-breadcrumbs-el :label="params.executorId" :to="`/executors/${encodeURIComponent(params.executorId)}`"/>
+      <q-breadcrumbs-el :label="params.executorId" :to="`/${encodeURIComponent(params.executorId)}`"/>
       <q-breadcrumbs-el label="MissionTemplates"/>
-      <q-breadcrumbs-el :label="params.missionTplId" :to="`/executors/${encodeURIComponent(params.executorId)}/missiontpls/${encodeURIComponent(params.missionTplId)}`"/>
+      <q-breadcrumbs-el :label="params.missionTplId" :to="`/${encodeURIComponent(params.executorId)}/missiontpls/${encodeURIComponent(params.missionTplId)}`"/>
       <q-breadcrumbs-el label="Params"/>
       <q-breadcrumbs-el :label="params.paramName"/>
       <q-btn
@@ -248,7 +247,7 @@
           .then((data) => {
             if (debug) console.debug('updateParameter: mutation data=', data)
             if (parameterPatch.paramName) {
-              this.$router.replace(`/executors/${encodeURIComponent(this.parameter.executorId)}/missionTpls/${encodeURIComponent(this.parameter.missionTplId)}/params/${encodeURIComponent(parameterPatch.paramName)}`)
+              this.$router.replace(`/${encodeURIComponent(this.parameter.executorId)}/missionTpls/${encodeURIComponent(this.parameter.missionTplId)}/params/${encodeURIComponent(parameterPatch.paramName)}`)
               return
             }
             this.refreshParameter()

@@ -2,8 +2,7 @@
   <q-page class="q-pa-md">
     <q-breadcrumbs active-color="secondary" color="light">
       <q-breadcrumbs-el label="Home" to="/"/>
-      <q-breadcrumbs-el label="Executors" to="/executors"/>
-      <q-breadcrumbs-el :label="params.executorId" :to="`/executors/${euc(params.executorId)}`"/>
+      <q-breadcrumbs-el :label="params.executorId" :to="`/${euc(params.executorId)}`"/>
       <q-breadcrumbs-el label="Missions"/>
       <q-btn
         dense round icon="refresh" class="q-ml-lg" size="sm"
@@ -46,7 +45,7 @@
       <q-td slot="body-cell-missionId" slot-scope="props" :props="props"
             style="width:5px"
       >
-        <router-link :to="`/executors/${euc(params.executorId)}/missiontpls/${euc(props.row.missionTplId)}/missions/${euc(props.row.missionId)}`">
+        <router-link :to="`/${euc(params.executorId)}/missiontpls/${euc(props.row.missionTplId)}/missions/${euc(props.row.missionId)}`">
           {{props.value}}
         </router-link>
       </q-td>
@@ -54,7 +53,7 @@
       <q-td slot="body-cell-missionTplId" slot-scope="props" :props="props"
             style="width:5px"
       >
-        <router-link :to="`/executors/${euc(params.executorId)}/missiontpls/${euc(props.value)}`">
+        <router-link :to="`/${euc(params.executorId)}/missiontpls/${euc(props.value)}`">
           {{props.value}}
         </router-link>
       </q-td>
@@ -62,7 +61,7 @@
       <q-td slot="body-cell-assetId" slot-scope="props" :props="props"
             style="width:5px"
       >
-        <router-link :to="`/executors/${euc(params.executorId)}/assets/${euc(props.value)}`">
+        <router-link :to="`/${euc(params.executorId)}/assets/${euc(props.value)}`">
           {{props.value}}
         </router-link>
       </q-td>

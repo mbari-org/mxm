@@ -2,9 +2,8 @@
   <q-page class="q-pa-md">
     <q-breadcrumbs active-color="secondary" color="light">
       <q-breadcrumbs-el label="Home" to="/"/>
-      <q-breadcrumbs-el label="Executors" to="/executors"/>
-      <q-breadcrumbs-el :label="params.executorId" :to="`/executors/${encodeURIComponent(params.executorId)}`"/>
-      <q-breadcrumbs-el label="MissionTemplates" :to="`/executors/${encodeURIComponent(params.executorId)}/missiontpls`"/>
+      <q-breadcrumbs-el :label="params.executorId" :to="`/${encodeURIComponent(params.executorId)}`"/>
+      <q-breadcrumbs-el label="MissionTemplates" :to="`/${encodeURIComponent(params.executorId)}/missiontpls`"/>
       <q-breadcrumbs-el :label="params.missionTplId"/>
       <q-btn
         dense round icon="refresh" class="q-ml-lg" size="sm"
@@ -73,7 +72,7 @@
             >
               <router-link
                 style="color:white;text-decoration:none"
-                :to="`/executors/${encodeURIComponent(params.executorId)}/assetclasses/${encodeURIComponent(c.assetClassName)}`"
+                :to="`/${encodeURIComponent(params.executorId)}/assetclasses/${encodeURIComponent(c.assetClassName)}`"
               >
                 {{c.assetClassName}}
               </router-link>
@@ -132,7 +131,7 @@
           >
             <router-link
               style="text-decoration:none"
-              :to="`/executors/${encodeURIComponent(params.executorId)}/missiontpls/${encodeURIComponent(params.missionTplId)}/params/${encodeURIComponent(props.row.paramName)}`"
+              :to="`/${encodeURIComponent(params.executorId)}/missiontpls/${encodeURIComponent(params.missionTplId)}/params/${encodeURIComponent(props.row.paramName)}`"
             >{{ props.row.paramName }}
             </router-link>
           </q-td>
@@ -397,7 +396,7 @@
           .then((data) => {
             if (debug) console.debug('updateMissionTpl: mutation data=', data)
             if (missionTplPatch.missionTplId) {
-              this.$router.replace(`/executors/${encodeURIComponent(this.params.executorId)}/missiontpls/${encodeURIComponent(missionTplPatch.missionTplId)}`)
+              this.$router.replace(`/${encodeURIComponent(this.params.executorId)}/missiontpls/${encodeURIComponent(missionTplPatch.missionTplId)}`)
               return
             }
             if (missionTplPatch.description) {

@@ -2,8 +2,7 @@
   <q-page class="q-pa-md">
     <q-breadcrumbs active-color="secondary" color="light">
       <q-breadcrumbs-el label="Home" to="/"/>
-      <q-breadcrumbs-el label="Executors" to="/executors"/>
-      <q-breadcrumbs-el :label="params.executorId" :to="`/executors/${encodeURIComponent(params.executorId)}`"/>
+      <q-breadcrumbs-el :label="params.executorId" :to="`/${encodeURIComponent(params.executorId)}`"/>
       <q-breadcrumbs-el label="Assets"/>
       <q-btn
         dense round icon="refresh" class="q-ml-lg" size="sm"
@@ -39,7 +38,7 @@
       <q-td slot="body-cell-assetId" slot-scope="props" :props="props"
             style="width:5px"
       >
-        <router-link :to="`/executors/${encodeURIComponent(params.executorId)}/assets/${encodeURIComponent(props.row.assetId)}`">
+        <router-link :to="`/${encodeURIComponent(params.executorId)}/assets/${encodeURIComponent(props.row.assetId)}`">
           {{props.row.assetId}}
         </router-link>
       </q-td>
@@ -47,7 +46,7 @@
       <q-td slot="body-cell-className" slot-scope="props" :props="props"
             style="width:5px"
       >
-        <router-link :to="`/executors/${encodeURIComponent(params.executorId)}/assetclasses/${encodeURIComponent(props.row.className)}`">
+        <router-link :to="`/${encodeURIComponent(params.executorId)}/assetclasses/${encodeURIComponent(props.row.className)}`">
           {{props.row.className}}
         </router-link>
       </q-td>

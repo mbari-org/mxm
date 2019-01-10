@@ -2,9 +2,8 @@
   <q-page class="q-pa-md">
     <q-breadcrumbs active-color="secondary" color="light">
       <q-breadcrumbs-el label="Home" to="/"/>
-      <q-breadcrumbs-el label="Executors" to="/executors"/>
-      <q-breadcrumbs-el :label="params.executorId" :to="`/executors/${encodeURIComponent(params.executorId)}`"/>
-      <q-breadcrumbs-el label="Assets" :to="`/executors/${encodeURIComponent(params.executorId)}/assets`"/>
+      <q-breadcrumbs-el :label="params.executorId" :to="`/${encodeURIComponent(params.executorId)}`"/>
+      <q-breadcrumbs-el label="Assets" :to="`/${encodeURIComponent(params.executorId)}/assets`"/>
       <q-breadcrumbs-el :label="params.assetId"/>
       <q-btn
         dense round icon="refresh" class="q-ml-lg" size="sm"
@@ -19,7 +18,7 @@
           Asset ID: <span class="text-bold">{{asset.assetId}}</span>
 
           (class: <router-link
-          :to="`/executors/${encodeURIComponent(params.executorId)}/assetclasses/${encodeURIComponent(asset.className)}`"
+          :to="`/${encodeURIComponent(params.executorId)}/assetclasses/${encodeURIComponent(asset.className)}`"
           >{{ asset.className }}</router-link>)
         </q-card-title>
 

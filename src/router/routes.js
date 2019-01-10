@@ -4,47 +4,44 @@ const routes = [
     component: () => import('layouts/MainLayout'),
     children: [
       {
-        path: '', component: () => import('pages/Index')
-      },
-      {
-        path: '/executors',
+        path: '',
         component: () => import('pages/Executors')
       },
       {
-        path: '/executors/:executorId',
+        path: '/:executorId',
         component: () => import('pages/Executor')
       },
-      { path: '/executors/:executorId/missiontpls/:missionTplId',
+      { path: '/:executorId/missiontpls/:missionTplId',
         component: () => import('pages/MissionTpl')
       },
-      { path: '/executors/:executorId/missiontpls',
+      { path: '/:executorId/missiontpls',
         component: () => import('pages/MissionTpls')
       },
-      { path: '/executors/:executorId/missiontpls/:missionTplId/params/:paramName',
+      { path: '/:executorId/missiontpls/:missionTplId/params/:paramName',
         component: () => import('pages/Parameter')
       },
       {
-        path: '/executors/:executorId/missions',
+        path: '/:executorId/missions',
         component: () => import('pages/Missions')
       },
       {
-        path: '/executors/:executorId/missiontpls/:missionTplId/missions/:missionId',
+        path: '/:executorId/missiontpls/:missionTplId/missions/:missionId',
         component: () => import('pages/Mission')
       },
       {
-        path: '/executors/:executorId/assetclasses',
+        path: '/:executorId/assetclasses',
         component: () => import('pages/AssetClasses')
       },
       {
-        path: '/executors/:executorId/assetclasses/:className',
+        path: '/:executorId/assetclasses/:className',
         component: () => import('pages/AssetClass')
       },
       {
-        path: '/executors/:executorId/assets',
+        path: '/:executorId/assets',
         component: () => import('pages/Assets')
       },
       {
-        path: '/executors/:executorId/assets/:assetId',
+        path: '/:executorId/assets/:assetId',
         component: () => import('pages/Asset')
       },
     ]

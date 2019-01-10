@@ -219,7 +219,7 @@
               timeout: 1000,
               type: 'info'
             })
-            this.$router.push(`/executors/${encodeURIComponent(this.executorId)}/missiontpls/${encodeURIComponent(this.missionTplId)}/missions/${encodeURIComponent(this.missionId)}`)
+            this.$router.push(`/${encodeURIComponent(this.executorId)}/missiontpls/${encodeURIComponent(this.missionTplId)}/missions/${encodeURIComponent(this.missionId)}`)
             // this.$emit('created', variables)
           })
           .catch((error) => {

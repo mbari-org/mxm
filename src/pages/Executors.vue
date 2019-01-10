@@ -2,7 +2,6 @@
   <q-page class="q-pa-md">
     <q-breadcrumbs active-color="secondary" color="light">
       <q-breadcrumbs-el label="Home" to="/"/>
-      <q-breadcrumbs-el label="Executors" to="/executors"/>
       <q-btn
         dense round icon="refresh" class="q-ml-lg" size="sm"
         @click="refresh"
@@ -15,22 +14,10 @@
       row-key="name"
       :rows-per-page-options="rowsPerPage"
       :pagination.sync="pagination"
-      :filter="filter"
     >
       <div slot="top-left" slot-scope="props" class="row items-center">
         <div class="col-auto q-headline">
           Executors
-        </div>
-
-        <div class="q-ml-md row">
-          <q-search
-            v-if="allExecutorsList.length"
-            class="col"
-            color="secondary"
-            v-model="filter"
-            placeholder="Filter"
-            clearable
-          />
         </div>
       </div>
 
@@ -41,7 +28,7 @@
       <q-td slot="body-cell-executorId" slot-scope="props" :props="props"
             style="width:5px"
       >
-        <router-link :to="`/executors/${encodeURIComponent(props.row.executorId)}`">
+        <router-link :to="`/${encodeURIComponent(props.row.executorId)}`">
           {{props.row.executorId}}
         </router-link>
       </q-td>
@@ -120,7 +107,6 @@
         pagination: {
           rowsPerPage: 0
         },
-        filter: '',
       }
     },
 

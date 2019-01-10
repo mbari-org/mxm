@@ -2,7 +2,6 @@
   <q-page class="q-pa-md">
     <q-breadcrumbs active-color="secondary" color="light">
       <q-breadcrumbs-el label="Home" to="/"/>
-      <q-breadcrumbs-el label="Executors" to="/executors"/>
       <q-breadcrumbs-el :label="params.executorId"/>
       <q-btn
         dense round icon="refresh" class="q-ml-lg" size="sm"
@@ -91,7 +90,7 @@
               label="Mission Templates"
               color="secondary"
               no-wrap no-caps dense
-              :to="`/executors/${encodeURIComponent(params.executorId)}/missiontpls`"
+              :to="`/${encodeURIComponent(params.executorId)}/missiontpls`"
             />
 
             <q-btn
@@ -99,14 +98,14 @@
               label="Asset Classes"
               color="secondary"
               no-wrap no-caps dense
-              :to="`/executors/${encodeURIComponent(params.executorId)}/assetclasses`"
+              :to="`/${encodeURIComponent(params.executorId)}/assetclasses`"
             />
 
             <q-btn
               label="Assets"
               color="secondary"
               no-wrap no-caps dense
-              :to="`/executors/${encodeURIComponent(params.executorId)}/assets`"
+              :to="`/${encodeURIComponent(params.executorId)}/assets`"
             />
           </div>
 
@@ -116,7 +115,7 @@
               label="Missions"
               color="secondary"
               no-wrap no-caps dense
-              :to="`/executors/${encodeURIComponent(params.executorId)}/missions`"
+              :to="`/${encodeURIComponent(params.executorId)}/missions`"
             />
           </div>
 

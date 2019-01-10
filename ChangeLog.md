@@ -1,3 +1,7 @@
+2019-01-10 0.1.0
+
+- make home page be the list of executors, and remove 'executors/' prefix in routes
+
 2018-12-20 0.0.9
 
 - position-table: use `q-tr` to associate mouse handlers to whole row

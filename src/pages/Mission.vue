@@ -2,9 +2,8 @@
   <q-page class="q-pa-md">
     <q-breadcrumbs active-color="secondary" color="light">
       <q-breadcrumbs-el label="Home" to="/"/>
-      <q-breadcrumbs-el label="Executors" to="/executors"/>
-      <q-breadcrumbs-el :label="params.executorId" :to="`/executors/${encodeURIComponent(params.executorId)}`"/>
-      <q-breadcrumbs-el label="Missions" :to="`/executors/${encodeURIComponent(params.executorId)}/missions`"/>
+      <q-breadcrumbs-el :label="params.executorId" :to="`/${encodeURIComponent(params.executorId)}`"/>
+      <q-breadcrumbs-el label="Missions" :to="`/${encodeURIComponent(params.executorId)}/missions`"/>
       <q-breadcrumbs-el :label="params.missionId"/>
       <q-btn
         dense round icon="refresh" class="q-ml-lg" size="sm"
@@ -19,7 +18,7 @@
           Mission: <q-chip square class="text-bold">{{ mission.missionId }}</q-chip>
           <span>
             <router-link
-              :to="`/executors/${encodeURIComponent(mission.executorId)}/missiontpls/${encodeURIComponent(mission.missionTplId)}`"
+              :to="`/${encodeURIComponent(mission.executorId)}/missiontpls/${encodeURIComponent(mission.missionTplId)}`"
               style="color:gray; font-size:smaller; text-decoration:none"
             >
               {{ mission.missionTplId }}
@@ -46,7 +45,7 @@
             </span>
             <span>
               <router-link
-                :to="`/executors/${encodeURIComponent(params.executorId)}/assets/${encodeURIComponent(mission.assetId)}`"
+                :to="`/${encodeURIComponent(params.executorId)}/assets/${encodeURIComponent(mission.assetId)}`"
                 style="text-decoration:none"
               >
                 {{ mission.assetId }}
@@ -189,7 +188,7 @@
           >
             <router-link
               style="text-decoration:none"
-              :to="`/executors/${encodeURIComponent(mission.executorId)}/missiontpls/${encodeURIComponent(mission.missionTplId)}/params/${encodeURIComponent(props.row.paramName)}`"
+              :to="`/${encodeURIComponent(mission.executorId)}/missiontpls/${encodeURIComponent(mission.missionTplId)}/params/${encodeURIComponent(props.row.paramName)}`"
             >{{ props.row.paramName }}
             </router-link>
 
@@ -756,7 +755,7 @@
           this.$apollo.mutate({mutation, variables})
             .then((data) => {
               if (debug) console.debug('deleteMission: mutation data=', data)
-              this.$router.replace(`/executors/${encodeURIComponent(this.mission.executorId)}`)
+              this.$router.replace(`/${encodeURIComponent(this.mission.executorId)}`)
               this.$q.notify('Done')
             })
             .catch((error) => {
