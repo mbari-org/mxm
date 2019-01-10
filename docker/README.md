@@ -1,21 +1,25 @@
 # Building the images
 
-Under this project's root directory:
-
 Adjust the GraphQL enpoint URI in `src/plugins/apollo.js`
 depending on how you are going to run the UI below.
 
-```
-$ quasar build
-$ cd docker/
-$ ./dockerize.sh pxs 0.0.8
-```
-generates image `mbari/pxs:0.0.8`
+Note:
+
+- Using *x.y.z* in instruction below just as a placeholder for
+  actual version corresponding to the target image.
+- The PXS version is set in `pxsUtil.js`
+- Reflect such versions in `docker-compose.yml` for general consistency.
 
 ```
-$ ./dockerize.sh pxspostgres 0.0.7
+$ cd <to this project's root directory>
+$ (quasar build && cd docker && ./dockerize.sh pxs x.y.z)
 ```
-generates image `mbari/pxspostgres:0.0.7`
+generates image `mbari/pxs:x.y.z`
+
+```
+$ (cd docker && ./dockerize.sh pxspostgres x.y.z)
+```
+generates image `mbari/pxspostgres:x.y.z`
 
 
 ```
