@@ -681,10 +681,11 @@
             .catch(error => {
               this.$q.notify({
                 message: `Mission submission error: ${JSON.stringify(error)}`,
-                timeout: 2000,
+                timeout: 0,
+                closeBtn: true,
                 type: 'info'
               })
-              console.error('createMissionTpls: error=', error)
+              console.error('runMission: postMission: error=', error)
             })
         }
       },
@@ -712,12 +713,13 @@
             }
           })
           .catch(error => {
-            console.error('createMissionTpls: error=', error)
+            console.error('checkStatus: getMission: error=', error)
             if (error === 'No such mission') {
               // assume we get back to DRAFT
               this.$q.notify({
                 message: `No such mission in the executor. Returning to DRAFT status`,
-                timeout: 3000,
+                timeout: 0,
+                closeBtn: true,
                 type: 'info'
               })
               this.updateMissionStatus('DRAFT')
@@ -728,7 +730,8 @@
             else {
               this.$q.notify({
                 message: `Mission submission error: ${JSON.stringify(error)}`,
-                timeout: 2000,
+                timeout: 0,
+                closeBtn: true,
                 type: 'info'
               })
             }
