@@ -1,3 +1,8 @@
+2019-01-14 0.1.0
+
+- describe proxy-pass on 'tsauv' for the enabled TSAUV Front Tracking
+  REST endopoint.
+
 2019-01-10 0.1.0
 
 - make home page be the list of executors, and remove 'executors/' prefix in routes

@@ -1,6 +1,6 @@
 # Building the images
 
-Adjust the GraphQL enpoint URI in `src/plugins/apollo.js`
+Adjust the GraphQL endpoint URI in `src/plugins/apollo.js`
 depending on how you are going to run the UI below.
 
 Note:
@@ -32,19 +32,19 @@ endpoint, proxy-passes in place, etc.)
 
 Open the GraphQL UI: http://localhost:5000/pxs-graphiql
 
-# tsauv
+# TSAUV
 
 ## docker-compose.yml
 
-Located under `/opt/tsauv/pxs/` (which I git enabled),
+Located under `/opt/tsauv/pxs/`,
 `docker-compose.yml` basically only adjusts the local ports
 (pxs=38080; postgraphile=25000; pxspostgres=25432).
 
-NOTE: using a subdir under `/opt/tsauv/` because this is
-an actual space under the tsauv VM (ie., not a share, which
+NOTE: using a subdirectory under `/opt/tsauv/` because that is
+an actual space under the 'tsauv' VM (ie., not a share, which
 would cause the mounted db data volume to fail).
 
-## apache proxy passes
+## Apache proxy-passes
 
 Added the following in `/etc/httpd/conf.d/tsauv.conf`:
 
@@ -59,7 +59,7 @@ Added the following in `/etc/httpd/conf.d/tsauv.conf`:
   </Location>
 ```
 
-And also the following, in particular to have a working
+Also the following, in particular to have a working
 graphiql interface (at http://tsauv.shore.mbari.org/pxs-graphiql)
 because latest available postgraphile docker image is still 4.0.1,
 which does not properly have references to js resources
@@ -73,6 +73,16 @@ which does not properly have references to js resources
   <Location /_postgraphile/>
     ProxyPass        http://localhost:25000/_postgraphile/
     ProxyPassReverse http://localhost:25000/_postgraphile/
+  </Location>
+```
+
+For the TSAUV Front Tracking REST endpoint for PXS, also added
+the following (see that project for launch instructions):
+
+```
+  <Location /tft-pxs/>
+    ProxyPass        http://localhost:8040/
+    ProxyPassReverse http://localhost:8040/
   </Location>
 ```
 
