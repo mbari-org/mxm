@@ -387,9 +387,7 @@
           if (data.missionByExecutorIdAndMissionTplIdAndMissionId) {
             res = data.missionByExecutorIdAndMissionTplIdAndMissionId
           }
-          Vue.nextTick(() => {
-            this.setMyArguments(res)
-          })
+          this.setMyArguments(res)
           return res
         },
       },
