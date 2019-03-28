@@ -1,3 +1,8 @@
+2019-03-28 0.2.0
+
+- general user-visible "pxs" to "mxms" renaming to reflect corresponding changes in the
+  spec document related with avoiding the "planning" term in the title of the project
+
 2019-01-14 0.1.0
 
 - describe proxy-pass on 'tsauv' for the enabled TSAUV Front Tracking

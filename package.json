@@ -1,8 +1,8 @@
 {
-  "name": "pxs",
-  "version": "0.0.0",
-  "description": "PXS",
-  "productName": "PXS",
+  "name": "mxms",
+  "version": "1.0.0",
+  "description": "MXMS",
+  "productName": "MXMS",
   "cordovaId": "org.cordova.quasar.app",
   "author": "Carlos Rueda <carueda@mbari.org>",
   "private": true,

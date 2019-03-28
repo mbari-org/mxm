@@ -1,8 +1,8 @@
 version: '3.6'
 services:
-  pxs:
-    container_name: pxs
-    image: mbari/pxs:0.1.0
+  mxms:
+    container_name: mxms
+    image: mbari/mxms:0.2.0
     ports:
     - "38080:80"
     depends_on:
@@ -15,11 +15,11 @@ services:
     ports:
     - "5000:5000"
     depends_on:
-    - pxspostgres
+    - mxmspostgres
     restart: always
     command:
       - --connection
-      - postgresql://pxs@pxspostgres:5432/pxs
+      - postgresql://mxms@mxmspostgres:5432/mxms
       - --schema
       - public
       - --cors
@@ -27,13 +27,13 @@ services:
       - only
       - --classic-ids
       - --graphql
-      - /pxs-graphql
+      - /mxms-graphql
       - --graphiql
-      - /pxs-graphiql
+      - /mxms-graphiql
 
-  pxspostgres:
-    container_name: pxspostgres
-    image: mbari/pxspostgres:0.0.7
+  mxmspostgres:
+    container_name: mxmspostgres
+    image: mbari/mxmspostgres:0.2.0
     ports:
     - "25432:5432"
     restart: always
@@ -41,5 +41,5 @@ services:
     - ${PWD}/db_data:/var/lib/postgresql/data
 
     environment:
-      # will trigger the creation of the "pxs" user and database:
-      POSTGRES_USER: pxs
+      # will trigger the creation of the "mxms" user and database:
+      POSTGRES_USER: mxms

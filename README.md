@@ -1,4 +1,4 @@
-# PXS
+# MXMS
 
 **WIP**
 
@@ -24,7 +24,7 @@ which opens: http://localhost:8080/index.html
 Client requests using HTTPie. e.g.:
 
 ```
-http post localhost:5000/pxs-graphql query='{
+http post localhost:5000/mxms-graphql query='{
   allExecutorsList {
     id
     executorId
