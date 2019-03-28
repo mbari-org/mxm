@@ -7,9 +7,9 @@ export default ({ app, Vue }) => {
 
   // GraphQL enpoint:
   const uri =
-    '/pxs-graphql'                             // for regular dockerized release with proxy-passes as appropriate
-    // 'http://localhost:5000/pxs-graphql'        // for local devel against local dockerized postgraphile
-    // 'http://tsauv.shore.mbari.org/pxs-graphql' // for local devel against PXS running on TSAUV
+    '/mxms-graphql'                             // for regular dockerized release with proxy-passes as appropriate
+    // 'http://localhost:5000/mxms-graphql'        // for local devel against local dockerized postgraphile
+    // 'http://tsauv.shore.mbari.org/mxms-graphql' // for local devel against MXMS running on TSAUV
 
   // this to facilitate showing the uri in the UI
   Vue.prototype.pxsGraphqlUri = uri
