@@ -10,10 +10,10 @@
 
         <q-toolbar-title shrink>
           <router-link style="color:white;text-decoration:none" to="/">MXMS</router-link>
-          <div slot="subtitle">prototype {{$pxsUtil.appInfo.version}}</div>
+          <div slot="subtitle">prototype {{$utl.appInfo.version}}</div>
         </q-toolbar-title>
 
-        <small class="text-weight-thin q-ma-sm">pxsGraphqlUri={{pxsGraphqlUri}}</small>
+        <small class="q-ma-sm">mxmsGraphqlUri: {{mxmsGraphqlUri}}</small>
 
       </q-toolbar>
     </q-layout-header>

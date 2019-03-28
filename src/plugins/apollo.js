@@ -12,7 +12,7 @@ export default ({ app, Vue }) => {
     // 'http://tsauv.shore.mbari.org/mxms-graphql' // for local devel against MXMS running on TSAUV
 
   // this to facilitate showing the uri in the UI
-  Vue.prototype.pxsGraphqlUri = uri
+  Vue.prototype.mxmsGraphqlUri = uri
 
   const httpLink = new HttpLink({
     uri

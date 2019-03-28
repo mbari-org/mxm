@@ -92,7 +92,7 @@
             label="Description:"
             :label-width="4"
           >
-            <pxs-markdown :text="description"
+            <mxms-markdown :text="description"
                           style="width:24em"
             />
             <q-popup-edit
@@ -140,7 +140,7 @@
 
 <script>
   import parameterInsert from '../graphql/parameterInsert.gql'
-  import PxsMarkdown from 'components/pxs-markdown'
+  import MxmsMarkdown from 'components/mxms-markdown'
   import ParameterValueInput from 'components/parameter-value-input'
 
   const debug = false
@@ -158,7 +158,7 @@
     },
 
     components: {
-      PxsMarkdown,
+      MxmsMarkdown,
       ParameterValueInput,
     },
 

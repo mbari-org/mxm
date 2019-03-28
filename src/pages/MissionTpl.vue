@@ -36,7 +36,7 @@
         </q-card-title>
         <q-card-separator/>
         <q-card-main>
-          <pxs-markdown :text="missionTpl.description"/>
+          <mxms-markdown :text="missionTpl.description"/>
           <q-popup-edit
             v-model="missionTpl.description"
             title="Description"
@@ -175,7 +175,7 @@
 
           <q-td key="description" :props="props"
           >
-            <pxs-markdown simple hide-empty :text="props.row.description"/>
+            <mxms-markdown simple hide-empty :text="props.row.description"/>
           </q-td>
         </q-tr>
       </q-table>
@@ -199,7 +199,7 @@
   import missionTplAssetClassDelete from '../graphql/missionTplAssetClassDelete.gql'
   import missionTplUpdate from '../graphql/missionTplUpdate.gql'
   import ParameterNewButton from 'components/parameter-new-button'
-  import PxsMarkdown from 'components/pxs-markdown'
+  import MxmsMarkdown from 'components/mxms-markdown'
   import ParameterValueInput from 'components/parameter-value-input'
   import _ from 'lodash'
 
@@ -209,7 +209,7 @@
     components: {
       AssetClassSelectButton,
       ParameterNewButton,
-      PxsMarkdown,
+      MxmsMarkdown,
       ParameterValueInput,
     },
 

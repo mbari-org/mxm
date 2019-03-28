@@ -7,7 +7,7 @@ Note:
 
 - Using *x.y.z* in instruction below just as a placeholder for
   actual version corresponding to the target image.
-- The MXMS version is set in `pxsUtil.js`
+- The MXMS version is set in `utl.js`
 - Reflect such versions in `docker-compose.yml` for general consistency.
 
 ```
@@ -36,7 +36,7 @@ Open the GraphQL UI: http://localhost:5000/mxms-graphiql
 
 ## docker-compose.yml
 
-Located under `/opt/tsauv/pxs/`,
+Located under `/opt/tsauv/mxms/`,
 `docker-compose.yml` basically only adjusts the local ports
 (mxms=38080; postgraphile=25000; mxmspostgres=25432).
 

@@ -55,7 +55,7 @@
 
         <q-td slot="body-cell-description" slot-scope="props" :props="props"
         >
-          <pxs-markdown simple hide-empty :text="props.value"/>
+          <mxms-markdown simple hide-empty :text="props.value"/>
         </q-td>
 
       </q-table>
@@ -71,14 +71,14 @@
 <script>
   import allMissionTplsList from '../graphql/missionTpls.gql'
   import MissionTplNewButton from 'components/mission-tpl-new-button'
-  import PxsMarkdown from 'components/pxs-markdown'
+  import MxmsMarkdown from 'components/mxms-markdown'
 
   const debug = false
 
   export default {
     components: {
       MissionTplNewButton,
-      PxsMarkdown,
+      MxmsMarkdown,
     },
 
     data() {

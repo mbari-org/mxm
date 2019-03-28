@@ -1,5 +1,6 @@
 2019-03-28 0.2.0
 
+- complete "pxs" to "mxms" renaming
 - general user-visible "pxs" to "mxms" renaming to reflect corresponding changes in the
   spec document related with avoiding the "planning" term in the title of the project
 

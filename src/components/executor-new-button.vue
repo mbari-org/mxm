@@ -191,7 +191,7 @@
 
       createAssetClasses(executor, assetClasses) {
         if (debug) console.debug('assetClasses=', assetClasses)
-        return this.$pxsUtil.runInSequence(_.map(assetClasses, assetClass =>
+        return this.$utl.runInSequence(_.map(assetClasses, assetClass =>
           this.createAssetClass(executor, assetClass)
         ))
       },
@@ -222,7 +222,7 @@
 
       createAssets(executor, assetClass, assets) {
         if (debug) console.debug('assets=', assets)
-        return this.$pxsUtil.runInSequence(_.map(assets, asset =>
+        return this.$utl.runInSequence(_.map(assets, asset =>
           this.createAsset(executor, assetClass, asset)
         ))
       },
@@ -252,7 +252,7 @@
 
       createMissionTpls(executor, missionTpls) {
         if (debug) console.debug('missionTpls=', missionTpls)
-        return this.$pxsUtil.runInSequence(_.map(missionTpls, missionTpl =>
+        return this.$utl.runInSequence(_.map(missionTpls, missionTpl =>
           this.createMissionTpl(executor, missionTpl)
         ))
       },
@@ -289,7 +289,7 @@
 
       createAssociatedAssetClasses(executor, missionTpl, assetClassNames) {
         if (debug) console.debug('createAssociatedAssetClasses=', assetClassNames)
-        return this.$pxsUtil.runInSequence(_.map(assetClassNames, assetClassName =>
+        return this.$utl.runInSequence(_.map(assetClassNames, assetClassName =>
           this.createAssociatedAssetClass(executor, missionTpl, assetClassName)
         ))
       },
@@ -315,7 +315,7 @@
 
       createParameters(executor, missionTpl, parameters) {
         if (debug) console.debug('createParameters=', parameters)
-        return this.$pxsUtil.runInSequence(_.map(parameters, parameter =>
+        return this.$utl.runInSequence(_.map(parameters, parameter =>
           this.createParameter(executor, missionTpl, parameter)
         ))
       },

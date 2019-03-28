@@ -8,7 +8,7 @@ const runInSequence = (promises) => (
 )
 
 export default ({ app, Vue }) => {
-  Vue.prototype.$pxsUtil = {
+  Vue.prototype.$utl = {
     appInfo: {
       version: 'v0.2.0',
     },

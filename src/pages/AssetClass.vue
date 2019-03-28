@@ -19,7 +19,7 @@
         </q-card-title>
         <q-card-separator/>
         <q-card-main>
-          <pxs-markdown :text="assetClass.description"/>
+          <mxms-markdown :text="assetClass.description"/>
           <q-popup-edit
             v-model="assetClass.description"
             title="Description"
@@ -84,7 +84,7 @@
 
         <q-td slot="body-cell-description" slot-scope="props" :props="props"
         >
-          <pxs-markdown simple hide-empty :text="props.value"/>
+          <mxms-markdown simple hide-empty :text="props.value"/>
         </q-td>
       </q-table>
 
@@ -100,14 +100,14 @@
   import assetClass from '../graphql/assetClass.gql'
   import AssetNewButton from 'components/asset-new-button'
   import assetClassUpdate from '../graphql/assetClassUpdate.gql'
-  import PxsMarkdown from 'components/pxs-markdown'
+  import MxmsMarkdown from 'components/mxms-markdown'
 
   const debug = false
 
   export default {
     components: {
       AssetNewButton,
-      PxsMarkdown,
+      MxmsMarkdown,
     },
 
     data() {
