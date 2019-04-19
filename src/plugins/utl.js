@@ -10,7 +10,7 @@ const runInSequence = (promises) => (
 export default ({ app, Vue }) => {
   Vue.prototype.$utl = {
     appInfo: {
-      version: 'v0.2.0',
+      version: 'v0.2.1',
     },
     runInSequence,
   }

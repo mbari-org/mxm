@@ -2,7 +2,7 @@ version: '3.6'
 services:
   mxms:
     container_name: mxms
-    image: mbari/mxms:0.2.0
+    image: mbari/mxms:0.2.1
     ports:
     - "38080:80"
     depends_on:
