@@ -1,8 +1,8 @@
 {
-  "name": "mxms",
+  "name": "mxm",
   "version": "1.0.0",
-  "description": "MXMS",
-  "productName": "MXMS",
+  "description": "Mission Execution Mediation Service",
+  "productName": "MXM",
   "cordovaId": "org.cordova.quasar.app",
   "author": "Carlos Rueda <carueda@mbari.org>",
   "private": true,

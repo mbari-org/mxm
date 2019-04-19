@@ -1,8 +1,8 @@
 version: '3.6'
 services:
-  mxms:
-    container_name: mxms
-    image: mbari/mxms:0.2.1
+  mxm:
+    container_name: mxm
+    image: mbari/mxm:0.2.1
     ports:
     - "38080:80"
     depends_on:
@@ -10,16 +10,16 @@ services:
     restart: always
 
   graphql-engine:
-    container_name: postgraphile
+    container_name: mxm-postgraphile
     image: graphile/postgraphile
     ports:
     - "5000:5000"
     depends_on:
-    - mxmspostgres
+    - mxm-postgres
     restart: always
     command:
       - --connection
-      - postgresql://mxms@mxmspostgres:5432/mxms
+      - postgresql://mxm@mxm-postgres:5432/mxm
       - --schema
       - public
       - --cors
@@ -27,13 +27,13 @@ services:
       - only
       - --classic-ids
       - --graphql
-      - /mxms-graphql
+      - /mxm-graphql
       - --graphiql
-      - /mxms-graphiql
+      - /mxm-graphiql
 
-  mxmspostgres:
-    container_name: mxmspostgres
-    image: mbari/mxmspostgres:0.2.0
+  mxm-postgres:
+    container_name: mxm-postgres
+    image: mbari/mxm-postgres:0.2.1
     ports:
     - "25432:5432"
     restart: always
@@ -41,5 +41,6 @@ services:
     - ${PWD}/db_data:/var/lib/postgresql/data
 
     environment:
-      # will trigger the creation of the "mxms" user and database:
-      POSTGRES_USER: mxms
+      # will trigger the creation of the "mxm" user and database:
+      # upon initial run of the container:
+      POSTGRES_USER: mxm

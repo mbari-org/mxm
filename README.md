@@ -1,4 +1,4 @@
-# MXMS
+# Mission Execution Mediation Service
 
 **WIP**
 
@@ -24,7 +24,7 @@ which opens: http://localhost:8080/index.html
 Client requests using HTTPie. e.g.:
 
 ```
-http post localhost:5000/mxms-graphql query='{
+http post localhost:5000/mxm-graphql query='{
   allExecutorsList {
     id
     executorId

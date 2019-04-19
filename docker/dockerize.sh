@@ -2,12 +2,12 @@
 
 function usage() {
 	echo "Usage:"
-	echo "  ./dockerize.sh mxms <version>"
-	echo "  ./dockerize.sh mxmspostgres <version>"
+	echo "  ./dockerize.sh mxm <version>"
+	echo "  ./dockerize.sh mxm-postgres <version>"
 	echo
 	echo "Example:"
-	echo "  ./dockerize.sh mxms 0.2.0"
-	echo "  ./dockerize.sh mxmspostgres 0.2.0"
+	echo "  ./dockerize.sh mxm 0.2.1"
+	echo "  ./dockerize.sh mxm-postgres 0.2.1"
 	echo
 	exit 1
 }
@@ -18,12 +18,12 @@ if [ "$version" = "" ]; then
 	usage
 fi
 
-if [ "$what" = "mxms" ]; then
+if [ "$what" = "mxm" ]; then
 	cd ..
-	docker build -f docker/Dockerfile -t "mbari/mxms:$version" --no-cache .
+	docker build -f docker/Dockerfile -t "mbari/mxm:$version" .
 
-elif [ "$what" = "mxmspostgres" ]; then
-	docker build -f Dockerfile-postgres -t "mbari/mxmspostgres:$version" --no-cache .
+elif [ "$what" = "mxm-postgres" ]; then
+	docker build -f Dockerfile-postgres -t "mbari/mxm-postgres:$version" .
 
 else
 	usage
