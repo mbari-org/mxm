@@ -2,18 +2,22 @@
   <q-layout view="lHh Lpr lFf">
     <q-layout-header>
       <q-toolbar
-        color="primary"
-        :glossy="$q.theme === 'mat'"
-        :inverted="$q.theme === 'ios'"
+        color="primary" glossy
+        class="row justify-between"
       >
-        <img src="statics/new_mbari_logo.png" width="60px" class="q-mr-lg">
+        <span class="row">
+          <img src="statics/new_mbari_logo.png" width="36px" height="10px" class="q-mr-lg">
 
-        <q-toolbar-title shrink>
-          <router-link style="color:white;text-decoration:none" to="/">MXM</router-link>
-          <div slot="subtitle">prototype {{$utl.appInfo.version}}</div>
-        </q-toolbar-title>
+          <q-toolbar-title shrink>
+            <router-link style="color:white;text-decoration:none" to="/">MXM</router-link>
+            <div slot="subtitle">
+              Prototype {{$utl.appInfo.version}}
+              - <a style="color:white" :href="$mxm.learnMoreUrl" target="_blank">Learn more</a>
+            </div>
+          </q-toolbar-title>
+        </span>
 
-        <small class="q-ma-sm">mxmsGraphqlUri: {{mxmsGraphqlUri}}</small>
+        <small class="q-ma-sm">graphql endpoint: {{$mxm.graphqlUri}}</small>
 
       </q-toolbar>
     </q-layout-header>

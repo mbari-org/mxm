@@ -1,5 +1,6 @@
 2019-04-19 0.2.1
 
+- link to documentation
 - renaming to "mxm" (only for externally visible elements)
 - favicon
 
