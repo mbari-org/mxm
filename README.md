@@ -6,15 +6,17 @@
 
 ### Reqs
 
-[Quasar Framework](http://quasar-framework.org/)
+- Have the MXM service running, see `docker/README.md`.
 
-    npm install -g vue-cli
-    npm install -g quasar-cli
+- [Quasar Framework](http://quasar-framework.org/)
+
+      npm install -g vue-cli
+      npm install -g quasar-cli
 
 ### Development
 
 NOTE: Adjust `src/plugins/apollo.js` to set the `uri` of the
-GraphQL endpoint as appropriate.
+MXM GraphQL endpoint as appropriate.
 
     npm install
     quasar dev

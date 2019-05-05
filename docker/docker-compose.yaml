@@ -41,6 +41,6 @@ services:
     - ${PWD}/db_data:/var/lib/postgresql/data
 
     environment:
-      # will trigger the creation of the "mxm" user and database:
-      # upon initial run of the container:
+      # POSTGRES_USER: will trigger the creation of the "mxm" user
+      # and "mxm" database upon initial run of the container:
       POSTGRES_USER: mxm
