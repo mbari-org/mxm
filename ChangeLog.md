@@ -1,3 +1,9 @@
+2019-08-15
+
+- use postgraphile:4
+- use --export-schema-graphql option, the idea being
+  to later on generate client code based on the schema
+
 2019-04-19 0.2.1
 
 - link to documentation

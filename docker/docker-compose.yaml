@@ -11,7 +11,7 @@ services:
 
   graphql-engine:
     container_name: mxm-postgraphile
-    image: graphile/postgraphile
+    image: graphile/postgraphile:4
     ports:
     - "5000:5000"
     depends_on:
@@ -30,6 +30,8 @@ services:
       - /mxm-graphql
       - --graphiql
       - /mxm-graphiql
+      - --export-schema-graphql
+      - mxmExportedSchema.graphql
 
   mxm-postgres:
     container_name: mxm-postgres
