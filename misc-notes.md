@@ -1,4 +1,6 @@
-### nested / batch mutations
+## nested / batch mutations
+
+2018-12-06
 
 - "Importing" a new "REST0" executor is currently done with separate mutation
 queries for the various associated entities. This of course is still a
@@ -11,6 +13,25 @@ is still in alpha status: https://github.com/mlipscombe/postgraphile-plugin-nest
 consider using an alternative tool like Prisma, which does provide such support:
 https://www.prisma.io/docs/prisma-graphql-api/reference/mutations-qwe2/
 
+
+## Prisma
+
+2019-09
+
+Thinking of Tom's Neptus prototype in java, I spent some time on java code generators
+for GraphQL but it all looked rather involved or still requiring significant boilerplate,
+so felt not very inclined to take that direction. Then, revisited prisma given that it's
+supposed to also support REST, the idea being that with such an interface (OpenAPI) we 
+could benefit from automatically generating clients in a broader range of languages, 
+including java. However, after spending some time experimenting with both prisma and
+prisma2(*), and given that I want to leverage my existing database schema as it is, it
+turns out prisma is not the way to go (at least at the moment) because it doesn't support
+composite keys (https://github.com/prisma/prisma/issues/171).
+
+(*) They are pretty much redoing the whole thing ... and btw composite keys are not
+supported yet https://github.com/prisma/prisma2/issues/528.
+
+2018-12-06
 
 - Been exploring Prisma a bit, but not really excited so far as it's proving to be
 rather confusing, not so much about how to set the various pieces up (prisma client,

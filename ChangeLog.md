@@ -1,3 +1,7 @@
+2019-09
+
+- some notes about revisiting prisma (but not choosing it after all)
+
 2019-08-15
 
 - use postgraphile:4
