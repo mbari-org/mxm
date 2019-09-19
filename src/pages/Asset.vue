@@ -24,7 +24,7 @@
 
         <q-card-separator/>
         <q-card-main>
-          <mxms-markdown :text="asset.description"/>
+          <mxm-markdown :text="asset.description"/>
           <q-popup-edit
             v-model="asset.description"
             title="Description"
@@ -57,14 +57,14 @@
   import asset from '../graphql/asset.gql'
   import AssetNewButton from 'components/asset-new-button'
   import assetUpdate from '../graphql/assetUpdate.gql'
-  import MxmsMarkdown from 'components/mxms-markdown'
+  import MxmMarkdown from 'components/mxm-markdown'
 
   const debug = false
 
   export default {
     components: {
       AssetNewButton,
-      MxmsMarkdown,
+      MxmMarkdown,
     },
 
     data() {

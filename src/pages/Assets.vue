@@ -53,7 +53,7 @@
 
       <q-td slot="body-cell-description" slot-scope="props" :props="props"
       >
-        <mxms-markdown simple hide-empty :text="props.value"/>
+        <mxm-markdown simple hide-empty :text="props.value"/>
       </q-td>
 
     </q-table>
@@ -62,13 +62,13 @@
 
 <script>
   import allAssetsList from '../graphql/assets.gql'
-  import MxmsMarkdown from 'components/mxms-markdown'
+  import MxmMarkdown from 'components/mxm-markdown'
 
   const debug = false
 
   export default {
     components: {
-      MxmsMarkdown,
+      MxmMarkdown,
     },
 
     data() {

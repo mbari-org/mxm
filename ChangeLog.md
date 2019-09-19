@@ -1,5 +1,6 @@
 2019-09
 
+- do pending mxms to mxm renaming
 - some notes about revisiting prisma (but not choosing it after all)
 
 2019-08-15

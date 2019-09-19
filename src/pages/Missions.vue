@@ -68,7 +68,7 @@
 
       <q-td slot="body-cell-description" slot-scope="props" :props="props"
       >
-        <mxms-markdown simple hide-empty :text="props.value"/>
+        <mxm-markdown simple hide-empty :text="props.value"/>
       </q-td>
 
       <q-td slot="body-cell-missionStatus" slot-scope="props" :props="props"
@@ -84,14 +84,14 @@
 <script>
   import allMissionsList from '../graphql/missions.gql'
   import MissionNewButton from 'components/mission-new-button'
-  import MxmsMarkdown from 'components/mxms-markdown'
+  import MxmMarkdown from 'components/mxm-markdown'
 
   const debug = false
 
   export default {
     components: {
       MissionNewButton,
-      MxmsMarkdown,
+      MxmMarkdown,
     },
 
     data() {

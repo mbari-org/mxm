@@ -71,7 +71,7 @@
 
         <q-card-separator/>
         <q-card-main>
-          <mxms-markdown :text="mission.description"/>
+          <mxm-markdown :text="mission.description"/>
           <q-popup-edit
             v-if="mission.missionStatus === 'DRAFT'"
             v-model="mission.description"
@@ -254,7 +254,7 @@
 
           <q-td key="description" :props="props"
           >
-            <mxms-markdown simple hide-empty :text="props.row.description"/>
+            <mxm-markdown simple hide-empty :text="props.row.description"/>
           </q-td>
 
         </q-tr>
@@ -283,7 +283,7 @@
   import argumentDelete from '../graphql/argumentDelete.gql'
   import missionUpdate from '../graphql/missionUpdate.gql'
   import missionDelete from '../graphql/missionDelete.gql'
-  import MxmsMarkdown from 'components/mxms-markdown'
+  import MxmMarkdown from 'components/mxm-markdown'
   import ParameterValueInput from 'components/parameter-value-input'
   import {
     postMission,
@@ -297,7 +297,7 @@
 
   export default {
     components: {
-      MxmsMarkdown,
+      MxmMarkdown,
       ParameterValueInput,
     },
 

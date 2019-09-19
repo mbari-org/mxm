@@ -51,7 +51,7 @@
 
       <q-td slot="body-cell-description" slot-scope="props" :props="props"
       >
-        <mxms-markdown simple hide-empty :text="props.value"/>
+        <mxm-markdown simple hide-empty :text="props.value"/>
       </q-td>
     </q-table>
   </q-page>
@@ -60,14 +60,14 @@
 <script>
   import allAssetClassesList from '../graphql/assetClasses.gql'
   import AssetClassNewButton from 'components/asset-class-new-button'
-  import MxmsMarkdown from 'components/mxms-markdown'
+  import MxmMarkdown from 'components/mxm-markdown'
 
   const debug = false
 
   export default {
     components: {
       AssetClassNewButton,
-      MxmsMarkdown,
+      MxmMarkdown,
     },
 
     data() {

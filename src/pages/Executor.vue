@@ -20,7 +20,7 @@
         <q-card-separator/>
         <q-card-main>
           <div>
-            <mxms-markdown :text="executor.description"/>
+            <mxm-markdown :text="executor.description"/>
             <q-popup-edit
               v-model="executor.description"
               title="Description"
@@ -135,7 +135,7 @@
   import executor from '../graphql/executor.gql'
   import executorUpdate from '../graphql/executorUpdate.gql'
   import apiTypeSelect from '../components/api-type-select'
-  import MxmsMarkdown from '../components/mxms-markdown'
+  import MxmMarkdown from '../components/mxm-markdown'
   import _ from 'lodash'
 
   const debug = false
@@ -143,7 +143,7 @@
   export default {
     components: {
       apiTypeSelect,
-      MxmsMarkdown,
+      MxmMarkdown,
     },
 
     data() {

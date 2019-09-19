@@ -99,7 +99,7 @@
             <tr>
               <td>Description:</td>
               <td>
-                <mxms-markdown :text="parameter.description"/>
+                <mxm-markdown :text="parameter.description"/>
                 <q-popup-edit
                   v-model="parameter.description"
                   title="Description"
@@ -154,7 +154,7 @@
 <script>
   import parameter from '../graphql/parameter.gql'
   import parameterUpdate from '../graphql/parameterUpdate.gql'
-  import MxmsMarkdown from 'components/mxms-markdown'
+  import MxmMarkdown from 'components/mxm-markdown'
   import ParameterValueInput from 'components/parameter-value-input'
   import _ from 'lodash'
 
@@ -162,7 +162,7 @@
 
   export default {
     components: {
-      MxmsMarkdown,
+      MxmMarkdown,
       ParameterValueInput,
     },
 
