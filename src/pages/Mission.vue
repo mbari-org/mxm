@@ -635,8 +635,7 @@
           message: `Submit mission '${this.mission.missionId}' for execution?`,
           color: 'primary',
           cancel: true
-        }).then(() => doIt()).catch(() => {
-        })
+        }).onOk(() => doIt())
 
         const doIt = () => {
           const httpEndpoint = this.executor.httpEndpoint
@@ -741,8 +740,7 @@
           color: 'negative',
           ok: `Yes, delete '${this.mission.missionId}'`,
           cancel: true
-        }).then(() => doIt()).catch(() => {
-        })
+        }).onOk(() => doIt())
 
         const doIt = () => {
           const mutation = missionDelete

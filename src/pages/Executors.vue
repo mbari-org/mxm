@@ -136,10 +136,7 @@
           color: 'negative',
           ok: `Yes, delete '${row.executorId}'`,
           cancel: true
-        })
-          .then(() => this.doDeleteExecutor(row))
-          .catch(() => {
-          })
+        }).onOk(() => this.doDeleteExecutor(row))
       },
 
       doDeleteExecutor(row) {

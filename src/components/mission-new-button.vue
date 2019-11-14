@@ -1,82 +1,5 @@
 <template>
   <div>
-    <q-dialog v-model="dialogOpened"
-             no-backdrop-dismiss
-    >
-      <q-layout style="min-width:600px;min-height:400px" class="bg-grey-2">
-        <q-header>
-          <q-toolbar-title>
-            Register new mission (for '{{executorId}}')
-          </q-toolbar-title>
-          <q-btn round dense
-                 color="primary"
-                 @click="dialogOpened = false"
-                 icon="close"
-          />
-        </q-header>
-
-        <div class="q-pa-lg">
-          <p style="color:gray;font-size:small">
-            The mission will initially be registered with 'DRAFT' status.
-            <br/>
-            You can then edit any arguments and submit it for execution.
-          </p>
-
-          <q-field
-            label="Mission Template:"
-            :error="!missionTplId.length"
-            :label-width="4"
-          >
-            <mission-tpl-select
-              :mission-tpls="missionTpls"
-              v-model="missionTplId"
-            />
-          </q-field>
-
-          <q-field
-            label="Asset:"
-            :error="!assetId.length"
-            :label-width="4"
-          >
-            <asset-select
-              :asset-classes="assetClasses"
-              v-model="assetId"
-            />
-          </q-field>
-
-          <q-input
-            label="Mission ID:"
-            :error="!missionId.length"
-            :label-width="4"
-            class="bg-light-blue-1"
-            v-model.trim="missionId"
-            type="text"
-            style="width:24em"
-          />
-
-          <q-input
-            label="Mission Description:"
-            :label-width="4"
-            class="bg-light-blue-1"
-            v-model.trim="description"
-            type="text"
-            style="width:24em"
-          />
-
-        </div>
-
-        <q-toolbar slot="footer" color="flat">
-          <q-toolbar-title/>
-          <q-btn dense
-                 :color="okToSubmit ? 'primary' : 'light'"
-                 @click="registerMission"
-                 label="Register"
-                 :disable="!okToSubmit"
-          />
-        </q-toolbar>
-      </q-layout>
-    </q-dialog>
-
     <q-btn
       color="primary"
       icon="add"
@@ -84,6 +7,65 @@
       @click="openDialog"
     />
 
+    <utl-dialog
+      :dialog-opened="dialogOpened"
+      :title="`Register new mission (for '${executorId}')`"
+      :ok-to-submit="!!okToSubmit"
+      :ok-to-dismiss="!!okToDismiss"
+      v-on:submit="submit"
+      v-on:dialogClosing="dialogOpened = false"
+    >
+      <div
+        class="column q-gutter-sm"
+      >
+        <p style="color:gray;font-size:small">
+          The mission will initially be registered with 'DRAFT' status.
+          <br/>
+          You can then edit any arguments and submit it for execution.
+        </p>
+
+        <q-field
+          label="Mission Template:"
+          :error="!missionTplId.length"
+          :label-width="4"
+        >
+          <mission-tpl-select
+            :mission-tpls="missionTpls"
+            v-model="missionTplId"
+          />
+        </q-field>
+
+        <q-field
+          label="Asset:"
+          :error="!assetId.length"
+          :label-width="4"
+        >
+          <asset-select
+            :asset-classes="assetClasses"
+            v-model="assetId"
+          />
+        </q-field>
+
+        <q-input
+          label="Mission ID:"
+          :error="!missionId.length"
+          :label-width="4"
+          class="bg-light-blue-1"
+          v-model.trim="missionId"
+          type="text"
+          style="width:24em"
+        />
+
+        <q-input
+          label="Mission Description:"
+          :label-width="4"
+          class="bg-light-blue-1"
+          v-model.trim="description"
+          type="text"
+          style="width:24em"
+        />
+      </div>
+    </utl-dialog>
   </div>
 </template>
 
@@ -144,7 +126,11 @@
         return this.missionTplId
           && this.assetId
           && this.missionId
-      }
+      },
+
+      okToDismiss() {
+        return true // TODO
+      },
     },
 
     apollo: {
@@ -179,7 +165,7 @@
         this.$apollo.queries.executor.refetch()
       },
 
-      registerMission() {
+      submit() {
         const mission = {
           executorId: this.executorId,
           missionTplId: this.missionTplId,

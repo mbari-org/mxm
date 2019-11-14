@@ -1,55 +1,5 @@
 <template>
   <div>
-    <q-dialog v-model="dialogOpened"
-             no-backdrop-dismiss
-    >
-      <q-layout style="min-width:300px;min-height:300px">
-        <q-header>
-          <q-toolbar-title>
-            Register new mission template for '{{executorId}}'
-          </q-toolbar-title>
-          <q-btn round dense
-                 color="primary"
-                 @click="dialogOpened = false"
-                 icon="close"
-          />
-        </q-header>
-
-        <div class="q-pa-lg">
-          <q-input
-            label="Mission Template ID:"
-            :error="!missionTplId.length"
-            :label-width="4"
-            class="bg-light-blue-1"
-            v-model.trim="missionTplId"
-            type="text"
-            autofocus
-            style="width:24em"
-          />
-
-          <q-input
-            label="Description:"
-            :label-width="4"
-            class="bg-light-blue-1"
-            v-model.trim="description"
-            type="text"
-            style="width:24em"
-          />
-
-        </div>
-
-        <q-toolbar slot="footer" color="flat">
-          <q-toolbar-title/>
-          <q-btn dense
-                 :color="okToSubmit ? 'primary' : 'light'"
-                 @click="submit"
-                 label="Submit"
-                 :disable="!okToSubmit"
-          />
-        </q-toolbar>
-      </q-layout>
-    </q-dialog>
-
     <q-btn
       color="primary"
       icon="add"
@@ -57,6 +7,39 @@
       @click="openDialog"
     />
 
+    <utl-dialog
+      :dialog-opened="dialogOpened"
+      :title="`Register new mission template for '${executorId}'`"
+      :ok-to-submit="!!okToSubmit"
+      :ok-to-dismiss="!!okToDismiss"
+      v-on:submit="submit"
+      v-on:dialogClosing="dialogOpened = false"
+    >
+      <div
+        class="column q-gutter-sm"
+      >
+        <q-input
+          label="Mission Template ID:"
+          :error="!missionTplId.length"
+          :label-width="4"
+          class="bg-light-blue-1"
+          v-model.trim="missionTplId"
+          type="text"
+          autofocus
+          style="width:24em"
+        />
+
+        <q-input
+          label="Description:"
+          :label-width="4"
+          class="bg-light-blue-1"
+          v-model.trim="description"
+          type="text"
+          style="width:24em"
+        />
+
+      </div>
+    </utl-dialog>
   </div>
 </template>
 
@@ -84,7 +67,11 @@
     computed: {
       okToSubmit() {
         return this.missionTplId
-      }
+      },
+
+      okToDismiss() {
+        return true // TODO
+      },
     },
 
     methods: {

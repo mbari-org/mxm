@@ -16,7 +16,6 @@
       v-on:dialogClosing="dialogOpened = false"
     >
       <div
-        :dialog-opened="dialogOpened"
         class="column q-gutter-sm"
       >
         <q-field
