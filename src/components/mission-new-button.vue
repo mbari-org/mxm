@@ -1,11 +1,10 @@
 <template>
   <div>
-    <q-modal v-model="dialogOpened"
-             content-css="min-width:600px;min-height:400px"
+    <q-dialog v-model="dialogOpened"
              no-backdrop-dismiss
     >
-      <q-modal-layout>
-        <q-toolbar slot="header">
+      <q-layout style="min-width:600px;min-height:400px" class="bg-grey-2">
+        <q-header>
           <q-toolbar-title>
             Register new mission (for '{{executorId}}')
           </q-toolbar-title>
@@ -14,7 +13,7 @@
                  @click="dialogOpened = false"
                  icon="close"
           />
-        </q-toolbar>
+        </q-header>
 
         <div class="q-pa-lg">
           <p style="color:gray;font-size:small">
@@ -45,30 +44,24 @@
             />
           </q-field>
 
-          <q-field
+          <q-input
             label="Mission ID:"
             :error="!missionId.length"
             :label-width="4"
-          >
-            <q-input
-              class="bg-light-blue-1"
-              v-model.trim="missionId"
-              type="text"
-              style="width:24em"
-            />
-          </q-field>
+            class="bg-light-blue-1"
+            v-model.trim="missionId"
+            type="text"
+            style="width:24em"
+          />
 
-          <q-field
+          <q-input
             label="Mission Description:"
             :label-width="4"
-          >
-            <q-input
-              class="bg-light-blue-1"
-              v-model.trim="description"
-              type="text"
-              style="width:24em"
-            />
-          </q-field>
+            class="bg-light-blue-1"
+            v-model.trim="description"
+            type="text"
+            style="width:24em"
+          />
 
         </div>
 
@@ -81,8 +74,8 @@
                  :disable="!okToSubmit"
           />
         </q-toolbar>
-      </q-modal-layout>
-    </q-modal>
+      </q-layout>
+    </q-dialog>
 
     <q-btn
       color="primary"

@@ -1,11 +1,10 @@
 <template>
   <div>
-    <q-modal v-model="dialogOpened"
-             content-css="min-width:350px;min-height:300px"
+    <q-dialog v-model="dialogOpened"
              no-backdrop-dismiss
     >
-      <q-modal-layout>
-        <q-toolbar slot="header">
+      <q-layout style="min-width:350px;min-height:300px">
+        <q-header>
           <q-toolbar-title>
             <span v-if="exclude && exclude.length">
               Add associated asset classes
@@ -19,20 +18,20 @@
                  @click="dialogOpened = false"
                  icon="close"
           />
-        </q-toolbar>
+        </q-header>
 
         <div class="q-mb-sm">
-          <q-list link>
+          <q-list>
             <q-item
               v-for="c in selectOptions" :key="c.className"
             >
-              <q-item-side>
+              <q-item-section>
                 <q-checkbox v-model="selection" :val="c.className"/>
-              </q-item-side>
-              <q-item-main>
-                <q-item-tile label>{{c.className}}</q-item-tile>
-                <q-item-tile sublabel>{{c.description}}</q-item-tile>
-              </q-item-main>
+              </q-item-section>
+              <q-item-section>
+                <q-item-label header>{{c.className}}</q-item-label>
+                <q-item-label caption>{{c.description}}</q-item-label>
+              </q-item-section>
             </q-item>
           </q-list>
 
@@ -53,8 +52,8 @@
                  :disable="!okToSubmit"
           />
         </q-toolbar>
-      </q-modal-layout>
-    </q-modal>
+      </q-layout>
+    </q-dialog>
 
     <q-btn
       color="primary"

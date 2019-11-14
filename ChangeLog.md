@@ -1,3 +1,10 @@
+2019-11
+
+- upgrading to Quasar 1
+- factoring out and extending geometry viewing/editing into qgeomap, a separate quasar extension
+
+- TODO: geojson-input still to be replaced with qgeomap-based implementation
+
 2019-09
 
 - do pending mxms to mxm renaming

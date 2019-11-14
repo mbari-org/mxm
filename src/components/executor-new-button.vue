@@ -1,11 +1,10 @@
 <template>
   <div>
-    <q-modal v-model="dialogOpened"
-             content-css="min-width:600px;min-height:300px"
+    <q-dialog v-model="dialogOpened"
              no-backdrop-dismiss
     >
-      <q-modal-layout>
-        <q-toolbar slot="header">
+      <q-layout style="min-width:600px;min-height:400px" class="bg-grey-2">
+        <q-header>
           <q-toolbar-title>
             Register new executor
           </q-toolbar-title>
@@ -14,47 +13,38 @@
                  @click="dialogOpened = false"
                  icon="close"
           />
-        </q-toolbar>
+        </q-header>
 
         <div class="q-pa-lg">
-          <q-field
+          <q-input
             label="Executor name:"
             :error="!executorId.length"
             :label-width="4"
-          >
-            <q-input
-              class="bg-light-blue-1"
-              v-model.trim="executorId"
-              type="text"
-              autofocus
-              style="width:24em"
-            />
-          </q-field>
+            class="bg-light-blue-1"
+            v-model.trim="executorId"
+            type="text"
+            autofocus
+            style="width:24em"
+          />
 
-          <q-field
+          <q-input
             label="Description:"
             :label-width="4"
-          >
-            <q-input
-              class="bg-light-blue-1"
-              v-model.trim="description"
-              type="text"
-              style="width:24em"
-            />
-          </q-field>
+            class="bg-light-blue-1"
+            v-model.trim="description"
+            type="text"
+            style="width:24em"
+          />
 
-          <q-field
+          <q-input
             label="HTTP Endpoint:"
             :error="!httpEndpoint.length"
             :label-width="4"
-          >
-            <q-input
-              class="bg-light-blue-1"
-              v-model.trim="httpEndpoint"
-              type="text"
-              style="width:24em"
-            />
-          </q-field>
+            class="bg-light-blue-1"
+            v-model.trim="httpEndpoint"
+            type="text"
+            style="width:24em"
+          />
 
           <q-field
             label="API Type:"
@@ -78,8 +68,8 @@
                  :disable="!okToSubmit"
           />
         </q-toolbar>
-      </q-modal-layout>
-    </q-modal>
+      </q-layout>
+    </q-dialog>
 
     <q-btn
       color="primary"
@@ -103,7 +93,7 @@
   import {
     getAssetClasses,
     getMissionTpls,
-  } from 'plugins/rest0'
+  } from 'boot/rest0'
 
   import _ from 'lodash'
 

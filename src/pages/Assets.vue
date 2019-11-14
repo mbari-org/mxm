@@ -24,7 +24,7 @@
         </div>
 
         <div class="q-ml-md row">
-          <q-search
+          <q-input
             v-if="allAssetsList.length"
             class="col"
             color="secondary"

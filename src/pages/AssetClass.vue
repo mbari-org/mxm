@@ -14,11 +14,11 @@
     <div v-if="assetClass">
 
       <q-card class="q-mb-md">
-        <q-card-title>
+        <q-card-section>
           Asset Class: <span class="text-bold">{{assetClass.className}}</span>
-        </q-card-title>
-        <q-card-separator/>
-        <q-card-main>
+        </q-card-section>
+        <q-separator/>
+        <q-card-section>
           <mxm-markdown :text="assetClass.description"/>
           <q-popup-edit
             v-model="assetClass.description"
@@ -26,18 +26,16 @@
             buttons
             @save="updateDescription"
           >
-            <q-field>
-              <q-input
-                v-model.trim="assetClass.description"
-                clearable
-                class="bg-green-1"
-                type="textarea"
-                rows="3"
-                :max-height="300"
-              />
-            </q-field>
+            <q-input
+              v-model.trim="assetClass.description"
+              clearable
+              class="bg-green-1"
+              type="textarea"
+              rows="3"
+              :max-height="300"
+            />
           </q-popup-edit>
-        </q-card-main>
+        </q-card-section>
       </q-card>
 
 
@@ -55,7 +53,7 @@
           </div>
 
           <div class="q-ml-md row">
-            <q-search
+            <q-input
               v-if="myAssets.length"
               class="col"
               color="secondary"

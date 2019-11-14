@@ -63,6 +63,8 @@
             :center="center"
             :options="{zoomControl:false}"
           >
+<!--            <l-control-polyline-measure :options="{ showUnitControl: true }" position="bottomright"/>-->
+
             <l-feature-group
               ref="featureGroup"
             >
@@ -165,17 +167,8 @@
 <script>
   import Vue from 'vue'
   import L from 'leaflet'
-  import Vue2Leaflet from 'vue2-leaflet'
-  require('leaflet-mouse-position/src/L.Control.MousePosition')
-  require('leaflet-measure/dist/leaflet-measure')
-  import * as esri from 'esri-leaflet/dist/esri-leaflet'
-  require('leaflet.gridlayer.googlemutant/Leaflet.GoogleMutant')
-  require('leaflet-draw/dist/leaflet.draw')
-  import _ from 'lodash'
 
-  import PositionTable from 'components/position-table'
-
-  const {
+  import {
     LMap,
     LMarker,
     LFeatureGroup,
@@ -186,7 +179,17 @@
     LTooltip,
     LCircle,
     LCircleMarker,
-  } = Vue2Leaflet
+  } from 'vue2-leaflet'
+
+  // import 'leaflet-draw'
+  // import LControlPolylineMeasure from 'vue2-leaflet-polyline-measure'
+
+  import {} from 'vue2-leaflet-googlemutant'
+
+  // require('leaflet-draw/dist/leaflet.draw')
+  import _ from 'lodash'
+
+  import PositionTable from 'components/position-table'
 
   const debug = false
 
@@ -202,6 +205,7 @@
       LTooltip,
       LCircle,
       LCircleMarker,
+      // LControlPolylineMeasure,
       PositionTable
     },
 
@@ -308,16 +312,7 @@
 
         if (debug) console.debug(`geojson-input initMap: paramName=${this.paramName}`, 'map=', map)
 
-        L.DomUtil.addClass(map._container,'my-default-cursor')
-
-        mousePosition.addToMap(map)
-
-        initBaseLayers(map)
-
-        L.control.measure({
-          primaryLengthUnit: 'meters', secondaryLengthUnit: 'kilometers',
-          primaryAreaUnit: 'sqmeters'
-        }).addTo(map)
+        this.$mapMan(map)
 
         if (!this.readonly) {
           this.initEditor()
@@ -665,52 +660,6 @@
     },
   }
 
-  function initBaseLayers(map) {
-    const esriOceansLayer = esri.basemapLayer('Oceans')
-    const esriOceansLabelsLayer = esri.basemapLayer('OceansLabels')
-    const esriOceansWithLabelsLayer = L.featureGroup([esriOceansLayer, esriOceansLabelsLayer])
-    const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
-    const gHybridLayer = L.gridLayer.googleMutant({type: 'hybrid'})
-    const gSatelliteLayer = L.gridLayer.googleMutant({type: 'satellite'})
-
-    // TODO leaflet or esri bug? radio button 'ESRI Oceans' seems to be always pre-selected
-    // if 'ESRI Oceans' is added, even though we are adding oceans-with-labels 1st and to the map.
-    // Also, a 2nd click on oceans-with-labels brings the one with only the labels!
-    const baseLayers = {
-      'ESRI Oceans/Labels': esriOceansWithLabelsLayer,
-      // 'ESRI Oceans': esriOceansLayer,
-      'OpenStreetMap': osmLayer,
-      'Google hybrid': gHybridLayer,
-      'Google satellite': gSatelliteLayer,
-    }
-    const controlLayers = L.control.layers(baseLayers).addTo(map)
-
-    let baseLayerName = 'ESRI Oceans/Labels'
-    baseLayers[baseLayerName].addTo(map)
-  }
-
-  // helper related with L.control.mousePosition
-  const mousePosition = (() => {
-    let prefix = ''  // with depth if available
-
-    const separator = ', '
-    const latFormatter = v => prefix + v.toFixed(5)
-    const lngFormatter = v => v.toFixed(5)
-    const mpos = L.control.mousePosition({
-      position: 'topright',
-      emptyString: '&nbsp;',
-      separator,
-      latFormatter,
-      lngFormatter,
-    })
-
-    return {
-      addToMap: map => {
-        mpos.addTo(map)
-      },
-    }
-  })()
-
   // basically just to reduce precision of coordinates entered or edited
   // prior to notifying parent component
   const stringify = json => {
@@ -727,7 +676,7 @@
 </script>
 
 <style src="leaflet/dist/leaflet.css" />
-<style src="leaflet-measure/dist/leaflet-measure.css" />
+<!--<style src="leaflet-measure/dist/leaflet-measure.css" />-->
 <style src="leaflet-draw/dist/leaflet.draw.css" />
 
 <style>

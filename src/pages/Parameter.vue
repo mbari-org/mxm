@@ -20,7 +20,7 @@
       </div>
 
       <q-card class="q-mb-md">
-        <q-card-title>
+        <q-card-section>
           Parameter:
           <span class="text-bold" style="font-family:monospace;font-size:larger">
             {{ parameter.paramName }}
@@ -30,18 +30,16 @@
               buttons
               @save="updateParameter"
             >
-              <q-field>
-                <q-input
-                  v-model.trim="parameter.paramName"
-                  clearable
-                  class="bg-green-1"
-                />
-              </q-field>
+              <q-input
+                v-model.trim="parameter.paramName"
+                clearable
+                class="bg-green-1"
+              />
             </q-popup-edit>
           </span>
-        </q-card-title>
-        <q-card-separator/>
-        <q-card-main>
+        </q-card-section>
+        <q-separator/>
+        <q-card-section>
 
           <table class="mission-table">
             <tbody>
@@ -62,14 +60,12 @@
                   title="Type"
                   buttons
                 >
-                  <q-field>
-                    <q-input
-                      v-model.trim="parameter.type"
-                      clearable
-                      :clear-value="original.type"
-                      class="bg-green-1"
-                    />
-                  </q-field>
+                  <q-input
+                    v-model.trim="parameter.type"
+                    clearable
+                    :clear-value="original.type"
+                    class="bg-green-1"
+                  />
                 </q-popup-edit>
               </td>
             </tr>
@@ -105,17 +101,15 @@
                   title="Description"
                   buttons
                 >
-                  <q-field>
-                    <q-input
-                      v-model.trim="parameter.description"
-                      clearable
-                      :clear-value="original.description"
-                      class="bg-green-1"
-                      type="textarea"
-                      rows="3"
-                      :max-height="300"
-                    />
-                  </q-field>
+                  <q-input
+                    v-model.trim="parameter.description"
+                    clearable
+                    :clear-value="original.description"
+                    class="bg-green-1"
+                    type="textarea"
+                    rows="3"
+                    :max-height="300"
+                  />
                 </q-popup-edit>
               </td>
             </tr>
@@ -128,7 +122,7 @@
             @click="updateParameter"
           />
 
-        </q-card-main>
+        </q-card-section>
       </q-card>
 
     </div>

@@ -14,11 +14,11 @@
     <div v-if="executor">
 
       <q-card class="q-mb-md">
-        <q-card-title>
+        <q-card-section>
           Executor: <span class="text-bold">{{executor.executorId}}</span>
-        </q-card-title>
-        <q-card-separator/>
-        <q-card-main>
+        </q-card-section>
+        <q-separator/>
+        <q-card-section>
           <div>
             <mxm-markdown :text="executor.description"/>
             <q-popup-edit
@@ -27,16 +27,14 @@
               buttons
               @save="updateDescription"
             >
-              <q-field>
-                <q-input
-                  v-model.trim="executor.description"
-                  clearable
-                  class="bg-green-1"
-                  type="textarea"
-                  rows="3"
-                  :max-height="300"
-                />
-              </q-field>
+              <q-input
+                v-model.trim="executor.description"
+                clearable
+                class="bg-green-1"
+                type="textarea"
+                rows="3"
+                :max-height="300"
+              />
             </q-popup-edit>
           </div>
 
@@ -54,13 +52,11 @@
                   buttons
                   @save="updateHttpEndpoint"
                 >
-                  <q-field>
-                    <q-input
-                      v-model.trim="executor.httpEndpoint"
-                      clearable
-                      class="bg-green-1"
-                    />
-                  </q-field>
+                  <q-input
+                    v-model.trim="executor.httpEndpoint"
+                    clearable
+                    class="bg-green-1"
+                  />
                 </q-popup-edit>
               </td>
             </tr>
@@ -119,7 +115,7 @@
             />
           </div>
 
-        </q-card-main>
+        </q-card-section>
       </q-card>
 
     </div>

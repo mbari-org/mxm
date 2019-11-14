@@ -1,8 +1,10 @@
+import UtlDialog from 'components/utl/utl-dialog'
+
 const runInSequence = (promises) => (
   promises.reduce((acum, promise) =>
-    acum.then(results =>
-      promise.then(result => [ ...results, result ])
-    ),
+      acum.then(results =>
+        promise.then(result => [ ...results, result ])
+      ),
     Promise.resolve([])
   )
 )
@@ -14,5 +16,6 @@ export default ({ app, Vue }) => {
     },
     runInSequence,
   }
-}
 
+  Vue.component('utl-dialog', UtlDialog)
+}

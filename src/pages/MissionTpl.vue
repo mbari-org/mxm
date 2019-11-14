@@ -14,7 +14,7 @@
     <div v-if="missionTpl">
 
       <q-card class="q-mb-md">
-        <q-card-title>
+        <q-card-section>
           Mission Template:
           <span class="text-bold">
             {{ params.missionTplId }}
@@ -24,18 +24,16 @@
             buttons
             @save="updateMissionTplId"
           >
-            <q-field>
-              <q-input
-                v-model.trim="missionTpl.missionTplId"
-                clearable
-                class="bg-green-1"
-              />
-            </q-field>
+            <q-input
+              v-model.trim="missionTpl.missionTplId"
+              clearable
+              class="bg-green-1"
+            />
           </q-popup-edit>
           </span>
-        </q-card-title>
-        <q-card-separator/>
-        <q-card-main>
+        </q-card-section>
+        <q-separator/>
+        <q-card-section>
           <mxm-markdown :text="missionTpl.description"/>
           <q-popup-edit
             v-model="missionTpl.description"
@@ -43,22 +41,20 @@
             buttons
             @save="updateDescription"
           >
-            <q-field>
-              <q-input
-                v-model.trim="missionTpl.description"
-                clearable
-                class="bg-green-1"
-                type="textarea"
-                rows="3"
-                :max-height="300"
-              />
-            </q-field>
+            <q-input
+              v-model.trim="missionTpl.description"
+              clearable
+              class="bg-green-1"
+              type="textarea"
+              rows="3"
+              :max-height="300"
+            />
           </q-popup-edit>
-        </q-card-main>
+        </q-card-section>
       </q-card>
 
       <q-card class="q-mb-lg">
-        <q-card-main>
+        <q-card-section>
           Associated asset classes:
           <div class="row q-mt-sm">
             <q-chip
@@ -67,8 +63,8 @@
               :key="c.assetClassName"
               color="secondary"
               small
-              closable
-              @hide="removeAssetClass(c.id)"
+              removable
+              @remove="removeAssetClass(c.id)"
             >
               <router-link
                 style="color:white;text-decoration:none"
@@ -89,7 +85,7 @@
             />
           </div>
 
-        </q-card-main>
+        </q-card-section>
       </q-card>
 
       <q-table
@@ -106,7 +102,7 @@
           </div>
 
           <div class="q-ml-md row">
-            <q-search
+            <q-input
               v-if="myParameters.length"
               class="col"
               color="secondary"
@@ -140,7 +136,7 @@
                 style="width:20em;font-family:monospace"
           >
             <div
-              class="round-borders q-pa-xs bg-green-1"
+              class="rounded-borders q-pa-xs bg-green-1"
               style="white-space: normal"
             >
               {{ props.row.defaultValue }}

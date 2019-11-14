@@ -14,7 +14,7 @@
     <div v-if="mission">
 
       <q-card class="q-mb-md">
-        <q-card-title>
+        <q-card-section>
           Mission: <q-chip square class="text-bold">{{ mission.missionId }}</q-chip>
           <span>
             <router-link
@@ -67,10 +67,10 @@
             </tr>
             </tbody>
           </table>
-        </q-card-title>
+        </q-card-section>
 
-        <q-card-separator/>
-        <q-card-main>
+        <q-separator/>
+        <q-card-section>
           <mxm-markdown :text="mission.description"/>
           <q-popup-edit
             v-if="mission.missionStatus === 'DRAFT'"
@@ -79,18 +79,16 @@
             buttons
             @save="updateDescription"
           >
-            <q-field>
-              <q-input
-                v-model.trim="mission.description"
-                clearable
-                class="bg-green-1"
-                type="textarea"
-                rows="3"
-                :max-height="300"
-              />
-            </q-field>
+            <q-input
+              v-model.trim="mission.description"
+              clearable
+              class="bg-green-1"
+              type="textarea"
+              rows="3"
+              :max-height="300"
+            />
           </q-popup-edit>
-        </q-card-main>
+        </q-card-section>
       </q-card>
 
       <div class="row q-mb-sm">
@@ -169,7 +167,7 @@
               </div>
 
               <div class="q-ml-md row">
-                <q-search
+                <q-input
                   v-if="myArguments"
                   class="col"
                   color="secondary"
@@ -202,17 +200,17 @@
           >
             <div
               v-if="!props.row.paramValue && props.row.required"
-              class="round-borders q-pa-xs bg-red-12 text-bold" style="color:white"
+              class="rounded-borders q-pa-xs bg-red-12 text-bold" style="color:white"
             > ?
             </div>
             <div v-else-if="(props.row.paramValue || '') !== (props.row.defaultValue || '')"
-                 class="round-borders q-pa-xs bg-green-11"
+                 class="rounded-borders q-pa-xs bg-green-11"
                  style="white-space: normal"
             >
               {{ props.row.paramValue }}
             </div>
             <div v-else
-                 class="round-borders q-pa-xs bg-green-1"
+                 class="rounded-borders q-pa-xs bg-green-1"
                  style="white-space: normal"
             >
               {{ props.row.paramValue }}
@@ -288,7 +286,7 @@
   import {
     postMission,
     getMission,
-  } from 'plugins/rest0'
+  } from 'boot/rest0'
 
   import Vue from 'vue'
   import _ from 'lodash'

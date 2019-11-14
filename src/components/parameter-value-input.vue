@@ -1,20 +1,31 @@
 <template>
   <div>
-    <geojson-input
-      v-if="isGeojsonType"
-      :param-name="paramName"
-      :param-type="paramType"
-      :default-value="defaultValue"
-      :readonly="readonly"
+    <!--
+        <geojson-input
+          v-if="isGeojsonType"
+          :param-name="paramName"
+          :param-type="paramType"
+          :default-value="defaultValue"
+          :readonly="readonly"
 
-      :value="paramValue"
-      @input="val => { paramValue = val; $emit('input', val) }"
-    />
+          :value="paramValue"
+          @input="val => { paramValue = val; $emit('input', val) }"
+        />
+    -->
+
+    <pre
+      v-if="isGeojsonType"
+    >
+      :param-name={{ paramName }}
+      :param-type={{paramType}}
+      :default-value={{defaultValue}}
+      :readonly={{readonly}}
+    </pre>
 
     <q-input
       v-else
-      class="round-borders q-pa-xs bg-green-1"
-      :stack-label="paramName"
+      class="rounded-borders q-pa-xs bg-green-1"
+      stack-label :label="paramName"
       :readonly="readonly"
       :clearable="!readonly"
       :clear-value="defaultValue"
@@ -30,7 +41,7 @@
 </template>
 
 <script>
-  import geojsonInput from 'components/geojson-input'
+  // import geojsonInput from 'components/geojson-input'
 
   export default {
     props: {
@@ -58,7 +69,7 @@
     },
 
     components: {
-      geojsonInput,
+      // geojsonInput,
     },
 
     data() {
