@@ -101,10 +101,10 @@
             buttons persistent
           >
             <q-input
-              style="width:30em"
+              style="width:30em; font-family:monospace"
               v-model.trim="data.description"
               clearable
-              class="bg-light-blue-1"
+              class="bg-light-blue-1 q-pl-md q-pr-md"
               type="textarea"
               rows="5"
               :max-height="300"

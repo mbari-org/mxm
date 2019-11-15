@@ -38,15 +38,16 @@
           <q-popup-edit
             v-model="missionTpl.description"
             title="Description"
-            buttons
+            buttons persistent
             @save="updateDescription"
           >
             <q-input
               v-model.trim="missionTpl.description"
               clearable
-              class="bg-green-1"
+              class="bg-green-1 q-pl-md q-pr-md"
+              style="font-family:monospace"
               type="textarea"
-              rows="3"
+              rows="5"
               :max-height="300"
               autofocus @keyup.enter.stop
             />

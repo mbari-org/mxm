@@ -1,5 +1,6 @@
 2019-11
 
+- more q-popup-edit adjs related with mxm-markdown. TODO factor out into some mxm-markdown-edit
 - use @keyup.enter.stop on multiline inputs under q-popup-edit.
   https://quasar.dev/vue-components/popup-edit#Textarea-%2F-QEditor
 

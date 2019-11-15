@@ -95,13 +95,14 @@
                 <q-popup-edit
                   v-model="parameter.description"
                   title="Description"
-                  buttons
+                  buttons persistent
                 >
                   <q-input
                     v-model.trim="parameter.description"
                     clearable
                     :clear-value="original.description"
-                    class="bg-green-1"
+                    class="bg-green-1 q-pl-md q-pr-md"
+                    style="font-family:monospace"
                     type="textarea"
                     rows="3"
                     :max-height="300"

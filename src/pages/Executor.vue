@@ -24,13 +24,14 @@
             <q-popup-edit
               v-model="executor.description"
               title="Description"
-              buttons
+              buttons persistent
               @save="updateDescription"
             >
               <q-input
                 v-model.trim="executor.description"
                 clearable
-                class="bg-green-1"
+                class="bg-green-1 q-pl-md q-pr-md"
+                style="font-family:monospace"
                 type="textarea"
                 rows="3"
                 :max-height="300"
