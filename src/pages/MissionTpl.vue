@@ -144,13 +144,8 @@
             <q-popup-edit
               v-if="props.row.defaultValue"
               v-model="props.row.defaultValue"
-              @show="editingArgName = props.row.paramName"
-              @hide="() => { editingArgName = 'HIDE' }"
-              @close="() => { editingArgName = 'CLOSE' }"
-              @cancel="() => { editingArgName = 'CANCEL' }"
             >
               <parameter-value-input
-                v-if="editingArgName === props.row.paramName"
                 :param-name="props.row.paramName"
                 v-model="props.row.defaultValue"
                 :param-type="props.row.type"
@@ -213,7 +208,6 @@
       return {
         loading: false,
         missionTpl: null,
-        editingArgName: null,
         columns: [
           {
             field: 'paramName',

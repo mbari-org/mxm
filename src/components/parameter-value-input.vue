@@ -1,26 +1,15 @@
 <template>
   <div>
-    <!--
-        <geojson-input
-          v-if="isGeojsonType"
-          :param-name="paramName"
-          :param-type="paramType"
-          :default-value="defaultValue"
-          :readonly="readonly"
-
-          :value="paramValue"
-          @input="val => { paramValue = val; $emit('input', val) }"
-        />
-    -->
-
-    <pre
+    <geojson-input
       v-if="isGeojsonType"
-    >
-      :param-name={{ paramName }}
-      :param-type={{paramType}}
-      :default-value={{defaultValue}}
-      :readonly={{readonly}}
-    </pre>
+      :param-name="paramName"
+      :param-type="paramType"
+      :default-value="defaultValue"
+      :readonly="readonly"
+
+      :value="paramValue"
+      @input="val => { paramValue = val; $emit('input', val) }"
+    />
 
     <q-input
       v-else
@@ -41,7 +30,9 @@
 </template>
 
 <script>
-  // import geojsonInput from 'components/geojson-input'
+  import geojsonInput from 'components/geojson-input'
+
+  const debug = true
 
   export default {
     props: {
@@ -69,7 +60,17 @@
     },
 
     components: {
-      // geojsonInput,
+      geojsonInput,
+    },
+
+    mounted() {
+      if (debug) console.log(`MOUNTED parameter-value-input
+      paramName=${this.paramName}
+      paramType=${this.paramType}
+      value=${this.value}
+      defaultValue=${this.defaultValue}
+      readonly=${this.readonly}
+      `)
     },
 
     data() {

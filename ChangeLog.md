@@ -1,5 +1,6 @@
 2019-11
 
+- starting to use qgeomap
 - upgrading to Quasar 1
 - factoring out and extending geometry viewing/editing into qgeomap, a separate quasar extension
 
