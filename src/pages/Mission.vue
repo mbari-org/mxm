@@ -162,7 +162,7 @@
             </div>
 
             <div class="row">
-              <div class="col-auto q-headline">
+              <div class="col-auto text-h5">
                 Arguments
               </div>
 

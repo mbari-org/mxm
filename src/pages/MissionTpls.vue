@@ -21,7 +21,7 @@
         :filter="filter"
       >
         <div slot="top-left" slot-scope="props" class="row items-center">
-          <div class="col-auto q-headline">
+          <div class="col-auto text-h5">
             Mission templates
           </div>
 
