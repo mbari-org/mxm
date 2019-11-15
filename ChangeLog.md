@@ -1,7 +1,14 @@
 2019-11
 
-- TODO: $apollo.queries.parameter.refetch() not actually refetching!
-  upon the recent upgrades (this was working just fine before)
+- fix apollo's refetch() not actually refetching
+  (this was working just fine before).
+  
+    The fix:
+    - upgraded all apollo stuff (as a general good thing to do)
+    - but this was not enough
+    - had to add `fetchPolicy: 'no-cache'`
+      Why the need for this for **refetch** calls??
+      TODO revisit the cache/fetch settings.
 
 - more q-popup-edit adjs related with mxm-markdown. TODO factor out into some mxm-markdown-edit
 - use @keyup.enter.stop on multiline inputs under q-popup-edit.

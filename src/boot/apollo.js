@@ -23,6 +23,16 @@ export default ({ app, Vue }) => {
 
   // Create the apollo client
   const apolloClient = new ApolloClient({
+    // TODO revisit the cache/fetch settings.
+    // For now, it seems taht we need 'no-cache' in general
+    defaultOptions: {
+      watchQuery: {
+        fetchPolicy: 'no-cache',
+      },
+      query: {
+        fetchPolicy: 'no-cache',
+      },
+    },
     link: httpLink,
     cache: new InMemoryCache(),
     connectToDevTools: true,
@@ -37,5 +47,5 @@ export default ({ app, Vue }) => {
   })
 
   // Set apollo provider instance on app
-  app.provide = apolloProvider.provide()
+  app.apolloProvider = apolloProvider // https://github.com/vuejs/vue-apollo/issues/408#issuecomment-426995379
 }

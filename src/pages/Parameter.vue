@@ -161,7 +161,8 @@
   import parameterUpdate from '../graphql/parameterUpdate.gql'
   import MxmMarkdown from 'components/mxm-markdown'
   import ParameterValueInput from 'components/parameter-value-input'
-  import _ from 'lodash'
+  import cloneDeep from 'lodash/cloneDeep'
+  import isEqual from 'lodash/isEqual'
 
   const debug = true
 
@@ -171,13 +172,11 @@
       ParameterValueInput,
     },
 
-    data() {
-      return {
-        loading: false,
-        parameter: null,
-        original: null,
-      }
-    },
+    data: () => ({
+      loading: false,
+      parameter: null,
+      original: null,
+    }),
 
     computed: {
       params() {
@@ -201,7 +200,7 @@
           if (data.parameterByExecutorIdAndMissionTplIdAndParamName) {
             parameter = data.parameterByExecutorIdAndMissionTplIdAndParamName
           }
-          this.original = _.cloneDeep(parameter)
+          this.original = cloneDeep(parameter)
           return parameter
         },
       },
@@ -214,13 +213,13 @@
     methods: {
       refreshParameter() {
         this.$apollo.queries.parameter.refetch()
-            .then(res => {
-              console.log('refetch res=', res)
-            })
+            // .then(res => {
+            //   console.log('refetch', res.data.parameterByExecutorIdAndMissionTplIdAndParamName.required)
+            // })
       },
 
       noChanges() {
-        return this.parameter === null || _.isEqual(this.parameter, this.original)
+        return this.parameter === null || isEqual(this.parameter, this.original)
       },
 
       updateParameter() {
@@ -228,19 +227,19 @@
         const mutation = parameterUpdate
         const parameterPatch = {}
 
-        if (!_.isEqual(this.parameter.paramName, this.original.paramName)) {
+        if (!isEqual(this.parameter.paramName, this.original.paramName)) {
           parameterPatch.paramName = this.parameter.paramName
         }
-        if (!_.isEqual(this.parameter.type, this.original.type)) {
+        if (!isEqual(this.parameter.type, this.original.type)) {
           parameterPatch.type = this.parameter.type
         }
-        if (!_.isEqual(this.parameter.required, this.original.required)) {
+        if (!isEqual(this.parameter.required, this.original.required)) {
           parameterPatch.required = this.parameter.required
         }
-        if (!_.isEqual(this.parameter.defaultValue, this.original.defaultValue)) {
+        if (!isEqual(this.parameter.defaultValue, this.original.defaultValue)) {
           parameterPatch.defaultValue = this.parameter.defaultValue
         }
-        if (!_.isEqual(this.parameter.description, this.original.description)) {
+        if (!isEqual(this.parameter.description, this.original.description)) {
           parameterPatch.description = this.parameter.description
         }
 
