@@ -1,5 +1,9 @@
 2019-11
 
+- propagating geometry edits, still based on adhoc simple format
+  externally (internally, always geojson is used)
+  TODO determine concrete format for "simplified geo types"
+
 - fix apollo's refetch() not actually refetching
   (this was working just fine before).
   

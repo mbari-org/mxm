@@ -4,7 +4,8 @@
     <qgeomap
       ref="qgeomap"
       :editable="editable"
-      v-on:warning="showWarning"
+      v-on:editsApplied="_editsApplied"
+      v-on:warning="_showWarning"
       include-table
       :style="sizeInfo.qgeomapStyle"
     />
@@ -82,60 +83,25 @@
       setFeatureData(value) {
         const qgeomap = this.$refs.qgeomap
 
-        this.valueString = value || ''
+        this.valueString = value && value.trim() || ''
 
         const entry_id = this.entry_id
 
         let entry = null
-        let json = null
-        if (this.valueString.trim()) {
+        if (this.valueString) {
           try {
-            json = JSON.parse(this.valueString)
-            switch (this.paramType) {
-              case 'Point': {
-                if (debug) console.debug(`setFeatureData: paramType=${this.paramType} point=`, json)
-                const coordinates = [json[1], json[0]]
-                entry = {
-                  entry_id,
-                  geometry: {
-                    type: "Feature",
-                    geometry: {
-                      type: "Point",
-                      coordinates,
-                    },
-                  },
-                  color: 'cyan',
-                  tooltip: entry_id,
-                }
-                break
+            const json = JSON.parse(this.valueString)
+            if (debug) console.debug(`setFeatureData: paramType=${this.paramType } json=`, json)
+
+            const geometry = simple2geojson(this.paramType, this.valueString)
+
+            if (geometry) {
+              entry = {
+                entry_id,
+                geometry,
+                color: 'cyan',
+                tooltip: entry_id,
               }
-
-              case 'Polygon': {
-                if (debug) console.debug(`setFeatureData: paramType=${this.paramType } polygon=`, json)
-
-                const coordinates = [ map(json, ([lat, lon]) => [lon, lat]) ]
-
-                entry = {
-                  entry_id,
-                  geometry: {
-                    type: "Feature",
-                    geometry: {
-                      type: "Polygon",
-                      coordinates,
-                    },
-                  },
-                  color: 'yellow',
-                  tooltip: 'Polygon',
-                }
-                break
-              }
-
-              case 'MultiPoint': {
-                if (debug) console.debug(`setFeatureData: paramType=${this.paramType} json=`, json)
-                break
-              }
-
-              // TODO the other paramType's
             }
           }
           catch (error) { // TODO
@@ -154,16 +120,20 @@
             }
           })
         }
-        return json
       },
 
-      updateValueString(json) {
-        this.valueString = json && stringify(json) || ''
-        console.debug(`::: updateValueString emiting '${this.valueString}'`)
+      _editsApplied(entryEdited) {
+        console.log(`_editsApplied: entryEdited=`, entryEdited)
+        this._updateValueString(entryEdited.geometry)
+      },
+
+      _updateValueString(geometry) {
+        this.valueString = geojson2simple(geometry)
+        console.debug(`_updateValueString emiting '${this.valueString}'`)
         this.$emit('input', this.valueString)
       },
 
-      showWarning(message) {
+      _showWarning(message) {
         console.warn('WARN:', message)
         this.$q.notify({
           message,
@@ -176,16 +146,65 @@
     },
   }
 
-  // basically just to reduce precision of coordinates entered or edited
-  // prior to notifying parent component
-  const stringify = json => {
-    if (Array.isArray(json) && !json.length) {
+  function simple2geojson(paramType, simple) {
+    const json = JSON.parse(simple)
+    switch (paramType) {
+      case 'Point': {
+        const [lat, lon] = json
+        const coordinates = [lon, lat]
+        return {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates,
+          }
+        }
+      }
+
+      case 'Polygon': {
+        const coordinates = [ map(json, ([lat, lon]) => [lon, lat]) ]
+        return {
+          type: 'Feature',
+          geometry: {
+            type: 'Polygon',
+            coordinates,
+          }
+        }
+      }
+    }
+  }
+
+  function geojson2simple(geometry) {
+    console.log('geojson2simple: geometry=', geometry)
+
+    if (!geometry || Array.isArray(geometry) && !geometry.length) {
       return ''   // avoid returning `[]`
     }
-    else {
-      return JSON.stringify(json, (k, v) => {
-        return typeof v === 'number' && v.toFixed ? +v.toFixed(6) : v
-      })
+
+    switch (geometry.type) {
+      case 'Feature': {
+        // TODO this is very simplistic for now (ignoring feature properties...)
+        return geojson2simple(geometry.geometry)
+      }
+
+      case 'Point': {
+        const coordinates = geometry.coordinates
+        const [lon, lat] = coordinates
+        const simple = [lat, lon]
+        return JSON.stringify(simple)
+      }
+
+      case 'Polygon': {
+        const [coordinates] = geometry.coordinates
+        const simple = map(coordinates, ([lat, lon]) => [lon, lat])
+        return JSON.stringify(simple)
+      }
+
+      // TODO revisit the 'toFixed" simplification
+      default:
+        return JSON.stringify(geometry, (k, v) =>
+          typeof v === 'number' && v.toFixed ? +v.toFixed(6) : v
+        )
     }
   }
 
