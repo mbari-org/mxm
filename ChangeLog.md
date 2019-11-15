@@ -1,5 +1,8 @@
 2019-11
 
+- TODO: $apollo.queries.parameter.refetch() not actually refetching!
+  upon the recent upgrades (this was working just fine before)
+
 - more q-popup-edit adjs related with mxm-markdown. TODO factor out into some mxm-markdown-edit
 - use @keyup.enter.stop on multiline inputs under q-popup-edit.
   https://quasar.dev/vue-components/popup-edit#Textarea-%2F-QEditor
@@ -8,7 +11,6 @@
 - upgrading to Quasar 1
 - factoring out and extending geometry viewing/editing into qgeomap, a separate quasar extension
 
-- TODO: geojson-input still to be replaced with qgeomap-based implementation
 
 2019-09
 

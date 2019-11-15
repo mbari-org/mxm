@@ -15,28 +15,47 @@
 
     <div v-if="parameter" class="q-mt-md">
 
-      <div class="q-mb-sm">
+      <div class="q-mb-lg">
         Mission Template: <span class="text-bold">{{ params.missionTplId }}</span>
       </div>
 
       <q-card class="q-mb-md">
-        <q-card-section>
-          Parameter:
-          <span class="text-bold" style="font-family:monospace;font-size:larger">
+        <q-card-section class="row q-gutter-md items-center">
+          <span>Parameter:</span>
+          <div class="q-ml-sm text-bold" style="font-family:monospace;font-size:larger">
             {{ parameter.paramName }}
             <q-popup-edit
               v-model="parameter.paramName"
               title="Parameter Name"
               buttons
-              @save="updateParameter"
             >
               <q-input
                 v-model.trim="parameter.paramName"
-                clearable
+                clearable autofocus
                 class="bg-green-1"
               />
             </q-popup-edit>
-          </span>
+          </div>
+
+          <div class="q-ml-xl">
+            <q-btn
+              :disable="noChanges()"
+              :color="noChanges() ? 'grey' : 'red'"
+              size="sm"
+              :class="{'shadow-5': !noChanges()}"
+              dense round icon="save"
+              @click="updateParameter"
+            />
+            <q-btn
+              v-if="!noChanges()"
+              class="q-ml-md"
+              color="grey"
+              size="sm"
+              dense round icon="undo"
+              @click="refreshParameter"
+            />
+          </div>
+
         </q-card-section>
         <q-separator/>
         <q-card-section>
@@ -54,19 +73,19 @@
               <td>
                 <span class="bg-green-1 q-pa-xs">
                   {{parameter.type}}
+                  <q-popup-edit
+                    v-model="parameter.type"
+                    title="Type"
+                    buttons
+                  >
+                    <q-input
+                      v-model.trim="parameter.type"
+                      clearable
+                      :clear-value="original.type"
+                      class="bg-green-1"
+                    />
+                  </q-popup-edit>
                 </span>
-                <q-popup-edit
-                  v-model="parameter.type"
-                  title="Type"
-                  buttons
-                >
-                  <q-input
-                    v-model.trim="parameter.type"
-                    clearable
-                    :clear-value="original.type"
-                    class="bg-green-1"
-                  />
-                </q-popup-edit>
               </td>
             </tr>
             <tr>
@@ -74,18 +93,18 @@
               <td>
                 <div class="bg-green-1 q-pa-xs" style="width:20em;font-family:monospace">
                   {{parameter.defaultValue}}
-                </div>
-                <q-popup-edit
-                  buttons
-                  v-model="parameter.defaultValue"
-                >
-                  <parameter-value-input
-                    :param-name="parameter.paramName"
+                  <q-popup-edit
+                    buttons
                     v-model="parameter.defaultValue"
-                    :param-type="parameter.type"
-                    editable
-                  />
-                </q-popup-edit>
+                  >
+                    <parameter-value-input
+                      :param-name="parameter.paramName"
+                      v-model="parameter.defaultValue"
+                      :param-type="parameter.type"
+                      editable
+                    />
+                  </q-popup-edit>
+                </div>
               </td>
             </tr>
             <tr>
@@ -113,13 +132,6 @@
             </tr>
             </tbody>
           </table>
-
-          <q-btn
-            :disable="noChanges()"
-            :color="noChanges() ? 'grey' : 'red'"
-            dense round icon="save" class="q-ml-lg" size="sm"
-            @click="updateParameter"
-          />
 
         </q-card-section>
       </q-card>
@@ -151,7 +163,7 @@
   import ParameterValueInput from 'components/parameter-value-input'
   import _ from 'lodash'
 
-  const debug = false
+  const debug = true
 
   export default {
     components: {
@@ -202,6 +214,9 @@
     methods: {
       refreshParameter() {
         this.$apollo.queries.parameter.refetch()
+            .then(res => {
+              console.log('refetch res=', res)
+            })
       },
 
       noChanges() {
