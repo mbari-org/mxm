@@ -103,11 +103,12 @@
             <q-input
               style="width:30em"
               v-model.trim="data.description"
-              clearable autofocus
+              clearable
               class="bg-light-blue-1"
               type="textarea"
               rows="5"
               :max-height="300"
+              autofocus @keyup.enter.stop
             />
           </q-popup-edit>
         </q-field>

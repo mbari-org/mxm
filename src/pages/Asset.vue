@@ -38,6 +38,7 @@
               type="textarea"
               rows="3"
               :max-height="300"
+              autofocus @keyup.enter.stop
             />
           </q-popup-edit>
         </q-card-section>

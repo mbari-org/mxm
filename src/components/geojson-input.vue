@@ -1,6 +1,6 @@
 <template>
   <div style="max-width:700px">
-    <pre>entry_id = {{entry_id}}</pre>
+    <div class="text-h5">{{paramName}}</div>
     <qgeomap
       ref="qgeomap"
       :editable="editable"
