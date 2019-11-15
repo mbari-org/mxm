@@ -1,14 +1,14 @@
 <template>
-  <div style="max-width:700px">
+  <div :style="sizeInfo.containerStyle">
     <div class="text-h5">{{paramName}}</div>
     <qgeomap
       ref="qgeomap"
       :editable="editable"
       v-on:warning="showWarning"
       include-table
-      style="height:600px; width:700px"
+      :style="sizeInfo.qgeomapStyle"
     />
-    <span style="word-break: break-all">valueString = {{valueString}}</span>
+    <span style="word-break:break-all;font-size:0.7em">{{valueString}}</span>
   </div>
 </template>
 
@@ -48,7 +48,17 @@
     computed: {
       entry_id() {
         return `${this.paramName}:${this.paramType}`
-      }
+      },
+
+      sizeInfo() {
+        return this.editable ? {
+          containerStyle: 'max-width:600px',
+          qgeomapStyle: 'height:600px;width:600px',
+        } : {
+          containerStyle: 'max-width:400px',
+          qgeomapStyle: 'height:400px;width:400px',
+        }
+      },
     },
 
     data () {
@@ -135,10 +145,12 @@
         if (entry) {
           qgeomap.addEntry(entry)
           this.$nextTick(() => {
-            qgeomap.selectEntry(entry_id)
-            qgeomap.zoomToAllSelected()
             if (this.editable) {
+              qgeomap.selectEntry(entry_id)
               qgeomap.editEntry(entry_id)
+            }
+            else {
+              qgeomap.zoomToAll()
             }
           })
         }

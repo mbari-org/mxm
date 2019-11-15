@@ -151,7 +151,6 @@
                 :param-name="props.row.paramName"
                 v-model="props.row.defaultValue"
                 :param-type="props.row.type"
-                readonly
               />
             </q-popup-edit>
           </q-td>
