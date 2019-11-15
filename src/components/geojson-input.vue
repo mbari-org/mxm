@@ -1,12 +1,12 @@
 <template>
-  <div style="max-width:400px">
+  <div style="max-width:700px">
     <pre>entry_id = {{entry_id}}</pre>
     <qgeomap
       ref="qgeomap"
-      :editable="!readonly"
+      :editable="editable"
       v-on:warning="showWarning"
       include-table
-      style="height:600px; width:400px"
+      style="height:600px; width:700px"
     />
     <span style="word-break: break-all">valueString = {{valueString}}</span>
   </div>
@@ -39,9 +39,8 @@
         required: false
       },
 
-      readonly: {
+      editable: {
         type: Boolean,
-        required: false,
         default: false
       },
     },
@@ -64,7 +63,7 @@
       paramType=${this.paramType}
       value=${this.value}
       defaultValue=${this.defaultValue}
-      readonly=${this.readonly}
+      editable=${this.editable}
       `)
       this.setFeatureData(this.value)
     },
@@ -77,7 +76,8 @@
 
         const entry_id = this.entry_id
 
-        let json
+        let entry = null
+        let json = null
         if (this.valueString.trim()) {
           try {
             json = JSON.parse(this.valueString)
@@ -85,7 +85,7 @@
               case 'Point': {
                 if (debug) console.debug(`setFeatureData: paramType=${this.paramType} point=`, json)
                 const coordinates = [json[1], json[0]]
-                qgeomap.addEntry({
+                entry = {
                   entry_id,
                   geometry: {
                     type: "Feature",
@@ -96,7 +96,7 @@
                   },
                   color: 'cyan',
                   tooltip: entry_id,
-                })
+                }
                 break
               }
 
@@ -105,7 +105,7 @@
 
                 const coordinates = [ map(json, ([lat, lon]) => [lon, lat]) ]
 
-                qgeomap.addEntry({
+                entry = {
                   entry_id,
                   geometry: {
                     type: "Feature",
@@ -116,7 +116,7 @@
                   },
                   color: 'yellow',
                   tooltip: 'Polygon',
-                })
+                }
                 break
               }
 
@@ -131,6 +131,16 @@
           catch (error) { // TODO
             console.warn(error)
           }
+        }
+        if (entry) {
+          qgeomap.addEntry(entry)
+          this.$nextTick(() => {
+            qgeomap.selectEntry(entry_id)
+            qgeomap.zoomToAllSelected()
+            if (this.editable) {
+              qgeomap.editEntry(entry_id)
+            }
+          })
         }
         return json
       },

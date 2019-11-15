@@ -5,7 +5,7 @@
       :param-name="paramName"
       :param-type="paramType"
       :default-value="defaultValue"
-      :readonly="readonly"
+      :editable="editable"
 
       :value="paramValue"
       @input="val => { paramValue = val; $emit('input', val) }"
@@ -15,8 +15,8 @@
       v-else
       class="rounded-borders q-pa-xs bg-green-1"
       stack-label :label="paramName"
-      :readonly="readonly"
-      :clearable="!readonly"
+      :readonly="!editable"
+      :clearable="editable"
       :clear-value="defaultValue"
       :type="inputProps.type"
       :style="inputProps.style"
@@ -40,21 +40,24 @@
         type: String,
         required: true
       },
+
       paramType: {
         type: String,
         required: true
       },
+
       value: {
         type: String,
         required: false
       },
+
       defaultValue: {
         type: String,
         required: false
       },
-      readonly: {
+
+      editable: {
         type: Boolean,
-        required: false,
         default: false
       },
     },
@@ -69,7 +72,7 @@
       paramType=${this.paramType}
       value=${this.value}
       defaultValue=${this.defaultValue}
-      readonly=${this.readonly}
+      editable=${this.editable}
       `)
     },
 

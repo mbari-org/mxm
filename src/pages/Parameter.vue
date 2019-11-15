@@ -78,16 +78,12 @@
                 <q-popup-edit
                   buttons
                   v-model="parameter.defaultValue"
-                  @show="editingArgName = parameter.paramName"
-                  @hide="() => { editingArgName = 'HIDE' }"
-                  @close="() => { editingArgName = 'CLOSE' }"
-                  @cancel="() => { editingArgName = 'CANCEL' }"
                 >
                   <parameter-value-input
-                    v-if="editingArgName === parameter.paramName"
                     :param-name="parameter.paramName"
                     v-model="parameter.defaultValue"
                     :param-type="parameter.type"
+                    editable
                   />
                 </q-popup-edit>
               </td>
@@ -118,6 +114,7 @@
 
           <q-btn
             :disable="noChanges()"
+            :color="noChanges() ? 'grey' : 'red'"
             dense round icon="save" class="q-ml-lg" size="sm"
             @click="updateParameter"
           />
@@ -165,7 +162,6 @@
         loading: false,
         parameter: null,
         original: null,
-        editingArgName: '',
       }
     },
 
