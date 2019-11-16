@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-// import example from './module-example'
+import config from './config'
 
 Vue.use(Vuex)
 
@@ -13,9 +13,16 @@ Vue.use(Vuex)
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
-      // example
+      config,
     }
   })
 
   return Store
+}
+
+if (process.env.DEV && module.hot) {
+  module.hot.accept(['./config'], () => {
+    const nw = require('./config').default
+    store.hotUpdate({ modules: { config: nw } })
+  })
 }

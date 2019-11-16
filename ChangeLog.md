@@ -1,5 +1,13 @@
 2019-11
 
+- a bit more dynamic configuration.
+  For now, only for googleApiKey
+  TODO also capture graphqlUri.
+  Procedure: Under src/statics, `cp template.config.json config.json`
+  and edit `config.json` as needed.
+  Then `quasar dev`, or `quasar build`, etc.
+  TODO `quasar build` not yet tested in general.
+  
 - propagating geometry edits, still based on adhoc simple format
   externally (internally, always geojson is used)
   TODO determine concrete format for "simplified geo types"
