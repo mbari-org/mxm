@@ -41,6 +41,7 @@
         <q-separator/>
         <q-card-section>
           <div>
+            Description:
             <mxm-markdown :text="executor.description"/>
             <q-popup-edit
               v-model="executor.description"
@@ -60,6 +61,37 @@
             </q-popup-edit>
           </div>
 
+          <div class="column q-mb-md q-gutter-md">
+            <div class="row q-gutter-md">
+              <q-btn
+                label="Mission Templates"
+                no-wrap no-caps dense
+                :to="`/${encodeURIComponent(params.executorId)}/missiontpls`"
+              />
+
+              <q-btn
+                label="Asset Classes"
+                no-wrap no-caps dense
+                :to="`/${encodeURIComponent(params.executorId)}/assetclasses`"
+              />
+
+              <q-btn
+                label="Assets"
+                no-wrap no-caps dense
+                :to="`/${encodeURIComponent(params.executorId)}/assets`"
+              />
+            </div>
+
+            <div class="row q-gutter-md">
+              <q-btn
+                label="Missions"
+                no-wrap no-caps dense
+                :to="`/${encodeURIComponent(params.executorId)}/missions`"
+              />
+            </div>
+          </div>
+
+          <q-separator/>
           <table class="q-mt-sm">
             <tbody>
             <tr>
@@ -101,41 +133,6 @@
             </tr>
             </tbody>
           </table>
-
-          <div class="q-ma-sm">
-            <q-btn
-              class="q-mr-sm"
-              label="Mission Templates"
-              color="secondary"
-              no-wrap no-caps dense
-              :to="`/${encodeURIComponent(params.executorId)}/missiontpls`"
-            />
-
-            <q-btn
-              class="q-mr-sm"
-              label="Asset Classes"
-              color="secondary"
-              no-wrap no-caps dense
-              :to="`/${encodeURIComponent(params.executorId)}/assetclasses`"
-            />
-
-            <q-btn
-              label="Assets"
-              color="secondary"
-              no-wrap no-caps dense
-              :to="`/${encodeURIComponent(params.executorId)}/assets`"
-            />
-          </div>
-
-          <div class="q-ma-sm">
-            <q-btn
-              class="q-mr-sm"
-              label="Missions"
-              color="secondary"
-              no-wrap no-caps dense
-              :to="`/${encodeURIComponent(params.executorId)}/missions`"
-            />
-          </div>
 
         </q-card-section>
       </q-card>

@@ -58,18 +58,18 @@
       <q-card class="q-mb-lg">
         <q-card-section>
           Associated asset classes:
-          <div class="row q-mt-sm">
+          <div class="row q-gutter-md">
             <q-chip
-              class="col-auto q-mr-sm shadow-5"
+              class="col-auto shadow-1"
               v-for="c in myAssetClasses"
               :key="c.assetClassName"
-              color="secondary"
-              small
+              color="white" text-color="black"
+              square
               removable
-              @remove="removeAssetClass(c.id)"
+              @remove="removeAssetClass(c)"
             >
               <router-link
-                style="color:white;text-decoration:none"
+                style="text-decoration:none"
                 :to="`/${encodeURIComponent(params.executorId)}/assetclasses/${encodeURIComponent(c.assetClassName)}`"
               >
                 {{c.assetClassName}}
@@ -346,22 +346,32 @@
           })
       },
 
-      removeAssetClass(id) {
-        if (debug) console.debug('removeAssetClass: id=', id)
+      removeAssetClass(c) {
+        this.$q.dialog({
+          title: 'Confirm',
+          message: `Remove asset class '${c.assetClassName}'?`,
+          color: 'negative',
+          ok: true,
+          cancel: true
+        }).onOk(() => doIt())
 
-        const mutation = missionTplAssetClassDelete
-        const variables = {
-          id
+        const doIt = () => {
+          if (debug) console.debug('removeAssetClass: id=', c.id)
+
+          const mutation = missionTplAssetClassDelete
+          const variables = {
+            id: c.id
+          }
+          this.$apollo.mutate({mutation, variables})
+            .then((data) => {
+              if (data.data) {
+                this.refreshMissionTpl()
+              }
+            })
+            .catch((error) => {
+              console.error('mutation error=', error)
+            })
         }
-        this.$apollo.mutate({mutation, variables})
-          .then((data) => {
-            if (data.data) {
-              this.refreshMissionTpl()
-            }
-          })
-          .catch((error) => {
-            console.error('mutation error=', error)
-          })
       },
 
       parameterCreated(data) {

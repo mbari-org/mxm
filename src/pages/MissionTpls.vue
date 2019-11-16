@@ -19,6 +19,7 @@
         :rows-per-page-options="rowsPerPage"
         :pagination.sync="pagination"
         :filter="filter"
+        separator="cell"
         no-data-label="No mission templates defined"
       >
         <div slot="top-left" slot-scope="props" class="row items-center">

@@ -14,6 +14,7 @@
       row-key="name"
       :rows-per-page-options="rowsPerPage"
       :pagination.sync="pagination"
+      separator="cell"
       no-data-label="No executors registered"
     >
       <div slot="top-left" slot-scope="props" class="row items-center">

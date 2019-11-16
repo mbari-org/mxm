@@ -155,6 +155,7 @@
         :rows-per-page-options="rowsPerPage"
         :pagination.sync="pagination"
         :filter="filter"
+        separator="cell"
         :no-data-label="`No parameters defined in the mission template '${mission.missionTplId}'`"
       >
         <div slot="top-left" slot-scope="props" class="row items-center">
