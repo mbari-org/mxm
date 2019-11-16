@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="text || !hideEmpty">
-      <div v-if="text" :class="{'round-borders bg-light-blue-1': !simple}">
+      <div v-if="text" :class="{'rounded-borders bg-light-blue-1': !simple}">
         <vue-markdown
           :source="text" table-class="markdownTable"
           :class="'markdownText ' + (simple ? '' : 'q-pa-sm')"
@@ -25,7 +25,6 @@
       },
       hideEmpty: {
         type: Boolean,
-        required: false,
         default: false
       },
       simple: {
@@ -35,7 +34,6 @@
       },
       emptyMessage: {
         type: String,
-        required: false,
         default: '(No description)'
       },
     },

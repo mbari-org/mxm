@@ -12,7 +12,7 @@ export {
 
 const debug = true
 
-import {axios} from 'plugins/axios'
+import {axios} from 'boot/axios'
 
 function getAssetClasses(httpEndpoint) {
   return doGet(httpEndpoint, 'assetclasses')

@@ -14,29 +14,29 @@
     <div v-if="executor">
 
       <q-card class="q-mb-md">
-        <q-card-title>
+        <q-card-section>
           Executor: <span class="text-bold">{{executor.executorId}}</span>
-        </q-card-title>
-        <q-card-separator/>
-        <q-card-main>
+        </q-card-section>
+        <q-separator/>
+        <q-card-section>
           <div>
-            <mxms-markdown :text="executor.description"/>
+            <mxm-markdown :text="executor.description"/>
             <q-popup-edit
               v-model="executor.description"
               title="Description"
-              buttons
+              buttons persistent
               @save="updateDescription"
             >
-              <q-field>
-                <q-input
-                  v-model.trim="executor.description"
-                  clearable
-                  class="bg-green-1"
-                  type="textarea"
-                  rows="3"
-                  :max-height="300"
-                />
-              </q-field>
+              <q-input
+                v-model.trim="executor.description"
+                clearable
+                class="bg-green-1 q-pl-md q-pr-md"
+                style="font-family:monospace"
+                type="textarea"
+                rows="3"
+                :max-height="300"
+                autofocus @keyup.enter.stop
+              />
             </q-popup-edit>
           </div>
 
@@ -54,13 +54,11 @@
                   buttons
                   @save="updateHttpEndpoint"
                 >
-                  <q-field>
-                    <q-input
-                      v-model.trim="executor.httpEndpoint"
-                      clearable
-                      class="bg-green-1"
-                    />
-                  </q-field>
+                  <q-input
+                    v-model.trim="executor.httpEndpoint"
+                    clearable
+                    class="bg-green-1"
+                  />
                 </q-popup-edit>
               </td>
             </tr>
@@ -119,7 +117,7 @@
             />
           </div>
 
-        </q-card-main>
+        </q-card-section>
       </q-card>
 
     </div>
@@ -135,7 +133,7 @@
   import executor from '../graphql/executor.gql'
   import executorUpdate from '../graphql/executorUpdate.gql'
   import apiTypeSelect from '../components/api-type-select'
-  import MxmsMarkdown from '../components/mxms-markdown'
+  import MxmMarkdown from '../components/mxm-markdown'
   import _ from 'lodash'
 
   const debug = false
@@ -143,7 +141,7 @@
   export default {
     components: {
       apiTypeSelect,
-      MxmsMarkdown,
+      MxmMarkdown,
     },
 
     data() {

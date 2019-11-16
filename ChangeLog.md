@@ -1,5 +1,31 @@
+2019-11
+
+- propagating geometry edits, still based on adhoc simple format
+  externally (internally, always geojson is used)
+  TODO determine concrete format for "simplified geo types"
+
+- fix apollo's refetch() not actually refetching
+  (this was working just fine before).
+  
+    The fix:
+    - upgraded all apollo stuff (as a general good thing to do)
+    - but this was not enough
+    - had to add `fetchPolicy: 'no-cache'`
+      Why the need for this for **refetch** calls??
+      TODO revisit the cache/fetch settings.
+
+- more q-popup-edit adjs related with mxm-markdown. TODO factor out into some mxm-markdown-edit
+- use @keyup.enter.stop on multiline inputs under q-popup-edit.
+  https://quasar.dev/vue-components/popup-edit#Textarea-%2F-QEditor
+
+- starting to use qgeomap
+- upgrading to Quasar 1
+- factoring out and extending geometry viewing/editing into qgeomap, a separate quasar extension
+
+
 2019-09
 
+- do pending mxms to mxm renaming
 - some notes about revisiting prisma (but not choosing it after all)
 
 2019-08-15

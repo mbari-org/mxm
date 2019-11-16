@@ -47,7 +47,7 @@
 
     methods: {
       atInput(val) {
-        this.$emit('input', val)
+        this.$emit('input', val.value)
       },
     },
 

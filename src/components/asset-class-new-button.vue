@@ -1,62 +1,5 @@
 <template>
   <div>
-    <q-modal v-model="dialogOpened"
-             content-css="min-width:350px;min-height:300px"
-             no-backdrop-dismiss
-    >
-      <q-modal-layout>
-        <q-toolbar slot="header">
-          <q-toolbar-title>
-            Register new asset class (for '{{executorId}}')
-          </q-toolbar-title>
-          <q-btn round dense
-                 color="primary"
-                 @click="dialogOpened = false"
-                 icon="close"
-          />
-        </q-toolbar>
-
-        <div class="q-pa-lg">
-          <q-field
-            label="Class name:"
-            :error="!className.length"
-            :label-width="4"
-          >
-            <q-input
-              class="bg-light-blue-1"
-              v-model.trim="className"
-              type="text"
-              autofocus
-              style="width:24em"
-            />
-          </q-field>
-
-          <q-field
-            label="Description:"
-            :label-width="4"
-          >
-            <q-input
-              class="bg-light-blue-1"
-              v-model.trim="description"
-              type="text"
-              style="width:24em"
-            />
-          </q-field>
-
-        </div>
-
-        <q-toolbar slot="footer" color="flat">
-          <q-toolbar-title/>
-          <q-btn dense
-                 :color="okToSubmit ? 'primary' : 'light'"
-                 @click="submit"
-                 label="Submit"
-                 :disable="!okToSubmit"
-          />
-        </q-toolbar>
-      </q-modal-layout>
-    </q-modal>
-
     <q-btn
       color="primary"
       icon="add"
@@ -66,6 +9,39 @@
       <q-tooltip>Register a new asset class</q-tooltip>
     </q-btn>
 
+    <utl-dialog
+      :dialog-opened="dialogOpened"
+      :title="`Register new asset class (for '${executorId}')`"
+      :ok-to-submit="!!okToSubmit"
+      :ok-to-dismiss="!!okToDismiss"
+      v-on:submit="submit"
+      v-on:dialogClosing="dialogOpened = false"
+    >
+      <div
+        class="column q-gutter-sm"
+      >
+        <q-input
+          label="Class name:"
+          :error="!className.length"
+          :label-width="4"
+          class="bg-light-blue-1"
+          v-model.trim="className"
+          type="text"
+          autofocus
+          style="width:24em"
+        />
+
+        <q-input
+          label="Description:"
+          :label-width="4"
+          class="bg-light-blue-1"
+          v-model.trim="description"
+          type="text"
+          style="width:24em"
+        />
+
+      </div>
+    </utl-dialog>
   </div>
 </template>
 
@@ -91,7 +67,11 @@
     computed: {
       okToSubmit() {
         return this.className
-      }
+      },
+
+      okToDismiss() {
+        return true // TODO
+      },
     },
 
     methods: {

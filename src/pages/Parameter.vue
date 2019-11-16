@@ -15,33 +15,50 @@
 
     <div v-if="parameter" class="q-mt-md">
 
-      <div class="q-mb-sm">
+      <div class="q-mb-lg">
         Mission Template: <span class="text-bold">{{ params.missionTplId }}</span>
       </div>
 
       <q-card class="q-mb-md">
-        <q-card-title>
-          Parameter:
-          <span class="text-bold" style="font-family:monospace;font-size:larger">
+        <q-card-section class="row q-gutter-md items-center">
+          <span>Parameter:</span>
+          <div class="q-ml-sm text-bold" style="font-family:monospace;font-size:larger">
             {{ parameter.paramName }}
             <q-popup-edit
               v-model="parameter.paramName"
               title="Parameter Name"
               buttons
-              @save="updateParameter"
             >
-              <q-field>
-                <q-input
-                  v-model.trim="parameter.paramName"
-                  clearable
-                  class="bg-green-1"
-                />
-              </q-field>
+              <q-input
+                v-model.trim="parameter.paramName"
+                clearable autofocus
+                class="bg-green-1"
+              />
             </q-popup-edit>
-          </span>
-        </q-card-title>
-        <q-card-separator/>
-        <q-card-main>
+          </div>
+
+          <div class="q-ml-xl">
+            <q-btn
+              :disable="noChanges()"
+              :color="noChanges() ? 'grey' : 'red'"
+              size="sm"
+              :class="{'shadow-5': !noChanges()}"
+              dense round icon="save"
+              @click="updateParameter"
+            />
+            <q-btn
+              v-if="!noChanges()"
+              class="q-ml-md"
+              color="grey"
+              size="sm"
+              dense round icon="undo"
+              @click="refreshParameter"
+            />
+          </div>
+
+        </q-card-section>
+        <q-separator/>
+        <q-card-section>
 
           <table class="mission-table">
             <tbody>
@@ -56,21 +73,19 @@
               <td>
                 <span class="bg-green-1 q-pa-xs">
                   {{parameter.type}}
-                </span>
-                <q-popup-edit
-                  v-model="parameter.type"
-                  title="Type"
-                  buttons
-                >
-                  <q-field>
+                  <q-popup-edit
+                    v-model="parameter.type"
+                    title="Type"
+                    buttons
+                  >
                     <q-input
                       v-model.trim="parameter.type"
                       clearable
                       :clear-value="original.type"
                       class="bg-green-1"
                     />
-                  </q-field>
-                </q-popup-edit>
+                  </q-popup-edit>
+                </span>
               </td>
             </tr>
             <tr>
@@ -78,57 +93,47 @@
               <td>
                 <div class="bg-green-1 q-pa-xs" style="width:20em;font-family:monospace">
                   {{parameter.defaultValue}}
-                </div>
-                <q-popup-edit
-                  buttons
-                  v-model="parameter.defaultValue"
-                  @show="editingArgName = parameter.paramName"
-                  @hide="() => { editingArgName = 'HIDE' }"
-                  @close="() => { editingArgName = 'CLOSE' }"
-                  @cancel="() => { editingArgName = 'CANCEL' }"
-                >
-                  <parameter-value-input
-                    v-if="editingArgName === parameter.paramName"
-                    :param-name="parameter.paramName"
+                  <q-popup-edit
+                    buttons
                     v-model="parameter.defaultValue"
-                    :param-type="parameter.type"
-                  />
-                </q-popup-edit>
+                  >
+                    <parameter-value-input
+                      :param-name="parameter.paramName"
+                      v-model="parameter.defaultValue"
+                      :param-type="parameter.type"
+                      editable
+                    />
+                  </q-popup-edit>
+                </div>
               </td>
             </tr>
             <tr>
               <td>Description:</td>
               <td>
-                <mxms-markdown :text="parameter.description"/>
+                <mxm-markdown :text="parameter.description"/>
                 <q-popup-edit
                   v-model="parameter.description"
                   title="Description"
-                  buttons
+                  buttons persistent
                 >
-                  <q-field>
-                    <q-input
-                      v-model.trim="parameter.description"
-                      clearable
-                      :clear-value="original.description"
-                      class="bg-green-1"
-                      type="textarea"
-                      rows="3"
-                      :max-height="300"
-                    />
-                  </q-field>
+                  <q-input
+                    v-model.trim="parameter.description"
+                    clearable
+                    :clear-value="original.description"
+                    class="bg-green-1 q-pl-md q-pr-md"
+                    style="font-family:monospace"
+                    type="textarea"
+                    rows="3"
+                    :max-height="300"
+                    autofocus @keyup.enter.stop
+                  />
                 </q-popup-edit>
               </td>
             </tr>
             </tbody>
           </table>
 
-          <q-btn
-            :disable="noChanges()"
-            dense round icon="save" class="q-ml-lg" size="sm"
-            @click="updateParameter"
-          />
-
-        </q-card-main>
+        </q-card-section>
       </q-card>
 
     </div>
@@ -154,26 +159,24 @@
 <script>
   import parameter from '../graphql/parameter.gql'
   import parameterUpdate from '../graphql/parameterUpdate.gql'
-  import MxmsMarkdown from 'components/mxms-markdown'
+  import MxmMarkdown from 'components/mxm-markdown'
   import ParameterValueInput from 'components/parameter-value-input'
-  import _ from 'lodash'
+  import cloneDeep from 'lodash/cloneDeep'
+  import isEqual from 'lodash/isEqual'
 
-  const debug = false
+  const debug = true
 
   export default {
     components: {
-      MxmsMarkdown,
+      MxmMarkdown,
       ParameterValueInput,
     },
 
-    data() {
-      return {
-        loading: false,
-        parameter: null,
-        original: null,
-        editingArgName: '',
-      }
-    },
+    data: () => ({
+      loading: false,
+      parameter: null,
+      original: null,
+    }),
 
     computed: {
       params() {
@@ -197,7 +200,7 @@
           if (data.parameterByExecutorIdAndMissionTplIdAndParamName) {
             parameter = data.parameterByExecutorIdAndMissionTplIdAndParamName
           }
-          this.original = _.cloneDeep(parameter)
+          this.original = cloneDeep(parameter)
           return parameter
         },
       },
@@ -210,10 +213,13 @@
     methods: {
       refreshParameter() {
         this.$apollo.queries.parameter.refetch()
+            // .then(res => {
+            //   console.log('refetch', res.data.parameterByExecutorIdAndMissionTplIdAndParamName.required)
+            // })
       },
 
       noChanges() {
-        return this.parameter === null || _.isEqual(this.parameter, this.original)
+        return this.parameter === null || isEqual(this.parameter, this.original)
       },
 
       updateParameter() {
@@ -221,19 +227,19 @@
         const mutation = parameterUpdate
         const parameterPatch = {}
 
-        if (!_.isEqual(this.parameter.paramName, this.original.paramName)) {
+        if (!isEqual(this.parameter.paramName, this.original.paramName)) {
           parameterPatch.paramName = this.parameter.paramName
         }
-        if (!_.isEqual(this.parameter.type, this.original.type)) {
+        if (!isEqual(this.parameter.type, this.original.type)) {
           parameterPatch.type = this.parameter.type
         }
-        if (!_.isEqual(this.parameter.required, this.original.required)) {
+        if (!isEqual(this.parameter.required, this.original.required)) {
           parameterPatch.required = this.parameter.required
         }
-        if (!_.isEqual(this.parameter.defaultValue, this.original.defaultValue)) {
+        if (!isEqual(this.parameter.defaultValue, this.original.defaultValue)) {
           parameterPatch.defaultValue = this.parameter.defaultValue
         }
-        if (!_.isEqual(this.parameter.description, this.original.description)) {
+        if (!isEqual(this.parameter.description, this.original.description)) {
           parameterPatch.description = this.parameter.description
         }
 

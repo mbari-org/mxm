@@ -1,61 +1,5 @@
 <template>
   <div>
-    <q-modal v-model="dialogOpened"
-             content-css="min-width:350px;min-height:300px"
-             no-backdrop-dismiss
-    >
-      <q-modal-layout>
-        <q-toolbar slot="header">
-          <q-toolbar-title>
-            <span v-if="exclude && exclude.length">
-              Add associated asset classes
-            </span>
-            <span v-else>
-              Asset class selection
-            </span>
-          </q-toolbar-title>
-          <q-btn round dense
-                 color="primary"
-                 @click="dialogOpened = false"
-                 icon="close"
-          />
-        </q-toolbar>
-
-        <div class="q-mb-sm">
-          <q-list link>
-            <q-item
-              v-for="c in selectOptions" :key="c.className"
-            >
-              <q-item-side>
-                <q-checkbox v-model="selection" :val="c.className"/>
-              </q-item-side>
-              <q-item-main>
-                <q-item-tile label>{{c.className}}</q-item-tile>
-                <q-item-tile sublabel>{{c.description}}</q-item-tile>
-              </q-item-main>
-            </q-item>
-          </q-list>
-
-          <div class="q-ma-xs">
-            <asset-class-new-button
-              :executor-id="executorId"
-              v-on:created="assetClassCreated"
-            />
-          </div>
-        </div>
-
-        <q-toolbar slot="footer" color="flat">
-          <q-toolbar-title/>
-          <q-btn dense
-                 :color="okToSubmit ? 'primary' : 'light'"
-                 @click="submit"
-                 label="OK"
-                 :disable="!okToSubmit"
-          />
-        </q-toolbar>
-      </q-modal-layout>
-    </q-modal>
-
     <q-btn
       color="primary"
       icon="add"
@@ -72,13 +16,49 @@
       </q-tooltip>
     </q-btn>
 
+    <utl-dialog
+      :dialog-opened="dialogOpened"
+      :title="exclude && exclude.length ? 'Add associated asset classes' : 'Asset class selection'"
+      :ok-to-submit="!!okToSubmit"
+      :ok-to-dismiss="!!okToDismiss"
+      v-on:submit="submit"
+      v-on:dialogClosing="dialogOpened = false"
+    >
+      <div
+        class="column q-gutter-sm"
+      >
+        <q-list separator>
+          <q-item
+            v-for="c in selectOptions" :key="c.className"
+          >
+            <q-item-section>
+              <q-checkbox v-model="selection" :val="c.className"/>
+            </q-item-section>
+            <q-item-section>
+              <q-item-label header>{{c.className}}</q-item-label>
+              <q-item-label caption>{{c.description}}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+
+        <div class="q-ma-xs">
+          <asset-class-new-button
+            :executor-id="executorId"
+            v-on:created="assetClassCreated"
+          />
+        </div>
+      </div>
+    </utl-dialog>
   </div>
 </template>
 
 <script>
   import AssetClassNewButton from 'components/asset-class-new-button'
   import allAssetClassesList from '../graphql/assetClasses.gql'
-  import _ from 'lodash'
+  import map from 'lodash/map'
+  import filter from 'lodash/filter'
+  import includes from 'lodash/includes'
+  import some from 'lodash/some'
 
   const debug = false
 
@@ -109,12 +89,12 @@
     computed: {
       selectOptions() {
         if (debug) console.debug('selectOptions: allAssetClassesList=', this.allAssetClassesList)
-        const all = _.map(this.allAssetClassesList, a => ({
+        const all = map(this.allAssetClassesList, a => ({
           className: a.className,
           description: a.description,
         }))
         if (this.exclude && this.exclude.length) {
-          return _.filter(all, c => !_.includes(this.exclude, c.className))
+          return filter(all, c => !includes(this.exclude, c.className))
         }
         else {
           return all
@@ -122,10 +102,13 @@
       },
 
       okToSubmit() {
-        return _.some(this.selection)
-      }
-    },
+        return some(this.selection)
+      },
 
+      okToDismiss() {
+        return true // TODO
+      },
+    },
 
     apollo: {
       allAssetClassesList: {

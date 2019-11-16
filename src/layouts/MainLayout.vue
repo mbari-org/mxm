@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-layout-header>
+    <q-header>
       <q-toolbar
         color="primary" glossy
         class="row justify-between"
@@ -20,7 +20,7 @@
         <small class="q-ma-sm">graphql endpoint: {{$mxm.graphqlUri}}</small>
 
       </q-toolbar>
-    </q-layout-header>
+    </q-header>
 
     <q-page-container>
       <router-view/>

@@ -14,7 +14,7 @@
     <div v-if="mission">
 
       <q-card class="q-mb-md">
-        <q-card-title>
+        <q-card-section>
           Mission: <q-chip square class="text-bold">{{ mission.missionId }}</q-chip>
           <span>
             <router-link
@@ -67,30 +67,31 @@
             </tr>
             </tbody>
           </table>
-        </q-card-title>
+        </q-card-section>
 
-        <q-card-separator/>
-        <q-card-main>
-          <mxms-markdown :text="mission.description"/>
+        <q-separator/>
+        <q-card-section>
+          Description:
+          <mxm-markdown :text="mission.description"/>
           <q-popup-edit
             v-if="mission.missionStatus === 'DRAFT'"
             v-model="mission.description"
             title="Description"
-            buttons
+            buttons persistent
             @save="updateDescription"
           >
-            <q-field>
-              <q-input
-                v-model.trim="mission.description"
-                clearable
-                class="bg-green-1"
-                type="textarea"
-                rows="3"
-                :max-height="300"
-              />
-            </q-field>
+            <q-input
+              v-model.trim="mission.description"
+              clearable
+              class="bg-green-1 q-pl-md q-pr-md"
+              style="font-family:monospace"
+              type="textarea"
+              rows="3"
+              :max-height="300"
+              autofocus @keyup.enter.stop
+            />
           </q-popup-edit>
-        </q-card-main>
+        </q-card-section>
       </q-card>
 
       <div class="row q-mb-sm">
@@ -164,12 +165,12 @@
             </div>
 
             <div class="row">
-              <div class="col-auto q-headline">
+              <div class="col-auto text-h5">
                 Arguments
               </div>
 
               <div class="q-ml-md row">
-                <q-search
+                <q-input
                   v-if="myArguments"
                   class="col"
                   color="secondary"
@@ -202,17 +203,17 @@
           >
             <div
               v-if="!props.row.paramValue && props.row.required"
-              class="round-borders q-pa-xs bg-red-12 text-bold" style="color:white"
+              class="rounded-borders q-pa-xs bg-red-12 text-bold" style="color:white"
             > ?
             </div>
             <div v-else-if="(props.row.paramValue || '') !== (props.row.defaultValue || '')"
-                 class="round-borders q-pa-xs bg-green-11"
+                 class="rounded-borders q-pa-xs bg-green-11"
                  style="white-space: normal"
             >
               {{ props.row.paramValue }}
             </div>
             <div v-else
-                 class="round-borders q-pa-xs bg-green-1"
+                 class="rounded-borders q-pa-xs bg-green-1"
                  style="white-space: normal"
             >
               {{ props.row.paramValue }}
@@ -221,21 +222,16 @@
             <q-popup-edit
               :buttons="mission.missionStatus === 'DRAFT'"
               v-model="props.row.paramValue"
-              @show="editingArgName = props.row.paramName"
-              @hide="() => { editingArgName = 'HIDE' }"
-              @close="() => { editingArgName = 'CLOSE' }"
-              @cancel="() => { editingArgName = 'CANCEL' }"
               @save="saveArguments"
             >
               <!-- https://github.com/quasarframework/quasar/issues/2861 -->
 
               <parameter-value-input
-                v-if="editingArgName === props.row.paramName"
                 :param-name="props.row.paramName"
                 v-model="props.row.paramValue"
                 :param-type="props.row.type"
                 :default-value="props.row.defaultValue"
-                :readonly="mission.missionStatus !== 'DRAFT'"
+                :editable="mission.missionStatus === 'DRAFT'"
               />
             </q-popup-edit>
           </q-td>
@@ -254,7 +250,7 @@
 
           <q-td key="description" :props="props"
           >
-            <mxms-markdown simple hide-empty :text="props.row.description"/>
+            <mxm-markdown simple hide-empty :text="props.row.description"/>
           </q-td>
 
         </q-tr>
@@ -283,12 +279,12 @@
   import argumentDelete from '../graphql/argumentDelete.gql'
   import missionUpdate from '../graphql/missionUpdate.gql'
   import missionDelete from '../graphql/missionDelete.gql'
-  import MxmsMarkdown from 'components/mxms-markdown'
+  import MxmMarkdown from 'components/mxm-markdown'
   import ParameterValueInput from 'components/parameter-value-input'
   import {
     postMission,
     getMission,
-  } from 'plugins/rest0'
+  } from 'boot/rest0'
 
   import Vue from 'vue'
   import _ from 'lodash'
@@ -297,7 +293,7 @@
 
   export default {
     components: {
-      MxmsMarkdown,
+      MxmMarkdown,
       ParameterValueInput,
     },
 
@@ -307,7 +303,6 @@
         loading: false,
         mission: null,
         savingArgs: false,
-        editingArgName: null,
         myArguments: [],
         argColumns: [
           {
@@ -637,8 +632,7 @@
           message: `Submit mission '${this.mission.missionId}' for execution?`,
           color: 'primary',
           cancel: true
-        }).then(() => doIt()).catch(() => {
-        })
+        }).onOk(() => doIt())
 
         const doIt = () => {
           const httpEndpoint = this.executor.httpEndpoint
@@ -743,8 +737,7 @@
           color: 'negative',
           ok: `Yes, delete '${this.mission.missionId}'`,
           cancel: true
-        }).then(() => doIt()).catch(() => {
-        })
+        }).onOk(() => doIt())
 
         const doIt = () => {
           const mutation = missionDelete

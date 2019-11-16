@@ -5,7 +5,7 @@
       :param-name="paramName"
       :param-type="paramType"
       :default-value="defaultValue"
-      :readonly="readonly"
+      :editable="editable"
 
       :value="paramValue"
       @input="val => { paramValue = val; $emit('input', val) }"
@@ -13,10 +13,10 @@
 
     <q-input
       v-else
-      class="round-borders q-pa-xs bg-green-1"
-      :stack-label="paramName"
-      :readonly="readonly"
-      :clearable="!readonly"
+      class="rounded-borders q-pa-xs bg-green-1"
+      stack-label :label="paramName"
+      :readonly="!editable"
+      :clearable="editable"
       :clear-value="defaultValue"
       :type="inputProps.type"
       :style="inputProps.style"
@@ -32,33 +32,48 @@
 <script>
   import geojsonInput from 'components/geojson-input'
 
+  const debug = true
+
   export default {
     props: {
       paramName: {
         type: String,
         required: true
       },
+
       paramType: {
         type: String,
         required: true
       },
+
       value: {
         type: String,
         required: false
       },
+
       defaultValue: {
         type: String,
         required: false
       },
-      readonly: {
+
+      editable: {
         type: Boolean,
-        required: false,
         default: false
       },
     },
 
     components: {
       geojsonInput,
+    },
+
+    mounted() {
+      if (debug) console.log(`MOUNTED parameter-value-input
+      paramName=${this.paramName}
+      paramType=${this.paramType}
+      value=${this.value}
+      defaultValue=${this.defaultValue}
+      editable=${this.editable}
+      `)
     },
 
     data() {

@@ -16,7 +16,7 @@
       :pagination.sync="pagination"
     >
       <div slot="top-left" slot-scope="props" class="row items-center">
-        <div class="col-auto q-headline">
+        <div class="col-auto text-h5">
           Executors
         </div>
       </div>
@@ -136,10 +136,7 @@
           color: 'negative',
           ok: `Yes, delete '${row.executorId}'`,
           cancel: true
-        })
-          .then(() => this.doDeleteExecutor(row))
-          .catch(() => {
-          })
+        }).onOk(() => this.doDeleteExecutor(row))
       },
 
       doDeleteExecutor(row) {

@@ -14,35 +14,35 @@
     <div v-if="asset">
 
       <q-card class="q-mb-md">
-        <q-card-title>
+        <q-card-section>
           Asset ID: <span class="text-bold">{{asset.assetId}}</span>
 
           (class: <router-link
           :to="`/${encodeURIComponent(params.executorId)}/assetclasses/${encodeURIComponent(asset.className)}`"
           >{{ asset.className }}</router-link>)
-        </q-card-title>
+        </q-card-section>
 
-        <q-card-separator/>
-        <q-card-main>
-          <mxms-markdown :text="asset.description"/>
+        <q-separator/>
+        <q-card-section>
+          <mxm-markdown :text="asset.description"/>
           <q-popup-edit
             v-model="asset.description"
             title="Description"
-            buttons
+            buttons persistent
             @save="updateDescription"
           >
-            <q-field>
-              <q-input
-                v-model.trim="asset.description"
-                clearable
-                class="bg-green-1"
-                type="textarea"
-                rows="3"
-                :max-height="300"
-              />
-            </q-field>
+            <q-input
+              v-model.trim="asset.description"
+              clearable
+              class="bg-green-1 q-pl-md q-pr-md"
+              style="font-family:monospace"
+              type="textarea"
+              rows="3"
+              :max-height="300"
+              autofocus @keyup.enter.stop
+            />
           </q-popup-edit>
-        </q-card-main>
+        </q-card-section>
       </q-card>
 
     </div>
@@ -57,14 +57,14 @@
   import asset from '../graphql/asset.gql'
   import AssetNewButton from 'components/asset-new-button'
   import assetUpdate from '../graphql/assetUpdate.gql'
-  import MxmsMarkdown from 'components/mxms-markdown'
+  import MxmMarkdown from 'components/mxm-markdown'
 
   const debug = false
 
   export default {
     components: {
       AssetNewButton,
-      MxmsMarkdown,
+      MxmMarkdown,
     },
 
     data() {

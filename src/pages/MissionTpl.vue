@@ -14,7 +14,7 @@
     <div v-if="missionTpl">
 
       <q-card class="q-mb-md">
-        <q-card-title>
+        <q-card-section>
           Mission Template:
           <span class="text-bold">
             {{ params.missionTplId }}
@@ -24,41 +24,39 @@
             buttons
             @save="updateMissionTplId"
           >
-            <q-field>
-              <q-input
-                v-model.trim="missionTpl.missionTplId"
-                clearable
-                class="bg-green-1"
-              />
-            </q-field>
+            <q-input
+              v-model.trim="missionTpl.missionTplId"
+              clearable
+              class="bg-green-1"
+            />
           </q-popup-edit>
           </span>
-        </q-card-title>
-        <q-card-separator/>
-        <q-card-main>
-          <mxms-markdown :text="missionTpl.description"/>
+        </q-card-section>
+        <q-separator/>
+        <q-card-section>
+          <mxm-markdown :text="missionTpl.description"/>
           <q-popup-edit
             v-model="missionTpl.description"
             title="Description"
-            buttons
+            buttons persistent
             @save="updateDescription"
           >
-            <q-field>
-              <q-input
-                v-model.trim="missionTpl.description"
-                clearable
-                class="bg-green-1"
-                type="textarea"
-                rows="3"
-                :max-height="300"
-              />
-            </q-field>
+            <q-input
+              v-model.trim="missionTpl.description"
+              clearable
+              class="bg-green-1 q-pl-md q-pr-md"
+              style="font-family:monospace"
+              type="textarea"
+              rows="5"
+              :max-height="300"
+              autofocus @keyup.enter.stop
+            />
           </q-popup-edit>
-        </q-card-main>
+        </q-card-section>
       </q-card>
 
       <q-card class="q-mb-lg">
-        <q-card-main>
+        <q-card-section>
           Associated asset classes:
           <div class="row q-mt-sm">
             <q-chip
@@ -67,8 +65,8 @@
               :key="c.assetClassName"
               color="secondary"
               small
-              closable
-              @hide="removeAssetClass(c.id)"
+              removable
+              @remove="removeAssetClass(c.id)"
             >
               <router-link
                 style="color:white;text-decoration:none"
@@ -89,7 +87,7 @@
             />
           </div>
 
-        </q-card-main>
+        </q-card-section>
       </q-card>
 
       <q-table
@@ -101,12 +99,12 @@
         :filter="filter"
       >
         <div slot="top-left" slot-scope="props" class="row items-center">
-          <div class="col-auto q-headline">
+          <div class="col-auto text-h5">
             Parameters
           </div>
 
           <div class="q-ml-md row">
-            <q-search
+            <q-input
               v-if="myParameters.length"
               class="col"
               color="secondary"
@@ -140,7 +138,7 @@
                 style="width:20em;font-family:monospace"
           >
             <div
-              class="round-borders q-pa-xs bg-green-1"
+              class="rounded-borders q-pa-xs bg-green-1"
               style="white-space: normal"
             >
               {{ props.row.defaultValue }}
@@ -148,17 +146,11 @@
             <q-popup-edit
               v-if="props.row.defaultValue"
               v-model="props.row.defaultValue"
-              @show="editingArgName = props.row.paramName"
-              @hide="() => { editingArgName = 'HIDE' }"
-              @close="() => { editingArgName = 'CLOSE' }"
-              @cancel="() => { editingArgName = 'CANCEL' }"
             >
               <parameter-value-input
-                v-if="editingArgName === props.row.paramName"
                 :param-name="props.row.paramName"
                 v-model="props.row.defaultValue"
                 :param-type="props.row.type"
-                readonly
               />
             </q-popup-edit>
           </q-td>
@@ -175,7 +167,7 @@
 
           <q-td key="description" :props="props"
           >
-            <mxms-markdown simple hide-empty :text="props.row.description"/>
+            <mxm-markdown simple hide-empty :text="props.row.description"/>
           </q-td>
         </q-tr>
       </q-table>
@@ -199,7 +191,7 @@
   import missionTplAssetClassDelete from '../graphql/missionTplAssetClassDelete.gql'
   import missionTplUpdate from '../graphql/missionTplUpdate.gql'
   import ParameterNewButton from 'components/parameter-new-button'
-  import MxmsMarkdown from 'components/mxms-markdown'
+  import MxmMarkdown from 'components/mxm-markdown'
   import ParameterValueInput from 'components/parameter-value-input'
   import _ from 'lodash'
 
@@ -209,7 +201,7 @@
     components: {
       AssetClassSelectButton,
       ParameterNewButton,
-      MxmsMarkdown,
+      MxmMarkdown,
       ParameterValueInput,
     },
 
@@ -217,7 +209,6 @@
       return {
         loading: false,
         missionTpl: null,
-        editingArgName: null,
         columns: [
           {
             field: 'paramName',
