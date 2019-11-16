@@ -17,8 +17,10 @@
         <q-card-section>
           Asset ID: <span class="text-bold">{{asset.assetId}}</span>
 
-          (class: <router-link
-          :to="`/${encodeURIComponent(params.executorId)}/assetclasses/${encodeURIComponent(asset.className)}`"
+          (class:
+          <router-link
+            style="text-decoration:none"
+            :to="`/${encodeURIComponent(params.executorId)}/assetclasses/${encodeURIComponent(asset.className)}`"
           >{{ asset.className }}</router-link>)
         </q-card-section>
 

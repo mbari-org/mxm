@@ -1,76 +1,5 @@
 <template>
   <div>
-    <q-dialog v-model="dialogOpened"
-             no-backdrop-dismiss
-    >
-      <q-layout style="min-width:600px;min-height:400px" class="bg-grey-2">
-        <q-header>
-          <q-toolbar-title>
-            Register new executor
-          </q-toolbar-title>
-          <q-btn round dense
-                 color="primary"
-                 @click="dialogOpened = false"
-                 icon="close"
-          />
-        </q-header>
-
-        <div class="q-pa-lg">
-          <q-input
-            label="Executor name:"
-            :error="!executorId.length"
-            :label-width="4"
-            class="bg-light-blue-1"
-            v-model.trim="executorId"
-            type="text"
-            autofocus
-            style="width:24em"
-          />
-
-          <q-input
-            label="Description:"
-            :label-width="4"
-            class="bg-light-blue-1"
-            v-model.trim="description"
-            type="text"
-            style="width:24em"
-          />
-
-          <q-input
-            label="HTTP Endpoint:"
-            :error="!httpEndpoint.length"
-            :label-width="4"
-            class="bg-light-blue-1"
-            v-model.trim="httpEndpoint"
-            type="text"
-            style="width:24em"
-          />
-
-          <q-field
-            label="API Type:"
-            :error="!apiType.length"
-            :label-width="4"
-          >
-            <api-type-select
-              :value="apiType"
-              @change="val => { apiType = val }"
-            />
-          </q-field>
-
-        </div>
-
-        <q-toolbar slot="footer" color="flat">
-          <q-toolbar-title/>
-          <q-btn dense
-                 :color="okToSubmit ? 'primary' : 'light'"
-                 @click="submit"
-                 label="Submit"
-                 :disable="!okToSubmit"
-          />
-        </q-toolbar>
-      </q-layout>
-    </q-dialog>
-
     <q-btn
       color="primary"
       icon="add"
@@ -78,6 +7,60 @@
       @click="openDialog"
     />
 
+    <utl-dialog
+      :dialog-opened="dialogOpened"
+      title="Register new executor"
+      :ok-to-submit="!!okToSubmit"
+      :ok-to-dismiss="!!okToDismiss"
+      v-on:submit="submit"
+      v-on:dialogClosing="dialogOpened = false"
+    >
+      <div
+        class="column q-gutter-sm"
+      >
+        <q-input
+          label="Executor name:"
+          :error="!executorId.length"
+          :label-width="4"
+          class="bg-light-blue-1"
+          v-model.trim="executorId"
+          type="text"
+          autofocus
+          style="width:24em"
+        />
+
+        <q-input
+          label="Description:"
+          :label-width="4"
+          class="bg-light-blue-1"
+          v-model.trim="description"
+          type="text"
+          style="width:24em"
+        />
+
+        <q-input
+          label="HTTP Endpoint:"
+          :error="!httpEndpoint.length"
+          :label-width="4"
+          class="bg-light-blue-1"
+          v-model.trim="httpEndpoint"
+          type="text"
+          style="width:24em"
+        />
+
+        <q-field
+          label="API Type:"
+          :error="!apiType.length"
+          :label-width="4"
+        >
+          <api-type-select
+            :value="apiType"
+            @input="val => { apiType = val.value }"
+          />
+        </q-field>
+
+      </div>
+    </utl-dialog>
   </div>
 </template>
 
@@ -117,7 +100,11 @@
     computed: {
       okToSubmit() {
         return this.executorId && this.httpEndpoint && this.apiType
-      }
+      },
+
+      okToDismiss() {
+        return !this.executorId
+      },
     },
 
     methods: {

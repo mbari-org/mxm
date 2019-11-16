@@ -14,6 +14,7 @@
       row-key="name"
       :rows-per-page-options="rowsPerPage"
       :pagination.sync="pagination"
+      no-data-label="No executors registered"
     >
       <div slot="top-left" slot-scope="props" class="row items-center">
         <div class="col-auto text-h5">
@@ -28,7 +29,10 @@
       <q-td slot="body-cell-executorId" slot-scope="props" :props="props"
             style="width:5px"
       >
-        <router-link :to="`/${encodeURIComponent(props.row.executorId)}`">
+        <router-link
+          style="text-decoration:none"
+          :to="`/${encodeURIComponent(props.row.executorId)}`"
+        >
           {{props.row.executorId}}
         </router-link>
       </q-td>

@@ -17,6 +17,7 @@
       :rows-per-page-options="rowsPerPage"
       :pagination.sync="pagination"
       :filter="filter"
+      no-data-label="No assets defined"
     >
       <div slot="top-left" slot-scope="props" class="row items-center">
         <div class="col-auto text-h5">
@@ -38,7 +39,10 @@
       <q-td slot="body-cell-assetId" slot-scope="props" :props="props"
             style="width:5px"
       >
-        <router-link :to="`/${encodeURIComponent(params.executorId)}/assets/${encodeURIComponent(props.row.assetId)}`">
+        <router-link
+          style="text-decoration:none"
+          :to="`/${encodeURIComponent(params.executorId)}/assets/${encodeURIComponent(props.row.assetId)}`"
+        >
           {{props.row.assetId}}
         </router-link>
       </q-td>
@@ -46,7 +50,10 @@
       <q-td slot="body-cell-className" slot-scope="props" :props="props"
             style="width:5px"
       >
-        <router-link :to="`/${encodeURIComponent(params.executorId)}/assetclasses/${encodeURIComponent(props.row.className)}`">
+        <router-link
+          style="text-decoration:none"
+          :to="`/${encodeURIComponent(params.executorId)}/assetclasses/${encodeURIComponent(props.row.className)}`"
+        >
           {{props.row.className}}
         </router-link>
       </q-td>

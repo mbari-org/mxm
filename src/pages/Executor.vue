@@ -13,10 +13,31 @@
 
     <div v-if="executor">
 
-      <q-card class="q-mb-md">
-        <q-card-section>
-          Executor: <span class="text-bold">{{executor.executorId}}</span>
+      <q-card class="q-mb-md q-mt-lg">
+        <q-card-section class="row q-gutter-md items-center">
+          <span>Executor:</span>
+          <span class="text-bold">{{executor.executorId}}</span>
+
+          <div class="q-ml-xl">
+            <q-btn
+              :disable="noChanges()"
+              :color="noChanges() ? 'grey' : 'red'"
+              size="sm"
+              :class="{'shadow-5': !noChanges()}"
+              dense round icon="save"
+              @click="updateExecutor"
+            />
+            <q-btn
+              v-if="!noChanges()"
+              class="q-ml-md"
+              color="grey"
+              size="sm"
+              dense round icon="undo"
+              @click="refreshExecutor"
+            />
+          </div>
         </q-card-section>
+
         <q-separator/>
         <q-card-section>
           <div>
@@ -25,7 +46,6 @@
               v-model="executor.description"
               title="Description"
               buttons persistent
-              @save="updateDescription"
             >
               <q-input
                 v-model.trim="executor.description"
@@ -52,7 +72,6 @@
                   v-model="executor.httpEndpoint"
                   title="Endpoint"
                   buttons
-                  @save="updateHttpEndpoint"
                 >
                   <q-input
                     v-model.trim="executor.httpEndpoint"
@@ -71,10 +90,11 @@
                 <q-popup-edit
                   v-model="executor.apiType"
                   title="API Type"
+                  buttons
                 >
                   <api-type-select
                     :value="executor.apiType"
-                    v-on:change="updateApiType"
+                    @input="val => { executor.apiType = val.value }"
                   />
                 </q-popup-edit>
               </td>
@@ -134,7 +154,8 @@
   import executorUpdate from '../graphql/executorUpdate.gql'
   import apiTypeSelect from '../components/api-type-select'
   import MxmMarkdown from '../components/mxm-markdown'
-  import _ from 'lodash'
+  import cloneDeep from 'lodash/cloneDeep'
+  import isEqual from 'lodash/isEqual'
 
   const debug = false
 
@@ -148,6 +169,7 @@
       return {
         debug,
         loading: false,
+        original: null,
       }
     },
 
@@ -167,10 +189,12 @@
         },
         update(data) {
           if (debug) console.log('update: data=', data)
+          let executor = null
           if (data.allExecutorsList && data.allExecutorsList.length) {
-            return data.allExecutorsList[0]
+            executor = data.allExecutorsList[0]
           }
-          else return null
+          this.original = cloneDeep(executor)
+          return executor
         },
       },
     },
@@ -180,27 +204,29 @@
     },
 
     methods: {
+      noChanges() {
+        return this.executor === null || isEqual(this.executor, this.original)
+      },
+
       refreshExecutor() {
         this.$apollo.queries.executor.refetch()
       },
 
-      updateDescription(description) {
-        this.updateExecutor({description})
-      },
-
-      updateHttpEndpoint(httpEndpoint) {
-        // TODO broader consequences of changing http endpoint
-        this.updateExecutor({httpEndpoint})
-      },
-
-      updateApiType(apiType) {
-        // TODO broader consequences of changing API Type
-        this.updateExecutor({apiType})
-      },
-
-      updateExecutor(executorPatch) {
-        if (debug) console.debug('updateExecutor executorPatch=', executorPatch)
+      updateExecutor() {
+        if (debug) console.debug('updateExecutor executor=', this.executor)
         const mutation = executorUpdate
+        const executorPatch = {}
+
+        if (!isEqual(this.executor.description, this.original.description)) {
+          executorPatch.description = this.executor.description
+        }
+        if (!isEqual(this.executor.httpEndpoint, this.original.httpEndpoint)) {
+          executorPatch.httpEndpoint = this.executor.httpEndpoint
+        }
+        if (!isEqual(this.executor.apiType, this.original.apiType)) {
+          executorPatch.apiType = this.executor.apiType
+        }
+
         const variables = {
           input: {
             id: this.executor.id,
@@ -209,25 +235,16 @@
         }
         this.$apollo.mutate({mutation, variables})
           .then((data) => {
-            if (debug) console.debug('updateDescription: mutation data=', data)
-            if (executorPatch.description) {
-              this.executor.description = executorPatch.description
-            }
-            if (executorPatch.httpEndpoint) {
-              this.executor.httpEndpoint = executorPatch.httpEndpoint
-            }
-            if (executorPatch.apiType) {
-              this.executor.apiType = executorPatch.apiType
-            }
+            if (debug) console.debug('updateExecutor: mutation data=', data)
+            this.refreshExecutor()
             this.$q.notify({
-              message: `Executor updated (${_.join(_.keys(executorPatch))})`,
+              message: `Executor updated`,
               timeout: 1000,
               type: 'info'
             })
-
           })
           .catch((error) => {
-            console.error('updateDescription: mutation error=', error)
+            console.error('updateExecutor: mutation error=', error)
           })
       },
     },

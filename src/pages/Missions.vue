@@ -17,6 +17,7 @@
       :rows-per-page-options="rowsPerPage"
       :pagination.sync="pagination"
       :filter="filter"
+      no-data-label="No missions defined"
     >
       <div slot="top-left" slot-scope="props" class="row items-center">
         <div class="col-auto text-h5">
@@ -45,7 +46,10 @@
       <q-td slot="body-cell-missionId" slot-scope="props" :props="props"
             style="width:5px"
       >
-        <router-link :to="`/${euc(params.executorId)}/missiontpls/${euc(props.row.missionTplId)}/missions/${euc(props.row.missionId)}`">
+        <router-link
+          style="text-decoration:none"
+          :to="`/${euc(params.executorId)}/missiontpls/${euc(props.row.missionTplId)}/missions/${euc(props.row.missionId)}`"
+        >
           {{props.value}}
         </router-link>
       </q-td>
@@ -53,7 +57,10 @@
       <q-td slot="body-cell-missionTplId" slot-scope="props" :props="props"
             style="width:5px"
       >
-        <router-link :to="`/${euc(params.executorId)}/missiontpls/${euc(props.value)}`">
+        <router-link
+          style="text-decoration:none"
+          :to="`/${euc(params.executorId)}/missiontpls/${euc(props.value)}`"
+        >
           {{props.value}}
         </router-link>
       </q-td>
@@ -61,7 +68,10 @@
       <q-td slot="body-cell-assetId" slot-scope="props" :props="props"
             style="width:5px"
       >
-        <router-link :to="`/${euc(params.executorId)}/assets/${euc(props.value)}`">
+        <router-link
+          style="text-decoration:none"
+          :to="`/${euc(params.executorId)}/assets/${euc(props.value)}`"
+        >
           {{props.value}}
         </router-link>
       </q-td>

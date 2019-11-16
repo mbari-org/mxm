@@ -19,6 +19,7 @@
         :rows-per-page-options="rowsPerPage"
         :pagination.sync="pagination"
         :filter="filter"
+        no-data-label="No mission templates defined"
       >
         <div slot="top-left" slot-scope="props" class="row items-center">
           <div class="col-auto text-h5">
@@ -48,7 +49,9 @@
               style="width:5px"
         >
           <router-link
-            :to="`/${encodeURIComponent(params.executorId)}/missiontpls/${encodeURIComponent(props.row.missionTplId)}`">
+            style="text-decoration:none"
+            :to="`/${encodeURIComponent(params.executorId)}/missiontpls/${encodeURIComponent(props.row.missionTplId)}`"
+          >
             {{props.row.missionTplId}}
           </router-link>
         </q-td>
