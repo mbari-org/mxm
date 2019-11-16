@@ -8,17 +8,30 @@
         <span class="row">
           <img src="statics/new_mbari_logo.png" width="36px" height="10px" class="q-mr-lg">
 
-          <q-toolbar-title shrink>
-            <router-link style="color:white;text-decoration:none" to="/">MXM</router-link>
-            <div slot="subtitle">
-              Prototype {{$utl.appInfo.version}}
-              - <a style="color:white" :href="$mxm.learnMoreUrl" target="_blank">Learn more</a>
-            </div>
+          <q-toolbar-title style="font-size:1.2em">
+            <router-link style="color:white;text-decoration:none" to="/">
+              MXM - Mission Execution Mediation Service
+            </router-link>
           </q-toolbar-title>
         </span>
 
-        <small class="q-ma-sm">graphql endpoint: {{$mxm.graphqlUri}}</small>
-
+        <small>
+          Prototype {{$utl.appInfo.version}}
+          <span v-if="config">
+            <span v-if="config.learnMoreUrl">
+              -
+              <a style="color:white;text-decoration:none"
+                 :href="config.learnMoreUrl"
+                 target="mxm_learnmore"
+              >
+                Learn more
+              </a>
+            </span>
+            <div>
+              GraphQL endpoint: {{ config.graphqlUri }}
+            </div>
+          </span>
+        </small>
       </q-toolbar>
     </q-header>
 
@@ -27,3 +40,17 @@
     </q-page-container>
   </q-layout>
 </template>
+
+<script>
+  import config from '../statics/config.json'
+
+  export default {
+    name: 'MainLayout',
+
+    computed: {
+      config() {
+        return config
+      },
+    },
+  }
+</script>

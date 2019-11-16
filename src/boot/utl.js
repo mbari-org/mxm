@@ -1,4 +1,5 @@
 import UtlDialog from 'components/utl/utl-dialog'
+import { version } from '../../package.json'
 
 const runInSequence = (promises) => (
   promises.reduce((acum, promise) =>
@@ -12,7 +13,7 @@ const runInSequence = (promises) => (
 export default ({ app, Vue }) => {
   Vue.prototype.$utl = {
     appInfo: {
-      version: 'v0.2.1',
+      version,
     },
     runInSequence,
   }

@@ -1,0 +1,9 @@
+# Copy the following into a sibling `config.json` file
+# and edit that file as needed.
+# The only required property is "graphqlUri".
+
+{
+  "graphqlUri": "REPLACE_WITH_ACTUAL_URL",
+  "learnMoreUrl": null,
+  "googleApiKey": null
+}
