@@ -1,6 +1,6 @@
 <template>
   <q-page class="q-pa-md">
-    <q-breadcrumbs active-color="secondary" color="light">
+    <q-breadcrumbs active-color="secondary" color="light" class="q-mb-sm">
       <q-breadcrumbs-el label="Home" to="/"/>
       <q-breadcrumbs-el :label="params.executorId" :to="`/${encodeURIComponent(params.executorId)}`"/>
       <q-breadcrumbs-el label="Assets"/>

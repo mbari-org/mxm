@@ -1,5 +1,6 @@
 2019-11
 
+- style adjustments
 - a bit more dynamic configuration.
   For now, only for googleApiKey
   TODO also capture graphqlUri.

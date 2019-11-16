@@ -1,6 +1,6 @@
 <template>
   <q-page class="q-pa-md">
-    <q-breadcrumbs active-color="secondary" color="light">
+    <q-breadcrumbs active-color="secondary" color="light" class="q-mb-sm">
       <q-breadcrumbs-el label="Home" to="/"/>
       <q-breadcrumbs-el :label="params.executorId" :to="`/${encodeURIComponent(params.executorId)}`"/>
       <q-breadcrumbs-el label="MissionTemplates"/>
@@ -13,7 +13,7 @@
       />
     </q-breadcrumbs>
 
-    <div v-if="parameter" class="q-mt-md">
+    <div v-if="parameter">
 
       <div class="q-mb-lg">
         Mission Template: <span class="text-bold">{{ params.missionTplId }}</span>
@@ -63,7 +63,7 @@
           <table class="mission-table">
             <tbody>
             <tr>
-              <td>Required:</td>
+              <td style="vertical-align: middle">Required:</td>
               <td>
                 <q-checkbox v-model="parameter.required"/>
               </td>
@@ -91,7 +91,7 @@
             <tr>
               <td>Default&nbsp;Value:</td>
               <td>
-                <div class="bg-green-1 q-pa-xs" style="width:20em;font-family:monospace">
+                <div class="bg-green-1 q-pa-xs" style="font-family:monospace">
                   {{parameter.defaultValue}}
                   <q-popup-edit
                     buttons

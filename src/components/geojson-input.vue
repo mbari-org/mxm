@@ -50,16 +50,16 @@
 
     computed: {
       entry_id() {
-        return `${this.paramName}:${this.paramType}`
+        return this.paramName
       },
 
       sizeInfo() {
         return this.editable ? {
-          containerStyle: 'max-width:600px',
-          qgeomapStyle: 'height:600px;width:600px',
+          containerStyle: 'max-width:500px',
+          qgeomapStyle: 'height:500px;width:500px',
         } : {
           containerStyle: 'max-width:400px',
-          qgeomapStyle: 'height:400px;width:400px',
+          qgeomapStyle: 'height:350px;width:350px',
         }
       },
     },

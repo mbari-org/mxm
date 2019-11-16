@@ -30,18 +30,19 @@
         <q-list separator>
           <q-item
             v-for="c in selectOptions" :key="c.className"
+            clickable @click="clickOption(c)"
           >
-            <q-item-section>
+            <q-item-section avatar>
               <q-checkbox v-model="selection" :val="c.className"/>
             </q-item-section>
             <q-item-section>
-              <q-item-label header>{{c.className}}</q-item-label>
+              <q-item-label>{{c.className}}</q-item-label>
               <q-item-label caption>{{c.description}}</q-item-label>
             </q-item-section>
           </q-item>
         </q-list>
 
-        <div class="q-ma-xs">
+        <div class="q-ma-md">
           <asset-class-new-button
             :executor-id="executorId"
             v-on:created="assetClassCreated"
@@ -58,6 +59,8 @@
   import map from 'lodash/map'
   import filter from 'lodash/filter'
   import includes from 'lodash/includes'
+  import indexOf from 'lodash/indexOf'
+  import remove from 'lodash/remove'
   import some from 'lodash/some'
 
   const debug = false
@@ -135,6 +138,16 @@
       submit() {
         this.dialogOpened = false
         this.$emit('selection', this.selection)
+      },
+
+      clickOption(c) {
+        const idx = indexOf(this.selection, c.className)
+        if (idx >= 0) {
+          this.selection.splice(idx, 1)
+        }
+        else {
+          this.selection.push(c.className)
+        }
       },
 
       assetClassCreated(data) {

@@ -9,7 +9,7 @@
       class="bg-white"
     >
       <q-toolbar class="bg-primary text-white">
-        <q-toolbar-title>
+        <q-toolbar-title style="font-size:1.2em">
           {{ title }}
         </q-toolbar-title>
         <q-btn

@@ -70,7 +70,7 @@
       },
 
       okToDismiss() {
-        return true // TODO
+        return !this.className && !this.description
       },
     },
 
