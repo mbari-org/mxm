@@ -2,6 +2,7 @@
   <div :style="sizeInfo.containerStyle">
     <div class="text-h5">{{paramName}}</div>
     <qgeomap
+      v-if="config"
       ref="qgeomap"
       :google-api-key="config.googleApiKey"
       :editable="editable"
@@ -15,7 +16,6 @@
 </template>
 
 <script>
-  import config from '../statics/config.json'
   import map from 'lodash/map'
 
   const debug = true
@@ -50,7 +50,7 @@
 
     computed: {
       config() {
-        return config
+        return this.$store.getters['config/config']
       },
 
       entry_id() {
@@ -83,7 +83,12 @@
       editable=${this.editable}
       `)
 
-      this.setFeatureData(this.value)
+      this.$store.dispatch('config/loadConfig')
+          .then(() => {
+            this.$nextTick(() => {
+              this.setFeatureData(this.value)
+            })
+          })
     },
 
     methods: {

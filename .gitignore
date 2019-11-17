@@ -1,4 +1,5 @@
-src/statics/config.json
+src/statics/config/config.json
+docker/config/config.json
 .quasar
 .DS_Store
 .thumbs.db

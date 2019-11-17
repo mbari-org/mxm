@@ -42,14 +42,12 @@
 </template>
 
 <script>
-  import config from '../statics/config.json'
-
   export default {
     name: 'MainLayout',
 
     computed: {
       config() {
-        return config
+        return this.$store.getters['config/config']
       },
     },
   }

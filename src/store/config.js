@@ -1,5 +1,4 @@
 import axios from 'axios'
-import cloneDeep from 'lodash/cloneDeep'
 
 const debug = false
 
@@ -19,7 +18,7 @@ const actions = {
         return
       }
       const method = 'GET'
-      const url = 'statics/config.json'
+      const url = '/statics/config/config.json'
       if (debug) console.log(`${method} ${url}`)
       axios({method, url})
         .then(response => {
@@ -38,7 +37,7 @@ const actions = {
 
 const mutations = {
   setConfig (state, c) {
-    state.config = cloneDeep(c)
+    state.config = c
   },
 }
 

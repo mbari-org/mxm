@@ -4,19 +4,40 @@
 
 ## Development
 
-### Reqs
-
-- Have the MXM service running, see `docker/README.md`.
-
-- Adjust `src/plugins/apollo.js` to set the `uri` of the
-  MXM GraphQL endpoint as appropriate.
+- If not already, install dependencies:
 
       yarn
+
+- Have an MXM GraphQL endpoint running somewhere.
+  See `docker/README.md`.
+
+- If not already
+
+      cp config.json.template src/statics/config/config.json
+
+- Adjust `src/statics/config/config.json` as appropriate, in particular, the `graphqlUri` property.
+
       quasar dev
 
-this opens: http://localhost:8080/index.html
+this will open http://localhost:8080/
 
-Client requests using HTTPie. e.g.:
+## Build
+
+      quasar build
+
+Note that a build is typically for a docker release, so in this case the
+particular file `src/statics/config/config.json` is not used.
+Instead, the location of the `config.json` file (which is still required)
+is indicated as a setting prior to running the container.
+
+### Install
+
+See `docker/README.md`
+
+## misc
+
+Assuming the MXM GraphQL endpoint is running at `localhost:5000/mxm-graphql`,
+some client requests:
 
 ```
 http post localhost:5000/mxm-graphql query='{
@@ -28,16 +49,3 @@ http post localhost:5000/mxm-graphql query='{
   }
 }'
 ```
-
-
-## Build
-
-NOTE: Again, see if there's any adjustment needed in `src/plugins/apollo.js`, then:
-
-```
-$ quasar build
-```
-
-### Install
-
-See `docker/README.md`

@@ -1,11 +1,9 @@
 2019-11
 
-- NOTE: config now loaded as a direct import from 'statics/config.json'.
+- adjustments for "dynamic" configuration loading so it accommodates both local
+  development/testing (config loaded from `src/statics/config/config.json`) 
+  and docker release (loaded from indicated directory, via mapped volume).
   Configuration now captures graphqlUri, learnMoreUrl and googleApiKey
-  Procedure: Under src/statics, `cp config.json.template config.json`
-  and edit `config.json` as needed.
-  Then `quasar dev`, or `quasar build`, etc.
-  TODO `quasar build` not yet tested in general.
 - style adjustments
   
 - propagating geometry edits, still based on adhoc simple format

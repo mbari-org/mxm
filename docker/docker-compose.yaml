@@ -2,7 +2,9 @@ version: '3.6'
 services:
   mxm:
     container_name: mxm
-    image: mbari/mxm:0.2.1
+    image: mbari/mxm:0.3.0
+    volumes:
+      - ${MXM_CONFIG_DIR}:/usr/local/apache2/htdocs/statics/config
     ports:
     - "38080:80"
     depends_on:
