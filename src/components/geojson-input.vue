@@ -2,9 +2,8 @@
   <div :style="sizeInfo.containerStyle">
     <div class="text-h5">{{paramName}}</div>
     <qgeomap
-      v-if="config"
       ref="qgeomap"
-      :google-api-key="config.googleApiKey"
+      :google-api-key="$mxmConfig.googleApiKey"
       :editable="editable"
       v-on:editsApplied="_editsApplied"
       v-on:warning="_showWarning"
@@ -49,10 +48,6 @@
     },
 
     computed: {
-      config() {
-        return this.$store.getters['config/config']
-      },
-
       entry_id() {
         return this.paramName
       },
@@ -83,12 +78,7 @@
       editable=${this.editable}
       `)
 
-      this.$store.dispatch('config/loadConfig')
-          .then(() => {
-            this.$nextTick(() => {
-              this.setFeatureData(this.value)
-            })
-          })
+      this.setFeatureData(this.value)
     },
 
     methods: {

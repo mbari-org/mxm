@@ -2,10 +2,11 @@ import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import VueApollo from 'vue-apollo'
+import { loadConfig } from 'boot/mxmConfig'
 
 export default async ({ store, app, Vue }) => {
   return new Promise((resolve, reject) => {
-    store.dispatch('config/loadConfig')
+    loadConfig
       .then(config => {
         resolve(initApollo(config))
       })

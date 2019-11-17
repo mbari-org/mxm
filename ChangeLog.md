@@ -1,5 +1,6 @@
 2019-11
 
+- add mxmConfig boot
 - adjustments for "dynamic" configuration loading so it accommodates both local
   development/testing (config loaded from `src/statics/config/config.json`) 
   and docker release (loaded from indicated directory, via mapped volume).

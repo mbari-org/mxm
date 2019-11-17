@@ -17,18 +17,18 @@
 
         <small>
           Prototype {{$utl.appInfo.version}}
-          <span v-if="config">
-            <span v-if="config.learnMoreUrl">
+          <span v-if="$mxmConfig">
+            <span v-if="$mxmConfig.learnMoreUrl">
               -
               <a style="color:white;text-decoration:none"
-                 :href="config.learnMoreUrl"
+                 :href="$mxmConfig.learnMoreUrl"
                  target="mxm_learnmore"
               >
                 Learn more
               </a>
             </span>
             <div>
-              GraphQL endpoint: {{ config.graphqlUri }}
+              GraphQL endpoint: {{ $mxmConfig.graphqlUri }}
             </div>
           </span>
         </small>
@@ -44,11 +44,5 @@
 <script>
   export default {
     name: 'MainLayout',
-
-    computed: {
-      config() {
-        return this.$store.getters['config/config']
-      },
-    },
   }
 </script>
