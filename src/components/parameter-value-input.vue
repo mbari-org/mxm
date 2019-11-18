@@ -15,13 +15,13 @@
       v-else
       class="rounded-borders q-pa-xs bg-green-1"
       stack-label :label="paramName"
+      autofocus
       :readonly="!editable"
       :clearable="editable"
       :clear-value="defaultValue"
       :type="inputProps.type"
       :style="inputProps.style"
       :rows="inputProps.rows"
-
       :value="value"
       @change="val => { $emit('change', val) }"
       @input="val => { $emit('input', val) }"

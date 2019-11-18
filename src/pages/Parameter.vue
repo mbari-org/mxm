@@ -79,6 +79,7 @@
                     <q-input
                       v-model.trim="parameter.type"
                       clearable
+                      autofocus
                       :clear-value="original.type"
                       class="bg-green-1"
                     />
@@ -90,7 +91,7 @@
             <div class="row items-top no-wrap q-gutter-sm">
               <div class="col-1">Default&nbsp;Value:</div>
               <div>
-                <div class="col-11 bg-blue-1 q-pa-xs" style="font-family:monospace">
+                <div class="col-11 bg-blue-1 q-pa-xs" style="font-family:monospace;min-height:2em;min-width:4em">
                   <span style="word-break:break-all;font-size:0.9em">
                     {{parameter.defaultValue}}
                   </span>

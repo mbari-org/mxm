@@ -14,7 +14,7 @@
 </template>
 
 <script>
-  import _ from 'lodash'
+  import map from 'lodash/map'
 
   const debug = false
 
@@ -36,7 +36,7 @@
     computed: {
       options() {
         if (debug) console.debug('missionTpls=', this.missionTpls)
-        return _.map(this.missionTpls, e => {
+        return map(this.missionTpls, e => {
           return {
             label: e.missionTplId,
             value: e.missionTplId,

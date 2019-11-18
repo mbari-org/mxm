@@ -14,7 +14,8 @@
 </template>
 
 <script>
-  import _ from 'lodash'
+  import each from 'lodash/each'
+  import get from 'lodash/get'
 
   const debug = false
 
@@ -36,10 +37,10 @@
     computed: {
       options() {
         const list = []
-        _.each(this.assetClasses, e => {
-          const instances = _.get(e, 'assetClassByExecutorIdAndAssetClassName.assetsByExecutorIdAndClassNameList') || []
+        each(this.assetClasses, e => {
+          const instances = get(e, 'assetClassByExecutorIdAndAssetClassName.assetsByExecutorIdAndClassNameList') || []
           if (debug) console.debug(':: instances=', instances)
-          _.each(instances, i => {
+          each(instances, i => {
             list.push({
               label: `${i.assetId} (${e.assetClassName})`,
               value: i.assetId,

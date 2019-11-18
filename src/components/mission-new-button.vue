@@ -74,7 +74,8 @@
   import missionInsert from '../graphql/missionInsert.gql'
   import MissionTplSelect from 'components/mission-tpl-select'
   import AssetSelect from 'components/asset-select'
-  import _ from 'lodash'
+  import find from 'lodash/find'
+  import each from 'lodash/each'
 
   const debug = false
 
@@ -112,10 +113,10 @@
 
       assetClasses() {
         const list = []
-        const missionTpl = _.find(this.missionTpls, {missionTplId: this.missionTplId})
+        const missionTpl = find(this.missionTpls, {missionTplId: this.missionTplId})
         if (debug) console.debug('missionTpl=', missionTpl)
         if (missionTpl && missionTpl.missionTplAssetClassesByExecutorIdAndMissionTplIdList) {
-          _.each(missionTpl.missionTplAssetClassesByExecutorIdAndMissionTplIdList, c => {
+          each(missionTpl.missionTplAssetClassesByExecutorIdAndMissionTplIdList, c => {
             list.push(c)
           })
         }

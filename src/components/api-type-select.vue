@@ -16,7 +16,8 @@
 
 <script>
   import executorApiTypes from '../graphql/executorApiTypes.gql'
-  import _ from 'lodash'
+  import get from 'lodash/get'
+  import map from 'lodash/map'
 
   const debug = false
 
@@ -36,8 +37,8 @@
         query: executorApiTypes,
         update(data) {
           if (debug) console.log('executorApiTypes update: data=', data)
-          const enumValues = _.get(data, '__type.enumValues') || []
-          return _.map(enumValues, o => ({
+          const enumValues = get(data, '__type.enumValues') || []
+          return map(enumValues, o => ({
             label: o.name,
             value: o.name
           }))

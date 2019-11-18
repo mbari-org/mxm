@@ -141,20 +141,20 @@
           >
             <div
               class="rounded-borders q-pa-xs bg-blue-1"
-              style="white-space: normal"
+              style="white-space: normal; min-height:1em"
             >
               {{ props.row.defaultValue }}
-            </div>
-            <q-popup-edit
-              v-if="props.row.defaultValue"
-              v-model="props.row.defaultValue"
-            >
-              <parameter-value-input
-                :param-name="props.row.paramName"
+              <q-popup-edit
+                v-if="props.row.defaultValue"
                 v-model="props.row.defaultValue"
-                :param-type="props.row.type"
-              />
-            </q-popup-edit>
+              >
+                <parameter-value-input
+                  :param-name="props.row.paramName"
+                  v-model="props.row.defaultValue"
+                  :param-type="props.row.type"
+                />
+              </q-popup-edit>
+            </div>
           </q-td>
 
           <q-td key="type" :props="props"
@@ -195,7 +195,8 @@
   import ParameterNewButton from 'components/parameter-new-button'
   import MxmMarkdown from 'components/mxm-markdown'
   import ParameterValueInput from 'components/parameter-value-input'
-  import _ from 'lodash'
+  import map from 'lodash/map'
+  import difference from 'lodash/difference'
 
   const debug = false
 
@@ -262,7 +263,7 @@
       },
 
       myAssetClassNames() {
-        return _.map(this.myAssetClasses, "assetClassName")
+        return map(this.myAssetClasses, "assetClassName")
       },
 
       myParameters() {
@@ -299,7 +300,7 @@
       },
 
       assetClassSelection(data) {
-        const newAssetClassNames = _.difference(data, this.myAssetClassNames)
+        const newAssetClassNames = difference(data, this.myAssetClassNames)
         if (debug) console.debug('assetClassSelection: newAssetClassNames=', newAssetClassNames)
 
         const added = []

@@ -289,7 +289,13 @@
   } from 'boot/rest0'
 
   import Vue from 'vue'
-  import _ from 'lodash'
+  import get from 'lodash/get'
+  import map from 'lodash/map'
+  import find from 'lodash/find'
+  import filter from 'lodash/filter'
+  import clone from 'lodash/clone'
+  import assign from 'lodash/assign'
+  import reduce from 'lodash/reduce'
 
   const debug = false
 
@@ -402,13 +408,13 @@
 
       setMyArguments(mission) {
         if (debug) console.debug('setMyArguments mission=', mission)
-        const alreadySavedArgs = _.get(mission, 'argumentsByExecutorIdAndMissionTplIdAndMissionIdList') || []
-        const parameters = _.get(mission, 'missionTplByExecutorIdAndMissionTplId.parametersByExecutorIdAndMissionTplIdList') || []
+        const alreadySavedArgs = get(mission, 'argumentsByExecutorIdAndMissionTplIdAndMissionIdList') || []
+        const parameters = get(mission, 'missionTplByExecutorIdAndMissionTplId.parametersByExecutorIdAndMissionTplIdList') || []
 
         if (debug) console.debug('alreadySavedArgs=', alreadySavedArgs)
 
-        this.myArguments = _.map(parameters, p => {
-          const arg = _.find(alreadySavedArgs, {paramName: p.paramName})
+        this.myArguments = map(parameters, p => {
+          const arg = find(alreadySavedArgs, {paramName: p.paramName})
           const paramValue = arg && arg.paramValue || p.defaultValue
           // console.debug('FIND p.paramName=', p.paramName, 'arg=', arg, 'paramValue=', paramValue)
           return {
@@ -430,7 +436,7 @@
       },
 
       parametersChanged() {
-        return _.filter(this.myArguments, a => a.paramValue !== a.defaultValue)
+        return filter(this.myArguments, a => a.paramValue !== a.defaultValue)
       },
 
       saveArguments() {
@@ -439,14 +445,14 @@
         }
         this.savingArgs = true
 
-        const alreadySavedArgs = _.get(this.mission, 'argumentsByExecutorIdAndMissionTplIdAndMissionIdList') || []
+        const alreadySavedArgs = get(this.mission, 'argumentsByExecutorIdAndMissionTplIdAndMissionIdList') || []
         if (debug) console.debug('saveArguments: alreadySavedArgs=', alreadySavedArgs)
 
         let numInserted = 0
         let numUpdated = 0
         let numDeleted = 0
 
-        const argList = _.clone(this.myArguments)
+        const argList = clone(this.myArguments)
         const nextArg = () => {
           const arg = argList.pop()
           if (!arg) {
@@ -468,7 +474,7 @@
           if (debug) console.debug('saveArguments: checking', arg.paramName,
             `v='${arg.paramValue}' dv='${arg.defaultValue}'`)
 
-          const alreadySavedArg = _.find(alreadySavedArgs, x => x.paramName === arg.paramName)
+          const alreadySavedArg = find(alreadySavedArgs, x => x.paramName === arg.paramName)
           if (debug) console.debug(arg.paramName, 'alreadySavedArg=', alreadySavedArg)
 
           if (arg.paramValue !== arg.defaultValue) {
@@ -595,7 +601,7 @@
           this.$apollo.mutate({mutation, variables})
             .then((data) => {
               if (debug) console.debug('updateMission: mutation data=', data)
-              _.assign(this.mission, missionPatch)
+              assign(this.mission, missionPatch)
               resolve(missionPatch)
             })
             .catch(error => {
@@ -644,7 +650,7 @@
           // console.debug('myArguments=', this.myArguments)
           const parametersChanged = this.parametersChanged()
           console.debug('parametersChanged=', parametersChanged)
-          const data = _.reduce(parametersChanged, (obj, {paramName, paramValue, type}) => {
+          const data = reduce(parametersChanged, (obj, {paramName, paramValue, type}) => {
             obj[paramName] = convertValue(paramValue, type)
             return obj
           }, {})

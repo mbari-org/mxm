@@ -14,7 +14,7 @@
 </template>
 
 <script>
-  import _ from 'lodash'
+  import map from 'lodash/map'
 
   const debug = false
 
@@ -35,7 +35,7 @@
 
     computed: {
       options() {
-        return _.map(this.parameters, p => {
+        return map(this.parameters, p => {
           return {
             label: p.paramName,
             value: p.paramName,
