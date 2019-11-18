@@ -5,6 +5,7 @@
       ref="qgeomap"
       :google-api-key="$mxmConfig.googleApiKey"
       :editable="editable"
+      v-on:startEditing="_startEditing"
       v-on:editsApplied="_editsApplied"
       v-on:warning="_showWarning"
       include-table
@@ -78,50 +79,42 @@
       editable=${this.editable}
       `)
 
-      this.setFeatureData(this.value)
+      this._setFeatureData(this.value)
     },
 
     methods: {
-      setFeatureData(value) {
+      _setFeatureData(value) {
         const qgeomap = this.$refs.qgeomap
 
         this.valueString = value && value.trim() || ''
-
         const entry_id = this.entry_id
+        const geometry = simple2geojson(this.paramType, this.valueString)
 
-        let entry = null
-        if (this.valueString) {
-          try {
-            const json = JSON.parse(this.valueString)
-            if (debug) console.debug(`setFeatureData: paramType=${this.paramType } json=`, json)
-
-            const geometry = simple2geojson(this.paramType, this.valueString)
-
-            if (geometry) {
-              entry = {
-                entry_id,
-                geometry,
-                color: 'cyan',
-                tooltip: entry_id,
-              }
-            }
-          }
-          catch (error) { // TODO
-            console.warn(error)
-          }
+        const entry = {
+          entry_id,
+          geometry,
+          color: 'cyan',
+          tooltip: entry_id,
         }
-        if (entry) {
-          qgeomap.addEntry(entry)
-          this.$nextTick(() => {
-            if (this.editable) {
-              qgeomap.selectEntry(entry_id)
-              qgeomap.editEntry(entry_id)
-            }
-            else {
-              qgeomap.zoomToAll()
-            }
-          })
+
+        qgeomap.addEntry(entry)
+        this.$nextTick(() => {
+          if (this.editable) {
+            qgeomap.selectEntry(entry_id)
+            qgeomap.editEntry(entry_id)
+          }
+          else {
+            qgeomap.zoomToAll()
+          }
+        })
+      },
+
+      _startEditing(selectedEntry) {
+        console.log(`_startEditing: selectedEntry=`, selectedEntry)
+        if (!selectedEntry) {
+          // TODO any further action here?
         }
+        // Else: qgeomap already taking care of the edit.
       },
 
       _editsApplied(entryEdited) {
@@ -148,30 +141,39 @@
     },
   }
 
+  // TODO all of this preliminary
   function simple2geojson(paramType, simple) {
-    const json = JSON.parse(simple)
-    switch (paramType) {
-      case 'Point': {
-        const [lat, lon] = json
-        const coordinates = [lon, lat]
-        return {
-          type: 'Feature',
-          geometry: {
-            type: 'Point',
-            coordinates,
+    const json = simple && JSON.parse(simple)
+    if (json) {
+      switch (paramType) {
+        case 'Point': {
+          const [lat, lon] = json
+          const coordinates = [lon, lat]
+          return {
+            type: 'Feature',
+            geometry: {
+              type: 'Point',
+              coordinates,
+            }
+          }
+        }
+
+        case 'Polygon': {
+          const coordinates = [ map(json, ([lat, lon]) => [lon, lat]) ]
+          return {
+            type: 'Feature',
+            geometry: {
+              type: 'Polygon',
+              coordinates,
+            }
           }
         }
       }
-
-      case 'Polygon': {
-        const coordinates = [ map(json, ([lat, lon]) => [lon, lat]) ]
-        return {
-          type: 'Feature',
-          geometry: {
-            type: 'Polygon',
-            coordinates,
-          }
-        }
+    }
+    else {
+      return {
+        type: 'FeatureCollection',
+        features: [],
       }
     }
   }
