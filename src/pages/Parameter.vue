@@ -3,7 +3,7 @@
     <q-breadcrumbs active-color="secondary" color="light" class="q-mb-sm">
       <q-breadcrumbs-el label="Home" to="/"/>
       <q-breadcrumbs-el :label="params.executorId" :to="`/${encodeURIComponent(params.executorId)}`"/>
-      <q-breadcrumbs-el label="MissionTemplates"/>
+      <q-breadcrumbs-el label="MissionTemplates" :to="`/${encodeURIComponent(params.executorId)}/missiontpls`"/>
       <q-breadcrumbs-el :label="params.missionTplId" :to="`/${encodeURIComponent(params.executorId)}/missiontpls/${encodeURIComponent(params.missionTplId)}`"/>
       <q-breadcrumbs-el label="Params"/>
       <q-breadcrumbs-el :label="params.paramName"/>
