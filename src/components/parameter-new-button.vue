@@ -10,6 +10,7 @@
     <utl-dialog
       :dialog-opened="dialogOpened"
       title="Add Parameter"
+      position="top"
       :ok-to-submit="!!okToSubmit"
       :ok-to-dismiss="!!okToDismiss"
       v-on:submit="submit"
@@ -81,7 +82,8 @@
               :param-name="data.paramName"
               v-model="data.defaultValue"
               :param-type="data.typeSelected.value"
-              :default-value="''"
+              default-value=""
+              editable
             />
           </q-popup-edit>
         </q-field>

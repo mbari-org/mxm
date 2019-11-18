@@ -1,6 +1,7 @@
 <template>
   <q-dialog
     :value="dialogOpened"
+    :position="position"
     @input="val => {if (!val) $emit('dialogClosing')}"
     :no-backdrop-dismiss="!okToDismiss"
     :no-esc-dismiss="!okToDismiss"
@@ -51,6 +52,11 @@
       title: {
         type: String,
         required: true
+      },
+
+      position: {
+        type: String,
+        default: undefined
       },
 
       submitLabel: {
