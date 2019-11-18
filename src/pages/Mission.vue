@@ -208,15 +208,10 @@
               class="rounded-borders q-pa-xs bg-red-12 text-bold" style="color:white"
             > ?
             </div>
-            <div v-else-if="(props.row.paramValue || '') !== (props.row.defaultValue || '')"
-                 class="rounded-borders q-pa-xs bg-green-11"
-                 style="white-space: normal"
-            >
-              {{ props.row.paramValue }}
-            </div>
-            <div v-else
-                 class="rounded-borders q-pa-xs bg-green-1"
-                 style="white-space: normal"
+            <div
+              v-else
+              :class="paramValueClass(props.row)"
+               style="white-space: normal"
             >
               {{ props.row.paramValue }}
             </div>
@@ -428,11 +423,13 @@
         })
       },
 
-      validateParamValue(val) {
-        // TODO proper validation
-        // for now, just force to be a non-empty string
-        if (debug) console.debug('validateParamValue val=', val)
-        return !!val
+      paramValueClass(row) {
+        if ((row.paramValue || '') !== (row.defaultValue || '')) {
+          return 'rounded-borders q-pa-xs bg-green-11'
+        }
+        else {
+          return 'rounded-borders q-pa-xs bg-green-1'
+        }
       },
 
       parametersChanged() {
