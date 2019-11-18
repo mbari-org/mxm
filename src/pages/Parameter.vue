@@ -66,26 +66,11 @@
               <q-checkbox v-model="parameter.required"/>
             </div>
 
-            <div class="row items-top no-wrap q-gutter-sm">
+            <div class="row items-center no-wrap q-gutter-sm">
               <div class="col-1">Type:</div>
-              <div>
-                <span class="bg-blue-1 q-pa-xs">
-                  {{parameter.type}}
-                  <q-popup-edit
-                    v-model="parameter.type"
-                    title="Type"
-                    buttons
-                  >
-                    <q-input
-                      v-model.trim="parameter.type"
-                      clearable
-                      autofocus
-                      :clear-value="original.type"
-                      class="bg-green-1"
-                    />
-                  </q-popup-edit>
-                </span>
-              </div>
+              <parameter-type-select
+                v-model="parameter.type"
+              />
             </div>
 
             <div class="row items-top no-wrap q-gutter-sm">
@@ -162,6 +147,7 @@
   import parameterUpdate from '../graphql/parameterUpdate.gql'
   import MxmMarkdown from 'components/mxm-markdown'
   import ParameterValueInput from 'components/parameter-value-input'
+  import ParameterTypeSelect from 'components/parameter-type-select'
   import cloneDeep from 'lodash/cloneDeep'
   import isEqual from 'lodash/isEqual'
 
@@ -171,6 +157,7 @@
     components: {
       MxmMarkdown,
       ParameterValueInput,
+      ParameterTypeSelect,
     },
 
     data: () => ({

@@ -38,16 +38,8 @@
             stack-label label="Type:"
             :label-width="4"
           >
-            <q-select
-              :error="!data.typeSelected"
-              :label-width="4"
-              bottom-slots
-              class="bg-light-blue-1"
-              style="width:12em"
+            <parameter-type-select
               v-model="data.typeSelected"
-              :options="typeOptions"
-              @input="val => {$emit('input', val)}"
-              hide-bottom-space
             />
           </q-field>
 
@@ -67,7 +59,7 @@
             class="bg-light-blue-1 q-pa-xs"
             style="width:24em;font-family:monospace"
           >
-            {{ data.defaultValue }}&nbsp;
+            {{ data.defaultValue }}
           </div>
 
           <q-popup-edit
@@ -81,7 +73,7 @@
               v-if="popupEditVisible"
               :param-name="data.paramName"
               v-model="data.defaultValue"
-              :param-type="data.typeSelected.value"
+              :param-type="data.typeSelected"
               default-value=""
               editable
             />
@@ -95,7 +87,7 @@
           <mxm-markdown
             class="bg-light-blue-1"
             :text="data.description"
-            style="width:24em"
+            style="min-height:4em;width:24em"
           />
           <q-popup-edit
             v-model="data.description"
@@ -123,6 +115,7 @@
   import parameterInsert from '../graphql/parameterInsert.gql'
   import MxmMarkdown from 'components/mxm-markdown'
   import ParameterValueInput from 'components/parameter-value-input'
+  import ParameterTypeSelect from 'components/parameter-type-select'
   import map from 'lodash/map'
   import cloneDeep from 'lodash/cloneDeep'
   import isEqual from 'lodash/isEqual'
@@ -153,6 +146,7 @@
     components: {
       MxmMarkdown,
       ParameterValueInput,
+      ParameterTypeSelect,
     },
 
     data: () => ({
@@ -162,20 +156,6 @@
     }),
 
     computed: {
-      types() {
-        return [
-          'float', 'integer', 'boolean', 'string',
-          'Point', 'MultiPoint', 'LineString', 'Polygon',
-        ]
-      },
-
-      typeOptions() {
-        return map(this.types, t => ({
-          label: t,
-          value: t
-        }))
-      },
-
       okToSubmit() {
         return this.data.paramName && this.data.typeSelected
       },
@@ -197,7 +177,7 @@
           executorId: this.executorId,
           missionTplId: this.missionTplId,
           paramName: this.data.paramName,
-          type: this.data.typeSelected.value,
+          type: this.data.typeSelected,
           required: this.data.required,
           defaultValue: this.data.defaultValue,
           description: this.data.description,

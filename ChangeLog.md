@@ -1,5 +1,6 @@
 2019-11
 
+- add parameter-type-select
 - adjs re adding new entry
 - add mxmConfig boot
 - adjustments for "dynamic" configuration loading so it accommodates both local
