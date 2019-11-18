@@ -54,23 +54,23 @@
         <q-field
           stack-label label="Default Value:"
           :label-width="4"
+          :error="!!defaultValueError()"
+          :error-message="defaultValueError()"
         >
-          <div
-            class="bg-light-blue-1 q-pa-xs"
-            style="width:24em;font-family:monospace"
-          >
-            {{ data.defaultValue }}
-          </div>
+          <parameter-value
+            ref="parameter-value"
+            class="q-pa-xs"
+            style="font-family:monospace;width:24em"
+            :param-type="data.typeSelected"
+            :param-value="data.defaultValue"
+          />
 
           <q-popup-edit
             v-if="data.typeSelected"
             buttons
             v-model="data.defaultValue"
-            @show="popupEditVisible = true"
-            @hide="() => { popupEditVisible = false }"
           >
             <parameter-value-input
-              v-if="popupEditVisible"
               :param-name="data.paramName"
               v-model="data.defaultValue"
               :param-type="data.typeSelected"
@@ -85,8 +85,8 @@
           :label-width="4"
         >
           <mxm-markdown
-            class="bg-light-blue-1"
             :text="data.description"
+            class="bg-light-blue-1"
             style="min-height:4em;width:24em"
           />
           <q-popup-edit
@@ -114,6 +114,7 @@
 <script>
   import parameterInsert from '../graphql/parameterInsert.gql'
   import MxmMarkdown from 'components/mxm-markdown'
+  import ParameterValue from 'components/parameter-value'
   import ParameterValueInput from 'components/parameter-value-input'
   import ParameterTypeSelect from 'components/parameter-type-select'
   import map from 'lodash/map'
@@ -145,6 +146,7 @@
 
     components: {
       MxmMarkdown,
+      ParameterValue,
       ParameterValueInput,
       ParameterTypeSelect,
     },
@@ -152,12 +154,12 @@
     data: () => ({
       data: cloneDeep(initialData),
       dialogOpened: false,
-      popupEditVisible: false,
     }),
 
     computed: {
       okToSubmit() {
         return this.data.paramName && this.data.typeSelected
+            && !this.defaultValueError()
       },
 
       okToDismiss() {
@@ -168,8 +170,12 @@
     methods: {
       openDialog() {
         this.data = cloneDeep(initialData)
-        this.popupEditVisible = false
         this.dialogOpened = true
+      },
+
+      defaultValueError() {
+        const parval = this.$refs['parameter-value']
+        return parval && parval.errorMessage()
       },
 
       submit() {

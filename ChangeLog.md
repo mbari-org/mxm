@@ -1,5 +1,6 @@
 2019-11
 
+- add parameter-value and some validation logic
 - add parameter-type-select
 - adjs re adding new entry
 - add mxmConfig boot

@@ -1,15 +1,13 @@
 <template>
-  <div>
-    <div v-if="text || !hideEmpty">
-      <div v-if="text" :class="{'rounded-borders bg-light-blue-1': !simple}">
-        <vue-markdown
-          :source="text" table-class="markdownTable"
-          :class="'markdownText ' + (simple ? '' : 'q-pa-sm')"
-        />
-      </div>
-      <div v-else style="color:gray;font-style:italic;font-size:smaller">
-        {{emptyMessage}}
-      </div>
+  <div v-if="text || !hideEmpty">
+    <div v-if="text" :class="{'rounded-borders bg-light-blue-1': !simple}">
+      <vue-markdown
+        :source="text" table-class="markdownTable"
+        :class="'markdownText ' + (simple ? '' : 'q-pa-sm')"
+      />
+    </div>
+    <div v-else style="color:gray;font-style:italic;font-size:smaller">
+      {{emptyMessage}}
     </div>
   </div>
 </template>

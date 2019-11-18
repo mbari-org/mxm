@@ -39,7 +39,7 @@
 
           <div class="q-ml-xl">
             <q-btn
-              :disable="noChanges()"
+              :disable="noChanges() || !okToSubmit"
               :color="noChanges() ? 'grey' : 'red'"
               size="sm"
               :class="{'shadow-5': !noChanges()}"
@@ -76,21 +76,33 @@
             <div class="row items-top no-wrap q-gutter-sm">
               <div class="col-1">Default&nbsp;Value:</div>
               <div>
-                <div class="col-11 bg-blue-1 q-pa-xs" style="font-family:monospace;min-height:2em;min-width:4em">
-                  <span style="word-break:break-all;font-size:0.9em">
-                    {{parameter.defaultValue}}
-                  </span>
-                  <q-popup-edit
-                    buttons
-                    v-model="parameter.defaultValue"
+                <div
+                  class="col-11 bg-blue-1 q-pa-xs"
+                  style="min-width:4em"
+                >
+                  <q-field
+                    :error="!!defaultValueError()"
+                    :error-message="defaultValueError()"
                   >
-                    <parameter-value-input
-                      :param-name="parameter.paramName"
-                      v-model="parameter.defaultValue"
+                    <parameter-value
+                      ref="parameter-value"
+                      class="q-pa-xs"
+                      style="font-family:monospace;min-width:24em;word-break:break-all"
                       :param-type="parameter.type"
-                      editable
+                      :param-value="parameter.defaultValue"
                     />
-                  </q-popup-edit>
+                    <q-popup-edit
+                      buttons
+                      v-model="parameter.defaultValue"
+                    >
+                      <parameter-value-input
+                        :param-name="parameter.paramName"
+                        v-model="parameter.defaultValue"
+                        :param-type="parameter.type"
+                        editable
+                      />
+                    </q-popup-edit>
+                  </q-field>
                 </div>
               </div>
             </div>
@@ -98,24 +110,32 @@
             <div class="row items-top no-wrap q-gutter-sm">
               <div class="col-1">Description:</div>
               <div>
-                <mxm-markdown :text="parameter.description"/>
-                <q-popup-edit
-                  v-model="parameter.description"
-                  title="Description"
-                  buttons persistent
+                <div
+                  class="col-11 bg-blue-1 q-pa-xs"
+                  style="min-width:4em"
                 >
-                  <q-input
-                    v-model.trim="parameter.description"
-                    clearable
-                    :clear-value="original.description"
-                    class="bg-green-1 q-pl-md q-pr-md"
-                    style="font-family:monospace"
-                    type="textarea"
-                    rows="3"
-                    :max-height="300"
-                    autofocus @keyup.enter.stop
+                  <mxm-markdown
+                    :text="parameter.description"
+                    style="min-height:4em;min-width:24em"
                   />
-                </q-popup-edit>
+                  <q-popup-edit
+                    v-model="parameter.description"
+                    title="Description"
+                    buttons persistent
+                  >
+                    <q-input
+                      v-model.trim="parameter.description"
+                      clearable
+                      :clear-value="original.description"
+                      class="bg-green-1 q-pl-md q-pr-md"
+                      style="font-family:monospace"
+                      type="textarea"
+                      rows="3"
+                      :max-height="300"
+                      autofocus @keyup.enter.stop
+                    />
+                  </q-popup-edit>
+                </div>
               </div>
             </div>
           </div>
@@ -146,6 +166,7 @@
   import parameter from '../graphql/parameter.gql'
   import parameterUpdate from '../graphql/parameterUpdate.gql'
   import MxmMarkdown from 'components/mxm-markdown'
+  import ParameterValue from 'components/parameter-value'
   import ParameterValueInput from 'components/parameter-value-input'
   import ParameterTypeSelect from 'components/parameter-type-select'
   import cloneDeep from 'lodash/cloneDeep'
@@ -156,6 +177,7 @@
   export default {
     components: {
       MxmMarkdown,
+      ParameterValue,
       ParameterValueInput,
       ParameterTypeSelect,
     },
@@ -169,6 +191,11 @@
     computed: {
       params() {
         return this.$route.params
+      },
+
+      okToSubmit() {
+        return this.parameter.paramName && this.parameter.type
+            && !this.defaultValueError()
       },
     },
 
@@ -208,6 +235,11 @@
 
       noChanges() {
         return this.parameter === null || isEqual(this.parameter, this.original)
+      },
+
+      defaultValueError() {
+        const parval = this.$refs['parameter-value']
+        return parval && parval.errorMessage()
       },
 
       updateParameter() {
