@@ -60,18 +60,16 @@
         <q-separator/>
         <q-card-section>
 
-          <table class="mission-table">
-            <tbody>
-            <tr>
-              <td style="vertical-align: middle">Required:</td>
-              <td>
-                <q-checkbox v-model="parameter.required"/>
-              </td>
-            </tr>
-            <tr>
-              <td>Type:</td>
-              <td>
-                <span class="bg-green-1 q-pa-xs">
+          <div class="column q-gutter-sm">
+            <div class="row items-center no-wrap q-gutter-sm">
+              <div class="col-1">Required:</div>
+              <q-checkbox v-model="parameter.required"/>
+            </div>
+
+            <div class="row items-top no-wrap q-gutter-sm">
+              <div class="col-1">Type:</div>
+              <div>
+                <span class="bg-blue-1 q-pa-xs">
                   {{parameter.type}}
                   <q-popup-edit
                     v-model="parameter.type"
@@ -86,13 +84,16 @@
                     />
                   </q-popup-edit>
                 </span>
-              </td>
-            </tr>
-            <tr>
-              <td>Default&nbsp;Value:</td>
-              <td>
-                <div class="bg-green-1 q-pa-xs" style="font-family:monospace">
-                  {{parameter.defaultValue}}
+              </div>
+            </div>
+
+            <div class="row items-top no-wrap q-gutter-sm">
+              <div class="col-1">Default&nbsp;Value:</div>
+              <div>
+                <div class="col-11 bg-blue-1 q-pa-xs" style="font-family:monospace">
+                  <span style="word-break:break-all;font-size:0.9em">
+                    {{parameter.defaultValue}}
+                  </span>
                   <q-popup-edit
                     buttons
                     v-model="parameter.defaultValue"
@@ -105,11 +106,12 @@
                     />
                   </q-popup-edit>
                 </div>
-              </td>
-            </tr>
-            <tr>
-              <td>Description:</td>
-              <td>
+              </div>
+            </div>
+
+            <div class="row items-top no-wrap q-gutter-sm">
+              <div class="col-1">Description:</div>
+              <div>
                 <mxm-markdown :text="parameter.description"/>
                 <q-popup-edit
                   v-model="parameter.description"
@@ -128,11 +130,9 @@
                     autofocus @keyup.enter.stop
                   />
                 </q-popup-edit>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-
+              </div>
+            </div>
+          </div>
         </q-card-section>
       </q-card>
 

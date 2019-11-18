@@ -140,7 +140,7 @@
                 style="width:20em;font-family:monospace"
           >
             <div
-              class="rounded-borders q-pa-xs bg-green-1"
+              class="rounded-borders q-pa-xs bg-blue-1"
               style="white-space: normal"
             >
               {{ props.row.defaultValue }}
