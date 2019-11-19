@@ -203,34 +203,36 @@
           <q-td key="paramValue" :props="props"
                 style="width:20em;font-family:monospace"
           >
-            <div
-              v-if="!props.row.paramValue && props.row.required"
-              class="rounded-borders q-pa-xs bg-red-12 text-bold" style="color:white"
-            > ?
-            </div>
-            <div
-              v-else
-              :class="paramValueClass(props.row)"
+            <q-field
+              :error="!!valueError(props.row.paramName)"
+              :error-message="valueError(props.row.paramName)"
+              :class="paramValueClass(props.row) + ' q-mb-md'"
                style="white-space: normal"
             >
-              {{ props.row.paramValue }}
-            </div>
-
-            <q-popup-edit
-              :buttons="mission.missionStatus === 'DRAFT'"
-              v-model="props.row.paramValue"
-              @save="saveArguments"
-            >
-              <!-- https://github.com/quasarframework/quasar/issues/2861 -->
-
-              <parameter-value-input
-                :param-name="props.row.paramName"
-                v-model="props.row.paramValue"
+              <parameter-value
+                :ref="`parameter-value_${props.row.paramName}`"
+                class="q-pa-xs"
+                style="font-family:monospace;min-width:24em;word-break:break-all;font-size:0.9em"
+                :required="props.row.required"
                 :param-type="props.row.type"
-                :default-value="props.row.defaultValue"
-                :editable="mission.missionStatus === 'DRAFT'"
+                :param-value="props.row.paramValue"
               />
-            </q-popup-edit>
+
+              <q-popup-edit
+                :buttons="mission.missionStatus === 'DRAFT'"
+                v-model="props.row.paramValue"
+                @save="saveArguments(props.row)"
+              >
+                <parameter-value-input
+                  :param-name="props.row.paramName"
+                  v-model="props.row.paramValue"
+                  :param-type="props.row.type"
+                  :default-value="props.row.defaultValue"
+                  :editable="mission.missionStatus === 'DRAFT'"
+                />
+              </q-popup-edit>
+            </q-field>
+
           </q-td>
 
           <q-td key="type" :props="props"
@@ -277,13 +279,13 @@
   import missionUpdate from '../graphql/missionUpdate.gql'
   import missionDelete from '../graphql/missionDelete.gql'
   import MxmMarkdown from 'components/mxm-markdown'
+  import ParameterValue from 'components/parameter-value'
   import ParameterValueInput from 'components/parameter-value-input'
   import {
     postMission,
     getMission,
   } from 'boot/rest0'
 
-  import Vue from 'vue'
   import get from 'lodash/get'
   import map from 'lodash/map'
   import find from 'lodash/find'
@@ -297,6 +299,7 @@
   export default {
     components: {
       MxmMarkdown,
+      ParameterValue,
       ParameterValueInput,
     },
 
@@ -424,7 +427,10 @@
       },
 
       paramValueClass(row) {
-        if ((row.paramValue || '') !== (row.defaultValue || '')) {
+        if (this.valueError(row.paramName)) {
+          return 'rounded-borders q-pa-xs bg-red-1 text-bold" style="color:white'
+        }
+        else if ((row.paramValue || '') !== (row.defaultValue || '')) {
           return 'rounded-borders q-pa-xs bg-green-11'
         }
         else {
@@ -432,14 +438,23 @@
         }
       },
 
+      valueError(paramName) {
+        const parval = this.$refs[`parameter-value_${paramName}`]
+        return parval && parval.errorMessage()
+      },
+
       parametersChanged() {
         return filter(this.myArguments, a => a.paramValue !== a.defaultValue)
       },
 
-      saveArguments() {
+      saveArguments(row) {
         if (this.savingArgs) {
           return
         }
+        if (this.valueError(row.paramName)) {
+          return
+        }
+
         this.savingArgs = true
 
         const alreadySavedArgs = get(this.mission, 'argumentsByExecutorIdAndMissionTplIdAndMissionIdList') || []

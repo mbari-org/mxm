@@ -1,8 +1,6 @@
 <template>
-  <div
-    :class="classes"
-  >
-    {{ showValue }}
+  <div>
+    {{ _showValue }}
   </div>
 </template>
 
@@ -21,65 +19,89 @@
         default: true
       },
 
-      checkRequired: {
+      required: {
         type: Boolean,
         default: false
       },
     },
 
     computed: {
-      error() {
+      _error() {
         if (this.paramValue) {
           const lcType = this.paramType.toLowerCase()
           switch (lcType) {
-            case 'integer': {
-              if (!this.paramValue.match(/^-?\d+$/)) {
-                return 'Invalid integer'
-              }
-              break
-            }
+            case 'integer':
+              return checkInteger(this.paramValue)
 
-            case 'float': {
-              if (!this.paramValue.match(/^-?\d*(\.\d+)?$/)) {
-                return 'Invalid float'
-              }
-              break
-            }
+            case 'float':
+              return checkFloat(this.paramValue)
 
-            case 'boolean': {
-              if (!this.paramValue.match(/^(true|false)$/)) {
-                return 'Invalid boolean'
-              }
-              break
-            }
+            case 'boolean':
+              return checkBoolean(this.paramValue)
+
+            case 'point':
+              return checkPoint(this.paramValue)
           }
         }
-        else if (this.checkRequired) {
+        else if (this.required) {
           return 'A value is required'
         }
       },
 
-      showValue() {
+      _showValue() {
         if (this.paramValue) {
           return this.paramValue
         }
-        else if (this.error) {
+        else if (this.required) {
           return '??'
         }
         else {
           return ''
         }
       },
-
-      classes() {
-        return `bg-light-blue-1${this.error ? ' text-red' : ''}`
-      },
     },
 
     methods: {
       errorMessage() {
-        return this.error
+        return this._error
       },
     },
   }
+
+  function checkInteger(value) {
+    if (!value.match(/^-?\d+$/)) {
+      return 'Invalid integer'
+    }
+  }
+
+  function checkFloat(value) {
+    if (!value.match(/^-?\d*(\.\d+)?$/)) {
+      return 'Invalid float'
+    }
+  }
+
+  function checkBoolean(value) {
+    if (!value.match(/^(true|false)$/)) {
+      return 'Invalid boolean'
+    }
+  }
+
+  function checkPoint(value) {
+    try {
+      const json = JSON.parse(value)
+      if (!Array.isArray(json)) {
+        return 'point syntax error'
+      }
+      if (json.length < 2 || json.length > 3) {
+        return `2 or 3 elements expected`
+      }
+    }
+    catch (err) {
+      return err
+    }
+    if (!value.match(/^(true|false)$/)) {
+      return 'Invalid boolean'
+    }
+  }
 </script>
+
