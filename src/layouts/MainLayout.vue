@@ -33,6 +33,9 @@
           </span>
         </small>
       </q-toolbar>
+
+      <utl-breadcrumbs />
+
     </q-header>
 
     <q-page-container>

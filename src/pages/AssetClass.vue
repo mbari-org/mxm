@@ -1,18 +1,6 @@
 <template>
   <q-page class="q-pa-md">
-    <q-breadcrumbs active-color="secondary" color="light" class="q-mb-sm">
-      <q-breadcrumbs-el label="Home" to="/"/>
-      <q-breadcrumbs-el :label="params.executorId" :to="`/${encodeURIComponent(params.executorId)}`"/>
-      <q-breadcrumbs-el label="AssetClasses" :to="`/${encodeURIComponent(params.executorId)}/assetclasses`"/>
-      <q-breadcrumbs-el :label="params.className"/>
-      <q-btn
-        dense round icon="refresh" class="q-ml-lg" size="sm"
-        @click="refreshAssetClass"
-      />
-    </q-breadcrumbs>
-
     <div v-if="assetClass">
-
       <q-card class="q-mb-md">
         <q-card-section>
           Asset Class: <span class="text-bold">{{assetClass.className}}</span>
@@ -161,6 +149,16 @@
     },
 
     mounted() {
+      this.$store.commit('utl/setBreadcrumbs', {
+        elements: [
+          ['Home', []],
+          [this.params.executorId, [this.params.executorId]],
+          ['AssetClasses', [this.params.executorId, 'assetclasses']],
+          [this.params.className],
+        ],
+        refresh: this.refreshAssetClass
+      })
+
       this.refreshAssetClass()
     },
 

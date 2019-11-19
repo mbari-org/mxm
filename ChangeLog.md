@@ -1,5 +1,6 @@
 2019-11
 
+- factor out breadcrumbs dispatch
 - handle editing in mxm-markdown
 - add mxmVal module for validating parameter values according to given
   type, and for conversion of simplified "geo-types" to and from GeoJSON.

@@ -1,15 +1,5 @@
 <template>
   <q-page class="q-pa-md">
-    <q-breadcrumbs active-color="secondary" color="light" class="q-mb-sm">
-      <q-breadcrumbs-el label="Home" to="/"/>
-      <q-breadcrumbs-el :label="params.executorId" :to="`/${encodeURIComponent(params.executorId)}`"/>
-      <q-breadcrumbs-el label="Assets"/>
-      <q-btn
-        dense round icon="refresh" class="q-ml-lg" size="sm"
-        @click="refreshAssets"
-      />
-    </q-breadcrumbs>
-
     <q-table
       :data="allAssetsList"
       :columns="columns"
@@ -135,6 +125,15 @@
     },
 
     mounted() {
+      this.$store.commit('utl/setBreadcrumbs', {
+        elements: [
+          ['Home', []],
+          [this.params.executorId, [this.params.executorId]],
+          ['Assets'],
+        ],
+        refresh: this.refreshAssets
+      })
+
       this.refreshAssets()
     },
 

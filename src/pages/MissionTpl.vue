@@ -1,18 +1,6 @@
 <template>
   <q-page class="q-pa-md">
-    <q-breadcrumbs active-color="secondary" color="light" class="q-mb-sm">
-      <q-breadcrumbs-el label="Home" to="/"/>
-      <q-breadcrumbs-el :label="params.executorId" :to="`/${encodeURIComponent(params.executorId)}`"/>
-      <q-breadcrumbs-el label="MissionTemplates" :to="`/${encodeURIComponent(params.executorId)}/missiontpls`"/>
-      <q-breadcrumbs-el :label="params.missionTplId"/>
-      <q-btn
-        dense round icon="refresh" class="q-ml-lg" size="sm"
-        @click="refreshMissionTpl"
-      />
-    </q-breadcrumbs>
-
     <div v-if="missionTpl">
-
       <q-card class="q-mb-md">
         <q-card-section>
           Mission Template:
@@ -278,6 +266,16 @@
     },
 
     mounted() {
+      this.$store.commit('utl/setBreadcrumbs', {
+        elements: [
+          ['Home', []],
+          [this.params.executorId, [this.params.executorId]],
+          ['MissionTemplates', [this.params.executorId, 'missiontpls']],
+          [this.params.missionTplId],
+        ],
+        refresh: this.refreshMissionTpl
+      })
+
       this.refreshMissionTpl()
     },
 

@@ -1,14 +1,5 @@
 <template>
   <q-page class="q-pa-md">
-    <q-breadcrumbs active-color="secondary" color="light" class="q-mb-sm">
-      <q-breadcrumbs-el label="Home" to="/"/>
-      <q-breadcrumbs-el :label="params.executorId"/>
-      <q-btn
-        dense round icon="refresh" class="q-ml-lg" size="sm"
-        @click="refreshExecutor"
-      />
-    </q-breadcrumbs>
-
     <!--<pre v-if="debug">executor={{executor}}</pre>-->
 
     <div v-if="executor">
@@ -185,6 +176,14 @@
     },
 
     mounted() {
+      this.$store.commit('utl/setBreadcrumbs', {
+        elements: [
+          ['Home', []],
+          [this.params.executorId],
+        ],
+        refresh: this.refreshExecutor
+      })
+
       this.refreshExecutor()
     },
 

@@ -1,20 +1,6 @@
 <template>
   <q-page class="q-pa-md">
-    <q-breadcrumbs active-color="secondary" color="light" class="q-mb-sm">
-      <q-breadcrumbs-el label="Home" to="/"/>
-      <q-breadcrumbs-el :label="params.executorId" :to="`/${encodeURIComponent(params.executorId)}`"/>
-      <q-breadcrumbs-el label="MissionTemplates" :to="`/${encodeURIComponent(params.executorId)}/missiontpls`"/>
-      <q-breadcrumbs-el :label="params.missionTplId" :to="`/${encodeURIComponent(params.executorId)}/missiontpls/${encodeURIComponent(params.missionTplId)}`"/>
-      <q-breadcrumbs-el label="Params"/>
-      <q-breadcrumbs-el :label="params.paramName"/>
-      <q-btn
-        dense round icon="refresh" class="q-ml-lg" size="sm"
-        @click="refreshParameter"
-      />
-    </q-breadcrumbs>
-
     <div v-if="parameter">
-
       <div class="q-mb-lg">
         Mission Template: <span class="text-bold">{{ params.missionTplId }}</span>
       </div>
@@ -207,6 +193,18 @@
     },
 
     mounted() {
+      this.$store.commit('utl/setBreadcrumbs', {
+        elements: [
+          ['Home', []],
+          [this.params.executorId, [this.params.executorId]],
+          ['MissionTemplates', [this.params.executorId, 'missiontpls']],
+          [this.params.missionTplId, [this.params.executorId, 'missiontpls', this.params.missionTplId]],
+          ['Params', [this.params.executorId, 'missiontpls', this.params.missionTplId]],
+          [this.params.paramName],
+        ],
+        refresh: this.refreshParameter
+      })
+
       this.refreshParameter()
     },
 

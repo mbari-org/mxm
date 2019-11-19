@@ -1,13 +1,5 @@
 <template>
   <q-page class="q-pa-md">
-    <q-breadcrumbs active-color="secondary" color="light" class="q-mb-sm">
-      <q-breadcrumbs-el label="Home" to="/"/>
-      <q-btn
-        dense round icon="refresh" class="q-ml-lg" size="sm"
-        @click="refresh"
-      />
-    </q-breadcrumbs>
-
     <q-table
       :data="allExecutorsList"
       :columns="columns"
@@ -120,6 +112,13 @@
     },
 
     mounted() {
+      this.$store.commit('utl/setBreadcrumbs', {
+        elements: [
+          ['Home', []],
+        ],
+        refresh: this.refresh
+      })
+
       this.refresh()
     },
 

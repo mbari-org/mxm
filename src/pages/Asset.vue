@@ -1,18 +1,6 @@
 <template>
   <q-page class="q-pa-md">
-    <q-breadcrumbs active-color="secondary" color="light" class="q-mb-sm">
-      <q-breadcrumbs-el label="Home" to="/"/>
-      <q-breadcrumbs-el :label="params.executorId" :to="`/${encodeURIComponent(params.executorId)}`"/>
-      <q-breadcrumbs-el label="Assets" :to="`/${encodeURIComponent(params.executorId)}/assets`"/>
-      <q-breadcrumbs-el :label="params.assetId"/>
-      <q-btn
-        dense round icon="refresh" class="q-ml-lg" size="sm"
-        @click="refreshAssetClass"
-      />
-    </q-breadcrumbs>
-
     <div v-if="asset">
-
       <q-card class="q-mb-md">
         <q-card-section>
           Asset ID: <span class="text-bold">{{asset.assetId}}</span>
@@ -104,16 +92,26 @@
     },
 
     mounted() {
-      this.refreshAssetClass()
+      this.$store.commit('utl/setBreadcrumbs', {
+        elements: [
+          ['Home', []],
+          [this.params.executorId, [this.params.executorId]],
+          ['Assets', [this.params.executorId, 'assets']],
+          [this.params.assetId],
+        ],
+        refresh: this.refreshAsset
+      })
+
+      this.refreshAsset()
     },
 
     methods: {
-      refreshAssetClass() {
+      refreshAsset() {
         this.$apollo.queries.asset.refetch()
       },
 
       assetCreated(data) {
-        this.refreshAssetClass()
+        this.refreshAsset()
       },
 
       updateDescription(val) {
@@ -140,7 +138,7 @@
 
     watch: {
       '$route'() {
-        this.refreshAssetClass()
+        this.refreshAsset()
       },
 
       asset(val) {
