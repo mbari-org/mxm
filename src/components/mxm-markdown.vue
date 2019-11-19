@@ -42,9 +42,15 @@
 </script>
 
 <style>
+  @import url(https://fonts.googleapis.com/css?family=Merriweather:400,300)
+</style>
+
+<style>
   .markdownText {
     white-space: normal !important;
     line-height: 1.5;
+    font-family: "Merriweather","Open Sans","Verdanda",Sans-Serif;
+    font-weight: 300;
   }
 </style>
 
