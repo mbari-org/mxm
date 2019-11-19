@@ -79,7 +79,9 @@
       editable=${this.editable}
       `)
 
-      this._setFeatureData(this.value)
+      this.$nextTick(() => {
+        this._setFeatureData(this.value)
+      })
     },
 
     methods: {
@@ -88,7 +90,7 @@
 
         this.valueString = value && value.trim() || ''
         const entry_id = this.entry_id
-        const geometry = simple2geojson(this.paramType, this.valueString)
+        const geometry = this.$mxmVal.toGeojson(this.paramType, this.valueString)
 
         const entry = {
           entry_id,
@@ -123,7 +125,7 @@
       },
 
       _updateValueString(geometry) {
-        this.valueString = geojson2simple(geometry)
+        this.valueString = this.$mxmVal.fromGeojson(this.paramType, geometry)
         console.debug(`_updateValueString emiting '${this.valueString}'`)
         this.$emit('input', this.valueString)
       },
@@ -140,76 +142,4 @@
       },
     },
   }
-
-  // TODO all of this preliminary
-  function simple2geojson(paramType, simple) {
-    const json = simple && JSON.parse(simple)
-    if (json) {
-      switch (paramType) {
-        case 'Point': {
-          const [lat, lon] = json
-          const coordinates = [lon, lat]
-          return {
-            type: 'Feature',
-            geometry: {
-              type: 'Point',
-              coordinates,
-            }
-          }
-        }
-
-        case 'Polygon': {
-          const coordinates = [ map(json, ([lat, lon]) => [lon, lat]) ]
-          return {
-            type: 'Feature',
-            geometry: {
-              type: 'Polygon',
-              coordinates,
-            }
-          }
-        }
-      }
-    }
-    else {
-      return {
-        type: 'FeatureCollection',
-        features: [],
-      }
-    }
-  }
-
-  function geojson2simple(geometry) {
-    console.log('geojson2simple: geometry=', geometry)
-
-    if (!geometry || Array.isArray(geometry) && !geometry.length) {
-      return ''   // avoid returning `[]`
-    }
-
-    switch (geometry.type) {
-      case 'Feature': {
-        // TODO this is very simplistic for now (ignoring feature properties...)
-        return geojson2simple(geometry.geometry)
-      }
-
-      case 'Point': {
-        const coordinates = geometry.coordinates
-        const [lon, lat] = coordinates
-        const simple = [lat, lon]
-        return JSON.stringify(simple)
-      }
-
-      case 'Polygon': {
-        const [coordinates] = geometry.coordinates
-        const simple = map(coordinates, ([lat, lon]) => [lon, lat])
-        return JSON.stringify(simple)
-      }
-
-      // TODO revisit the 'toFixed" simplification
-      default:
-        return JSON.stringify(geometry, (k, v) =>
-          typeof v === 'number' && v.toFixed ? +v.toFixed(6) : v
-        )
-    }
-  }
-
 </script>

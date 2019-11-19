@@ -1,5 +1,7 @@
 2019-11
 
+- add mxmVal module for validating parameter values according to given
+  type, and for conversion of simplified "geo-types" to and from GeoJSON.
 - add parameter-value and some validation logic
 - add parameter-type-select
 - adjs re adding new entry

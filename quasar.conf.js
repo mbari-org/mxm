@@ -9,6 +9,7 @@ module.exports = function (ctx) {
     boot: [
       'mxmConfig',
       'apollo',
+      'mxmVal',
       'utl'
     ],
 
