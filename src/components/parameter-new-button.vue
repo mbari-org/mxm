@@ -85,26 +85,12 @@
           :label-width="4"
         >
           <mxm-markdown
-            :text="data.description"
             class="bg-light-blue-1"
             style="min-height:4em;width:24em"
+            :text="data.description"
+            editable
+            v-on:saveDescription="d => { data.description = d }"
           />
-          <q-popup-edit
-            v-model="data.description"
-            title="Description"
-            buttons persistent
-          >
-            <q-input
-              style="width:30em; font-family:monospace"
-              v-model.trim="data.description"
-              clearable
-              class="bg-light-blue-1 q-pl-md q-pr-md"
-              type="textarea"
-              rows="5"
-              :max-height="300"
-              autofocus @keyup.enter.stop
-            />
-          </q-popup-edit>
         </q-field>
       </div>
     </utl-dialog>

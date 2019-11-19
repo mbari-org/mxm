@@ -1,40 +1,19 @@
 <template>
-  <div>
-    <mxm-markdown-view
-      :text="contents"
-      :simple="simple"
-      :hide-empty="hideEmpty"
-      :empty-message="emptyMessage"
-    />
-
-    <q-popup-edit
-      v-if="editable"
-      v-model="contents"
-      :title="editTitle + (anyMods ? ' *' : '')"
-      buttons
-      :persistent="anyMods"
-      @save="$emit('saveDescription', contents)"
-    >
-      <mxm-markdown-view
-        :text="contents"
-        class="shadow-2 q-mb-sm"
+  <div v-if="text || !hideEmpty">
+    <div v-if="text" :class="{'rounded-borders bg-light-blue-1': !simple}">
+      <vue-markdown
+        :source="text" table-class="markdownTable"
+        :class="'markdownText ' + (simple ? '' : 'q-pa-sm')"
       />
-      <q-input
-        v-model.trim="contents"
-        clearable
-        class="bg-green-1 q-pl-md q-pr-md"
-        style="font-family:monospace"
-        type="textarea"
-        rows="5"
-        :max-height="500"
-        autofocus @keyup.enter.stop
-      />
-    </q-popup-edit>
+    </div>
+    <div v-else style="color:gray;font-style:italic;font-size:smaller">
+      {{emptyMessage}}
+    </div>
   </div>
 </template>
 
 <script>
-  import MxmMarkdownView from 'components/mxm-markdown-view'
+  import VueMarkdown from 'vue-markdown'
 
   export default {
     props: {
@@ -42,50 +21,22 @@
         type: String,
         required: false
       },
-
       hideEmpty: {
         type: Boolean,
         default: false
       },
-
       simple: {
         type: Boolean,
         required: false,
         default: false
       },
-
       emptyMessage: {
         type: String,
         default: '(No description)'
       },
-
-      editable: {
-        type: Boolean,
-        default: false
-      },
-
-      editTitle: {
-        type: String,
-        default: 'Description'
-      },
     },
-
     components: {
-      MxmMarkdownView,
-    },
-
-    data: () => ({
-      contents: '',
-    }),
-
-    computed: {
-      anyMods() {
-        return this.contents != this.text
-      },
-    },
-
-    mounted() {
-      this.contents = this.text
+      VueMarkdown,
     },
   }
 </script>

@@ -72,25 +72,11 @@
         <q-separator/>
         <q-card-section>
           Description:
-          <mxm-markdown :text="mission.description"/>
-          <q-popup-edit
-            v-if="mission.missionStatus === 'DRAFT'"
-            v-model="mission.description"
-            title="Description"
-            buttons persistent
-            @save="updateDescription"
-          >
-            <q-input
-              v-model.trim="mission.description"
-              clearable
-              class="bg-green-1 q-pl-md q-pr-md"
-              style="font-family:monospace"
-              type="textarea"
-              rows="3"
-              :max-height="300"
-              autofocus @keyup.enter.stop
-            />
-          </q-popup-edit>
+          <mxm-markdown
+            :text="mission.description"
+            :editable="mission.missionStatus === 'DRAFT'"
+            v-on:saveDescription="updateDescription"
+          />
         </q-card-section>
       </q-card>
 

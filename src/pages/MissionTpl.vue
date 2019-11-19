@@ -34,24 +34,11 @@
         </q-card-section>
         <q-separator/>
         <q-card-section>
-          <mxm-markdown :text="missionTpl.description"/>
-          <q-popup-edit
-            v-model="missionTpl.description"
-            title="Description"
-            buttons persistent
-            @save="updateDescription"
-          >
-            <q-input
-              v-model.trim="missionTpl.description"
-              clearable
-              class="bg-green-1 q-pl-md q-pr-md"
-              style="font-family:monospace"
-              type="textarea"
-              rows="5"
-              :max-height="300"
-              autofocus @keyup.enter.stop
-            />
-          </q-popup-edit>
+          <mxm-markdown
+            editable
+            :text="missionTpl.description"
+            v-on:saveDescription="updateDescription"
+          />
         </q-card-section>
       </q-card>
 

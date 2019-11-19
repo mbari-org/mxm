@@ -115,26 +115,11 @@
                   style="min-width:4em"
                 >
                   <mxm-markdown
-                    :text="parameter.description"
                     style="min-height:4em;min-width:24em"
+                    :text="parameter.description"
+                    editable
+                    v-on:saveDescription="d => { parameter.description = d }"
                   />
-                  <q-popup-edit
-                    v-model="parameter.description"
-                    title="Description"
-                    buttons persistent
-                  >
-                    <q-input
-                      v-model.trim="parameter.description"
-                      clearable
-                      :clear-value="original.description"
-                      class="bg-green-1 q-pl-md q-pr-md"
-                      style="font-family:monospace"
-                      type="textarea"
-                      rows="3"
-                      :max-height="300"
-                      autofocus @keyup.enter.stop
-                    />
-                  </q-popup-edit>
                 </div>
               </div>
             </div>
