@@ -5,7 +5,8 @@
       :simple="simple"
       :hide-empty="hideEmpty"
       :empty-message="emptyMessage"
-      :edit-button="editable"
+      :edit-click="editClick"
+      :edit-button="editButton || !editClick && editable"
       v-on:edit="openEdit"
     />
 
@@ -49,6 +50,11 @@
       },
 
       hideEmpty: {
+        type: Boolean,
+        default: false
+      },
+
+      editClick: {
         type: Boolean,
         default: false
       },

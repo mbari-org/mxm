@@ -2,6 +2,7 @@
   <div
     v-if="text || !hideEmpty"
     class="relative-position"
+    @click="() => editClick && $emit('edit')"
   >
     <div v-if="text" :class="{'rounded-borders bg-light-blue-1': !simple}">
       <vue-markdown
@@ -9,7 +10,11 @@
         :class="'markdownText ' + (simple ? '' : 'q-pa-sm')"
       />
     </div>
-    <div v-else style="color:gray;font-style:italic;font-size:smaller">
+    <div
+      v-else
+      style="color:gray;font-style:italic;font-size:smaller"
+      class="fit"
+    >
       {{emptyMessage}}
     </div>
 
@@ -36,6 +41,11 @@
       },
 
       hideEmpty: {
+        type: Boolean,
+        default: false
+      },
+
+      editClick: {
         type: Boolean,
         default: false
       },
