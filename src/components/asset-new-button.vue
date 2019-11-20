@@ -22,25 +22,29 @@
       <div
         class="column q-gutter-sm"
       >
-        <q-input
-          label="Asset ID:"
-          :error="!assetId.length"
-          :label-width="4"
-          class="bg-light-blue-1"
-          v-model.trim="assetId"
-          type="text"
-          autofocus
-          style="width:24em"
-        />
+        <div>
+          Asset ID:
+          <q-input
+            dense hide-bottom-space
+            :error="!assetId.length"
+            class="bg-light-blue-1"
+            v-model.trim="assetId"
+            type="text"
+            autofocus
+            style="width:24em"
+          />
+        </div>
 
-        <q-input
-          label="Description:"
-          :label-width="4"
-          class="bg-light-blue-1"
-          v-model.trim="description"
-          type="text"
-          style="width:24em"
-        />
+        <div>
+          Description:
+          <mxm-markdown
+            class="bg-light-blue-1"
+            style="min-height:4em;min-width:24em"
+            :text="description"
+            editable edit-click
+            v-on:saveDescription="d => { description = d }"
+          />
+        </div>
       </div>
     </utl-dialog>
   </div>

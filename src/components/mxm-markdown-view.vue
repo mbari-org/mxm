@@ -4,18 +4,13 @@
     class="relative-position"
     @click="() => editClick && $emit('edit')"
   >
-    <div v-if="text" :class="{'rounded-borders bg-light-blue-1': !simple}">
+    <div :class="{'rounded-borders bg-light-blue-1': !simple}">
       <vue-markdown
-        :source="text" table-class="markdownTable"
+        :source="text || emptyMessage"
+        table-class="markdownTable"
         :class="'markdownText ' + (simple ? '' : 'q-pa-sm')"
+        :style="text ? '' : 'color:gray;font-style:italic;font-size:smaller'"
       />
-    </div>
-    <div
-      v-else
-      style="color:gray;font-style:italic;font-size:smaller"
-      class="fit"
-    >
-      {{emptyMessage}}
     </div>
 
     <q-btn

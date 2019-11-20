@@ -34,14 +34,12 @@
   import asset from '../graphql/asset.gql'
   import AssetNewButton from 'components/asset-new-button'
   import assetUpdate from '../graphql/assetUpdate.gql'
-  import MxmMarkdown from 'components/mxm-markdown'
 
   const debug = false
 
   export default {
     components: {
       AssetNewButton,
-      MxmMarkdown,
     },
 
     data() {

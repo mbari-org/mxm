@@ -1,5 +1,6 @@
 import UtlDialog from 'components/utl/utl-dialog'
 import UtlBreadcrumbs from 'components/utl/utl-breadcrumbs'
+import MxmMarkdown from 'components/mxm-markdown'
 import { version } from '../../package.json'
 
 const runInSequence = (promises) => (
@@ -21,4 +22,5 @@ export default ({ app, Vue }) => {
 
   Vue.component('utl-dialog', UtlDialog)
   Vue.component('utl-breadcrumbs', UtlBreadcrumbs)
+  Vue.component('mxm-markdown', MxmMarkdown)
 }

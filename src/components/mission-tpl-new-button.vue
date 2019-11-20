@@ -18,25 +18,30 @@
       <div
         class="column q-gutter-sm"
       >
-        <q-input
-          label="Mission Template ID:"
-          :error="!missionTplId.length"
-          :label-width="4"
-          class="bg-light-blue-1"
-          v-model.trim="missionTplId"
-          type="text"
-          autofocus
-          style="width:24em"
-        />
+        <div>
+          Mission Template ID:
+          <q-input
+            dense hide-bottom-space
+            :error="!missionTplId.length"
+            :label-width="4"
+            class="bg-light-blue-1"
+            v-model.trim="missionTplId"
+            type="text"
+            autofocus
+            style="width:24em"
+          />
+        </div>
 
-        <q-input
-          label="Description:"
-          :label-width="4"
-          class="bg-light-blue-1"
-          v-model.trim="description"
-          type="text"
-          style="width:24em"
-        />
+        <div>
+          Description:
+          <mxm-markdown
+            class="bg-light-blue-1"
+            style="min-height:4em;min-width:24em"
+            :text="description"
+            editable edit-click
+            v-on:saveDescription="d => { description = d }"
+          />
+        </div>
 
       </div>
     </utl-dialog>

@@ -15,55 +15,51 @@
       v-on:submit="submit"
       v-on:dialogClosing="dialogOpened = false"
     >
+      <p style="color:gray;font-size:small;width:24em">
+        The mission will be registered with 'DRAFT' status.
+        You can then edit any arguments and submit it for execution.
+      </p>
+
       <div
         class="column q-gutter-sm"
       >
-        <p style="color:gray;font-size:small">
-          The mission will initially be registered with 'DRAFT' status.
-          <br/>
-          You can then edit any arguments and submit it for execution.
-        </p>
-
-        <q-field
-          label="Mission Template:"
-          :error="!missionTplId.length"
-          :label-width="4"
-        >
+        <div :class="{'text-red': !missionTplId.length}">
+          Mission Template:
           <mission-tpl-select
             :mission-tpls="missionTpls"
             v-model="missionTplId"
           />
-        </q-field>
+        </div>
 
-        <q-field
-          label="Asset:"
-          :error="!assetId.length"
-          :label-width="4"
-        >
+        <div :class="{'text-red': !assetId.length}">
+          Asset:
           <asset-select
             :asset-classes="assetClasses"
             v-model="assetId"
           />
-        </q-field>
+        </div>
 
-        <q-input
-          label="Mission ID:"
-          :error="!missionId.length"
-          :label-width="4"
-          class="bg-light-blue-1"
-          v-model.trim="missionId"
-          type="text"
-          style="width:24em"
-        />
+        <div :class="{'text-red': !missionId.length}">
+          Mission ID:
+          <q-input
+            dense hide-bottom-space
+            class="bg-light-blue-1"
+            v-model.trim="missionId"
+            type="text"
+            style="width:24em"
+          />
+        </div>
 
-        <q-input
-          label="Mission Description:"
-          :label-width="4"
-          class="bg-light-blue-1"
-          v-model.trim="description"
-          type="text"
-          style="width:24em"
-        />
+        <div>
+          Mission Description:
+          <mxm-markdown
+            class="bg-light-blue-1"
+            style="min-height:6em;min-width:24em"
+            :text="description"
+            editable edit-click
+            v-on:saveDescription="d => { description = d }"
+          />
+        </div>
       </div>
     </utl-dialog>
   </div>

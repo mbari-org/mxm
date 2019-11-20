@@ -80,14 +80,12 @@
   import assetClass from '../graphql/assetClass.gql'
   import AssetNewButton from 'components/asset-new-button'
   import assetClassUpdate from '../graphql/assetClassUpdate.gql'
-  import MxmMarkdown from 'components/mxm-markdown'
 
   const debug = false
 
   export default {
     components: {
       AssetNewButton,
-      MxmMarkdown,
     },
 
     data() {

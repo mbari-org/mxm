@@ -17,31 +17,27 @@
       v-on:dialogClosing="dialogOpened = false"
     >
       <div
-        class="column q-gutter-sm"
+        class="column q-gutter-md"
       >
-        <q-field
-          stack-label label="Name:"
-          :label-width="4"
-        >
+        <div :class="{'text-red': !data.paramName.length}">
+          Name:
           <q-input
-            :error="!data.paramName.length"
+            dense hide-bottom-space
             class="bg-light-blue-1"
             v-model.trim="data.paramName"
             type="text"
             autofocus hide-bottom-space
             style="width:24em"
           />
-        </q-field>
+        </div>
 
         <div class="row justify-between">
-          <q-field
-            stack-label label="Type:"
-            :label-width="4"
-          >
+          <div :class="{'text-red': !data.typeSelected}">
+            Type:
             <parameter-type-select
               v-model="data.typeSelected"
             />
-          </q-field>
+          </div>
 
           <q-toggle
             v-model="data.required"
@@ -88,7 +84,7 @@
             class="bg-light-blue-1"
             style="min-height:4em;width:24em"
             :text="data.description"
-            editable
+            editable edit-click
             v-on:saveDescription="d => { data.description = d }"
           />
         </q-field>
@@ -99,7 +95,6 @@
 
 <script>
   import parameterInsert from '../graphql/parameterInsert.gql'
-  import MxmMarkdown from 'components/mxm-markdown'
   import ParameterValue from 'components/parameter-value'
   import ParameterValueInput from 'components/parameter-value-input'
   import ParameterTypeSelect from 'components/parameter-type-select'
@@ -131,7 +126,6 @@
     },
 
     components: {
-      MxmMarkdown,
       ParameterValue,
       ParameterValueInput,
       ParameterTypeSelect,

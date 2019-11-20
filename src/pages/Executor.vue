@@ -129,7 +129,6 @@
   import executor from '../graphql/executor.gql'
   import executorUpdate from '../graphql/executorUpdate.gql'
   import apiTypeSelect from '../components/api-type-select'
-  import MxmMarkdown from '../components/mxm-markdown'
   import cloneDeep from 'lodash/cloneDeep'
   import isEqual from 'lodash/isEqual'
 
@@ -138,7 +137,6 @@
   export default {
     components: {
       apiTypeSelect,
-      MxmMarkdown,
     },
 
     data() {

@@ -18,47 +18,49 @@
       <div
         class="column q-gutter-sm"
       >
-        <q-input
-          label="Executor name:"
-          :error="!executorId.length"
-          :label-width="4"
-          class="bg-light-blue-1"
-          v-model.trim="executorId"
-          type="text"
-          autofocus
-          style="width:24em"
-        />
+        <div>
+          Executor name:
+          <q-input
+            dense hide-bottom-space
+            :error="!executorId.length"
+            class="bg-light-blue-1"
+            v-model.trim="executorId"
+            type="text"
+            autofocus
+            style="width:24em"
+          />
+        </div>
 
-        <q-input
-          label="Description:"
-          :label-width="4"
-          class="bg-light-blue-1"
-          v-model.trim="description"
-          type="text"
-          style="width:24em"
-        />
+        <div>
+          HTTP Endpoint:
+          <q-input
+            dense hide-bottom-space
+            :error="!httpEndpoint.length"
+            class="bg-light-blue-1"
+            v-model.trim="httpEndpoint"
+            type="text"
+            style="width:24em"
+          />
+        </div>
 
-        <q-input
-          label="HTTP Endpoint:"
-          :error="!httpEndpoint.length"
-          :label-width="4"
-          class="bg-light-blue-1"
-          v-model.trim="httpEndpoint"
-          type="text"
-          style="width:24em"
-        />
-
-        <q-field
-          label="API Type:"
-          :error="!apiType.length"
-          :label-width="4"
-        >
+        <div>
+          API Type:
           <api-type-select
             :value="apiType"
             @input="val => { apiType = val.value }"
           />
-        </q-field>
+        </div>
 
+        <div>
+          Description:
+          <mxm-markdown
+            class="bg-light-blue-1"
+            style="min-height:4em;min-width:24em"
+            :text="description"
+            editable edit-click
+            v-on:saveDescription="d => { description = d }"
+          />
+        </div>
       </div>
     </utl-dialog>
   </div>

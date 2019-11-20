@@ -243,7 +243,6 @@
   import argumentDelete from '../graphql/argumentDelete.gql'
   import missionUpdate from '../graphql/missionUpdate.gql'
   import missionDelete from '../graphql/missionDelete.gql'
-  import MxmMarkdown from 'components/mxm-markdown'
   import ParameterValue from 'components/parameter-value'
   import ParameterValueInput from 'components/parameter-value-input'
   import {
@@ -263,7 +262,6 @@
 
   export default {
     components: {
-      MxmMarkdown,
       ParameterValue,
       ParameterValueInput,
     },

@@ -60,13 +60,11 @@
 
 <script>
   import allAssetsList from '../graphql/assets.gql'
-  import MxmMarkdown from 'components/mxm-markdown'
 
   const debug = false
 
   export default {
     components: {
-      MxmMarkdown,
     },
 
     data() {

@@ -2,7 +2,7 @@
 
   <div>
     <q-select
-      style="width:17em"
+      dense
       class="bg-light-blue-1 col-auto"
       v-model="missionTplId"
       :options="options"

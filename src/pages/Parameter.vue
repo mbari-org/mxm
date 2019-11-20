@@ -103,7 +103,7 @@
                   <mxm-markdown
                     style="min-height:4em;min-width:24em"
                     :text="parameter.description"
-                    editable
+                    editable edit-click
                     v-on:saveDescription="d => { parameter.description = d }"
                   />
                 </div>
@@ -136,7 +136,6 @@
 <script>
   import parameter from '../graphql/parameter.gql'
   import parameterUpdate from '../graphql/parameterUpdate.gql'
-  import MxmMarkdown from 'components/mxm-markdown'
   import ParameterValue from 'components/parameter-value'
   import ParameterValueInput from 'components/parameter-value-input'
   import ParameterTypeSelect from 'components/parameter-type-select'
@@ -147,7 +146,6 @@
 
   export default {
     components: {
-      MxmMarkdown,
       ParameterValue,
       ParameterValueInput,
       ParameterTypeSelect,
@@ -181,11 +179,11 @@
           }
         },
         update(data) {
-          if (debug) console.log('update: data=', data)
           let parameter = null
           if (data.parameterByExecutorIdAndMissionTplIdAndParamName) {
             parameter = data.parameterByExecutorIdAndMissionTplIdAndParamName
           }
+          if (debug) console.log('update: parameter=', parameter)
           this.original = cloneDeep(parameter)
           return parameter
         },
@@ -205,15 +203,13 @@
         refresh: this.refreshParameter
       })
 
+      this.original = null
       this.refreshParameter()
     },
 
     methods: {
       refreshParameter() {
         this.$apollo.queries.parameter.refetch()
-            // .then(res => {
-            //   console.log('refetch', res.data.parameterByExecutorIdAndMissionTplIdAndParamName.required)
-            // })
       },
 
       noChanges() {

@@ -55,14 +55,12 @@
 <script>
   import allAssetClassesList from '../graphql/assetClasses.gql'
   import AssetClassNewButton from 'components/asset-class-new-button'
-  import MxmMarkdown from 'components/mxm-markdown'
 
   const debug = false
 
   export default {
     components: {
       AssetClassNewButton,
-      MxmMarkdown,
     },
 
     data() {

@@ -85,14 +85,12 @@
 <script>
   import allMissionsList from '../graphql/missions.gql'
   import MissionNewButton from 'components/mission-new-button'
-  import MxmMarkdown from 'components/mxm-markdown'
 
   const debug = false
 
   export default {
     components: {
       MissionNewButton,
-      MxmMarkdown,
     },
 
     data() {

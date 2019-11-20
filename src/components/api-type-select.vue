@@ -2,6 +2,7 @@
 
   <div>
     <q-select
+      dense
       style="width:24em"
       class="bg-light-blue-1"
       :options="options"

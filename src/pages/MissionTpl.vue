@@ -6,18 +6,18 @@
           Mission Template:
           <span class="text-bold">
             {{ params.missionTplId }}
-          <q-popup-edit
-            v-model="missionTpl.missionTplId"
-            title="Mission Template ID"
-            buttons
-            @save="updateMissionTplId"
-          >
-            <q-input
-              v-model.trim="missionTpl.missionTplId"
-              clearable
-              class="bg-green-1"
-            />
-          </q-popup-edit>
+            <q-popup-edit
+              v-model="missionTpl.missionTplId"
+              title="Mission Template ID"
+              buttons
+              @save="updateMissionTplId"
+            >
+              <q-input
+                v-model.trim="missionTpl.missionTplId"
+                clearable
+                class="bg-green-1"
+              />
+            </q-popup-edit>
           </span>
         </q-card-section>
         <q-separator/>
@@ -166,7 +166,6 @@
   import missionTplAssetClassDelete from '../graphql/missionTplAssetClassDelete.gql'
   import missionTplUpdate from '../graphql/missionTplUpdate.gql'
   import ParameterNewButton from 'components/parameter-new-button'
-  import MxmMarkdown from 'components/mxm-markdown'
   import ParameterValueInput from 'components/parameter-value-input'
   import map from 'lodash/map'
   import difference from 'lodash/difference'
@@ -177,7 +176,6 @@
     components: {
       AssetClassSelectButton,
       ParameterNewButton,
-      MxmMarkdown,
       ParameterValueInput,
     },
 

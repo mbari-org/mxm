@@ -64,14 +64,12 @@
 <script>
   import allMissionTplsList from '../graphql/missionTpls.gql'
   import MissionTplNewButton from 'components/mission-tpl-new-button'
-  import MxmMarkdown from 'components/mxm-markdown'
 
   const debug = false
 
   export default {
     components: {
       MissionTplNewButton,
-      MxmMarkdown,
     },
 
     data() {

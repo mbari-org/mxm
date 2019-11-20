@@ -1,5 +1,13 @@
 2019-11
 
+- TODO Mission arg editing:
+    - allow to revert to default value (both simple and geo types)
+    - geo type: also allow editing of the text?
+- TODO add Duration type  
+- TODO define how to represent tethysdash parameter types  
+- TODO check for required args before 'Run'ning the mission
+- TODO delete a parameter     
+    
 - more handling involving LineString, Polygon, boolean
 - factor out breadcrumbs dispatch
 - handle editing in mxm-markdown
