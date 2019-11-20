@@ -32,6 +32,14 @@ function checkValue(value, simpleType, required) {
       case 'multipoint': {
         return checkMultiPointString(value)
       }
+
+      case 'polygon': {
+        return checkPolygonString(value)
+      }
+
+      case 'linestring': {
+        return checkLineStringString(value)
+      }
     }
   }
   else if (required) {
@@ -41,19 +49,19 @@ function checkValue(value, simpleType, required) {
 
 function checkInteger(value) {
   if (!value.match(/^-?\d+$/)) {
-    return 'Invalid integer'
+    return 'Invalid integer value'
   }
 }
 
 function checkFloat(value) {
   if (!value.match(/^-?\d*(\.\d+)?$/)) {
-    return 'Invalid float'
+    return 'Invalid float value'
   }
 }
 
 function checkBoolean(value) {
   if (!value.match(/^(true|false)$/)) {
-    return 'Invalid boolean'
+    return 'Invalid boolean value'
   }
 }
 
@@ -88,6 +96,52 @@ function checkMultiPointString(value) {
 
 function checkMultiPoint(array) {
   console.log('checkMultiPoint', array)
+  if (!Array.isArray(array)) {
+    return 'Not an array'
+  }
+  for (let i = 0; i < array.length; i++) {
+    const err = checkPoint(array[i])
+    if (err) {
+      return `${i}-th element not an point`
+    }
+  }
+}
+
+function checkPolygonString(value) {
+  try {
+    const array = JSON.parse(value)
+    return checkPolygon(array)
+  }
+  catch (err) {
+    return err
+  }
+}
+
+function checkPolygon(array) {
+  // console.log('checkPolygon', array)
+  if (!Array.isArray(array)) {
+    return 'Not an array'
+  }
+  for (let i = 0; i < array.length; i++) {
+    const err = checkPoint(array[i])
+    if (err) {
+      return `${i}-th element not an point`
+    }
+  }
+}
+
+function checkLineStringString(value) {
+  try {
+    const array = JSON.parse(value)
+    return checkLineString(array)
+  }
+  catch (err) {
+    return err
+  }
+}
+
+function checkLineString(array) {
+  // console.log('checkLineString', array)
   if (!Array.isArray(array)) {
     return 'Not an array'
   }
@@ -142,6 +196,17 @@ function toGeojson(simpleType, simple) {
           }
         }
       }
+
+      case 'LineString': {
+        const coordinates = map(json, ([lat, lon]) => [lon, lat])
+        return {
+          type: 'Feature',
+          geometry: {
+            type: 'LineString',
+            coordinates,
+          }
+        }
+      }
     }
   }
   else {
@@ -159,7 +224,7 @@ function fromGeojson(simpleType, geometry) {
   switch (geometry.type) {
     case 'Feature': {
       // TODO this is very simplistic for now (ignoring feature properties...)
-      return fromGeojson(geometry.geometry)
+      return fromGeojson(simpleType, geometry.geometry)
     }
 
     case 'Point': {
@@ -191,12 +256,18 @@ function fromGeojson(simpleType, geometry) {
       else {
         const feat = geometry.features[0]
         console.warn('fromGeojson: FeatureCollection: handling first feature!=', feat)
-        return fromGeojson(feat)
+        return fromGeojson(simpleType, feat)
       }
     }
 
     case 'Polygon': {
       const [coordinates] = geometry.coordinates
+      const simple = map(coordinates, ([lat, lon]) => [lon, lat])
+      return JSON.stringify(simple)
+    }
+
+    case 'LineString': {
+      const coordinates = geometry.coordinates
       const simple = map(coordinates, ([lat, lon]) => [lon, lat])
       return JSON.stringify(simple)
     }

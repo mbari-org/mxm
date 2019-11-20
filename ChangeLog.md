@@ -1,5 +1,6 @@
 2019-11
 
+- more handling involving LineString, Polygon, boolean
 - factor out breadcrumbs dispatch
 - handle editing in mxm-markdown
 - add mxmVal module for validating parameter values according to given

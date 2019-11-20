@@ -11,6 +11,14 @@
       @input="val => { paramValue = val; $emit('input', val) }"
     />
 
+    <div v-else-if="paramType === 'boolean'" class="q-pa-md">
+      <div class="q-gutter-lg">
+        <q-radio dense :value="value" val="true"  @input="val => { $emit('input', val) }" label="true" />
+        <q-radio dense :value="value" val="false" @input="val => { $emit('input', val) }" label="false" />
+        <q-radio dense :value="value" val=""      @input="val => { $emit('input', val) }" label="No default value" />
+      </div>
+    </div>
+
     <q-input
       v-else
       class="rounded-borders q-pa-xs bg-green-1"

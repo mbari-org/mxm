@@ -3,6 +3,7 @@
     <div class="text-h5">{{paramName}}</div>
     <qgeomap
       ref="qgeomap"
+      debug-feature="right"
       :google-api-key="$mxmConfig.googleApiKey"
       :editable="editable"
       v-on:startEditing="_startEditing"
@@ -120,7 +121,7 @@
       },
 
       _editsApplied(entryEdited) {
-        console.log(`_editsApplied: entryEdited=`, entryEdited)
+        // console.log(`_editsApplied: entryEdited=`, entryEdited)
         this._updateValueString(entryEdited.geometry)
       },
 
