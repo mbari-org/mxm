@@ -197,7 +197,7 @@
             this.$q.notify({
               message: 'Mission created',
               timeout: 1000,
-              type: 'info'
+              color: 'info',
             })
             this.$router.push(`/${encodeURIComponent(this.executorId)}/missiontpls/${encodeURIComponent(this.missionTplId)}/missions/${encodeURIComponent(this.missionId)}`)
             // this.$emit('created', variables)

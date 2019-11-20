@@ -97,7 +97,7 @@
             this.$q.notify({
               message: 'Mission Template created',
               timeout: 1000,
-              type: 'info'
+              color: 'info',
             })
             this.$emit('created', variables)
           })

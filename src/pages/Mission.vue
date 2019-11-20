@@ -4,15 +4,6 @@
       <q-card class="q-mb-md">
         <q-card-section>
           Mission: <q-chip square class="text-bold">{{ mission.missionId }}</q-chip>
-          <span>
-            <router-link
-              :to="`/${encodeURIComponent(mission.executorId)}/missiontpls/${encodeURIComponent(mission.missionTplId)}`"
-              style="color:gray; font-size:smaller; text-decoration:none"
-            >
-              {{ mission.missionTplId }}
-              <q-tooltip>Mission Template</q-tooltip>
-            </router-link>
-          </span>
 
           <span class="q-ml-lg" style="font-size:smaller">
             <span style="color:gray">
@@ -28,13 +19,25 @@
                 <q-tooltip>Check for status against external executor</q-tooltip>
               </q-btn>
             </span>
+
+            <span class="q-ml-lg" style="color:gray">
+              Template:
+            </span>
+            <span>
+              <router-link
+                :to="`/${encodeURIComponent(mission.executorId)}/missiontpls/${encodeURIComponent(mission.missionTplId)}`"
+              >
+                {{ mission.missionTplId }}
+                <q-tooltip>Mission Template</q-tooltip>
+              </router-link>
+            </span>
+
             <span class="q-ml-lg" style="color:gray">
               Asset:
             </span>
             <span>
               <router-link
                 :to="`/${encodeURIComponent(params.executorId)}/assets/${encodeURIComponent(mission.assetId)}`"
-                style="text-decoration:none"
               >
                 {{ mission.assetId }}
                 <q-tooltip>
@@ -68,8 +71,7 @@
         </q-card-section>
       </q-card>
 
-      <div class="row q-mb-sm">
-        <div style="margin-left:auto;margin-right:auto">
+      <div class="row q-mb-sm justify-center q-gutter-lg">
           <q-btn
             label="Validate"
             icon="check"
@@ -84,7 +86,6 @@
             label="Run"
             icon="settings"
             push color="primary"
-            class="q-ml-sm"
             size="sm"
             :disable="mission.missionStatus !== 'DRAFT'"
             @click="runMission"
@@ -92,12 +93,11 @@
             <q-tooltip>Request execution of this mission</q-tooltip>
           </q-btn>
           <q-btn
+            v-if="mission.missionStatus === 'RUNNING' || mission.missionStatus === 'QUEUED'"
             label="Cancel"
             icon="cancel"
             push color="primary"
-            class="q-ml-sm"
             size="sm"
-            :disable="mission.missionStatus !== 'RUNNING' && mission.missionStatus !== 'QUEUED'"
             @click="cancelMission"
           >
             <q-tooltip>Request cancelation of submitted mission</q-tooltip>
@@ -106,20 +106,18 @@
             label="Delete"
             icon="delete"
             push color="primary"
-            class="q-ml-sm"
             size="sm"
             :disable="mission.missionStatus !== 'DRAFT' && mission.missionStatus !== 'TERMINATED'"
             @click="deleteMission"
           >
             <q-tooltip>
               Delete this mission<br/>
-              <span style="font-size:smaller">
+              <span>
                 (only if in DRAFT or<br/>
                 TERMINATED status)
               </span>
             </q-tooltip>
           </q-btn>
-        </div>
       </div>
 
       <q-table
@@ -442,7 +440,8 @@
               this.$q.notify({
                 message: `Arguments updated`,
                 timeout: 600,
-                type: 'info'
+                position: 'left',
+                color: 'info',
               })
             }
             return
@@ -650,7 +649,7 @@
                   this.$q.notify({
                     message: `Mission submitted. Status: ${status}`,
                     timeout: 2000,
-                    type: 'info'
+                    color: 'info',
                   })
                   this.refreshMission()
                 })
@@ -659,8 +658,8 @@
               this.$q.notify({
                 message: `Mission submission error: ${JSON.stringify(error)}`,
                 timeout: 0,
-                closeBtn: true,
-                type: 'info'
+                closeBtn: 'Close',
+                color: 'warning',
               })
               console.error('runMission: postMission: error=', error)
             })
@@ -679,7 +678,7 @@
             this.$q.notify({
               message: `Status: ${status}`,
               timeout: 1000,
-              type: 'info',
+              color: 'info',
               position: 'top-left'
             })
             if (this.mission.missionStatus !== status) {
@@ -696,8 +695,8 @@
               this.$q.notify({
                 message: `No such mission in the executor. Returning to DRAFT status`,
                 timeout: 0,
-                closeBtn: true,
-                type: 'info'
+                closeBtn: 'Close',
+                color: 'info'
               })
               this.updateMissionStatus('DRAFT')
                 .then(_ => {
@@ -708,8 +707,8 @@
               this.$q.notify({
                 message: `Mission submission error: ${JSON.stringify(error)}`,
                 timeout: 0,
-                closeBtn: true,
-                type: 'info'
+                closeBtn: 'Close',
+                color: 'info',
               })
             }
           })

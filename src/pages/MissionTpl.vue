@@ -291,7 +291,7 @@
               this.$q.notify({
                 message: `Asset associated (${added.length})`,
                 timeout: 1000,
-                type: 'info'
+                color: 'info'
               })
               this.refreshMissionTpl()
             }

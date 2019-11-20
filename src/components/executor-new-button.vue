@@ -328,7 +328,7 @@
         this.$q.notify({
           message: `Executor created: ${executor.executorId}`,
           timeout: 1000,
-          type: 'info'
+          color: 'info',
         })
         this.$emit('created', executor)
       },

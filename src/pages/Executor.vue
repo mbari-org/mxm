@@ -224,7 +224,7 @@
             this.$q.notify({
               message: `Executor updated`,
               timeout: 1000,
-              type: 'info'
+              color: 'info',
             })
           })
           .catch((error) => {

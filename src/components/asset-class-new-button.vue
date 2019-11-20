@@ -96,7 +96,7 @@
             this.$q.notify({
               message: 'Asset class registered',
               timeout: 1000,
-              type: 'info'
+              color: 'info',
             })
             this.$emit('created', variables)
           })
