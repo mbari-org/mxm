@@ -7,15 +7,15 @@
     :no-esc-dismiss="!okToDismiss"
   >
     <q-card
+      :style="style"
       class="bg-white"
     >
-      <q-toolbar class="bg-primary text-white">
+      <q-toolbar :class="headerClass">
         <q-toolbar-title style="font-size:1.2em">
           {{ title }}
         </q-toolbar-title>
         <q-btn
-          round dense
-          color="primary"
+          round dense size="sm"
           @click="$emit('dialogClosing')"
           icon="close"
         />
@@ -25,7 +25,7 @@
         <slot></slot>
       </q-card-section>
 
-      <q-toolbar class="bg-primary text-white">
+      <q-toolbar :class="footerClass">
         <q-toolbar-title/>
         <q-btn
           dense no-caps
@@ -59,6 +59,21 @@
         default: undefined
       },
 
+      sizeStyle: {
+        type: String,
+        required: false
+      },
+
+      headerClass: {
+        type: String,
+        default: 'bg-secondary text-white'
+      },
+
+      footerClass: {
+        type: String,
+        default: 'bg-secondary text-white'
+      },
+
       submitLabel: {
         type: String,
         default: 'Submit'
@@ -73,6 +88,14 @@
         type: Boolean,
         default: false
       },
+    },
+
+    computed: {
+      style() {
+        if (this.sizeStyle) {
+          return this.sizeStyle
+        }
+      }
     },
   }
 </script>
