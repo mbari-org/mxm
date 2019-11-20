@@ -30,7 +30,7 @@
       <div slot="top-right" slot-scope="props" class="fit">
         <mission-new-button
           :executor-id="params.executorId"
-          v-on:created="missionCreated"
+          @created="missionCreated"
         />
       </div>
 

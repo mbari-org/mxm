@@ -31,7 +31,7 @@
         <div slot="top-right" slot-scope="props" class="fit">
           <mission-tpl-new-button
             :executor-id="params.executorId"
-            v-on:created="missionTplCreated"
+            @created="missionTplCreated"
           />
         </div>
 

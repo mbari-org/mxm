@@ -16,7 +16,7 @@
       </div>
 
       <div slot="top-right" slot-scope="props" class="fit">
-        <executor-new-button v-on:created="executorCreated"/>
+        <executor-new-button @created="executorCreated"/>
       </div>
 
       <q-td slot="body-cell-executorId" slot-scope="props" :props="props"

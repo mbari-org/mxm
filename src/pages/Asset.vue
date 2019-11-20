@@ -17,7 +17,7 @@
           <mxm-markdown
             :text="asset.description"
             editable
-            v-on:saveDescription="updateDescription"
+            @saveDescription="updateDescription"
           />
         </q-card-section>
       </q-card>

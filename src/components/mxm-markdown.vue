@@ -7,7 +7,7 @@
       :empty-message="emptyMessage"
       :edit-click="editClick"
       :edit-button="editButton || !editClick && editable"
-      v-on:edit="openEdit"
+      @edit="openEdit"
     />
 
     <utl-dialog
@@ -20,8 +20,8 @@
       submit-label="OK"
       :ok-to-submit="anyMods"
       :ok-to-dismiss="!anyMods"
-      v-on:submit="saveEdit"
-      v-on:dialogClosing="cancelEdit"
+      @submit="saveEdit"
+      @dialogClosing="cancelEdit"
     >
       <q-input
         v-model.trim="contents"

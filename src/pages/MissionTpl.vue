@@ -25,7 +25,7 @@
           <mxm-markdown
             editable
             :text="missionTpl.description"
-            v-on:saveDescription="updateDescription"
+            @saveDescription="updateDescription"
           />
         </q-card-section>
       </q-card>
@@ -58,7 +58,7 @@
               class="col-auto q-ml-md"
               :exclude="myAssetClassNames"
               :executor-id="params.executorId"
-              v-on:selection="assetClassSelection"
+              @selection="assetClassSelection"
             />
           </div>
 
@@ -97,7 +97,7 @@
           <parameter-new-button
             :executor-id="params.executorId"
             :mission-tpl-id="params.missionTplId"
-            v-on:created="parameterCreated"
+            @created="parameterCreated"
           />
         </div>
 

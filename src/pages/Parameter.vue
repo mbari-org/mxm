@@ -104,7 +104,7 @@
                     style="min-height:4em;min-width:24em"
                     :text="parameter.description"
                     editable edit-click
-                    v-on:saveDescription="d => { parameter.description = d }"
+                    @saveDescription="d => { parameter.description = d }"
                   />
                 </div>
               </div>

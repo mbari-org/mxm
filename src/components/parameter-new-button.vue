@@ -13,8 +13,8 @@
       position="top"
       :ok-to-submit="!!okToSubmit"
       :ok-to-dismiss="!!okToDismiss"
-      v-on:submit="submit"
-      v-on:dialogClosing="dialogOpened = false"
+      @submit="submit"
+      @dialogClosing="dialogOpened = false"
     >
       <div
         class="column q-gutter-md"
@@ -85,7 +85,7 @@
             style="min-height:4em;width:24em"
             :text="data.description"
             editable edit-click
-            v-on:saveDescription="d => { data.description = d }"
+            @saveDescription="d => { data.description = d }"
           />
         </q-field>
       </div>

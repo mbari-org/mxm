@@ -6,9 +6,9 @@
       debug-feature="right"
       :google-api-key="$mxmConfig.googleApiKey"
       :editable="editable"
-      v-on:startEditing="_startEditing"
-      v-on:editsApplied="_editsApplied"
-      v-on:warning="_showWarning"
+      @startEditing="_startEditing"
+      @editsApplied="_editsApplied"
+      @warning="_showWarning"
       include-table
       :style="sizeInfo.qgeomapStyle"
     />

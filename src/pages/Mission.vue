@@ -66,7 +66,7 @@
           <mxm-markdown
             :text="mission.description"
             :editable="mission.missionStatus === 'DRAFT'"
-            v-on:saveDescription="updateDescription"
+            @saveDescription="updateDescription"
           />
         </q-card-section>
       </q-card>

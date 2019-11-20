@@ -21,8 +21,8 @@
       :title="exclude && exclude.length ? 'Add associated asset classes' : 'Asset class selection'"
       :ok-to-submit="!!okToSubmit"
       :ok-to-dismiss="!!okToDismiss"
-      v-on:submit="submit"
-      v-on:dialogClosing="dialogOpened = false"
+      @submit="submit"
+      @dialogClosing="dialogOpened = false"
     >
       <div
         class="column q-gutter-sm"
@@ -45,7 +45,7 @@
         <div class="q-ma-md">
           <asset-class-new-button
             :executor-id="executorId"
-            v-on:created="assetClassCreated"
+            @created="assetClassCreated"
           />
         </div>
       </div>

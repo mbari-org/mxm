@@ -10,7 +10,7 @@
           <mxm-markdown
             :text="assetClass.description"
             editable
-            v-on:saveDescription="updateDescription"
+            @saveDescription="updateDescription"
           />
         </q-card-section>
       </q-card>
@@ -47,7 +47,7 @@
           <asset-new-button
             :executor-id="params.executorId"
             :asset-class-name="params.className"
-            v-on:created="assetCreated"
+            @created="assetCreated"
           />
         </div>
 

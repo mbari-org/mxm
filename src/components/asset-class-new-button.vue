@@ -14,8 +14,8 @@
       :title="`Register new asset class (for '${executorId}')`"
       :ok-to-submit="!!okToSubmit"
       :ok-to-dismiss="!!okToDismiss"
-      v-on:submit="submit"
-      v-on:dialogClosing="dialogOpened = false"
+      @submit="submit"
+      @dialogClosing="dialogOpened = false"
     >
       <div
         class="column q-gutter-sm"
@@ -40,7 +40,7 @@
             style="min-height:4em;min-width:24em"
             :text="description"
             editable edit-click
-            v-on:saveDescription="d => { description = d }"
+            @saveDescription="d => { description = d }"
           />
         </div>
 

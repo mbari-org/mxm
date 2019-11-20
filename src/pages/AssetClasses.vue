@@ -29,7 +29,7 @@
       <div slot="top-right" slot-scope="props" class="fit">
         <asset-class-new-button
           :executor-id="params.executorId"
-          v-on:created="assetClassCreated"
+          @created="assetClassCreated"
         />
       </div>
 

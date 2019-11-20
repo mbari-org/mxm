@@ -12,8 +12,8 @@
       :title="`Register new mission (for '${executorId}')`"
       :ok-to-submit="!!okToSubmit"
       :ok-to-dismiss="!!okToDismiss"
-      v-on:submit="submit"
-      v-on:dialogClosing="dialogOpened = false"
+      @submit="submit"
+      @dialogClosing="dialogOpened = false"
     >
       <p style="color:gray;font-size:small;width:24em">
         The mission will be registered with 'DRAFT' status.
@@ -57,7 +57,7 @@
             style="min-height:6em;min-width:24em"
             :text="description"
             editable edit-click
-            v-on:saveDescription="d => { description = d }"
+            @saveDescription="d => { description = d }"
           />
         </div>
       </div>

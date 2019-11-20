@@ -36,7 +36,7 @@
             <mxm-markdown
               :text="executor.description"
               editable
-              v-on:saveDescription="d => { executor.description = d }"
+              @saveDescription="d => { executor.description = d }"
             />
           </div>
 
