@@ -123,6 +123,7 @@
       </div>
 
       <q-table
+        :dense="$q.screen.lt.md"
         :data="myArguments"
         :columns="argColumns"
         row-key="name"
@@ -161,21 +162,23 @@
 
         <q-tr slot="body" slot-scope="props" :props="props">
           <q-td key="paramName" :props="props"
-                style="width:5px;font-family:monospace"
+                style="width:5px;font-family:monospace;vertical-align:top"
           >
             <router-link
-              style="text-decoration:none"
+              style="cursor:pointer"
+              tag="div"
+              :class="props.row.required ? 'text-bold' : 'text-black'"
               :to="`/${encodeURIComponent(mission.executorId)}/missiontpls/${encodeURIComponent(mission.missionTplId)}/params/${encodeURIComponent(props.row.paramName)}`"
             >{{ props.row.paramName }}
             </router-link>
 
-            <div v-if="debug" class="bg-blue-1" style="white-space:wrap;width:200px">
-              V={{props.row.paramValue}}
+            <div class="text-grey-7 q-mt-sm" style="font-size:0.8em">
+              ({{ props.row.type }})
             </div>
           </q-td>
 
           <q-td key="paramValue" :props="props"
-                style="width:20em;font-family:monospace"
+                style="width:20em;font-family:monospace;vertical-align:top"
           >
             <q-field
               :error="!!valueError(props.row.paramName)"
@@ -199,6 +202,7 @@
               >
                 <parameter-value-input
                   :param-name="props.row.paramName"
+                  :param-required="props.row.required"
                   v-model="props.row.paramValue"
                   :param-type="props.row.type"
                   :default-value="props.row.defaultValue"
@@ -209,19 +213,8 @@
 
           </q-td>
 
-          <q-td key="type" :props="props"
-                style="width:5px"
-          >
-            {{ props.row.type }}
-          </q-td>
-
-          <q-td key="required" :props="props"
-                style="width:5px"
-          >
-            {{ props.row.required }}
-          </q-td>
-
           <q-td key="description" :props="props"
+                style="vertical-align:top"
           >
             <mxm-markdown simple hide-empty :text="props.row.description"/>
           </q-td>
@@ -297,18 +290,6 @@
             name: 'paramValue',
             label: 'Value',
             align: 'left',
-          },
-          {
-            field: 'type',
-            name: 'type',
-            label: 'Type',
-            align: 'left',
-            sortable: true
-          },
-          {
-            field: 'required',
-            name: 'required',
-            label: 'Required'
           },
           {
             field: 'description',

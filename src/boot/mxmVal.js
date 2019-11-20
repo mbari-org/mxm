@@ -100,7 +100,7 @@ function checkMultiPointString(value) {
 }
 
 function checkMultiPoint(array) {
-  console.log('checkMultiPoint', array)
+  // console.log('checkMultiPoint', array)
   if (!Array.isArray(array)) {
     return 'Not an array'
   }

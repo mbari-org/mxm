@@ -13,9 +13,16 @@
 
     <div v-else-if="paramType === 'boolean'" class="q-pa-md">
       <div class="q-gutter-lg">
-        <q-radio dense :value="value" val="true"  @input="val => { $emit('input', val) }" label="true" />
-        <q-radio dense :value="value" val="false" @input="val => { $emit('input', val) }" label="false" />
-        <q-radio dense :value="value" val=""      @input="val => { $emit('input', val) }" label="No default value" />
+        <q-radio
+          dense :value="value" val="true"  @input="val => { $emit('input', val) }" label="true"
+        />
+        <q-radio
+          dense :value="value" val="false" @input="val => { $emit('input', val) }" label="false"
+        />
+        <q-radio
+          v-if="!paramRequired"
+          dense :value="value" val="" @input="val => { $emit('input', val) }" label="No default value"
+        />
       </div>
     </div>
 
@@ -52,6 +59,11 @@
       paramType: {
         type: String,
         required: true
+      },
+
+      paramRequired: {
+        type: Boolean,
+        default: false
       },
 
       value: {
