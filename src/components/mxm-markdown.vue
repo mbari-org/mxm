@@ -5,31 +5,36 @@
       :simple="simple"
       :hide-empty="hideEmpty"
       :empty-message="emptyMessage"
+      :edit-button="editable"
+      v-on:edit="openEdit"
     />
 
-    <q-popup-edit
+    <utl-dialog
       v-if="editable"
-      v-model="contents"
+      size-style="width: 900px; max-width: 80vw"
+      header-class="bg-white text-black"
+      footer-class="bg-white text-black"
+      :dialog-opened="editOpened"
       :title="editTitle + (anyMods ? ' *' : '')"
-      buttons
-      :persistent="anyMods"
-      @save="$emit('saveDescription', contents)"
+      submit-label="OK"
+      :ok-to-submit="anyMods"
+      :ok-to-dismiss="!anyMods"
+      v-on:submit="saveEdit"
+      v-on:dialogClosing="cancelEdit"
     >
-      <mxm-markdown-view
-        :text="contents"
-        class="shadow-2 q-mb-sm"
-      />
       <q-input
         v-model.trim="contents"
         clearable
-        class="bg-green-1 q-pl-md q-pr-md"
+        class="bg-green-1"
         style="font-family:monospace"
         type="textarea"
-        rows="5"
+        rows="10"
+        cols="80"
         :max-height="500"
+        hide-bottom-space
         autofocus @keyup.enter.stop
       />
-    </q-popup-edit>
+    </utl-dialog>
   </div>
 </template>
 
@@ -44,6 +49,11 @@
       },
 
       hideEmpty: {
+        type: Boolean,
+        default: false
+      },
+
+      editButton: {
         type: Boolean,
         default: false
       },
@@ -76,6 +86,7 @@
 
     data: () => ({
       contents: '',
+      editOpened: false,
     }),
 
     computed: {
@@ -86,6 +97,31 @@
 
     mounted() {
       this.contents = this.text
+      this.editOpened = false
+    },
+
+    methods: {
+      openEdit() {
+        this.contents = this.text
+        this.editOpened = true
+      },
+
+      saveEdit() {
+        this.editOpened = false
+        this.$emit('saveDescription', this.contents)
+      },
+
+      cancelEdit() {
+        this.contents = this.text
+        this.editOpened = false
+      },
+    },
+
+    watch: {
+      // needed because mxm-markdown-view uses updatable `contents`
+      text(val) {
+        this.contents = val
+      },
     },
   }
 </script>

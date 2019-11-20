@@ -1,5 +1,8 @@
 <template>
-  <div v-if="text || !hideEmpty">
+  <div
+    v-if="text || !hideEmpty"
+    class="relative-position"
+  >
     <div v-if="text" :class="{'rounded-borders bg-light-blue-1': !simple}">
       <vue-markdown
         :source="text" table-class="markdownTable"
@@ -9,6 +12,16 @@
     <div v-else style="color:gray;font-style:italic;font-size:smaller">
       {{emptyMessage}}
     </div>
+
+    <q-btn
+      v-if="editButton"
+      class="absolute-right text-grey shadow-3"
+      style="margin-right:4px;margin-top:-4px"
+      size="xs" round dense icon="edit" color="yellow"
+      @click="$emit('edit')"
+    />
+
+    <slot></slot>
   </div>
 </template>
 
@@ -21,15 +34,22 @@
         type: String,
         required: false
       },
+
       hideEmpty: {
         type: Boolean,
         default: false
       },
-      simple: {
+
+      editButton: {
         type: Boolean,
-        required: false,
         default: false
       },
+
+      simple: {
+        type: Boolean,
+        default: false
+      },
+
       emptyMessage: {
         type: String,
         default: '(No description)'
