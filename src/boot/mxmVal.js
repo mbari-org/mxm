@@ -5,6 +5,7 @@ export default ({ app, Vue }) => {
     checkValue,
     toGeojson,
     fromGeojson,
+    isGeojsonType,
   }
 }
 
@@ -289,5 +290,28 @@ function emptyFeature() {
   return {
     type: 'FeatureCollection',
     features: [],
+  }
+}
+
+function isGeojsonType(simpleType) {
+  switch (simpleType) {
+    case 'Point':
+    case 'MultiPoint':
+    case 'LineString':
+    case 'MultiLineString':
+    case 'Polygon':
+    case 'MultiPolygon':
+    case 'GeometryCollection':
+    // https://tools.ietf.org/html/rfc7946#section-3
+    case 'GeoJSON':
+      return true
+
+    // https://tools.ietf.org/html/rfc7946#section-3.2
+    case 'Feature':
+    case 'FeatureCollection':
+      return true
+
+    default:
+      return false
   }
 }

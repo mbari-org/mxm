@@ -1,7 +1,7 @@
 <template>
   <div>
     <geojson-input
-      v-if="isGeojsonType"
+      v-if="$mxmVal.isGeojsonType(paramType)"
       :param-name="paramName"
       :param-type="paramType"
       :default-value="defaultValue"
@@ -14,13 +14,16 @@
     <div v-else-if="paramType === 'boolean'" class="q-pa-md">
       <div class="q-gutter-lg">
         <q-radio
+          :disable="!editable"
           dense :value="value" val="true"  @input="val => { $emit('input', val) }" label="true"
         />
         <q-radio
+          :disable="!editable"
           dense :value="value" val="false" @input="val => { $emit('input', val) }" label="false"
         />
         <q-radio
           v-if="!paramRequired"
+          :disable="!editable"
           dense :value="value" val="" @input="val => { $emit('input', val) }"
           label="Unspecified"
         />
@@ -104,28 +107,6 @@
     },
 
     computed: {
-      isGeojsonType() {
-        switch (this.paramType) {
-          case 'Point':
-          case 'MultiPoint':
-          case 'LineString':
-          case 'MultiLineString':
-          case 'Polygon':
-          case 'MultiPolygon':
-          case 'GeometryCollection':
-          // https://tools.ietf.org/html/rfc7946#section-3
-          case 'GeoJSON':
-            return true
-
-          // https://tools.ietf.org/html/rfc7946#section-3.2
-          // case 'feature':
-          // case 'featurecollection': return ??
-
-          default:
-            return false
-        }
-      },
-
       inputProps() {
         let type = "text"
         let style = "font-family:monospace"
