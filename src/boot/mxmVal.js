@@ -72,7 +72,7 @@ function checkPointString(value) {
     return checkPoint(array)
   }
   catch (err) {
-    return err
+    return 'Invalid Point: ' + err.message
   }
 }
 
@@ -96,7 +96,7 @@ function checkMultiPointString(value) {
     return checkMultiPoint(array)
   }
   catch (err) {
-    return err
+    return 'Invalid MultiPoint: ' + err.message
   }
 }
 
@@ -119,7 +119,7 @@ function checkPolygonString(value) {
     return checkPolygon(array)
   }
   catch (err) {
-    return err
+    return 'Invalid Polygon: ' + err.message
   }
 }
 
@@ -142,7 +142,7 @@ function checkLineStringString(value) {
     return checkLineString(array)
   }
   catch (err) {
-    return err
+    return 'Invalid LineString: ' + err.message
   }
 }
 
