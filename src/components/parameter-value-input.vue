@@ -21,7 +21,8 @@
         />
         <q-radio
           v-if="!paramRequired"
-          dense :value="value" val="" @input="val => { $emit('input', val) }" label="No default value"
+          dense :value="value" val="" @input="val => { $emit('input', val) }"
+          label="Unspecified"
         />
       </div>
     </div>
