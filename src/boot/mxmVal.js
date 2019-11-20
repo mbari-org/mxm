@@ -82,6 +82,11 @@ function checkPoint(array) {
   if (array.length < 2 || array.length > 3) {
     return `Not an array of 2 or 3 elements`
   }
+  for (let i = 0; i < array.length; i++) {
+    if (typeof array[i] !== 'number') {
+      return `Elements must be numbers`
+    }
+  }
 }
 
 function checkMultiPointString(value) {
