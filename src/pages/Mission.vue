@@ -77,7 +77,7 @@
             icon="check"
             push color="primary"
             size="sm"
-            :disable="mission.missionStatus !== 'DRAFT'"
+            :disable="mission.missionStatus !== 'DRAFT' || parametersWithErrorCount > 0"
             @click="validateMission"
           >
             <q-tooltip>Validate mission against external executor</q-tooltip>
@@ -87,7 +87,7 @@
             icon="settings"
             push color="primary"
             size="sm"
-            :disable="mission.missionStatus !== 'DRAFT'"
+            :disable="mission.missionStatus !== 'DRAFT' || parametersWithErrorCount > 0"
             @click="runMission"
           >
             <q-tooltip>Request execution of this mission</q-tooltip>
@@ -133,9 +133,15 @@
       >
         <div slot="top-left" slot-scope="props" class="row items-center">
           <div class="col">
-            <div class="row">
-              <div style="color:gray;font-size:small" class="col-auto vertical-middle text-weight-light">
+            <div class="row q-gutter-lg">
+              <div style="font-size:small"
+                   class="col-auto vertical-middle text-weight-light text-grey">
                 Overridden parameters: {{parametersChanged().length}}
+              </div>
+              <div
+                v-if="parametersWithErrorCount"
+                class="col-auto vertical-middle text-red">
+                Arguments with error: {{parametersWithErrorCount}}
               </div>
             </div>
 
@@ -258,6 +264,7 @@
   import clone from 'lodash/clone'
   import assign from 'lodash/assign'
   import reduce from 'lodash/reduce'
+  import size from 'lodash/size'
 
   const debug = false
 
@@ -267,45 +274,50 @@
       ParameterValueInput,
     },
 
-    data() {
-      return {
-        debug,
-        loading: false,
-        mission: null,
-        savingArgs: false,
-        myArguments: [],
-        argColumns: [
-          {
-            field: 'paramName',
-            name: 'paramName',
-            label: 'Parameter',
-            align: 'left',
-            sortable: true
-          },
-          {
-            field: 'paramValue',
-            name: 'paramValue',
-            label: 'Value',
-            align: 'left',
-          },
-          {
-            field: 'description',
-            name: 'description',
-            label: 'Description',
-            align: 'left',
-          }
-        ],
-        rowsPerPage: [0],
-        pagination: {
-          rowsPerPage: 0
+    data: () => ({
+      debug,
+      loading: false,
+      mission: null,
+      savingArgs: false,
+
+      myArguments: [],
+      parametersWithError: {},
+
+      argColumns: [
+        {
+          field: 'paramName',
+          name: 'paramName',
+          label: 'Parameter',
+          align: 'left',
+          sortable: true
         },
-        filter: '',
-      }
-    },
+        {
+          field: 'paramValue',
+          name: 'paramValue',
+          label: 'Value',
+          align: 'left',
+        },
+        {
+          field: 'description',
+          name: 'description',
+          label: 'Description',
+          align: 'left',
+        }
+      ],
+      rowsPerPage: [0],
+      pagination: {
+        rowsPerPage: 0
+      },
+      filter: '',
+    }),
 
     computed: {
       params() {
         return this.$route.params
+      },
+
+      parametersWithErrorCount() {
+        return size(this.parametersWithError)
       },
     },
 
@@ -357,6 +369,7 @@
         refresh: this.refreshMission
       })
 
+      this.parametersWithError = {}
       this.refreshMission()
     },
 
@@ -406,7 +419,14 @@
 
       valueError(paramName) {
         const parval = this.$refs[`parameter-value_${paramName}`]
-        return parval && parval.errorMessage()
+        const error = parval && parval.errorMessage()
+        if (error) {
+          this.$set(this.parametersWithError, paramName, error)
+        }
+        else {
+          this.$delete(this.parametersWithError, paramName)
+        }
+        return error
       },
 
       parametersChanged() {

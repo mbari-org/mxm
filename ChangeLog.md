@@ -5,9 +5,10 @@
     - geo type: also allow editing of the text?
 - TODO add Duration type  
 - TODO define how to represent tethysdash parameter types  
-- TODO check for required args before 'Run'ning the mission
 - TODO delete a parameter     
     
+- check for args with error before validating or running the mission
+  against executor system
 - more handling involving LineString, Polygon, boolean
 - factor out breadcrumbs dispatch
 - handle editing in mxm-markdown
