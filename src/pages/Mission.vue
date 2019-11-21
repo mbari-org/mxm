@@ -731,9 +731,7 @@
           color: 'negative',
           ok: `Yes, delete '${this.mission.missionId}'`,
           cancel: true
-        }).onOk(() => doIt())
-
-        const doIt = () => {
+        }).onOk(() => {
           const mutation = missionDelete
           const variables = {
             input: {
@@ -743,13 +741,24 @@
           this.$apollo.mutate({mutation, variables})
             .then((data) => {
               if (debug) console.debug('deleteMission: mutation data=', data)
+              this.$q.notify({
+                message: `Mission deleted: '${this.mission.missionId}'`,
+                timeout: 2000,
+                position: 'left',
+                color: 'info',
+              })
               this.$router.replace(`/${encodeURIComponent(this.mission.executorId)}`)
-              this.$q.notify('Done')
             })
             .catch((error) => {
               console.error('deleteMission: mutation error=', error)
+              this.$q.notify({
+                message: `Mission deletion error: ${JSON.stringify(error)}`,
+                timeout: 0,
+                closeBtn: 'Close',
+                color: 'warning',
+              })
             })
-        }
+        })
       },
     },
 
