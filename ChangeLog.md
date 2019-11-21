@@ -7,6 +7,7 @@
 - TODO define how to represent tethysdash parameter types  
 - TODO delete a parameter     
     
+- handle edit dispatch through parameter-value
 - check for args with error before validating or running the mission
   against executor system
 - more handling involving LineString, Polygon, boolean

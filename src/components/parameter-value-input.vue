@@ -98,6 +98,10 @@
       geojsonInput,
     },
 
+    data: () => ({
+      paramValue: '',
+    }),
+
     mounted() {
       if (debug) console.log(`MOUNTED parameter-value-input
       paramName=${this.paramName}
@@ -106,12 +110,8 @@
       defaultValue=${this.defaultValue}
       editable=${this.editable}
       `)
-    },
 
-    data() {
-      return {
-        paramValue: this.value,
-      }
+      this.paramValue = this.value
     },
 
     computed: {

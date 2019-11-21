@@ -1,14 +1,37 @@
 <template>
   <div>
     {{ _showValue }}
+
+    <q-popup-edit
+      :buttons="editable"
+      v-model="paramValueModel"
+      @save="val => { $emit('save', val) }"
+    >
+      <parameter-value-input
+        :param-name="paramName"
+        :param-required="required"
+        v-model="paramValueModel"
+        :param-type="paramType"
+        :default-value="defaultValue"
+        :editable="editable"
+        @input="val => { $emit('save', val) }"
+      />
+    </q-popup-edit>
   </div>
 </template>
 
 <script>
+  import ParameterValueInput from 'components/parameter-value-input'
+
   const debug = true
 
   export default {
     props: {
+      paramName: {
+        type: String,
+        required: true
+      },
+
       paramType: {
         type: String,
         required: false
@@ -23,6 +46,28 @@
         type: Boolean,
         default: false
       },
+
+      defaultValue: {
+        type: String,
+        required: false
+      },
+
+      editable: {
+        type: Boolean,
+        default: false
+      },
+    },
+
+    components: {
+      ParameterValueInput,
+    },
+
+    data: () => ({
+      paramValueModel: '',
+    }),
+
+    mounted() {
+      this.paramValueModel = this.paramValue
     },
 
     computed: {

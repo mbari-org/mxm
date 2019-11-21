@@ -57,23 +57,13 @@
             ref="parameter-value"
             class="q-pa-xs"
             style="font-family:monospace;width:24em"
+            :param-name="data.paramName"
             :param-type="data.typeSelected"
             :param-value="data.defaultValue"
+            default-value=""
+            editable
+            @save="val => { data.defaultValue = val }"
           />
-
-          <q-popup-edit
-            v-if="data.typeSelected"
-            buttons
-            v-model="data.defaultValue"
-          >
-            <parameter-value-input
-              :param-name="data.paramName"
-              v-model="data.defaultValue"
-              :param-type="data.typeSelected"
-              default-value=""
-              editable
-            />
-          </q-popup-edit>
         </q-field>
 
         <q-field
@@ -96,7 +86,6 @@
 <script>
   import parameterInsert from '../graphql/parameterInsert.gql'
   import ParameterValue from 'components/parameter-value'
-  import ParameterValueInput from 'components/parameter-value-input'
   import ParameterTypeSelect from 'components/parameter-type-select'
   import map from 'lodash/map'
   import cloneDeep from 'lodash/cloneDeep'
@@ -127,7 +116,6 @@
 
     components: {
       ParameterValue,
-      ParameterValueInput,
       ParameterTypeSelect,
     },
 
