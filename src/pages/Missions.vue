@@ -39,7 +39,7 @@
       >
         <router-link
           style="text-decoration:none"
-          :to="`/${euc(params.executorId)}/missiontpls/${euc(props.row.missionTplId)}/missions/${euc(props.row.missionId)}`"
+          :to="$utl.routeLoc([params.executorId, 'missiontpls', props.row.missionTplId, 'missions', props.row.missionId])"
         >
           {{props.value}}
         </router-link>
@@ -50,7 +50,7 @@
       >
         <router-link
           style="text-decoration:none"
-          :to="`/${euc(params.executorId)}/missiontpls/${euc(props.value)}`"
+          :to="$utl.routeLoc([params.executorId, 'missiontpls', props.value])"
         >
           {{props.value}}
         </router-link>
@@ -61,7 +61,7 @@
       >
         <router-link
           style="text-decoration:none"
-          :to="`/${euc(params.executorId)}/assets/${euc(props.value)}`"
+          :to="$utl.routeLoc([params.executorId, 'assets', props.value])"
         >
           {{props.value}}
         </router-link>
@@ -182,10 +182,6 @@
 
       missionCreated(data) {
         this.refreshMissions()
-      },
-
-      euc(c) {
-        return encodeURIComponent(c)
       },
     },
 

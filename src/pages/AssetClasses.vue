@@ -38,7 +38,7 @@
       >
         <router-link
           style="text-decoration:none"
-          :to="`/${encodeURIComponent(params.executorId)}/assetclasses/${encodeURIComponent(props.row.className)}`"
+          :to="$utl.routeLoc([params.executorId, 'assetclasses', props.row.className])"
         >
           {{props.row.className}}
         </router-link>

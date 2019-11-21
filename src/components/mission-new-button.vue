@@ -195,7 +195,7 @@
               timeout: 1000,
               color: 'info',
             })
-            this.$router.push(`/${encodeURIComponent(this.executorId)}/missiontpls/${encodeURIComponent(this.missionTplId)}/missions/${encodeURIComponent(this.missionId)}`)
+            this.$utl.push([this.executorId, 'missiontpls', this.missionTplId, 'missions', this.missionId])
             // this.$emit('created', variables)
           })
           .catch((error) => {

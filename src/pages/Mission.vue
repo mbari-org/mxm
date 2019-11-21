@@ -25,7 +25,7 @@
             </span>
             <span>
               <router-link
-                :to="`/${encodeURIComponent(mission.executorId)}/missiontpls/${encodeURIComponent(mission.missionTplId)}`"
+                :to="$utl.routeLoc([mission.executorId, 'missiontpls', mission.missionTplId])"
               >
                 {{ mission.missionTplId }}
                 <q-tooltip>Mission Template</q-tooltip>
@@ -37,7 +37,7 @@
             </span>
             <span>
               <router-link
-                :to="`/${encodeURIComponent(params.executorId)}/assets/${encodeURIComponent(mission.assetId)}`"
+                :to="$utl.routeLoc([params.executorId, 'assets', mission.assetId])"
               >
                 {{ mission.assetId }}
                 <q-tooltip>
@@ -172,7 +172,7 @@
               no-caps dense
               style="min-width:3em"
               :class="`text-primary ${props.row.required ? 'text-bold' : ''}`"
-              :to="`/${encodeURIComponent(mission.executorId)}/missiontpls/${encodeURIComponent(mission.missionTplId)}/params/${encodeURIComponent(props.row.paramName)}`"
+              :to="$utl.routeLoc([mission.executorId, 'missiontpls', mission.missionTplId, 'params', props.row.paramName])"
             >
               {{ props.row.paramName }}
             </q-btn>
@@ -747,7 +747,7 @@
                 position: 'left',
                 color: 'info',
               })
-              this.$router.replace(`/${encodeURIComponent(this.mission.executorId)}`)
+              this.$utl.replace([this.mission.executorId])
             })
             .catch((error) => {
               console.error('deleteMission: mutation error=', error)

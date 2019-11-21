@@ -24,7 +24,7 @@
       >
         <router-link
           style="text-decoration:none"
-          :to="`/${encodeURIComponent(props.row.executorId)}`"
+          :to="$utl.routeLoc([props.row.executorId])"
         >
           {{props.row.executorId}}
         </router-link>

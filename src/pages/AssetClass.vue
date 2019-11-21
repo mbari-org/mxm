@@ -56,7 +56,7 @@
         >
           <router-link
             style="text-decoration:none"
-            :to="`/${encodeURIComponent(params.executorId)}/assets/${encodeURIComponent(props.row.assetId)}`"
+            :to="$utl.routeLoc([params.executorId, 'assets', props.row.assetId])"
           >
             {{props.row.assetId}}
           </router-link>

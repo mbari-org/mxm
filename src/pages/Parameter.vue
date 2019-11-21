@@ -251,7 +251,7 @@
           .then((data) => {
             if (debug) console.debug('updateParameter: mutation data=', data)
             if (parameterPatch.paramName) {
-              this.$router.replace(`/${encodeURIComponent(this.parameter.executorId)}/missionTpls/${encodeURIComponent(this.parameter.missionTplId)}/params/${encodeURIComponent(parameterPatch.paramName)}`)
+              this.$utl.replace([this.parameter.executorId, 'missionTpls', this.parameter.missionTplId, 'params', parameterPatch.paramName])
               return
             }
             this.refreshParameter()
@@ -285,7 +285,7 @@
                   position: 'left',
                   color: 'info',
                 })
-                this.$router.replace(`/${encodeURIComponent(this.parameter.executorId)}/missionTpls/${encodeURIComponent(this.parameter.missionTplId)}`)
+                this.$utl.replace([this.parameter.executorId, 'missionTpls', this.parameter.missionTplId])
               })
               .catch(error => {
                 console.error('deleteParameter: mutation error=', error)

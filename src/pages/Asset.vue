@@ -8,7 +8,7 @@
           (class:
           <router-link
             style="text-decoration:none"
-            :to="`/${encodeURIComponent(params.executorId)}/assetclasses/${encodeURIComponent(asset.className)}`"
+            :to="$utl.routeLoc([params.executorId, 'assetclasses', asset.className])"
           >{{ asset.className }}</router-link>)
         </q-card-section>
 

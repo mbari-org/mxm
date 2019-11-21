@@ -45,7 +45,7 @@
             >
               <router-link
                 style="text-decoration:none"
-                :to="`/${encodeURIComponent(params.executorId)}/assetclasses/${encodeURIComponent(c.assetClassName)}`"
+                :to="$utl.routeLoc([params.executorId, 'assetclasses', c.assetClassName])"
               >
                 {{c.assetClassName}}
               </router-link>
@@ -109,7 +109,7 @@
               no-caps dense
               style="min-width:3em"
               :class="`text-primary ${props.row.required ? 'text-bold' : ''}`"
-              :to="`/${encodeURIComponent(params.executorId)}/missiontpls/${encodeURIComponent(params.missionTplId)}/params/${encodeURIComponent(props.row.paramName)}`"
+              :to="$utl.routeLoc([params.executorId, 'missiontpls', params.missionTplId, 'params', props.row.paramName])"
             >
               {{ props.row.paramName }}
             </q-btn>
@@ -365,7 +365,7 @@
           .then((data) => {
             if (debug) console.debug('updateMissionTpl: mutation data=', data)
             if (missionTplPatch.missionTplId) {
-              this.$router.replace(`/${encodeURIComponent(this.params.executorId)}/missiontpls/${encodeURIComponent(missionTplPatch.missionTplId)}`)
+              this.$utl.replace([this.params.executorId, 'missiontpls', missionTplPatch.missionTplId])
               return
             }
             if (missionTplPatch.description) {

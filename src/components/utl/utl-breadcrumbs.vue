@@ -42,9 +42,7 @@
 
     methods: {
       _getTo(a) {
-        if (a) {
-          return '/' + map(a, encodeURIComponent).join('/')
-        }
+        return a && this.$utl.routeLoc(a)
       },
     },
 

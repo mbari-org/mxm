@@ -40,7 +40,7 @@
         >
           <router-link
             style="text-decoration:none"
-            :to="`/${encodeURIComponent(params.executorId)}/missiontpls/${encodeURIComponent(props.row.missionTplId)}`"
+            :to="$utl.routeLoc([params.executorId, 'missiontpls', props.row.missionTplId])"
           >
             {{props.row.missionTplId}}
           </router-link>
