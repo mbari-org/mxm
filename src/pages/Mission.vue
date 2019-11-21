@@ -65,7 +65,7 @@
           Description:
           <mxm-markdown
             :text="mission.description"
-            :editable="mission.missionStatus === 'DRAFT'"
+            :editable="editable()"
             @saveDescription="updateDescription"
           />
         </q-card-section>
@@ -184,31 +184,32 @@
               :class="paramValueClass(props.row) + ' q-mb-md'"
                style="white-space: normal"
             >
-              <parameter-value
-                :ref="`parameter-value_${props.row.paramName}`"
-                class="q-pa-xs"
-                style="font-family:monospace;min-width:24em;word-break:break-all;font-size:0.9em"
-                :required="props.row.required"
-                :param-type="props.row.type"
-                :param-value="props.row.paramValue"
-              />
-
-              <q-popup-edit
-                :buttons="mission.missionStatus === 'DRAFT'"
-                v-model="props.row.paramValue"
-                @save="saveArguments(props.row)"
-              >
-                <parameter-value-input
-                  :param-name="props.row.paramName"
-                  :param-required="props.row.required"
-                  v-model="props.row.paramValue"
+              <div>
+                <parameter-value
+                  :ref="`parameter-value_${props.row.paramName}`"
+                  class="q-pa-xs"
+                  style="font-family:monospace;min-width:24em;word-break:break-all;font-size:0.9em"
+                  :required="props.row.required"
                   :param-type="props.row.type"
-                  :default-value="props.row.defaultValue"
-                  :editable="mission.missionStatus === 'DRAFT'"
+                  :param-value="props.row.paramValue"
                 />
-              </q-popup-edit>
-            </q-field>
 
+                <q-popup-edit
+                  :buttons="editable()"
+                  v-model="props.row.paramValue"
+                  @save="saveArguments(props.row)"
+                >
+                  <parameter-value-input
+                    :param-name="props.row.paramName"
+                    :param-required="props.row.required"
+                    v-model="props.row.paramValue"
+                    :param-type="props.row.type"
+                    :default-value="props.row.defaultValue"
+                    :editable="editable()"
+                  />
+                </q-popup-edit>
+              </div>
+            </q-field>
           </q-td>
 
           <q-td key="description" :props="props"
@@ -363,6 +364,10 @@
       refreshMission() {
         this.$apollo.queries.mission.refetch()
         this.$apollo.queries.executor.refetch()
+      },
+
+      editable() {
+        return this.mission.missionStatus === 'DRAFT'
       },
 
       setMyArguments(mission) {

@@ -15,17 +15,25 @@
       <div class="q-gutter-lg">
         <q-radio
           :disable="!editable"
-          dense :value="value" val="true"  @input="val => { $emit('input', val) }" label="true"
+          label="true"
+          dense size="xs"
+          :value="value" val="true"
+          @input="val => { $emit('input', val) }"
         />
         <q-radio
           :disable="!editable"
-          dense :value="value" val="false" @input="val => { $emit('input', val) }" label="false"
+          label="false"
+          dense size="xs"
+          :value="value" val="false"
+          @input="val => { $emit('input', val) }"
         />
         <q-radio
           v-if="!paramRequired"
           :disable="!editable"
-          dense :value="value" val="" @input="val => { $emit('input', val) }"
           label="Unspecified"
+          dense size="xs"
+          :value="value" val=""
+          @input="val => { $emit('input', val) }"
         />
       </div>
     </div>
