@@ -8,6 +8,7 @@
       :buttons="editable"
       v-model="paramValueModel"
       @save="val => { $emit('save', val) }"
+      @cancel="$emit('cancel')"
     >
       <parameter-value-input
         :param-name="paramName"
