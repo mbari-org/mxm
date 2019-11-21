@@ -1,0 +1,19 @@
+mutation deleteParameter($input: DeleteParameterInput!) {
+  deleteParameter(input: $input) {
+    parameter {
+      executorId
+      missionTplId
+      paramName
+      type
+      required
+      defaultValue
+      description
+    }
+  }
+}
+
+#variables: {
+#  "input": {
+#    "id": ""
+#  }
+#}

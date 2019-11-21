@@ -40,6 +40,13 @@
               dense round icon="undo"
               @click="refreshParameter"
             />
+            <q-btn
+              class="q-ml-md"
+              color="red"
+              size="sm"
+              dense round icon="delete"
+              @click="deleteParameter"
+            />
           </div>
 
         </q-card-section>
@@ -129,6 +136,7 @@
 <script>
   import parameter from '../graphql/parameter.gql'
   import parameterUpdate from '../graphql/parameterUpdate.gql'
+  import parameterDelete from '../graphql/parameterDelete.gql'
   import ParameterValue from 'components/parameter-value'
   import ParameterTypeSelect from 'components/parameter-type-select'
   import cloneDeep from 'lodash/cloneDeep'
@@ -251,6 +259,44 @@
           .catch((error) => {
             console.error('updateParameter: mutation error=', error)
           })
+      },
+
+      deleteParameter() {
+        console.log('deleteParameter: parameter=', this.parameter)
+        this.$q.dialog({
+          title: 'Confirm',
+          message: `Delete parameter '${this.parameter.paramName}'?`,
+          color: 'negative',
+          ok: `Yes, delete '${this.parameter.paramName}'`,
+          cancel: true
+        }).onOk(() => {
+          const mutation = parameterDelete
+          const variables = {
+            input: {
+              id: this.parameter.id
+            }
+          }
+          this.$apollo.mutate({mutation, variables})
+              .then(data => {
+                if (debug) console.debug('deleteParameter: mutation data=', data)
+                this.$q.notify({
+                  message: `Parameter deleted: '${this.parameter.paramName}'`,
+                  timeout: 2000,
+                  position: 'left',
+                  color: 'info',
+                })
+                this.$router.replace(`/${encodeURIComponent(this.parameter.executorId)}/missionTpls/${encodeURIComponent(this.parameter.missionTplId)}`)
+              })
+              .catch(error => {
+                console.error('deleteParameter: mutation error=', error)
+                this.$q.notify({
+                  message: `Parameter deletion error: ${JSON.stringify(error)}`,
+                  timeout: 0,
+                  closeBtn: 'Close',
+                  color: 'warning',
+                })
+              })
+        })
       },
     },
 
