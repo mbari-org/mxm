@@ -125,17 +125,13 @@
               class="rounded-borders q-pa-xs bg-blue-1"
               style="white-space: normal; min-height:1em"
             >
-              {{ props.row.defaultValue }}
-              <q-popup-edit
-                v-if="props.row.defaultValue"
-                v-model="props.row.defaultValue"
-              >
-                <parameter-value-input
-                  :param-name="props.row.paramName"
-                  v-model="props.row.defaultValue"
-                  :param-type="props.row.type"
-                />
-              </q-popup-edit>
+              <parameter-value
+                :param-name="props.row.paramName"
+                :param-type="props.row.type"
+                :param-value="props.row.defaultValue"
+                default-value=""
+                @save="val => { props.row.defaultValue = val }"
+              />
             </div>
           </q-td>
 
@@ -166,7 +162,7 @@
   import missionTplAssetClassDelete from '../graphql/missionTplAssetClassDelete.gql'
   import missionTplUpdate from '../graphql/missionTplUpdate.gql'
   import ParameterNewButton from 'components/parameter-new-button'
-  import ParameterValueInput from 'components/parameter-value-input'
+  import ParameterValue from 'components/parameter-value'
   import map from 'lodash/map'
   import difference from 'lodash/difference'
 
@@ -176,7 +172,7 @@
     components: {
       AssetClassSelectButton,
       ParameterNewButton,
-      ParameterValueInput,
+      ParameterValue,
     },
 
     data() {

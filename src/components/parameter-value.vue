@@ -2,6 +2,8 @@
   <div>
     {{ _showValue }}
 
+<!--    TODO simplify dispatch if not editing -->
+<!--      v-if="editable || $mxmVal.isGeojsonType(paramType)"-->
     <q-popup-edit
       :buttons="editable"
       v-model="paramValueModel"
