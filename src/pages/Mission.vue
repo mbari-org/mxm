@@ -134,14 +134,14 @@
         <div slot="top-left" slot-scope="props" class="row items-center">
           <div class="col">
             <div class="row q-gutter-lg">
-              <div style="font-size:small"
-                   class="col-auto vertical-middle text-weight-light text-grey">
+              <div class="vertical-middle text-weight-light text-grey">
                 Overridden parameters: {{parametersChanged().length}}
               </div>
               <div
                 v-if="parametersWithErrorCount"
-                class="col-auto vertical-middle text-red">
-                Arguments with error: {{parametersWithErrorCount}}
+                class="vertical-middle text-red"
+              >
+                Arguments missing or with error: {{parametersWithErrorCount}}
               </div>
             </div>
 
