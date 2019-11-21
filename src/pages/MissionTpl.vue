@@ -110,12 +110,12 @@
               tag="div"
               :class="props.row.required ? 'text-bold' : 'text-black'"
               :to="`/${encodeURIComponent(params.executorId)}/missiontpls/${encodeURIComponent(params.missionTplId)}/params/${encodeURIComponent(props.row.paramName)}`"
-            >{{ props.row.paramName }}
+            >
+              {{ props.row.paramName }}
+              <div class="text-grey-7 q-mt-sm" style="font-size:0.8em">
+                ({{ props.row.type }})
+              </div>
             </router-link>
-
-            <div class="text-grey-7 q-mt-sm" style="font-size:0.8em">
-              ({{ props.row.type }})
-            </div>
           </q-td>
 
           <q-td key="defaultValue" :props="props"
