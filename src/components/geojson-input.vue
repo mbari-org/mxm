@@ -12,7 +12,7 @@
       include-table
       :style="sizeInfo.qgeomapStyle"
     />
-    <span style="word-break:break-all;font-size:0.7em">{{valueString}}</span>
+<!--    <span style="word-break:break-all;font-size:0.7em">{{valueString}}</span>-->
   </div>
 </template>
 

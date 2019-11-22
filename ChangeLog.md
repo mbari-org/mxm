@@ -1,11 +1,11 @@
 2019-11
 
 - TODO Mission arg editing:
-    - allow to revert to default value (both simple and geo types)
     - geo type: also allow editing of the text?
 - TODO add Duration type  
 - TODO define how to represent tethysdash parameter types  
     
+- allow to revert to default value (both simple and geo types)
 - add option to delete a parameter     
 - handle edit dispatch through parameter-value
 - check for args with error before validating or running the mission
