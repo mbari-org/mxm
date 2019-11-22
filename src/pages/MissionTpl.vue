@@ -23,6 +23,7 @@
         <q-separator/>
         <q-card-section>
           <mxm-markdown
+            expandable expandable-title="Description:"
             editable
             :text="missionTpl.description"
             @saveDescription="updateDescription"

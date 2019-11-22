@@ -71,6 +71,7 @@
           :label-width="4"
         >
           <mxm-markdown
+            expandable
             class="bg-light-blue-1"
             style="min-height:4em;width:24em"
             :text="data.description"
@@ -98,7 +99,7 @@
     typeSelected: null,
     required: true,
     defaultValue: '',
-    description: '',
+    description: null,
   }
 
   export default {

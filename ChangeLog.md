@@ -5,6 +5,7 @@
 - TODO add Duration type  
 - TODO define how to represent tethysdash parameter types  
     
+- expandable mxm-markdown
 - allow to revert to default value (both simple and geo types)
 - add option to delete a parameter     
 - handle edit dispatch through parameter-value

@@ -53,6 +53,7 @@
         <div>
           Mission Description:
           <mxm-markdown
+            expandable
             class="bg-light-blue-1"
             style="min-height:6em;min-width:24em"
             :text="description"
@@ -88,19 +89,17 @@
       }
     },
 
-    data() {
-      return {
-        dialogOpened: false,
-        executor: null,
-        missionTplId: '',
-        assetId: '',
-        missionId: '',
-        description: '',
-        arguments: [],
-        startDate: null,
-        endDate: null
-      }
-    },
+    data: () => ({
+      dialogOpened: false,
+      executor: null,
+      missionTplId: '',
+      assetId: '',
+      missionId: '',
+      description: null,
+      arguments: [],
+      startDate: null,
+      endDate: null
+    }),
 
     computed: {
       missionTpls() {
@@ -154,7 +153,7 @@
         this.missionTplId = ''
         this.assetId = ''
         this.missionId = ''
-        this.description = ''
+        this.description = null
         this.arguments = []
         this.startDate = new Date()
         this.endDate = new Date()

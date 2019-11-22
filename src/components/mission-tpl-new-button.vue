@@ -35,6 +35,7 @@
         <div>
           Description:
           <mxm-markdown
+            expandable
             class="bg-light-blue-1"
             style="min-height:4em;min-width:24em"
             :text="description"
@@ -61,13 +62,11 @@
       }
     },
 
-    data() {
-      return {
-        dialogOpened: false,
-        missionTplId: '',
-        description: ''
-      }
-    },
+    data: () => ({
+      dialogOpened: false,
+      missionTplId: '',
+      description: null,
+    }),
 
     computed: {
       okToSubmit() {
@@ -82,7 +81,7 @@
     methods: {
       openDialog() {
         this.missionTplId = ''
-        this.description = ''
+        this.description = null
         this.dialogOpened = true
       },
 

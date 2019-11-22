@@ -54,6 +54,7 @@
         <div>
           Description:
           <mxm-markdown
+            expandable
             class="bg-light-blue-1"
             style="min-height:4em;min-width:24em"
             :text="description"
@@ -89,15 +90,13 @@
       apiTypeSelect,
     },
 
-    data() {
-      return {
-        dialogOpened: false,
-        executorId: '',
-        httpEndpoint: '',
-        apiType: '',
-        description: ''
-      }
-    },
+    data: () => ({
+      dialogOpened: false,
+      executorId: '',
+      httpEndpoint: '',
+      apiType: '',
+      description: null,
+    }),
 
     computed: {
       okToSubmit() {

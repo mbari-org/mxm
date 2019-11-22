@@ -34,11 +34,13 @@
           <div>
             Description:
             <mxm-markdown
+              expandable init-expanded
               :text="executor.description"
               editable
               @saveDescription="d => { executor.description = d }"
             />
           </div>
+          <q-separator/>
 
           <div class="column q-mb-md q-gutter-md">
             <div class="row q-gutter-md">

@@ -62,8 +62,8 @@
 
         <q-separator/>
         <q-card-section>
-          Description:
           <mxm-markdown
+            expandable expandable-title="Description:"
             :text="mission.description"
             :editable="editable()"
             @saveDescription="updateDescription"
@@ -424,9 +424,6 @@
         if (this.savingArgs) {
           return
         }
-        if (this.valueError(row.paramName)) {
-          return
-        }
 
         this.savingArgs = true
 
@@ -449,8 +446,8 @@
               this.refreshMission()
               this.$q.notify({
                 message: `Arguments updated`,
-                timeout: 600,
-                position: 'left',
+                timeout: 700,
+                position: 'top',
                 color: 'info',
               })
             }
@@ -567,7 +564,15 @@
       },
 
       updateDescription(description) {
-        return this.updateMission({description})
+        this.updateMission({description})
+            .then(() => {
+              this.$q.notify({
+                message: 'Description updated',
+                timeout: 700,
+                color: 'info',
+                position: 'top',
+              })
+            })
       },
 
       updateMissionStatus(missionStatus) {
@@ -660,6 +665,7 @@
                     message: `Mission submitted. Status: ${status}`,
                     timeout: 2000,
                     color: 'info',
+                    position: 'top',
                   })
                   this.refreshMission()
                 })
@@ -744,7 +750,7 @@
               this.$q.notify({
                 message: `Mission deleted: '${this.mission.missionId}'`,
                 timeout: 2000,
-                position: 'left',
+                position: 'top',
                 color: 'info',
               })
               this.$utl.replace([this.mission.executorId])

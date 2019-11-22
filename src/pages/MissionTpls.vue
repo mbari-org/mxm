@@ -36,7 +36,7 @@
         </div>
 
         <q-td slot="body-cell-missionTplId" slot-scope="props" :props="props"
-              style="width:5px"
+              style="width:5px;vertical-align:top"
         >
           <router-link
             style="text-decoration:none"
@@ -48,7 +48,10 @@
 
         <q-td slot="body-cell-description" slot-scope="props" :props="props"
         >
-          <mxm-markdown simple hide-empty :text="props.value"/>
+          <mxm-markdown
+            expandable :expandable-subtitle-limit="80"
+            simple hide-empty :text="props.value"
+          />
         </q-td>
 
       </q-table>
