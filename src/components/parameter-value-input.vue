@@ -4,9 +4,7 @@
       v-if="$mxmVal.isGeojsonType(paramType)"
       :param-name="paramName"
       :param-type="paramType"
-      :default-value="defaultValue"
       :editable="editable"
-
       :value="paramValue"
       @input="val => { paramValue = val; $emit('input', val) }"
     />
@@ -45,7 +43,6 @@
       autofocus
       :readonly="!editable"
       :clearable="editable"
-      :clear-value="defaultValue"
       :type="inputProps.type"
       :style="inputProps.style"
       :rows="inputProps.rows"
@@ -83,11 +80,6 @@
         required: false
       },
 
-      defaultValue: {
-        type: String,
-        required: false
-      },
-
       editable: {
         type: Boolean,
         default: false
@@ -107,7 +99,6 @@
       paramName=${this.paramName}
       paramType=${this.paramType}
       value=${this.value}
-      defaultValue=${this.defaultValue}
       editable=${this.editable}
       `)
 

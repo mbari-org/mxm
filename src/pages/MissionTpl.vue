@@ -130,7 +130,6 @@
                 :param-name="props.row.paramName"
                 :param-type="props.row.type"
                 :param-value="props.row.defaultValue"
-                default-value=""
                 @save="val => { props.row.defaultValue = val }"
               />
             </div>

@@ -38,11 +38,6 @@
         required: false
       },
 
-      defaultValue: {
-        type: String,
-        required: false
-      },
-
       editable: {
         type: Boolean,
         default: false
@@ -76,7 +71,6 @@
       paramName=${this.paramName}
       paramType=${this.paramType}
       value=${this.value}
-      defaultValue=${this.defaultValue}
       editable=${this.editable}
       `)
 

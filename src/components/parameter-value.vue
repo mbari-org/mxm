@@ -17,10 +17,12 @@
           :param-required="required"
           v-model="paramValueModel"
           :param-type="paramType"
-          :default-value="defaultValue"
           :editable="editable"
         />
-        <div class="row q-mt-sm justify-center">
+        <div
+          v-if="editable"
+          class="row q-mt-sm justify-center"
+        >
           <q-btn
             no-caps flat dense color="light"
             label="Cancel"
@@ -85,7 +87,7 @@
     },
 
     data: () => ({
-      paramValueModel: '',
+      paramValueModel: null,
       insert: true,
     }),
 
@@ -114,7 +116,7 @@
           // trick to refresh the graphical edit: re-insert it:
           this.insert = false
           this.$nextTick(() => {
-            this.paramValueModel = this.defaultValue
+          this.paramValueModel = this.defaultValue
             this.insert = true
           })
         }
