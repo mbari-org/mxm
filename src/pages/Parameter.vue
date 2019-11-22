@@ -84,7 +84,7 @@
                       :param-name="parameter.paramName"
                       :param-type="parameter.type"
                       :param-value="parameter.defaultValue"
-                      :default-value="parameter.defaultValue"
+                      :default-value="original.defaultValue"
                       editable
                       @save="val => { parameter.defaultValue = val }"
                       @cancel="() => { parameter.defaultValue = original.defaultValue }"

@@ -18,25 +18,26 @@
           :param-type="paramType"
           :editable="editable"
         />
-        <div
-          v-if="editable"
-          class="row q-mt-sm justify-center"
-        >
-          <q-btn
-            no-caps flat dense color="light"
-            label="Cancel"
-            @click.stop="cancel"
-          />
-          <q-btn
-            no-caps dense color="positive" class="q-ml-lg"
-            label="Set"
-            @click.stop="set"
-          />
-          <q-btn
-            :disable="paramValueModel === defaultValue"
-            label="Reset" no-caps dense color="warning" class="q-ml-lg"
-            @click.stop="reset"
-          />
+        <div v-if="editable" class="q-mt-sm">
+          <q-separator/>
+          <div class="row q-mt-xs justify-center q-gutter-x-lg">
+            <q-btn
+              :disable="paramValueModel === defaultValue"
+              no-caps dense color="positive"
+              label="Set"
+              @click.stop="set"
+            />
+            <q-btn
+              :disable="paramValueModel === defaultValue"
+              label="Reset" no-caps dense color="warning"
+              @click.stop="reset"
+            />
+            <q-btn
+              no-caps dense color="light" text-color="black"
+              label="Cancel"
+              @click.stop="cancel"
+            />
+          </div>
         </div>
       </template>
     </q-popup-edit>
