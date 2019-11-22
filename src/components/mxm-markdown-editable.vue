@@ -24,7 +24,7 @@
       @dialogClosing="cancelEdit"
     >
       <q-input
-        v-model.trim="contents"
+        v-model="contents"
         clearable
         class="bg-green-1"
         style="font-family:monospace"
@@ -97,18 +97,22 @@
 
     computed: {
       anyMods() {
-        return this.contents != this.text
+        return this.contents !== (this.text || '')
       },
     },
 
     mounted() {
-      this.contents = this.text
+      this.setContents()
       this.editOpened = false
     },
 
     methods: {
+      setContents() {
+        this.contents = this.text || ''
+      },
+
       openEdit() {
-        this.contents = this.text
+        this.setContents()
         this.editOpened = true
       },
 
@@ -118,15 +122,15 @@
       },
 
       cancelEdit() {
-        this.contents = this.text
+        this.setContents()
         this.editOpened = false
       },
     },
 
     watch: {
       // needed because mxm-markdown-view uses updatable `contents`
-      text(val) {
-        this.contents = val
+      text() {
+        this.setContents()
       },
     },
   }
