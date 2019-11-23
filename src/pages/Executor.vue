@@ -32,9 +32,8 @@
         <q-separator/>
         <q-card-section>
           <div>
-            Description:
             <mxm-markdown
-              expandable init-expanded
+              expandable init-expanded expandable-title="Description:"
               :text="executor.description"
               editable
               @saveDescription="d => { executor.description = d }"
