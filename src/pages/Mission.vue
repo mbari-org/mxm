@@ -195,6 +195,7 @@
                 class="q-pa-xs"
                 style="font-family:monospace;min-width:24em;word-break:break-all;font-size:0.9em"
                 :param-required="props.row.required"
+                :label="`${props.row.paramName}:`"
                 :param-name="props.row.paramName"
                 :param-type="props.row.type"
                 :param-value="props.row.paramValue"

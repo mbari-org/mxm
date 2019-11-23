@@ -81,6 +81,7 @@
                       ref="parameter-value"
                       class="q-pa-xs"
                       style="font-family:monospace;min-width:24em;word-break:break-all"
+                      :label="`${params.paramName} default value:`"
                       :param-name="params.paramName"
                       :param-type="parameter.type"
                       :param-value="parameter.defaultValue"

@@ -57,6 +57,7 @@
             ref="parameter-value"
             class="q-pa-xs"
             style="font-family:monospace;width:24em"
+            label="Default value:"
             :param-name="data.paramName"
             :param-type="data.typeSelected"
             :param-value="data.defaultValue"

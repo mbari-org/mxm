@@ -127,6 +127,7 @@
               style="white-space: normal; min-height:1em"
             >
               <parameter-value
+                :label="`${props.row.paramName} default value:`"
                 :param-name="props.row.paramName"
                 :param-type="props.row.type"
                 :param-value="props.row.defaultValue"

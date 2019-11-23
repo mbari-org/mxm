@@ -2,6 +2,7 @@
   <div>
     <geojson-input
       v-if="$mxmVal.isGeojsonType(paramType)"
+      :label="label"
       :param-name="paramName"
       :param-type="paramType"
       :editable="editable"
@@ -9,8 +10,9 @@
       @input="val => { paramValue = val; $emit('input', val) }"
     />
 
-    <div v-else-if="paramType === 'boolean'" class="q-pa-md">
-      <div class="q-gutter-lg">
+    <div v-else-if="paramType === 'boolean'">
+      <div v-if="label" class="q-mb-md text-bold">{{ label }}</div>
+      <div class="q-ml-sm q-gutter-lg">
         <q-radio
           :disable="!editable"
           label="true"
@@ -36,20 +38,22 @@
       </div>
     </div>
 
-    <q-input
-      v-else
-      class="rounded-borders q-pa-xs bg-green-1"
-      stack-label :label="paramName"
-      autofocus
-      :readonly="!editable"
-      :clearable="editable"
-      :type="inputProps.type"
-      :style="inputProps.style"
-      :rows="inputProps.rows"
-      :value="value"
-      @change="val => { $emit('change', val) }"
-      @input="val => { $emit('input', val) }"
-    />
+    <div v-else>
+      <div v-if="label" class="q-mb-sm text-bold">{{ label }}</div>
+      <q-input
+        class="q-ml-sm rounded-borders q-pa-xs bg-green-1"
+        autofocus dense
+        :readonly="!editable"
+        :clearable="editable"
+        :type="inputProps.type"
+        :style="inputProps.style"
+        :rows="inputProps.rows"
+        :value="value"
+        @change="val => { $emit('change', val) }"
+        @input="val => { $emit('input', val) }"
+      />
+
+    </div>
   </div>
 </template>
 
@@ -60,6 +64,11 @@
 
   export default {
     props: {
+      label: {
+        type: String,
+        required: false
+      },
+
       paramName: {
         type: String,
         required: true

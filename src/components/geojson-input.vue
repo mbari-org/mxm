@@ -1,6 +1,6 @@
 <template>
   <div :style="sizeInfo.containerStyle">
-    <div class="text-h5">{{paramName}}</div>
+    <div v-if="label" class="text-bold">{{ label }}</div>
     <qgeomap
       ref="qgeomap"
       debug-feature="right"
@@ -23,6 +23,11 @@
 
   export default {
     props: {
+      label: {
+        type: String,
+        required: false
+      },
+
       paramName: {
         type: String,
         required: true

@@ -13,6 +13,7 @@
     >
       <div class="q-ma-md">
         <parameter-value-input
+          :label="label"
           :param-name="paramName"
           :param-required="paramRequired"
           v-model="paramValueModel"
@@ -53,6 +54,11 @@
 
   export default {
     props: {
+      label: {
+        type: String,
+        required: false
+      },
+
       paramName: {
         type: String,
         required: true
