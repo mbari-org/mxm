@@ -23,7 +23,7 @@
           <q-separator/>
           <div class="row q-mt-xs justify-center q-gutter-x-lg">
             <q-btn
-              :disable="!originalValue && originalValue === paramValueModel"
+              :disable="paramValue === paramValueModel"
               no-caps dense color="positive"
               label="Set"
               @click.stop="setValue"
