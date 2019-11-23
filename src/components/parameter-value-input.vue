@@ -16,14 +16,14 @@
           label="true"
           dense size="xs"
           :value="value" val="true"
-          @input="val => { $emit('input', val) }"
+          @input="val => { paramValue = val; $emit('input', val) }"
         />
         <q-radio
           :disable="!editable"
           label="false"
           dense size="xs"
           :value="value" val="false"
-          @input="val => { $emit('input', val) }"
+          @input="val => { paramValue = val; $emit('input', val) }"
         />
         <q-radio
           v-if="!paramRequired"
@@ -31,7 +31,7 @@
           label="Unspecified"
           dense size="xs"
           :value="value" val=""
-          @input="val => { $emit('input', val) }"
+          @input="val => { paramValue = val; $emit('input', val) }"
         />
       </div>
     </div>

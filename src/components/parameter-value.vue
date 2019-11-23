@@ -1,19 +1,20 @@
 <template>
   <div>
-    {{ _showValue }}
+    {{ paramValueModel || (paramRequired ? '??' : '') }}
 
-    <q-popup-edit
-      v-if="editable || $mxmVal.isGeojsonType(paramType)"
-      v-model="paramValueModel"
-      @save="val => { $emit('save', val) }"
-      @cancel="$emit('cancel')"
+    <q-menu
+      v-if="paramType && (editable || $mxmVal.isGeojsonType(paramType))"
+      ref="q-popup-edit"
+      @keyup.enter.stop="setValue"
+      @cancel="cancel"
+      @hide="cancel"
+      @escape-key="cancel"
       :cover="false" self="top left"
     >
-      <template v-slot="{ initialValue, value, emitValue, set, cancel }">
+      <div class="q-ma-md">
         <parameter-value-input
-          v-if="insert"
           :param-name="paramName"
-          :param-required="required"
+          :param-required="paramRequired"
           v-model="paramValueModel"
           :param-type="paramType"
           :editable="editable"
@@ -22,15 +23,16 @@
           <q-separator/>
           <div class="row q-mt-xs justify-center q-gutter-x-lg">
             <q-btn
-              :disable="paramValueModel === defaultValue"
+              :disable="!originalValue && originalValue === paramValueModel"
               no-caps dense color="positive"
               label="Set"
-              @click.stop="set"
+              @click.stop="setValue"
             />
             <q-btn
-              :disable="paramValueModel === defaultValue"
+              v-if="originalValue"
+              :disable="paramValueModel === originalValue"
               label="Reset" no-caps dense color="warning"
-              @click.stop="reset"
+              @click.stop="resetValue"
             />
             <q-btn
               no-caps dense color="light" text-color="black"
@@ -39,8 +41,8 @@
             />
           </div>
         </div>
-      </template>
-    </q-popup-edit>
+      </div>
+    </q-menu>
   </div>
 </template>
 
@@ -66,12 +68,12 @@
         default: ''
       },
 
-      required: {
+      paramRequired: {
         type: Boolean,
         default: false
       },
 
-      defaultValue: {
+      originalValue: {
         type: String,
         required: false
       },
@@ -87,49 +89,41 @@
     },
 
     data: () => ({
+      dummy: '',
       paramValueModel: null,
-      insert: true,
     }),
 
     mounted() {
       this.paramValueModel = this.paramValue
-      this.insert = true
-    },
-
-    computed: {
-      _showValue() {
-        if (this.paramValue) {
-          return this.paramValue
-        }
-        else if (this.required) {
-          return '??'
-        }
-        else {
-          return ''
-        }
-      },
     },
 
     methods: {
-      reset() {
-        if (this.$mxmVal.isGeojsonType(this.paramType)) {
-          // trick to refresh the graphical edit: re-insert it:
-          this.insert = false
-          this.$nextTick(() => {
-          this.paramValueModel = this.defaultValue
-            this.insert = true
-          })
-        }
-        else {
-          this.paramValueModel = this.defaultValue
-        }
+      errorMessage() {
+        return this.$mxmVal && this.$mxmVal.checkValue(this.paramValue, this.paramType, this.paramRequired)
       },
 
-      errorMessage() {
-        return this.$mxmVal && this.$mxmVal.checkValue(this.paramValue, this.paramType, this.required)
+      setValue() {
+        this.$emit('save', this.paramValueModel)
+        this.$refs['q-popup-edit'].hide()
+      },
+
+      resetValue() {
+        this.paramValueModel = this.originalValue
+        this.$emit('save', this.paramValueModel)
+        this.$refs['q-popup-edit'].hide()
+      },
+
+      cancel() {
+        this.paramValueModel = this.paramValue
+        this.$emit('save', this.paramValueModel)
+        this.$refs['q-popup-edit'].hide()
+      },
+    },
+
+    watch: {
+      paramValue(val) {
+        this.paramValueModel = val
       },
     },
   }
-
 </script>
-

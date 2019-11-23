@@ -4,7 +4,9 @@
     - geo type: also allow editing of the text?
 - TODO add Duration type  
 - TODO define how to represent tethysdash parameter types  
-    
+- TODO replicate undoParameter handling in other relevant components
+
+- more adjs to parameter-value editing handling    
 - simplify parameter-value dispatch: only edit-popup if editing OR geo type
 - expandable mxm-markdown
 - allow to revert to default value (both simple and geo types)

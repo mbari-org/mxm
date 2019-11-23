@@ -60,7 +60,6 @@
             :param-name="data.paramName"
             :param-type="data.typeSelected"
             :param-value="data.defaultValue"
-            default-value=""
             editable
             @save="val => { data.defaultValue = val }"
           />

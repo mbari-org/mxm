@@ -194,11 +194,11 @@
                 :ref="`parameter-value_${props.row.paramName}`"
                 class="q-pa-xs"
                 style="font-family:monospace;min-width:24em;word-break:break-all;font-size:0.9em"
-                :required="props.row.required"
+                :param-required="props.row.required"
                 :param-name="props.row.paramName"
                 :param-type="props.row.type"
                 :param-value="props.row.paramValue"
-                :default-value="props.row.defaultValue"
+                :original-value="props.row.defaultValue"
                 :editable="editable()"
                 @save="val => { props.row.paramValue = val; saveArguments(props.row) }"
               />
