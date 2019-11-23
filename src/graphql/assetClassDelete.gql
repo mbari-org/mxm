@@ -1,0 +1,14 @@
+mutation deleteAssetClass($input: DeleteAssetClassInput!) {
+  deleteAssetClass(input: $input) {
+    assetClass {
+      className
+      description
+    }
+  }
+}
+
+#variables: {
+#  "input": {
+#    "id": ""
+#  }
+#}

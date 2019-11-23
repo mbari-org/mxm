@@ -3,22 +3,33 @@
     <div v-if="missionTpl">
       <q-card class="q-mb-md">
         <q-card-section>
-          Mission Template:
-          <span class="text-bold">
-            {{ params.missionTplId }}
-            <q-popup-edit
-              v-model="missionTpl.missionTplId"
-              title="Mission Template ID"
-              buttons
-              @save="updateMissionTplId"
-            >
-              <q-input
-                v-model.trim="missionTpl.missionTplId"
-                clearable
-                class="bg-green-1"
+          <div class="row q-gutter-x-sm">
+            <div>Mission Template:</div>
+            <div class="text-bold">
+              {{ params.missionTplId }}
+              <q-popup-edit
+                v-model="missionTpl.missionTplId"
+                title="Mission Template ID"
+                buttons
+                @save="updateMissionTplId"
+              >
+                <q-input
+                  v-model.trim="missionTpl.missionTplId"
+                  clearable
+                  class="bg-green-1"
+                />
+              </q-popup-edit>
+            </div>
+            <div class="q-ml-xl">
+              <q-btn
+                class="q-ml-md"
+                color="red"
+                size="xs"
+                dense round icon="delete"
+                @click="deleteMissionTpl"
               />
-            </q-popup-edit>
-          </span>
+            </div>
+          </div>
         </q-card-section>
         <q-separator/>
         <q-card-section>
@@ -162,10 +173,12 @@
 
 <script>
   import missionTpl from '../graphql/missionTpl.gql'
-  import AssetClassSelectButton from 'components/asset-class-select-button'
   import missionTplAssetClassInsert from '../graphql/missionTplAssetClassInsert.gql'
   import missionTplAssetClassDelete from '../graphql/missionTplAssetClassDelete.gql'
   import missionTplUpdate from '../graphql/missionTplUpdate.gql'
+  import missionTplDelete from '../graphql/missionTplDelete.gql'
+
+  import AssetClassSelectButton from 'components/asset-class-select-button'
   import ParameterNewButton from 'components/parameter-new-button'
   import ParameterValue from 'components/parameter-value'
   import map from 'lodash/map'
@@ -380,6 +393,44 @@
           .catch((error) => {
             console.error('updateMissionTpl: mutation error=', error)
           })
+      },
+
+      deleteMissionTpl() {
+        console.log('deleteMissionTpl: missionTpl=', this.missionTpl)
+        this.$q.dialog({
+          title: 'Confirm',
+          message: `Delete mission template '${this.missionTpl.missionTplId}'?`,
+          color: 'negative',
+          ok: `Yes, delete '${this.missionTpl.missionTplId}'`,
+          cancel: true
+        }).onOk(() => {
+          const mutation = missionTplDelete
+          const variables = {
+            input: {
+              id: this.missionTpl.id
+            }
+          }
+          this.$apollo.mutate({mutation, variables})
+              .then(data => {
+                if (debug) console.debug('deleteMissionTpl: mutation data=', data)
+                this.$q.notify({
+                  message: `Mission template deleted: '${this.missionTpl.missionTplId}'`,
+                  timeout: 2000,
+                  position: 'top',
+                  color: 'info',
+                })
+                this.$utl.replace([this.params.executorId, 'missionTpls'])
+              })
+              .catch(error => {
+                console.error('deleteMissionTpl: mutation error=', error)
+                this.$q.notify({
+                  message: `Mission template deletion error: ${JSON.stringify(error)}`,
+                  timeout: 0,
+                  closeBtn: 'Close',
+                  color: 'warning',
+                })
+              })
+        })
       },
     },
 

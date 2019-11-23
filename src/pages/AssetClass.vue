@@ -3,7 +3,19 @@
     <div v-if="assetClass">
       <q-card class="q-mb-md">
         <q-card-section>
-          Asset Class: <span class="text-bold">{{assetClass.className}}</span>
+          <div class="row q-gutter-x-sm">
+            <div>Asset Class:</div>
+            <div class="text-bold">{{assetClass.className}}</div>
+            <div class="q-ml-xl">
+              <q-btn
+                class="q-ml-md"
+                color="red"
+                size="xs"
+                dense round icon="delete"
+                @click="deleteAssetClass"
+              />
+            </div>
+          </div>
         </q-card-section>
         <q-separator/>
         <q-card-section>
@@ -78,8 +90,10 @@
 
 <script>
   import assetClass from '../graphql/assetClass.gql'
-  import AssetNewButton from 'components/asset-new-button'
   import assetClassUpdate from '../graphql/assetClassUpdate.gql'
+  import assetClassDelete from '../graphql/assetClassDelete.gql'
+
+  import AssetNewButton from 'components/asset-new-button'
 
   const debug = false
 
@@ -188,6 +202,44 @@
           .catch((error) => {
             console.error('updateDescription: mutation error=', error)
           })
+      },
+
+      deleteAssetClass() {
+        console.log('deleteAssetClass: assetClass=', this.assetClass)
+        this.$q.dialog({
+          title: 'Confirm',
+          message: `Delete asset class '${this.assetClass.className}'?`,
+          color: 'negative',
+          ok: `Yes, delete '${this.assetClass.className}'`,
+          cancel: true
+        }).onOk(() => {
+          const mutation = assetClassDelete
+          const variables = {
+            input: {
+              id: this.assetClass.id
+            }
+          }
+          this.$apollo.mutate({mutation, variables})
+              .then(data => {
+                if (debug) console.debug('deleteAssetClass: mutation data=', data)
+                this.$q.notify({
+                  message: `Asset class deleted: '${this.assetClass.className}'`,
+                  timeout: 2000,
+                  position: 'top',
+                  color: 'info',
+                })
+                this.$utl.replace([this.params.executorId, 'assetclasses'])
+              })
+              .catch(error => {
+                console.error('deleteAssetClass: mutation error=', error)
+                this.$q.notify({
+                  message: `Asset class deletion error: ${JSON.stringify(error)}`,
+                  timeout: 0,
+                  closeBtn: 'Close',
+                  color: 'warning',
+                })
+              })
+        })
       },
     },
 

@@ -6,6 +6,7 @@
 - TODO define how to represent tethysdash parameter types  
 - TODO replicate undoParameter handling in other relevant components
 
+- add options to delete: asset, asset class, mission template
 - label for parameter-value
 - more adjs to parameter-value editing handling    
 - simplify parameter-value dispatch: only edit-popup if editing OR geo type

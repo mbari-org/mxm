@@ -139,6 +139,7 @@
   import parameter from '../graphql/parameter.gql'
   import parameterUpdate from '../graphql/parameterUpdate.gql'
   import parameterDelete from '../graphql/parameterDelete.gql'
+
   import ParameterValue from 'components/parameter-value'
   import ParameterTypeSelect from 'components/parameter-type-select'
   import cloneDeep from 'lodash/cloneDeep'
@@ -288,7 +289,7 @@
                 this.$q.notify({
                   message: `Parameter deleted: '${this.parameter.paramName}'`,
                   timeout: 2000,
-                  position: 'left',
+                  position: 'top',
                   color: 'info',
                 })
                 this.$utl.replace([this.parameter.executorId, 'missionTpls', this.parameter.missionTplId])

@@ -1,0 +1,14 @@
+mutation deleteMissionTpl($input: DeleteMissionTplInput!) {
+  deleteMissionTpl(input: $input) {
+    missionTpl {
+      executorId
+      missionTplId
+    }
+  }
+}
+
+#variables: {
+#  "input": {
+#    "id": ""
+#  }
+#}

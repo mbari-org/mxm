@@ -3,13 +3,27 @@
     <div v-if="asset">
       <q-card class="q-mb-md">
         <q-card-section>
-          Asset ID: <span class="text-bold">{{asset.assetId}}</span>
+          <div class="row q-gutter-x-sm">
+            <div>Asset ID:</div>
+            <div class="text-bold">{{asset.assetId}}</div>
+            <div>
+              (class:
+              <router-link
+                style="text-decoration:none"
+                :to="$utl.routeLoc([params.executorId, 'assetclasses', asset.className])"
+              >{{ asset.className }}</router-link>)
+            </div>
+            <div class="q-ml-xl">
+              <q-btn
+                class="q-ml-md"
+                color="red"
+                size="xs"
+                dense round icon="delete"
+                @click="deleteAsset"
+              />
+            </div>
+          </div>
 
-          (class:
-          <router-link
-            style="text-decoration:none"
-            :to="$utl.routeLoc([params.executorId, 'assetclasses', asset.className])"
-          >{{ asset.className }}</router-link>)
         </q-card-section>
 
         <q-separator/>
@@ -32,8 +46,10 @@
 
 <script>
   import asset from '../graphql/asset.gql'
-  import AssetNewButton from 'components/asset-new-button'
   import assetUpdate from '../graphql/assetUpdate.gql'
+  import assetDelete from '../graphql/assetDelete.gql'
+
+  import AssetNewButton from 'components/asset-new-button'
 
   const debug = false
 
@@ -131,6 +147,44 @@
           .catch((error) => {
             console.error('updateDescription: mutation error=', error)
           })
+      },
+
+      deleteAsset() {
+        console.log('deleteAsset: asset=', this.asset)
+        this.$q.dialog({
+          title: 'Confirm',
+          message: `Delete asset ID '${this.asset.assetId}'?`,
+          color: 'negative',
+          ok: `Yes, delete '${this.asset.assetId}'`,
+          cancel: true
+        }).onOk(() => {
+          const mutation = assetDelete
+          const variables = {
+            input: {
+              id: this.asset.id
+            }
+          }
+          this.$apollo.mutate({mutation, variables})
+              .then(data => {
+                if (debug) console.debug('deleteAsset: mutation data=', data)
+                this.$q.notify({
+                  message: `Asset deleted: '${this.asset.assetId}'`,
+                  timeout: 2000,
+                  position: 'top',
+                  color: 'info',
+                })
+                this.$utl.replace([this.params.executorId, 'assets'])
+              })
+              .catch(error => {
+                console.error('deleteAsset: mutation error=', error)
+                this.$q.notify({
+                  message: `Asset deletion error: ${JSON.stringify(error)}`,
+                  timeout: 0,
+                  closeBtn: 'Close',
+                  color: 'warning',
+                })
+              })
+        })
       },
     },
 
