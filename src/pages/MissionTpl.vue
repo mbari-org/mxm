@@ -15,7 +15,7 @@
               >
                 <q-input
                   v-model.trim="missionTpl.missionTplId"
-                  clearable
+                  clearable autofocus
                   class="bg-green-1"
                 />
               </q-popup-edit>
@@ -382,6 +382,12 @@
         this.$apollo.mutate({mutation, variables})
           .then((data) => {
             if (debug) console.debug('updateMissionTpl: mutation data=', data)
+            this.$q.notify({
+              message: `Mission template updated`,
+              timeout: 1000,
+              position: 'top',
+              color: 'info',
+            })
             if (missionTplPatch.missionTplId) {
               this.$utl.replace([this.params.executorId, 'missiontpls', missionTplPatch.missionTplId])
               return

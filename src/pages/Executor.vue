@@ -87,7 +87,7 @@
                 >
                   <q-input
                     v-model.trim="executor.httpEndpoint"
-                    clearable
+                    clearable autofocus
                     class="bg-green-1"
                   />
                 </q-popup-edit>

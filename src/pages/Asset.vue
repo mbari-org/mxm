@@ -143,6 +143,12 @@
           .then((data) => {
             if (debug) console.debug('updateDescription: mutation data=', data)
             this.asset.description = val
+            this.$q.notify({
+              message: `Asset description saved`,
+              timeout: 1000,
+              position: 'top',
+              color: 'info',
+            })
           })
           .catch((error) => {
             console.error('updateDescription: mutation error=', error)

@@ -575,7 +575,7 @@
         this.updateMission({description})
             .then(() => {
               this.$q.notify({
-                message: 'Description updated',
+                message: 'Mission description saved',
                 timeout: 700,
                 color: 'info',
                 position: 'top',
