@@ -138,18 +138,22 @@
           <q-td key="description" :props="props"
                 style="vertical-align:top"
           >
-            <mxm-markdown simple hide-empty :text="props.row.description"/>
+            <mxm-markdown
+              simple hide-empty :text="props.row.description"
+            />
           </q-td>
         </q-tr>
       </q-table>
     </div>
 
     <div v-else-if="!loading">
-      Mission Template not found.
-      <div class="q-ml-md">
-        Executor: {{params.executorId}} <br/>
-        Mission Template ID: {{params.missionTplId}}
-      </div>
+      <div class="text-negative">Not found:</div>
+      <table class="q-ml-md">
+        <tbody>
+        <tr><td>Mission Template:<td/><td>{{params.missionTplId}}</td></tr>
+        <tr><td>Executor:<td/><td>{{params.executorId}}</td></tr>
+        </tbody>
+      </table>
     </div>
 
   </q-page>
