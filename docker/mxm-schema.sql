@@ -89,7 +89,6 @@ create table if not exists missions
   description varchar,
   start_date timestamp with time zone,
   end_date timestamp with time zone,
-  geometry json,
   foreign key (executor_id, mission_tpl_id) references mission_tpls on update cascade on delete cascade,
   foreign key (executor_id, asset_id) references assets on update cascade on delete cascade,
   primary key (executor_id, mission_tpl_id, mission_id)
