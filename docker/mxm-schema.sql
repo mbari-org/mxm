@@ -64,6 +64,7 @@ create table if not exists parameters
   type varchar not null,
   required boolean default false not null,
   default_value varchar,
+  default_units varchar,
   description varchar,
   foreign key (executor_id, mission_tpl_id) references mission_tpls on update cascade on delete cascade,
   primary key (executor_id, mission_tpl_id, param_name)
@@ -102,6 +103,7 @@ create table if not exists arguments
   mission_id varchar not null,
   param_name varchar not null,
   param_value varchar not null,
+  param_units varchar,
   foreign key (executor_id, mission_tpl_id, mission_id) references missions on update cascade on delete cascade,
   foreign key (executor_id, mission_tpl_id, param_name) references parameters on update cascade on delete cascade,
   primary key (executor_id, mission_tpl_id, mission_id, param_name)

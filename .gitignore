@@ -3,7 +3,7 @@ docker/config/config.json
 .quasar
 .DS_Store
 .thumbs.db
-docker/db_data/
+docker/db_data*/
 node_modules
 /dist
 /src-cordova/platforms

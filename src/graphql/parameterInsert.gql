@@ -5,6 +5,7 @@ mutation(
   $type: String!
   $required: Boolean!
   $defaultValue: String
+  $defaultUnits: String
   $description: String
 ) {
   createParameter(
@@ -16,6 +17,7 @@ mutation(
         paramName: $paramName
         type: $type
         defaultValue: $defaultValue
+        defaultUnits: $defaultUnits
         required: $required
       }
     }

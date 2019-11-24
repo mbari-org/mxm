@@ -37,7 +37,7 @@ services:
 
   mxm-postgres:
     container_name: mxm-postgres
-    image: mbari/mxm-postgres:0.2.1
+    image: mbari/mxm-postgres:0.3.0
     ports:
     - "25432:5432"
     restart: always

@@ -11,6 +11,5 @@ query missions($executorId: String!) {
     description
     startDate
     endDate
-    geometry
   }
 }

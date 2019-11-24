@@ -6,6 +6,7 @@ export default ({ app, Vue }) => {
     toGeojson,
     fromGeojson,
     isGeojsonType,
+    isNumericType,
   }
 }
 
@@ -314,4 +315,8 @@ function isGeojsonType(simpleType) {
     default:
       return false
   }
+}
+
+function isNumericType(simpleType) {
+  return simpleType === 'float' || simpleType === 'integer'
 }

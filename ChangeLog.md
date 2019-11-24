@@ -1,11 +1,12 @@
 2019-11
 
-- TODO Mission arg editing:
-    - geo type: also allow editing of the text?
+- TODO geo type: also allow text-based editing of the value?
 - TODO add Duration type  
 - TODO define how to represent tethysdash parameter types  
 - TODO replicate undoParameter handling in other relevant components
 
+- TODO edit argument units
+- add "units" to model: defaultUnits in parameter and and paramUnits in argument
 - remove unused geometry in mission table
 - add options to delete: asset, asset class, mission template
 - label for parameter-value

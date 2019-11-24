@@ -16,6 +16,7 @@ query ($executorId: String!, $missionTplId: String!) {
       type
       required
       defaultValue
+      defaultUnits
       description
     }
   }

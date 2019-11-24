@@ -31,7 +31,7 @@
           />
         </div>
 
-        <div class="row justify-between">
+        <div class="row justify-between items-center">
           <div :class="{'text-red': !data.typeSelected}">
             Type:
             <parameter-type-select
@@ -39,36 +39,55 @@
             />
           </div>
 
-          <q-toggle
-            v-model="data.required"
-            label="Required?"
+          <q-checkbox
+            v-if="$mxmVal.isNumericType(data.typeSelected)"
+            label="Units?"
+            v-model="withUnits"
+          />
+        </div>
+
+        <q-checkbox
+          label="Required?"
+          v-model="data.required"
+        />
+
+        <div>
+          <q-field
+            stack-label label="Default Value:"
             :label-width="4"
-            :left-label="true"
+            :error="!!defaultValueError()"
+            :error-message="defaultValueError()"
+            hide-bottom-space
+          >
+            <parameter-value
+              ref="parameter-value"
+              class="q-pa-xs"
+              style="font-family:monospace;width:24em"
+              label="Default value:"
+              :param-name="data.paramName"
+              :param-type="data.typeSelected"
+              :param-value="data.defaultValue"
+              editable
+              @save="val => { data.defaultValue = val }"
+            />
+          </q-field>
+
+          <q-input
+            v-if="$mxmVal.isNumericType(data.typeSelected) && withUnits"
+            prefix="Units:"
+            dense hide-bottom-space
+            type="text"
+            v-model.trim="defaultUnits"
+            :error="!defaultUnits"
+            class="q-ml-xl bg-light-blue-1"
+            style="height:2.2em; width:12em"
           />
         </div>
 
         <q-field
-          stack-label label="Default Value:"
-          :label-width="4"
-          :error="!!defaultValueError()"
-          :error-message="defaultValueError()"
-        >
-          <parameter-value
-            ref="parameter-value"
-            class="q-pa-xs"
-            style="font-family:monospace;width:24em"
-            label="Default value:"
-            :param-name="data.paramName"
-            :param-type="data.typeSelected"
-            :param-value="data.defaultValue"
-            editable
-            @save="val => { data.defaultValue = val }"
-          />
-        </q-field>
-
-        <q-field
           stack-label label="Description:"
           :label-width="4"
+          hide-bottom-space
         >
           <mxm-markdown
             expandable
@@ -122,6 +141,8 @@
 
     data: () => ({
       data: cloneDeep(initialData),
+      withUnits: false,
+      defaultUnits: '',
       dialogOpened: false,
     }),
 
@@ -139,6 +160,8 @@
     methods: {
       openDialog() {
         this.data = cloneDeep(initialData)
+        this.withUnits = false
+        this.defaultUnits = ''
         this.dialogOpened = true
       },
 
@@ -157,6 +180,9 @@
           defaultValue: this.data.defaultValue,
           description: this.data.description,
         }
+        if (this.withUnits) {
+          variables.defaultUnits = this.defaultUnits
+        }
         if (debug) console.debug('variables=', variables)
 
         const mutation = parameterInsert
@@ -167,6 +193,7 @@
             this.$q.notify({
               message: 'Parameter created',
               timeout: 1000,
+              position: 'top',
               color: 'info',
             })
             this.$emit('created', variables)

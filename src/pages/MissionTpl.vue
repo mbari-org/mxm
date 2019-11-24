@@ -145,6 +145,13 @@
                 @save="val => { props.row.defaultValue = val }"
               />
             </div>
+
+            <q-chip
+              v-if="props.row.defaultUnits"
+              class="rounded-borders q-pa-xs bg-blue-1"
+            >
+              {{ props.row.defaultUnits }}
+            </q-chip>
           </q-td>
 
           <q-td key="description" :props="props"

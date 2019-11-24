@@ -176,10 +176,6 @@
         if (this.endDate) {
           mission.endDate = this.endDate.toISOString()
         }
-        // TODO geometry
-        if (this.geometry) {
-          mission.geometry = this.geometry
-        }
 
         const variables = {input: {mission}}
         if (debug) console.debug('variables=', variables)

@@ -9,7 +9,6 @@ mutation($input: CreateMissionInput!) {
       description
       startDate
       endDate
-      geometry
     }
   }
 }

@@ -55,14 +55,19 @@
 
           <div class="column q-gutter-sm">
             <div class="row items-center no-wrap q-gutter-sm">
-              <div class="col-1">Required:</div>
-              <q-checkbox v-model="parameter.required"/>
-            </div>
-
-            <div class="row items-center no-wrap q-gutter-sm">
               <div class="col-1">Type:</div>
               <parameter-type-select
                 v-model="parameter.type"
+              />
+            </div>
+
+            <div
+              v-if="$mxmVal.isNumericType(parameter.type)"
+              class="row items-center no-wrap q-gutter-sm"
+            >
+              <div class="col-1">Units?:</div>
+              <q-checkbox
+                v-model="parameter.withUnits"
               />
             </div>
 
@@ -70,12 +75,14 @@
               <div class="col-1">Default&nbsp;Value:</div>
               <div>
                 <div
-                  class="col-11 bg-blue-1 q-pa-xs"
+                  class="col-11 q-pa-xs"
                   style="min-width:4em"
                 >
                   <q-field
                     :error="!!defaultValueError()"
                     :error-message="defaultValueError()"
+                    class="bg-blue-1"
+                    hide-bottom-space
                   >
                     <parameter-value
                       ref="parameter-value"
@@ -91,9 +98,24 @@
                       @cancel="() => { parameter.defaultValue = original.defaultValue }"
                     />
                   </q-field>
+                  <q-input
+                    v-if="parameter.withUnits"
+                    prefix="Units:"
+                    dense hide-bottom-space
+                    type="text"
+                    v-model.trim="parameter.defaultUnits"
+                    :error="!parameter.defaultUnits"
+                    class="q-ml-xl bg-light-blue-1"
+                    style="height:2.2em; width:12em"
+                  />
                 </div>
               </div>
             </div>
+
+            <q-checkbox
+              label="Required?"
+              v-model="parameter.required"
+            />
 
             <div class="row items-top no-wrap q-gutter-sm">
               <div class="col-1">Description:</div>
@@ -186,6 +208,7 @@
             parameter = data.parameterByExecutorIdAndMissionTplIdAndParamName
           }
           if (debug) console.log('update: parameter=', parameter)
+          parameter.withUnits = !!parameter.defaultUnits
           this.original = cloneDeep(parameter)
           return parameter
         },
@@ -244,6 +267,16 @@
         if (!isEqual(this.parameter.defaultValue, this.original.defaultValue)) {
           parameterPatch.defaultValue = this.parameter.defaultValue
         }
+
+        if (this.parameter.withUnits) {
+          if (!isEqual(this.parameter.defaultUnits, this.original.defaultUnits)) {
+            parameterPatch.defaultUnits = this.parameter.defaultUnits
+          }
+        }
+        else {
+          parameterPatch.defaultUnits = null
+        }
+
         if (!isEqual(this.parameter.description, this.original.description)) {
           parameterPatch.description = this.parameter.description
         }

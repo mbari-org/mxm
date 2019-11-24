@@ -187,7 +187,7 @@
             <q-field
               :error="!!valueError(props.row.paramName)"
               :error-message="valueError(props.row.paramName)"
-              :class="paramValueClass(props.row) + ' q-mb-md'"
+              :class="paramValueClass(props.row)"
                style="white-space: normal"
             >
               <parameter-value
@@ -204,6 +204,13 @@
                 @save="val => { props.row.paramValue = val; saveArguments(props.row) }"
               />
             </q-field>
+
+            <q-chip
+              v-if="props.row.paramUnits"
+              :class="'q-ml-md ' + paramUnitsClass(props.row)"
+            >
+              {{ props.row.paramUnits }}
+            </q-chip>
           </q-td>
 
           <q-td key="description" :props="props"
@@ -347,7 +354,7 @@
           if (data.missionByExecutorIdAndMissionTplIdAndMissionId) {
             res = data.missionByExecutorIdAndMissionTplIdAndMissionId
           }
-          this.setMyArguments(res)
+          this.setMyArgumentsFromSaved(res)
           return res
         },
       },
@@ -378,8 +385,8 @@
         return this.mission.missionStatus === 'DRAFT'
       },
 
-      setMyArguments(mission) {
-        if (debug) console.debug('setMyArguments mission=', mission)
+      setMyArgumentsFromSaved(mission) {
+        if (debug) console.debug('setMyArgumentsFromSaved mission=', mission)
         const alreadySavedArgs = get(mission, 'argumentsByExecutorIdAndMissionTplIdAndMissionIdList') || []
         const parameters = get(mission, 'missionTplByExecutorIdAndMissionTplId.parametersByExecutorIdAndMissionTplIdList') || []
 
@@ -388,12 +395,15 @@
         this.myArguments = map(parameters, p => {
           const arg = find(alreadySavedArgs, {paramName: p.paramName})
           const paramValue = arg && arg.paramValue || p.defaultValue
+          const paramUnits = arg && arg.paramUnits || p.defaultUnits
           // console.debug('FIND p.paramName=', p.paramName, 'arg=', arg, 'paramValue=', paramValue)
           return {
             paramName: p.paramName,
             type: p.type,
             paramValue,
+            paramUnits,
             defaultValue: p.defaultValue,
+            defaultUnits: p.defaultUnits,
             required: p.required,
             description: p.description,
           }
@@ -405,6 +415,15 @@
           return 'rounded-borders q-pa-xs bg-red-1 text-bold" style="color:white'
         }
         else if ((row.paramValue || '') !== (row.defaultValue || '')) {
+          return 'rounded-borders q-pa-xs bg-green-11'
+        }
+        else {
+          return 'rounded-borders q-pa-xs bg-green-1'
+        }
+      },
+
+      paramUnitsClass(row) {
+        if (row.paramUnits !== row.defaultUnits) {
           return 'rounded-borders q-pa-xs bg-green-11'
         }
         else {
@@ -471,7 +490,7 @@
           if (arg.paramValue !== arg.defaultValue) {
             if (alreadySavedArg) {
               if (alreadySavedArg.paramValue !== arg.paramValue) {
-                if (debug) console.debug(arg.paramName, 'UPDATING', arg.paramName)
+                if (debug) console.debug(arg.paramName, 'UPDATING', arg.paramValue)
                 this.updateArgument(alreadySavedArg.id, arg.paramValue, ok => {
                   if (ok) {
                     numUpdated++
@@ -482,7 +501,7 @@
               else nextArg()
             }
             else {
-              if (debug) console.debug(arg.paramName, 'INSERTING', arg.paramName)
+              if (debug) console.debug(arg.paramName, 'INSERTING', arg.paramValue)
               this.insertArgument(arg.paramName, arg.paramValue, ok => {
                 if (ok) {
                   numInserted++

@@ -18,10 +18,12 @@ query mission($executorId: String!, $missionTplId: String!, $missionId: String!)
       id
       paramName
       paramValue
+      paramUnits
       parameterByExecutorIdAndMissionTplIdAndParamName {
         type
         required
         defaultValue
+        defaultUnits
         description
       }
     }
@@ -31,6 +33,7 @@ query mission($executorId: String!, $missionTplId: String!, $missionId: String!)
         type
         required
         defaultValue
+        defaultUnits
         description
       }
     }
