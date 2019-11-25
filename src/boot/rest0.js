@@ -1,9 +1,6 @@
-export default ({app, router, Vue}) => {
-}
-
 // TODO this is still preliminary
 
-export {
+export default {
   getAssetClasses,
   getMissionTpls,
   postMission,

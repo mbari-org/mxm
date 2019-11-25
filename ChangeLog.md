@@ -6,6 +6,8 @@
 - TODO replicate undoParameter handling in other relevant components
 
 - TODO edit argument units
+
+- add $createMxmProvideClient to modularize interaction with external provider
 - add "units" to model: defaultUnits in parameter and and paramUnits in argument
 - remove unused geometry in mission table
 - add options to delete: asset, asset class, mission template

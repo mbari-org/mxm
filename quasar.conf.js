@@ -10,6 +10,7 @@ module.exports = function (ctx) {
       'mxmConfig',
       'apollo',
       'mxmVal',
+      'mxmProviderClient',
       'utl'
     ],
 

@@ -76,10 +76,6 @@
   import parameterInsert from '../graphql/parameterInsert.gql'
 
   import apiTypeSelect from '../components/api-type-select'
-  import {
-    getAssetClasses,
-    getMissionTpls,
-  } from 'boot/rest0'
 
   import map from 'lodash/map'
 
@@ -141,16 +137,17 @@
       },
 
       executorCreated(executor, data) {
-        if (executor.apiType !== 'REST0') {
+        const mxmProviderClient = this.$createMxmProvideClient(executor)
+        if (!mxmProviderClient.isSupportedInterface()) {
           this.closeDialogAndNotify(executor)
           return
         }
 
-        getAssetClasses(executor.httpEndpoint)
+        mxmProviderClient.getAssetClasses()
           .then(assetClasses => {
             this.createAssetClasses(executor, assetClasses)
               .then(_ => {
-                getMissionTpls(executor.httpEndpoint)
+                mxmProviderClient.getMissionTpls()
                   .then(missionTpls => {
                     this.createMissionTpls(executor, missionTpls)
                       .then(_ => {
@@ -329,6 +326,7 @@
         this.$q.notify({
           message: `Executor created: ${executor.executorId}`,
           timeout: 1000,
+          position: 'top',
           color: 'info',
         })
         this.$emit('created', executor)

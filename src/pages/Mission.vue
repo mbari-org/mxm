@@ -254,10 +254,6 @@
   import missionDelete from '../graphql/missionDelete.gql'
   import ParameterValue from 'components/parameter-value'
   import ParameterValueInput from 'components/parameter-value-input'
-  import {
-    postMission,
-    getMission,
-  } from 'boot/rest0'
 
   import get from 'lodash/get'
   import map from 'lodash/map'
@@ -648,6 +644,17 @@
       },
 
       runMission() {
+        const mxmProviderClient = this.$createMxmProvideClient(executor)
+        if (!mxmProviderClient.isSupportedInterface()) {
+          this.$q.notify({
+            message: `Operation not implemented yet for apiType=${this.executor.apiType}`,
+            timeout: 4000,
+            position: 'top',
+            color: 'warning',
+          })
+          return
+        }
+
         if (this.executor.apiType !== 'REST0') {
           this.$q.notify('TODO runMission for apiType=' + this.executor.apiType)
           return
@@ -679,7 +686,7 @@
 
           console.debug('data=', data)
 
-          postMission(httpEndpoint, data)
+          mxmProviderClient.postMission(data)
             .then(res => {
               if (!res.status) {
                 this.$q.notify("Executor reported no status")
@@ -710,7 +717,18 @@
       },
 
       checkStatus() {
-        getMission(this.executor.httpEndpoint, this.mission.missionId)
+        const mxmProviderClient = this.$createMxmProvideClient(executor)
+        if (!mxmProviderClient.isSupportedInterface()) {
+          this.$q.notify({
+            message: `Operation not implemented yet for apiType=${this.executor.apiType}`,
+            timeout: 4000,
+            position: 'top',
+            color: 'warning',
+          })
+          return
+        }
+
+        mxmProviderClient.getMissionById(this.mission.missionId)
           .then(res => {
             console.debug('getMission: res=', res)
             if (!res.status) {
