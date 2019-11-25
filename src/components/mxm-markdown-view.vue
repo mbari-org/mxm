@@ -7,6 +7,7 @@
     <div :class="{'rounded-borders bg-light-blue-1': !simple}">
       <vue-markdown
         :source="text || emptyMessage"
+        :breaks="false"
         table-class="markdownTable"
         :class="'markdownText ' + (simple ? '' : 'q-pa-sm')"
         :style="text ? '' : 'color:gray;font-style:italic;font-size:smaller'"
