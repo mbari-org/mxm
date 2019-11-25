@@ -62,6 +62,16 @@
             @saveDescription="d => { description = d }"
           />
         </div>
+
+        <div>
+          <q-linear-progress
+            v-if="progress" size="25px" :value="progress" color="accent"
+          >
+            <div class="absolute-full flex flex-center">
+              <q-badge color="white" text-color="accent" :label="progressLabel" />
+            </div>
+          </q-linear-progress>
+        </div>
       </div>
     </utl-dialog>
   </div>
@@ -92,6 +102,9 @@
       httpEndpoint: '',
       apiType: '',
       description: null,
+
+      progress: null,
+      progressLabel: null,
     }),
 
     computed: {
@@ -106,10 +119,11 @@
 
     methods: {
       openDialog() {
-        this.executorId = ''
-        this.httpEndpoint = 'http://localhost:8040'
         this.apiType = 'REST0'
-        this.description = null
+        this.executorId = 'TethysDash'
+        this.httpEndpoint = 'http://tethyssim.shore.mbari.org:8080/TethysDash/api/mxm'
+        // this.httpEndpoint = 'http://localhost:8040'
+        this.description = 'TethysDash/LRAUV System'
         this.dialogOpened = true
       },
 
@@ -143,10 +157,16 @@
           return
         }
 
+        // TODO progress is very ad hoc at the moment
+        this.progress = 0.1
+        this.progressLabel = 'Importing asset classes...'
+
         mxmProviderClient.getAssetClasses()
           .then(assetClasses => {
             this.createAssetClasses(executor, assetClasses)
               .then(_ => {
+                this.progress = 0.3
+                this.progressLabel = 'Importing mission templates...'
                 mxmProviderClient.getMissionTpls()
                   .then(missionTpls => {
                     this.createMissionTpls(executor, missionTpls)
@@ -227,12 +247,14 @@
 
       createMissionTpls(executor, missionTpls) {
         if (debug) console.debug('missionTpls=', missionTpls)
+        const remainingProgress = 1.0 - this.progress
+        const stepProgress = missionTpls.length && remainingProgress / missionTpls.length
         return this.$utl.runInSequence(map(missionTpls, missionTpl =>
-          this.createMissionTpl(executor, missionTpl)
+          this.createMissionTpl(executor, missionTpl, stepProgress)
         ))
       },
 
-      createMissionTpl(executor, missionTpl) {
+      createMissionTpl(executor, missionTpl, stepProgress) {
         return new Promise((resolve, reject) => {
           const variables = {
             executorId: executor.executorId,
@@ -251,12 +273,14 @@
                   const parameters = missionTpl.parameters || []
                   this.createParameters(executor, missionTpl, parameters)
                   .then(data => {
+                    this.progress += stepProgress
                     resolve(data)
                   })
                 })
             })
             .catch(error => {
               console.error('createMissionTpl: mutation error=', error)
+              this.progress += stepProgress
               reject(error)
             })
         })
@@ -322,6 +346,8 @@
       },
 
       closeDialogAndNotify(executor) {
+        this.progress = null
+        this.progressLabel = null
         this.dialogOpened = false
         this.$q.notify({
           message: `Executor created: ${executor.executorId}`,

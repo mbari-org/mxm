@@ -2,11 +2,12 @@
 
 - TODO geo type: also allow text-based editing of the value?
 - TODO add Duration type  
-- TODO define how to represent tethysdash parameter types  
 - TODO replicate undoParameter handling in other relevant components
 
 - TODO edit argument units
 
+- starting adjs with tethysdash as mxm provider
+  
 - add $createMxmProvideClient to modularize interaction with external provider
 - add "units" to model: defaultUnits in parameter and and paramUnits in argument
 - remove unused geometry in mission table

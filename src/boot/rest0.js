@@ -40,7 +40,10 @@ function doGet(httpEndpoint, route) {
           reject(response.data.error)
         }
         else {
-          resolve(response.data.data)
+          // TODO cleanup.  For now:
+          //    response.data.result: TethysDash
+          //    response.data.data: TFT
+          resolve(response.data.result || response.data.data)
         }
       })
       .catch(e => {
