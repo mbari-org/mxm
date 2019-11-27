@@ -119,7 +119,7 @@
           >
             <q-btn
               no-caps dense
-              style="min-width:3em"
+              style="min-width:3em; font-size:small"
               :class="`text-primary ${props.row.required ? 'text-bold' : ''}`"
               :to="$utl.routeLoc([params.executorId, 'missiontpls', params.missionTplId, 'params', props.row.paramName])"
             >

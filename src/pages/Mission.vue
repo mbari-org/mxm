@@ -75,7 +75,7 @@
           <q-btn
             label="Validate"
             icon="check"
-            push color="primary"
+            push color="secondary"
             size="sm"
             :disable="mission.missionStatus !== 'DRAFT' || parametersWithErrorCount > 0"
             @click="validateMission"
@@ -85,7 +85,7 @@
           <q-btn
             label="Run"
             icon="settings"
-            push color="primary"
+            push color="secondary"
             size="sm"
             :disable="mission.missionStatus !== 'DRAFT' || parametersWithErrorCount > 0"
             @click="runMission"
@@ -96,7 +96,7 @@
             v-if="mission.missionStatus === 'RUNNING' || mission.missionStatus === 'QUEUED'"
             label="Cancel"
             icon="cancel"
-            push color="primary"
+            push color="secondary"
             size="sm"
             @click="cancelMission"
           >
@@ -105,7 +105,7 @@
           <q-btn
             label="Delete"
             icon="delete"
-            push color="primary"
+            push color="secondary"
             size="sm"
             :disable="mission.missionStatus !== 'DRAFT' && mission.missionStatus !== 'TERMINATED'"
             @click="deleteMission"
@@ -170,7 +170,7 @@
           >
             <q-btn
               no-caps dense
-              style="min-width:3em"
+              style="min-width:3em; font-size:small"
               :class="`text-primary ${props.row.required ? 'text-bold' : ''}`"
               :to="$utl.routeLoc([mission.executorId, 'missiontpls', mission.missionTplId, 'params', props.row.paramName])"
             >
