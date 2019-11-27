@@ -40,7 +40,7 @@
 </template>
 
 <script>
-  import MxmMarkdownView from 'components/mxm-markdown-view'
+  import MxmMarkdownView from 'components/markdown/mxm-markdown-view'
 
   export default {
     props: {

@@ -20,7 +20,7 @@
 </template>
 
 <script>
-  import MxmMarkdownEditable from 'components/mxm-markdown-editable'
+  import MxmMarkdownEditable from 'components/markdown/mxm-markdown-editable'
 
   export default {
     props: {
