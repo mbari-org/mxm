@@ -1,12 +1,12 @@
 <template>
   <q-page class="q-pa-md">
     <div v-if="parameter">
-      <div class="q-mb-lg">
+      <div class="q-mb-sm">
         Mission Template: <span class="text-bold">{{ params.missionTplId }}</span>
       </div>
 
       <q-card class="q-mb-md">
-        <q-card-section class="row q-gutter-md items-center">
+        <q-card-section class="row q-gutter-x-md items-center">
           <span>Parameter:</span>
           <div class="q-ml-sm text-bold" style="font-family:monospace;font-size:larger">
             {{ parameter.paramName }}
@@ -63,7 +63,7 @@
 
             <div
               v-if="$mxmVal.isNumericType(parameter.type)"
-              class="row items-center no-wrap q-gutter-sm"
+              class="row items-center no-wrap q-gutter-x-sm"
             >
               <div class="col-1">Units?:</div>
               <q-checkbox
@@ -71,7 +71,7 @@
               />
             </div>
 
-            <div class="row items-top no-wrap q-gutter-sm">
+            <div class="row items-top no-wrap q-gutter-x-sm">
               <div class="col-1">Default&nbsp;Value:</div>
               <div>
                 <div
@@ -117,7 +117,7 @@
               v-model="parameter.required"
             />
 
-            <div class="row items-top no-wrap q-gutter-sm">
+            <div class="row items-top no-wrap q-gutter-x-sm">
               <div class="col-1">Description:</div>
               <div>
                 <div

@@ -71,7 +71,7 @@
         </q-card-section>
       </q-card>
 
-      <div class="row q-mb-sm justify-center q-gutter-lg">
+      <div class="row q-mb-sm justify-center q-gutter-x-lg">
           <q-btn
             label="Validate"
             icon="check"
