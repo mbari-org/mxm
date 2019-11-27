@@ -217,7 +217,8 @@
           message: `Delete asset class '${this.assetClass.className}'?`,
           color: 'negative',
           ok: `Yes, delete '${this.assetClass.className}'`,
-          cancel: true
+          cancel: true,
+          focus: 'cancel',
         }).onOk(() => {
           const mutation = assetClassDelete
           const variables = {

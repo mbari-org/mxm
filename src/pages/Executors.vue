@@ -139,7 +139,8 @@
           ' and all associated entities?',
           color: 'negative',
           ok: `Yes, delete '${row.executorId}'`,
-          cancel: true
+          cancel: true,
+          focus: 'cancel',
         }).onOk(() => this.doDeleteExecutor(row))
       },
 

@@ -308,7 +308,8 @@
           message: `Delete parameter '${this.parameter.paramName}'?`,
           color: 'negative',
           ok: `Yes, delete '${this.parameter.paramName}'`,
-          cancel: true
+          cancel: true,
+          focus: 'cancel',
         }).onOk(() => {
           const mutation = parameterDelete
           const variables = {

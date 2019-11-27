@@ -45,9 +45,9 @@
       <q-card class="q-mb-lg">
         <q-card-section>
           Associated asset classes:
-          <div class="row q-gutter-md">
+          <div class="row q-gutter-x-md items-center">
             <q-chip
-              class="col-auto shadow-1"
+              class="col-auto shadow-1 q-pr-md"
               v-for="c in myAssetClasses"
               :key="c.assetClassName"
               color="white" text-color="black"
@@ -56,7 +56,7 @@
               @remove="removeAssetClass(c)"
             >
               <router-link
-                style="text-decoration:none"
+                style="text-decoration:none" class="q-pr-sm"
                 :to="$utl.routeLoc([params.executorId, 'assetclasses', c.assetClassName])"
               >
                 {{c.assetClassName}}
@@ -340,10 +340,11 @@
       removeAssetClass(c) {
         this.$q.dialog({
           title: 'Confirm',
-          message: `Remove asset class '${c.assetClassName}'?`,
+          message: `Remove associated asset class '${c.assetClassName}'?`,
           color: 'negative',
-          ok: true,
-          cancel: true
+          ok: `Yes, delete association`,
+          cancel: true,
+          focus: 'cancel',
         }).onOk(() => doIt())
 
         const doIt = () => {
@@ -415,7 +416,8 @@
           message: `Delete mission template '${this.missionTpl.missionTplId}'?`,
           color: 'negative',
           ok: `Yes, delete '${this.missionTpl.missionTplId}'`,
-          cancel: true
+          cancel: true,
+          focus: 'cancel',
         }).onOk(() => {
           const mutation = missionTplDelete
           const variables = {

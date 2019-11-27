@@ -162,7 +162,8 @@
           message: `Delete asset ID '${this.asset.assetId}'?`,
           color: 'negative',
           ok: `Yes, delete '${this.asset.assetId}'`,
-          cancel: true
+          cancel: true,
+          focus: 'cancel',
         }).onOk(() => {
           const mutation = assetDelete
           const variables = {

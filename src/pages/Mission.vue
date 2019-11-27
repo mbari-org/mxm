@@ -781,7 +781,8 @@
           message: `Are you sure you want to delete this mission '${this.mission.missionId}'`,
           color: 'negative',
           ok: `Yes, delete '${this.mission.missionId}'`,
-          cancel: true
+          cancel: true,
+          focus: 'cancel',
         }).onOk(() => {
           const mutation = missionDelete
           const variables = {
