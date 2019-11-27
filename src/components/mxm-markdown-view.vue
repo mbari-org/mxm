@@ -14,13 +14,17 @@
       />
     </div>
 
-    <q-btn
-      v-if="editButton"
-      class="absolute-right text-grey shadow-3"
+    <div
+      class="absolute-right"
       style="margin-right:4px;margin-top:-4px"
-      size="xs" round dense icon="edit" color="yellow"
-      @click="$emit('edit')"
-    />
+    >
+      <q-btn
+        v-if="editButton"
+        class="text-grey shadow-1"
+        size="xs" dense icon="edit" color="yellow-3"
+        @click="$emit('edit')"
+      />
+    </div>
 
     <slot></slot>
   </div>
