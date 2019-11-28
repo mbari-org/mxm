@@ -47,6 +47,7 @@
         </q-td>
 
         <q-td slot="body-cell-description" slot-scope="props" :props="props"
+              style="vertical-align:top"
         >
           <mxm-markdown
             expandable :expandable-subtitle-limit="80"

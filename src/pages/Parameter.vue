@@ -121,7 +121,7 @@
               <div class="col-1">Description:</div>
               <div>
                 <div
-                  class="col-11 bg-blue-1 q-pa-xs"
+                  class="col-11 q-pa-xs"
                   style="min-width:4em"
                 >
                   <mxm-markdown

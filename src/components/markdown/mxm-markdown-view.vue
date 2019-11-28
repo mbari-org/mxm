@@ -1,30 +1,57 @@
 <template>
   <div
     v-if="text || !hideEmpty"
-    class="relative-position"
     @click="() => editClick && $emit('edit')"
   >
-    <div :class="{'rounded-borders bg-light-blue-1': !simple}">
-      <vue-markdown
-        :source="text || emptyMessage"
-        :breaks="false"
-        table-class="markdownTable"
-        :class="'markdownText ' + (simple ? '' : 'q-pa-sm')"
-        :style="text ? '' : 'color:gray;font-style:italic;font-size:smaller'"
-      />
-    </div>
+    <table>
+      <tbody>
+      <tr>
+        <td style="vertical-align:top">
+          <div :class="{'rounded-borders bg-light-blue-1': !simple}">
+            <vue-markdown
+              v-if="useMarkdown"
+              :source="text || emptyMessage"
+              :breaks="false"
+              table-class="markdownTable"
+              :class="'markdownText ' + (simple ? '' : 'q-pa-sm')"
+              :style="styleMarkdown"
+            />
+            <pre
+              v-else
+              v-text="text || emptyMessage"
+              :class="{'q-pa-sm': !simple}"
+              :style="stylePlain"
+            />
+          </div>
+        </td>
 
-    <div
-      class="absolute-right"
-      style="margin-right:4px;margin-top:-4px"
-    >
-      <q-btn
-        v-if="editButton"
-        class="text-grey shadow-1"
-        size="xs" dense icon="edit" color="yellow-3"
-        @click="$emit('edit')"
-      />
-    </div>
+        <td
+          v-if="editButton || !simple && text"
+          style="width:5px;vertical-align:top"
+        >
+          <div class="column">
+            <q-btn
+              v-if="editButton"
+              class="text-grey"
+              size="xs" dense icon="edit"
+              color="yellow-2"
+              @click="$emit('edit')"
+            />
+
+            <q-btn
+              v-if="!simple && text"
+              class="text-grey q-mt-xs"
+              size="xs" dense icon="fab fa-markdown"
+              color="yellow-2"
+              @click.stop="useMarkdown = !useMarkdown"
+            >
+              <q-tooltip>Toggle markdown</q-tooltip>
+            </q-btn>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
 
     <slot></slot>
   </div>
@@ -65,8 +92,26 @@
         default: '(No description)'
       },
     },
+
     components: {
       VueMarkdown,
+    },
+
+    data: () => ({
+      useMarkdown: false,
+    }),
+
+    computed: {
+      stylePlain() {
+        const s = 'min-height:4em; white-space:pre-wrap; font-size:smaller; margin:0'
+        return s + (this.text ? '' : '; color:gray-3;font-style:italic')
+      },
+
+      styleMarkdown() {
+        if (!this.text) {
+          return 'color:gray;font-style:italic;font-size:smaller'
+        }
+      },
     },
   }
 </script>
