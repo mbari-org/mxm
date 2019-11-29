@@ -99,13 +99,13 @@
                     />
                   </q-field>
                   <q-input
-                    v-if="parameter.withUnits"
+                    v-if="$mxmVal.isNumericType(parameter.type) && parameter.withUnits"
                     prefix="Units:"
                     dense hide-bottom-space
                     type="text"
                     v-model.trim="parameter.defaultUnits"
                     :error="!parameter.defaultUnits"
-                    class="q-ml-xl bg-light-blue-1"
+                    class="q-ml-xl q-mt-xs bg-light-blue-1"
                     style="height:2.2em; width:12em"
                   />
                 </div>
