@@ -3,7 +3,7 @@
     v-if="text || !hideEmpty"
     @click="() => editClick && $emit('edit')"
   >
-    <table>
+    <table style="width:100%">
       <tbody>
       <tr>
         <td style="vertical-align:top">
