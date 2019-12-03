@@ -56,7 +56,7 @@ function checkInteger(value) {
 }
 
 function checkFloat(value) {
-  if (!value.match(/^-?\d*(\.\d+)?$/)) {
+  if (!value.match(/^-?\d*(\.\d+)?$/) && !value.match(/^nan$/i) ) {
     return 'Invalid float value'
   }
 }

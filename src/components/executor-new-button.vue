@@ -339,6 +339,9 @@
           if (parameter.defaultValue) {
             variables.defaultValue = '' + parameter.defaultValue
           }
+          if (parameter.defaultUnits) {
+            variables.defaultUnits = parameter.defaultUnits
+          }
           this.$apollo.mutate({mutation, variables})
             .then(data => {
               resolve(data)
