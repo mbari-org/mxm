@@ -44,27 +44,33 @@
           <div class="column q-mb-md q-gutter-md">
             <div class="row q-gutter-md">
               <q-btn
-                label="Mission Templates"
+                :label="`Mission Templates (${numMissionTemplates()})`"
                 no-wrap no-caps dense
                 :to="$utl.routeLoc([params.executorId, 'mt'])"
               />
 
               <q-btn
-                label="Asset Classes"
+                :label="`Asset Classes (${numAssetClasses()})`"
                 no-wrap no-caps dense
                 :to="$utl.routeLoc([params.executorId, 'ac'])"
               />
 
               <q-btn
-                label="Assets"
+                :label="`Assets (${numAssets()})`"
                 no-wrap no-caps dense
                 :to="$utl.routeLoc([params.executorId, 'a'])"
+              />
+
+              <q-btn
+                :label="`Units (${numUnits()})`"
+                no-wrap no-caps dense
+                :to="$utl.routeLoc([params.executorId, 'u'])"
               />
             </div>
 
             <div class="row q-gutter-md">
               <q-btn
-                label="Missions"
+                :label="`Missions (${numMissions()})`"
                 no-wrap no-caps dense
                 :to="$utl.routeLoc([params.executorId, 'm'])"
               />
@@ -132,6 +138,7 @@
   import apiTypeSelect from '../components/api-type-select'
   import cloneDeep from 'lodash/cloneDeep'
   import isEqual from 'lodash/isEqual'
+  import reduce from 'lodash/reduce'
 
   const debug = false
 
@@ -229,6 +236,47 @@
           .catch((error) => {
             console.error('updateExecutor: mutation error=', error)
           })
+      },
+
+      numMissionTemplates() {
+        if (this.executor) {
+          return this.executor.missionTplsByExecutorIdList.length
+        }
+        else return 0
+      },
+
+      numMissions() {
+        if (this.executor) {
+          return reduce(this.executor.missionTplsByExecutorIdList,
+              (result, missionTemplate) => result + missionTemplate.missionsByExecutorIdAndMissionTplIdList.length,
+              0
+          )
+        }
+        else return 0
+      },
+
+      numAssetClasses() {
+        if (this.executor) {
+          return this.executor.assetClassesByExecutorIdList.length
+        }
+        else return 0
+      },
+
+      numAssets() {
+        if (this.executor) {
+          return reduce(this.executor.assetClassesByExecutorIdList,
+              (result, assetClass) => result + assetClass.assetsByExecutorIdAndClassNameList.length,
+              0
+          )
+        }
+        else return 0
+      },
+
+      numUnits() {
+        if (this.executor) {
+          return this.executor.unitsByExecutorIdList.length
+        }
+        else return 0
       },
     },
 

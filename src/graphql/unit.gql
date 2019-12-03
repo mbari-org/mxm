@@ -1,0 +1,17 @@
+query units($executorId: String!, $unitName: String!) {
+  unitByExecutorIdAndUnitName(
+    executorId: $executorId
+    unitName: $unitName
+  ) {
+    id
+    executorId
+    unitName
+    abbreviation
+    baseUnit
+    unitsByExecutorIdAndBaseUnitList {
+      unitName
+      abbreviation
+      baseUnit
+    }
+  }
+}

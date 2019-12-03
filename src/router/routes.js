@@ -44,6 +44,14 @@ const routes = [
         path: '/:executorId/a/:assetId',
         component: () => import('pages/Asset')
       },
+      {
+        path: '/:executorId/u',
+        component: () => import('pages/Units')
+      },
+      {
+        path: '/:executorId/u/:unitName',
+        component: () => import('pages/Unit')
+      },
     ]
   }
 ]

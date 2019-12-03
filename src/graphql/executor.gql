@@ -19,6 +19,18 @@ query executor($executorId: String!) {
           }
         }
       }
+      missionsByExecutorIdAndMissionTplIdList {
+        missionId
+      }
+    }
+    assetClassesByExecutorIdList {
+      className
+      assetsByExecutorIdAndClassNameList {
+        assetId
+      }
+    }
+    unitsByExecutorIdList {
+      unitName
     }
   }
 }

@@ -7,6 +7,7 @@
 2019-12
 
 - 0.3.1: adding units to data model
+  For now, only read-only as they are retrieved from TethysDash
 - capture defaultUnits when importing REST0 provider info
 - simplify routes a bit (eg `/mt` instead of `/missiontpls`)
 

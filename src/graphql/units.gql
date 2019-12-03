@@ -1,0 +1,11 @@
+query units($executorId: String!) {
+  allUnitsList(condition: {
+    executorId: $executorId
+  }) {
+    id
+    executorId
+    unitName
+    abbreviation
+    baseUnit
+  }
+}
