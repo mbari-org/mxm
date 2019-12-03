@@ -6,6 +6,7 @@
 
 2019-12
 
+- 0.3.1: adding units to data model
 - capture defaultUnits when importing REST0 provider info
 - simplify routes a bit (eg `/mt` instead of `/missiontpls`)
 

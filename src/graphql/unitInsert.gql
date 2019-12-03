@@ -1,0 +1,19 @@
+mutation($executorId: String!, $unitName: String!, $abbreviation: String, $baseUnit: String) {
+  createUnit(
+    input: {
+      unit: {
+        executorId: $executorId
+        unitName: $unitName
+        abbreviation: $abbreviation
+        baseUnit: $baseUnit
+      }
+    }
+  ) {
+    unit {
+      executorId
+      unitName
+      abbreviation
+      baseUnit
+    }
+  }
+}

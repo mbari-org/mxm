@@ -56,6 +56,18 @@ create table if not exists mission_tpl_asset_class
 )
 ;
 
+create table if not exists units
+(
+  executor_id varchar not null,
+  unit_name varchar not null,
+  abbreviation varchar,
+  base_unit varchar,
+  foreign key (executor_id) references executors on update cascade on delete cascade,
+  foreign key (executor_id, base_unit) references units on update cascade on delete cascade,
+  primary key (executor_id, unit_name)
+)
+;
+
 create table if not exists parameters
 (
   executor_id varchar not null,
@@ -67,6 +79,7 @@ create table if not exists parameters
   default_units varchar,
   description varchar,
   foreign key (executor_id, mission_tpl_id) references mission_tpls on update cascade on delete cascade,
+  foreign key (executor_id, default_units) references units on update cascade on delete cascade,
   primary key (executor_id, mission_tpl_id, param_name)
 )
 ;

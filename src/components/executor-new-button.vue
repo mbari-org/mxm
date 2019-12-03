@@ -81,6 +81,7 @@
   import executorInsert from '../graphql/executorInsert.gql'
   import assetClassInsert from '../graphql/assetClassInsert.gql'
   import assetInsert from '../graphql/assetInsert.gql'
+  import unitInsert from '../graphql/unitInsert.gql'
   import missionTplInsert from '../graphql/missionTplInsert.gql'
   import missionTplAssetClassInsert from '../graphql/missionTplAssetClassInsert.gql'
   import parameterInsert from '../graphql/parameterInsert.gql'
@@ -88,6 +89,7 @@
   import apiTypeSelect from '../components/api-type-select'
 
   import map from 'lodash/map'
+  import orderBy from 'lodash/orderBy'
 
   const debug = false
 
@@ -170,18 +172,29 @@
           .then(assetClasses => {
             this.createAssetClasses(executor, assetClasses)
               .then(_ => {
-                this.progress = 0.3
-                this.progressLabel = 'Importing mission templates...'
-                mxmProviderClient.getMissionTpls()
-                  .then(missionTpls => {
-                    this.createMissionTpls(executor, missionTpls)
-                      .then(_ => {
-                        this.closeDialogAndNotify(executor)
-                      })
-                      .catch(error => {
-                        console.error('createMissionTpls: error=', error)
-                      })
-                  })
+                this.progress = 0.2
+                this.progressLabel = 'Importing units...'
+                mxmProviderClient.getUnits()
+                    .then(units => {
+                      this.createUnits(executor, units)
+                          .then(_ => {
+                            this.progress = 0.3
+                            this.progressLabel = 'Importing mission templates...'
+                            mxmProviderClient.getMissionTpls()
+                              .then(missionTpls => {
+                                this.createMissionTpls(executor, missionTpls)
+                                  .then(_ => {
+                                    this.closeDialogAndNotify(executor)
+                                  })
+                                  .catch(error => {
+                                    console.error('createMissionTpls: error=', error)
+                                  })
+                              })
+                          })
+                          .catch(error => {
+                            console.error('createUnits: error=', error)
+                          })
+                    })
               })
               .catch(error => {
                 console.error('createMissionTpls: error=', error)
@@ -247,6 +260,42 @@
               console.error('createAsset: mutation error=', error)
               reject(error)
             })
+        })
+      },
+
+      createUnits(executor, units) {
+        if (debug) console.debug('units=', units)
+        // sort units so we first create the base units then the others:
+        const sortedUnits = orderBy(units, u => u.baseUnit ? 1 : 0)
+        return this.$utl.runInSequence(map(sortedUnits, unit =>
+            this.createUnit(executor, unit)
+        ))
+      },
+
+      createUnit(executor, unit) {
+        return new Promise((resolve, reject) => {
+          const variables = {
+            executorId: executor.executorId,
+            unitName: unit.name,
+          }
+          if (unit.abbreviation) {
+            variables.abbreviation = unit.abbreviation
+          }
+          if (unit.baseUnit) {
+            variables.baseUnit = unit.baseUnit
+          }
+          if (debug) console.debug('createUnit: variables=', variables)
+
+          const mutation = unitInsert
+          this.$apollo.mutate({mutation, variables})
+              .then(data => {
+                if (debug) console.debug('createUnit: mutation data=', data)
+                resolve(data)
+              })
+              .catch(error => {
+                console.error('createUnit: mutation error=', error)
+                reject(error)
+              })
         })
       },
 

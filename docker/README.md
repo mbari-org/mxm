@@ -1,29 +1,32 @@
 # Building the images
 
-TODO UPDATE ALL THE FOLLOWING
-Adjust the GraphQL endpoint URI in `src/statics/config/config.json`
+**TODO Some of the following still to be updated**
+
+Adjust the GraphQL endpoint URI in `config/config.json`
 depending on how you are going to run the UI below.
 
 Note:
 
 - Using *x.y.z* in instructions below just as a placeholder for
-  actual version corresponding to the target image.
-- The user-visible MXM version is set in `utl.js`.
+  actual version corresponding to the intended target image.
+- The user-visible MXM version is set in `../package.json`.
 - The version of the postgres image is set directly as needed.
 - Reflect such versions in `docker-compose.yml` for general consistency.
 
 
+To generate image `mbari/mxm:x.y.z`:
+
     cd <to this project's root directory>
     (quasar build && cd docker && ./dockerize.sh mxm x.y.z)
 
-generates image `mbari/mxm:x.y.z`
+
+To generate image `mbari/mxm-postgres:x.y.z`:
 
     (cd docker && ./dockerize.sh mxm-postgres x.y.z)
 
-generates image `mbari/mxm-postgres:x.y.z`
+Launch:
 
     cd docker && docker-compose up -d
-
 
 Open the UI: http://localhost:38080/
 (again, this will be functional depending on the indicated GraphQL

@@ -2,6 +2,7 @@
 
 export default {
   getAssetClasses,
+  getUnits,
   getMissionTpls,
   postMission,
   getMission,
@@ -13,6 +14,10 @@ import {axios} from 'boot/axios'
 
 function getAssetClasses(httpEndpoint) {
   return doGet(httpEndpoint, 'assetclasses')
+}
+
+function getUnits(httpEndpoint) {
+  return doGet(httpEndpoint, 'units')
 }
 
 function getMissionTpls(httpEndpoint) {
