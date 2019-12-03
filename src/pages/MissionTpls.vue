@@ -40,7 +40,7 @@
         >
           <router-link
             style="text-decoration:none"
-            :to="$utl.routeLoc([params.executorId, 'missiontpls', props.row.missionTplId])"
+            :to="$utl.routeLoc([params.executorId, 'mt', props.row.missionTplId])"
           >
             {{props.row.missionTplId}}
           </router-link>
@@ -132,7 +132,7 @@
         elements: [
           ['Home', []],
           [this.params.executorId, [this.params.executorId]],
-          ['MissionTemplates', [this.params.executorId, 'missiontpls']],
+          ['MissionTemplates', [this.params.executorId, 'mt']],
         ],
         refresh: this.refreshMissionTpls
       })

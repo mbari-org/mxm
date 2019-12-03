@@ -25,7 +25,7 @@
             </span>
             <span>
               <router-link
-                :to="$utl.routeLoc([mission.executorId, 'missiontpls', mission.missionTplId])"
+                :to="$utl.routeLoc([mission.executorId, 'mt', mission.missionTplId])"
               >
                 {{ mission.missionTplId }}
                 <q-tooltip>Mission Template</q-tooltip>
@@ -37,7 +37,7 @@
             </span>
             <span>
               <router-link
-                :to="$utl.routeLoc([params.executorId, 'assets', mission.assetId])"
+                :to="$utl.routeLoc([params.executorId, 'a', mission.assetId])"
               >
                 {{ mission.assetId }}
                 <q-tooltip>
@@ -172,7 +172,7 @@
               no-caps dense
               style="min-width:3em; font-size:small"
               :class="`text-primary ${props.row.required ? 'text-bold' : ''}`"
-              :to="$utl.routeLoc([mission.executorId, 'missiontpls', mission.missionTplId, 'params', props.row.paramName])"
+              :to="$utl.routeLoc([mission.executorId, 'mt', mission.missionTplId, 'p', props.row.paramName])"
             >
               {{ props.row.paramName }}
             </q-btn>
@@ -361,7 +361,7 @@
         elements: [
           ['Home', []],
           [this.params.executorId, [this.params.executorId]],
-          ['Missions', [this.params.executorId, 'missions']],
+          ['Missions', [this.params.executorId, 'm']],
           [this.params.missionId],
         ],
         refresh: this.refreshMission

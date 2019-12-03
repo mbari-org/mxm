@@ -10,7 +10,7 @@
               (class:
               <router-link
                 style="text-decoration:none"
-                :to="$utl.routeLoc([params.executorId, 'assetclasses', asset.className])"
+                :to="$utl.routeLoc([params.executorId, 'ac', asset.className])"
               >{{ asset.className }}</router-link>)
             </div>
             <div class="q-ml-xl">
@@ -110,7 +110,7 @@
         elements: [
           ['Home', []],
           [this.params.executorId, [this.params.executorId]],
-          ['Assets', [this.params.executorId, 'assets']],
+          ['Assets', [this.params.executorId, 'a']],
           [this.params.assetId],
         ],
         refresh: this.refreshAsset
@@ -180,7 +180,7 @@
                   position: 'top',
                   color: 'info',
                 })
-                this.$utl.replace([this.params.executorId, 'assets'])
+                this.$utl.replace([this.params.executorId, 'a'])
               })
               .catch(error => {
                 console.error('deleteAsset: mutation error=', error)

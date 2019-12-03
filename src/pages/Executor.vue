@@ -46,19 +46,19 @@
               <q-btn
                 label="Mission Templates"
                 no-wrap no-caps dense
-                :to="$utl.routeLoc([params.executorId, 'missiontpls'])"
+                :to="$utl.routeLoc([params.executorId, 'mt'])"
               />
 
               <q-btn
                 label="Asset Classes"
                 no-wrap no-caps dense
-                :to="$utl.routeLoc([params.executorId, 'assetclasses'])"
+                :to="$utl.routeLoc([params.executorId, 'ac'])"
               />
 
               <q-btn
                 label="Assets"
                 no-wrap no-caps dense
-                :to="$utl.routeLoc([params.executorId, 'assets'])"
+                :to="$utl.routeLoc([params.executorId, 'a'])"
               />
             </div>
 
@@ -66,7 +66,7 @@
               <q-btn
                 label="Missions"
                 no-wrap no-caps dense
-                :to="$utl.routeLoc([params.executorId, 'missions'])"
+                :to="$utl.routeLoc([params.executorId, 'm'])"
               />
             </div>
           </div>

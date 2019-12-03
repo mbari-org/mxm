@@ -39,7 +39,7 @@
       >
         <router-link
           style="text-decoration:none"
-          :to="$utl.routeLoc([params.executorId, 'missiontpls', props.row.missionTplId, 'missions', props.row.missionId])"
+          :to="$utl.routeLoc([params.executorId, 'mt', props.row.missionTplId, 'm', props.row.missionId])"
         >
           {{props.value}}
         </router-link>
@@ -50,7 +50,7 @@
       >
         <router-link
           style="text-decoration:none"
-          :to="$utl.routeLoc([params.executorId, 'missiontpls', props.value])"
+          :to="$utl.routeLoc([params.executorId, 'mt', props.value])"
         >
           {{props.value}}
         </router-link>
@@ -61,7 +61,7 @@
       >
         <router-link
           style="text-decoration:none"
-          :to="$utl.routeLoc([params.executorId, 'assets', props.value])"
+          :to="$utl.routeLoc([params.executorId, 'a', props.value])"
         >
           {{props.value}}
         </router-link>

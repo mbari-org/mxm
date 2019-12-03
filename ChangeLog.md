@@ -1,11 +1,14 @@
-2019-11
 
 - TODO geo type: also allow text-based editing of the value?
 - TODO add Duration type  
 - TODO replicate undoParameter handling in other relevant components
-
 - TODO edit argument units
 
+2019-12
+
+- simplify routes a bit (eg `/mt` instead of `/missiontpls`)
+
+2019-11
 - starting adjs with tethysdash as mxm provider
   
 - add $createMxmProvideClient to modularize interaction with external provider

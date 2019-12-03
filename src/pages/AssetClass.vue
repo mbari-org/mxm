@@ -68,7 +68,7 @@
         >
           <router-link
             style="text-decoration:none"
-            :to="$utl.routeLoc([params.executorId, 'assets', props.row.assetId])"
+            :to="$utl.routeLoc([params.executorId, 'a', props.row.assetId])"
           >
             {{props.row.assetId}}
           </router-link>
@@ -165,7 +165,7 @@
         elements: [
           ['Home', []],
           [this.params.executorId, [this.params.executorId]],
-          ['AssetClasses', [this.params.executorId, 'assetclasses']],
+          ['AssetClasses', [this.params.executorId, 'ac']],
           [this.params.className],
         ],
         refresh: this.refreshAssetClass
@@ -235,7 +235,7 @@
                   position: 'top',
                   color: 'info',
                 })
-                this.$utl.replace([this.params.executorId, 'assetclasses'])
+                this.$utl.replace([this.params.executorId, 'ac'])
               })
               .catch(error => {
                 console.error('deleteAssetClass: mutation error=', error)

@@ -11,37 +11,37 @@ const routes = [
         path: '/:executorId',
         component: () => import('pages/Executor')
       },
-      { path: '/:executorId/missiontpls/:missionTplId',
+      { path: '/:executorId/mt/:missionTplId',
         component: () => import('pages/MissionTpl')
       },
-      { path: '/:executorId/missiontpls',
+      { path: '/:executorId/mt',
         component: () => import('pages/MissionTpls')
       },
-      { path: '/:executorId/missiontpls/:missionTplId/params/:paramName',
+      { path: '/:executorId/mt/:missionTplId/p/:paramName',
         component: () => import('pages/Parameter')
       },
       {
-        path: '/:executorId/missions',
+        path: '/:executorId/m',
         component: () => import('pages/Missions')
       },
       {
-        path: '/:executorId/missiontpls/:missionTplId/missions/:missionId',
+        path: '/:executorId/mt/:missionTplId/m/:missionId',
         component: () => import('pages/Mission')
       },
       {
-        path: '/:executorId/assetclasses',
+        path: '/:executorId/ac',
         component: () => import('pages/AssetClasses')
       },
       {
-        path: '/:executorId/assetclasses/:className',
+        path: '/:executorId/ac/:className',
         component: () => import('pages/AssetClass')
       },
       {
-        path: '/:executorId/assets',
+        path: '/:executorId/a',
         component: () => import('pages/Assets')
       },
       {
-        path: '/:executorId/assets/:assetId',
+        path: '/:executorId/a/:assetId',
         component: () => import('pages/Asset')
       },
     ]

@@ -220,9 +220,9 @@
         elements: [
           ['Home', []],
           [this.params.executorId, [this.params.executorId]],
-          ['MissionTemplates', [this.params.executorId, 'missiontpls']],
-          [this.params.missionTplId, [this.params.executorId, 'missiontpls', this.params.missionTplId]],
-          ['Params', [this.params.executorId, 'missiontpls', this.params.missionTplId]],
+          ['MissionTemplates', [this.params.executorId, 'mt']],
+          [this.params.missionTplId, [this.params.executorId, 'mt', this.params.missionTplId]],
+          ['Params', [this.params.executorId, 'mt', this.params.missionTplId]],
           [this.params.paramName],
         ],
         refresh: this.refreshParameter
@@ -291,7 +291,7 @@
           .then((data) => {
             if (debug) console.debug('updateParameter: mutation data=', data)
             if (parameterPatch.paramName) {
-              this.$utl.replace([this.parameter.executorId, 'missionTpls', this.parameter.missionTplId, 'params', parameterPatch.paramName])
+              this.$utl.replace([this.parameter.executorId, 'missionTpls', this.parameter.missionTplId, 'p', parameterPatch.paramName])
               return
             }
             this.refreshParameter()

@@ -57,7 +57,7 @@
             >
               <router-link
                 style="text-decoration:none" class="q-pr-sm"
-                :to="$utl.routeLoc([params.executorId, 'assetclasses', c.assetClassName])"
+                :to="$utl.routeLoc([params.executorId, 'ac', c.assetClassName])"
               >
                 {{c.assetClassName}}
               </router-link>
@@ -121,7 +121,7 @@
               no-caps dense
               style="min-width:3em; font-size:small"
               :class="`text-primary ${props.row.required ? 'text-bold' : ''}`"
-              :to="$utl.routeLoc([params.executorId, 'missiontpls', params.missionTplId, 'params', props.row.paramName])"
+              :to="$utl.routeLoc([params.executorId, 'mt', params.missionTplId, 'p', props.row.paramName])"
             >
               {{ props.row.paramName }}
             </q-btn>
@@ -275,7 +275,7 @@
         elements: [
           ['Home', []],
           [this.params.executorId, [this.params.executorId]],
-          ['MissionTemplates', [this.params.executorId, 'missiontpls']],
+          ['MissionTemplates', [this.params.executorId, 'mt']],
           [this.params.missionTplId],
         ],
         refresh: this.refreshMissionTpl
@@ -397,7 +397,7 @@
               color: 'info',
             })
             if (missionTplPatch.missionTplId) {
-              this.$utl.replace([this.params.executorId, 'missiontpls', missionTplPatch.missionTplId])
+              this.$utl.replace([this.params.executorId, 'mt', missionTplPatch.missionTplId])
               return
             }
             if (missionTplPatch.description) {

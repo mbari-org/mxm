@@ -190,7 +190,7 @@
               timeout: 1000,
               color: 'info',
             })
-            this.$utl.push([this.executorId, 'missiontpls', this.missionTplId, 'missions', this.missionId])
+            this.$utl.push([this.executorId, 'mt', this.missionTplId, 'm', this.missionId])
             // this.$emit('created', variables)
           })
           .catch((error) => {
