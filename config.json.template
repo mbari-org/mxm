@@ -10,7 +10,7 @@
 # Then edit `config.json` as needed:
 #
 # - graphqlUri:  (Required)
-#   Indicates the external URI of the GraphQL endpoint.
+#   Indicates the external URI of the MXM GraphQL endpoint.
 #   The default value here, "http://localhost:5000/mxm-graphql", is just intended
 #   for basic local testing using the dockerized package.
 #

@@ -5,6 +5,8 @@ mutation($input: CreateExecutorInput!) {
       httpEndpoint
       apiType
       description
+      canValidate
+      usesUnits
     }
   }
 }
@@ -15,7 +17,9 @@ mutation($input: CreateExecutorInput!) {
 #          "executorId": "x1",
 #          "httpEndpoint": "h:/x1",
 #          "apiType": "REST0",
-#          "description": "..."
+#          "description": "...",
+#          "canValidate": true,
+#          "usesUnits": true
 #        }
 #      }
 #    }

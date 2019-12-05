@@ -1,9 +1,11 @@
 // TODO this is still preliminary
 
 export default {
+  getCapabilities,
   getAssetClasses,
   getUnits,
   getMissionTpls,
+  getMissions,
   postMission,
   getMission,
 }
@@ -11,6 +13,10 @@ export default {
 const debug = true
 
 import {axios} from 'boot/axios'
+
+function getCapabilities(httpEndpoint) {
+  return doGet(httpEndpoint, 'capabilities')
+}
 
 function getAssetClasses(httpEndpoint) {
   return doGet(httpEndpoint, 'assetclasses')
@@ -22,6 +28,10 @@ function getUnits(httpEndpoint) {
 
 function getMissionTpls(httpEndpoint) {
   return doGet(httpEndpoint, 'missiontpls')
+}
+
+function getMissions(httpEndpoint) {
+  return doGet(httpEndpoint, 'missions')
 }
 
 function postMission(httpEndpoint, data) {

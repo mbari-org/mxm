@@ -6,6 +6,7 @@
 
 2019-12
 
+- add "capabilities" to executor, in particular to indicate `usesUnits`
 - 0.3.1: adding units to data model
   For now, only read-only as they are retrieved from TethysDash
 - capture defaultUnits when importing REST0 provider info

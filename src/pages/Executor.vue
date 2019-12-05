@@ -62,6 +62,7 @@
               />
 
               <q-btn
+                v-if="executor.usesUnits"
                 :label="`Units (${numUnits()})`"
                 no-wrap no-caps dense
                 :to="$utl.routeLoc([params.executorId, 'u'])"
@@ -117,6 +118,18 @@
                 </q-popup-edit>
               </td>
             </tr>
+            <tr>
+              <td>Can validate:</td>
+              <td class="text-bold">
+                {{ executor.canValidate ? 'Yes' : 'No '}}
+              </td>
+            </tr>
+            <tr>
+              <td>Units of measure:</td>
+              <td class="text-bold">
+                {{ executor.usesUnits ? 'Yes' : 'No '}}
+              </td>
+            </tr>
             </tbody>
           </table>
 
@@ -129,12 +142,15 @@
       Executor not found: {{params.executorId}}
     </div>
 
+<!--    <pre>{{executor}}</pre>-->
+
   </q-page>
 </template>
 
 <script>
-  import executor from '../graphql/executor.gql'
-  import executorUpdate from '../graphql/executorUpdate.gql'
+  import executorGql from '../graphql/executor.gql'
+  import executorUpdateGql from '../graphql/executorUpdate.gql'
+
   import apiTypeSelect from '../components/api-type-select'
   import cloneDeep from 'lodash/cloneDeep'
   import isEqual from 'lodash/isEqual'
@@ -163,7 +179,7 @@
 
     apollo: {
       executor: {
-        query: executor,
+        query: executorGql,
         variables() {
           return {
             executorId: this.params.executorId
@@ -204,7 +220,7 @@
 
       updateExecutor() {
         if (debug) console.debug('updateExecutor executor=', this.executor)
-        const mutation = executorUpdate
+        const mutation = executorUpdateGql
         const executorPatch = {}
 
         if (!isEqual(this.executor.description, this.original.description)) {

@@ -10,6 +10,8 @@ create table if not exists executors
   http_endpoint varchar not null,
   api_type executor_api_type not null,
   description varchar,
+  can_validate boolean default false not null,
+  uses_units boolean default false not null,
   primary key (executor_id)
 )
 ;

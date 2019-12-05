@@ -11,9 +11,11 @@ function createMxmProvideClient({httpEndpoint, apiType}) {
   console.log('createMxmProvideClient: httpEndpoint=', httpEndpoint, 'apiType=', apiType)
   return {
     isSupportedInterface,
+    getCapabilities,
     getAssetClasses,
     getUnits,
     getMissionTpls,
+    getMissions,
     getMissionById,
     postMission,
   }
@@ -23,18 +25,24 @@ function createMxmProvideClient({httpEndpoint, apiType}) {
     return apiType === 'REST0'
   }
 
+  function getCapabilities() {
+    return rest0.getCapabilities(httpEndpoint)
+  }
+
   function getAssetClasses() {
-    console.log('getAssetClasses: rest0=', rest0)
     return rest0.getAssetClasses(httpEndpoint)
   }
 
   function getUnits() {
-    console.log('getUnits: rest0=', rest0)
     return rest0.getUnits(httpEndpoint)
   }
 
   function getMissionTpls() {
     return rest0.getMissionTpls(httpEndpoint)
+  }
+
+  function getMissions() {
+    return rest0.getMissions(httpEndpoint)
   }
 
   function getMissionById(missionId) {

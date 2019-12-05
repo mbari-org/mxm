@@ -78,13 +78,13 @@
 </template>
 
 <script>
-  import executorInsert from '../graphql/executorInsert.gql'
-  import assetClassInsert from '../graphql/assetClassInsert.gql'
-  import assetInsert from '../graphql/assetInsert.gql'
-  import unitInsert from '../graphql/unitInsert.gql'
-  import missionTplInsert from '../graphql/missionTplInsert.gql'
-  import missionTplAssetClassInsert from '../graphql/missionTplAssetClassInsert.gql'
-  import parameterInsert from '../graphql/parameterInsert.gql'
+  import executorInsertGql from '../graphql/executorInsert.gql'
+  import assetClassInsertGql from '../graphql/assetClassInsert.gql'
+  import assetInsertGql from '../graphql/assetInsert.gql'
+  import unitInsertGql from '../graphql/unitInsert.gql'
+  import missionTplInsertGql from '../graphql/missionTplInsert.gql'
+  import missionTplAssetClassInsertGql from '../graphql/missionTplAssetClassInsert.gql'
+  import parameterInsertGql from '../graphql/parameterInsert.gql'
 
   import apiTypeSelect from '../components/api-type-select'
 
@@ -135,71 +135,122 @@
       },
 
       submit() {
+        const mxmProviderClient = this.$createMxmProvideClient({
+          httpEndpoint: this.httpEndpoint,
+          apiType: this.apiType,
+        })
+
+        if (mxmProviderClient.isSupportedInterface()) {
+          // TODO progress is very ad hoc at the moment.
+          this.progress = 0
+
+          mxmProviderClient.getCapabilities()
+              .then(capabilities => {
+                this.progress += 0.1
+                this.createExecutorAndEntities(mxmProviderClient, capabilities)
+              })
+              .catch(error => {
+                console.error('getCapabilities: error=', error)
+              })
+        }
+        else {
+          this.createExecutorAndEntities(mxmProviderClient)
+        }
+      },
+
+      createExecutorAndEntities(mxmProviderClient, capabilities = {}) {
         const variables = {
           input: {
             executor: {
               executorId: this.executorId,
               httpEndpoint: this.httpEndpoint,
               apiType: this.apiType,
-              description: this.description
+              description: this.description,
+              canValidate: capabilities.canValidate,
+              usesUnits: capabilities.usesUnits,
             }
           }
         }
 
-        const mutation = executorInsert
+        const mutation = executorInsertGql
         this.$apollo.mutate({mutation, variables})
-          .then((data) => {
-            if (debug) console.debug('mutation data=', data)
-            this.executorCreated(variables.input.executor, data)
-          })
-          .catch(error => {
-            console.error('mutation error=', error)
-          })
+            .then(data => {
+              if (debug) console.debug('mutation data=', data)
+              if (mxmProviderClient.isSupportedInterface()) {
+                this.createOtherEntities(mxmProviderClient, variables.input.executor, data)
+              }
+              else {
+                this.closeDialogAndNotify(variables.input.executor)
+              }
+            })
+            .catch(error => {
+              console.error('mutation error=', error)
+            })
       },
 
-      executorCreated(executor, data) {
-        const mxmProviderClient = this.$createMxmProvideClient(executor)
-        if (!mxmProviderClient.isSupportedInterface()) {
-          this.closeDialogAndNotify(executor)
-          return
-        }
-
-        // TODO progress is very ad hoc at the moment
-        this.progress = 0.1
-        this.progressLabel = 'Importing asset classes...'
-
-        mxmProviderClient.getAssetClasses()
-          .then(assetClasses => {
-            this.createAssetClasses(executor, assetClasses)
-              .then(_ => {
-                this.progress = 0.2
-                this.progressLabel = 'Importing units...'
-                mxmProviderClient.getUnits()
-                    .then(units => {
-                      this.createUnits(executor, units)
-                          .then(_ => {
-                            this.progress = 0.3
-                            this.progressLabel = 'Importing mission templates...'
-                            mxmProviderClient.getMissionTpls()
-                              .then(missionTpls => {
-                                this.createMissionTpls(executor, missionTpls)
-                                  .then(_ => {
-                                    this.closeDialogAndNotify(executor)
-                                  })
-                                  .catch(error => {
-                                    console.error('createMissionTpls: error=', error)
-                                  })
-                              })
-                          })
-                          .catch(error => {
-                            console.error('createUnits: error=', error)
-                          })
+      createOtherEntities(mxmProviderClient, executor, data) {
+        const getAndCreateAssetClasses = () => {
+          this.progress += 0.1
+          this.progressLabel = 'Importing asset classes...'
+          mxmProviderClient.getAssetClasses()
+              .then(assetClasses => {
+                this.progress += 0.1
+                this.createAssetClasses(executor, assetClasses)
+                    .then(_ => {
+                      this.progress += 0.1
+                      if (executor.usesUnits) {
+                        getAndCreateUnits()
+                      }
+                      else {
+                        getAndCreateMissionTpls()
+                      }
+                    })
+                    .catch(error => {
+                      console.error('createAssetClasses: error=', error)
                     })
               })
               .catch(error => {
-                console.error('createMissionTpls: error=', error)
+                console.error('getAssetClasses: error=', error)
               })
-          })
+        }
+
+        const getAndCreateUnits = () => {
+          this.progressLabel = 'Importing units...'
+          mxmProviderClient.getUnits()
+              .then(units => {
+                this.createUnits(executor, units)
+                    .then(_ => {
+                      this.progress += 0.1
+                      getAndCreateMissionTpls()
+                    })
+                    .catch(error => {
+                      console.error('createUnits: error=', error)
+                    })
+              })
+              .catch(error => {
+                console.error('getUnits: error=', error)
+              })
+        }
+
+        const getAndCreateMissionTpls = () => {
+          this.progressLabel = 'Importing mission templates...'
+          mxmProviderClient.getMissionTpls()
+              .then(missionTpls => {
+                this.progress += 0.1
+                this.createMissionTpls(executor, missionTpls)
+                    .then(_ => {
+                      this.closeDialogAndNotify(executor)
+                    })
+                    .catch(error => {
+                      console.error('createMissionTpls: error=', error)
+                    })
+              })
+              .catch(error => {
+                console.error('getMissionTpls: error=', error)
+              })
+        }
+
+        getAndCreateAssetClasses()
       },
 
       createAssetClasses(executor, assetClasses) {
@@ -218,7 +269,7 @@
           }
           if (debug) console.debug('createAssetClass: variables=', variables)
 
-          const mutation = assetClassInsert
+          const mutation = assetClassInsertGql
           this.$apollo.mutate({mutation, variables})
             .then(data => {
               if (debug) console.debug('createAssetClass: mutation data=', data)
@@ -250,7 +301,7 @@
           }
           if (debug) console.debug('createAsset: variables=', variables)
 
-          const mutation = assetInsert
+          const mutation = assetInsertGql
           this.$apollo.mutate({mutation, variables})
             .then(data => {
               if (debug) console.debug('createAsset: mutation data=', data)
@@ -286,7 +337,7 @@
           }
           if (debug) console.debug('createUnit: variables=', variables)
 
-          const mutation = unitInsert
+          const mutation = unitInsertGql
           this.$apollo.mutate({mutation, variables})
               .then(data => {
                 if (debug) console.debug('createUnit: mutation data=', data)
@@ -317,7 +368,7 @@
           }
           if (debug) console.debug('createMissionTpl: variables=', variables)
 
-          const mutation = missionTplInsert
+          const mutation = missionTplInsertGql
           this.$apollo.mutate({mutation, variables})
             .then(data => {
               if (debug) console.debug('createMissionTpl: mutation data=', data)
@@ -349,7 +400,7 @@
 
       createAssociatedAssetClass(executor, missionTpl, assetClassName) {
         return new Promise((resolve, reject) => {
-          const mutation = missionTplAssetClassInsert
+          const mutation = missionTplAssetClassInsertGql
           const variables = {
             executorId: executor.executorId,
             missionTplId: missionTpl.missionTplId,
@@ -376,7 +427,7 @@
       createParameter(executor, missionTpl, parameter) {
         if (debug) console.debug(':::: createParameter', parameter.paramName)
         return new Promise((resolve, reject) => {
-          const mutation = parameterInsert
+          const mutation = parameterInsertGql
           const variables = {
             executorId: executor.executorId,
             missionTplId: missionTpl.missionTplId,
