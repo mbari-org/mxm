@@ -3,9 +3,9 @@
     <div v-if="missionTpl">
       <q-card class="q-mb-md">
         <q-card-section>
-          <div class="row q-gutter-x-sm">
+          <div class="row q-gutter-x-sm items-center">
             <div>Mission Template:</div>
-            <div class="text-bold">
+            <div class="text-bold" style="font-size:1.1em">
               {{ params.missionTplId }}
               <q-popup-edit
                 v-model="missionTpl.missionTplId"
@@ -179,11 +179,11 @@
 </template>
 
 <script>
-  import missionTpl from '../graphql/missionTpl.gql'
-  import missionTplAssetClassInsert from '../graphql/missionTplAssetClassInsert.gql'
-  import missionTplAssetClassDelete from '../graphql/missionTplAssetClassDelete.gql'
-  import missionTplUpdate from '../graphql/missionTplUpdate.gql'
-  import missionTplDelete from '../graphql/missionTplDelete.gql'
+  import missionTplGql from '../graphql/missionTpl.gql'
+  import missionTplAssetClassInsertGql from '../graphql/missionTplAssetClassInsert.gql'
+  import missionTplAssetClassDeleteGql from '../graphql/missionTplAssetClassDelete.gql'
+  import missionTplUpdateGql from '../graphql/missionTplUpdate.gql'
+  import missionTplDeleteGql from '../graphql/missionTplDelete.gql'
 
   import AssetClassSelectButton from 'components/asset-class-select-button'
   import ParameterNewButton from 'components/parameter-new-button'
@@ -253,7 +253,7 @@
 
     apollo: {
       missionTpl: {
-        query: missionTpl,
+        query: missionTplGql,
         variables() {
           return {
             executorId: this.params.executorId,
@@ -321,7 +321,7 @@
       },
 
       addAssetClassName(assetClassName, next) {
-        const mutation = missionTplAssetClassInsert
+        const mutation = missionTplAssetClassInsertGql
         const variables = {
           executorId: this.params.executorId,
           missionTplId: this.params.missionTplId,
@@ -350,7 +350,7 @@
         const doIt = () => {
           if (debug) console.debug('removeAssetClass: id=', c.id)
 
-          const mutation = missionTplAssetClassDelete
+          const mutation = missionTplAssetClassDeleteGql
           const variables = {
             id: c.id
           }
@@ -380,7 +380,7 @@
 
       updateMissionTpl(missionTplPatch) {
         if (debug) console.debug('updateMissionTpl missionTplPatch=', missionTplPatch)
-        const mutation = missionTplUpdate
+        const mutation = missionTplUpdateGql
         const variables = {
           input: {
             id: this.missionTpl.id,
@@ -419,7 +419,7 @@
           cancel: true,
           focus: 'cancel',
         }).onOk(() => {
-          const mutation = missionTplDelete
+          const mutation = missionTplDeleteGql
           const variables = {
             input: {
               id: this.missionTpl.id

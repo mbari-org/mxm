@@ -79,6 +79,7 @@ create table if not exists parameters
   required boolean default false not null,
   default_value varchar,
   default_units varchar,
+  value_can_reference varchar,
   description varchar,
   foreign key (executor_id, mission_tpl_id) references mission_tpls on update cascade on delete cascade,
   foreign key (executor_id, default_units) references units on update cascade on delete cascade,

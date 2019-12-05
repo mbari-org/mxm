@@ -112,6 +112,16 @@
               </div>
             </div>
 
+            <div
+              v-if="parameter.valueCanReference"
+              class="row items-center no-wrap q-gutter-x-sm"
+            >
+              <div>Value can reference:</div>
+              <div class="text-bold">
+                {{ parameter.valueCanReference }}
+              </div>
+            </div>
+
             <q-checkbox
               label="Required?"
               v-model="parameter.required"
@@ -158,9 +168,9 @@
 </style>
 
 <script>
-  import parameter from '../graphql/parameter.gql'
-  import parameterUpdate from '../graphql/parameterUpdate.gql'
-  import parameterDelete from '../graphql/parameterDelete.gql'
+  import parameterGql from '../graphql/parameter.gql'
+  import parameterUpdateGql from '../graphql/parameterUpdate.gql'
+  import parameterDeleteGql from '../graphql/parameterDelete.gql'
 
   import ParameterValue from 'components/parameter-value'
   import ParameterTypeSelect from 'components/parameter-type-select'
@@ -194,7 +204,7 @@
 
     apollo: {
       parameter: {
-        query: parameter,
+        query: parameterGql,
         variables() {
           return {
             executorId: this.params.executorId,
@@ -252,7 +262,7 @@
 
       updateParameter() {
         if (debug) console.debug('updateParameter parameter=', this.parameter)
-        const mutation = parameterUpdate
+        const mutation = parameterUpdateGql
         const parameterPatch = {}
 
         if (!isEqual(this.parameter.paramName, this.original.paramName)) {
@@ -311,7 +321,7 @@
           cancel: true,
           focus: 'cancel',
         }).onOk(() => {
-          const mutation = parameterDelete
+          const mutation = parameterDeleteGql
           const variables = {
             input: {
               id: this.parameter.id

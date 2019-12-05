@@ -12,6 +12,7 @@ query ($executorId: String!, $missionTplId: String!, $paramName: String!) {
     required
     defaultValue
     defaultUnits
+    valueCanReference
     description
   }
 }

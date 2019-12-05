@@ -223,9 +223,6 @@
                       this.progress += 0.1
                       getAndCreateMissionTpls()
                     })
-                    .catch(error => {
-                      console.error('createUnits: error=', error)
-                    })
               })
               .catch(error => {
                 console.error('getUnits: error=', error)
@@ -318,9 +315,13 @@
         if (debug) console.debug('units=', units)
         // sort units so we first create the base units then the others:
         const sortedUnits = orderBy(units, u => u.baseUnit ? 1 : 0)
-        return this.$utl.runInSequence(map(sortedUnits, unit =>
+        const prom = this.$utl.runInSequence(map(sortedUnits, unit =>
             this.createUnit(executor, unit)
         ))
+        prom.catch(error => {
+          console.error('createUnits: error=', error)
+        })
+        return prom
       },
 
       createUnit(executor, unit) {
@@ -441,6 +442,9 @@
           }
           if (parameter.defaultUnits) {
             variables.defaultUnits = parameter.defaultUnits
+          }
+          if (parameter.valueCanReference) {
+            variables.valueCanReference = parameter.valueCanReference
           }
           this.$apollo.mutate({mutation, variables})
             .then(data => {

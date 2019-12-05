@@ -1,11 +1,12 @@
 
 - TODO geo type: also allow text-based editing of the value?
-- TODO add Duration type  
+- TODO add Duration type
 - TODO replicate undoParameter handling in other relevant components
 - TODO edit argument units
 
 2019-12
 
+- add valueCanReference property to parameter
 - add "capabilities" to executor, in particular to indicate `usesUnits`
 - 0.3.1: adding units to data model
   For now, only read-only as they are retrieved from TethysDash
@@ -14,17 +15,17 @@
 
 2019-11
 - starting adjs with tethysdash as mxm provider
-  
+
 - add $createMxmProvideClient to modularize interaction with external provider
 - add "units" to model: defaultUnits in parameter and and paramUnits in argument
 - remove unused geometry in mission table
 - add options to delete: asset, asset class, mission template
 - label for parameter-value
-- more adjs to parameter-value editing handling    
+- more adjs to parameter-value editing handling
 - simplify parameter-value dispatch: only edit-popup if editing OR geo type
 - expandable mxm-markdown
 - allow to revert to default value (both simple and geo types)
-- add option to delete a parameter     
+- add option to delete a parameter
 - handle edit dispatch through parameter-value
 - check for args with error before validating or running the mission
   against executor system
@@ -38,18 +39,18 @@
 - adjs re adding new entry
 - add mxmConfig boot
 - adjustments for "dynamic" configuration loading so it accommodates both local
-  development/testing (config loaded from `src/statics/config/config.json`) 
+  development/testing (config loaded from `src/statics/config/config.json`)
   and docker release (loaded from indicated directory, via mapped volume).
   Configuration now captures graphqlUri, learnMoreUrl and googleApiKey
 - style adjustments
-  
+
 - propagating geometry edits, still based on adhoc simple format
   externally (internally, always geojson is used)
   TODO determine concrete format for "simplified geo types"
 
 - fix apollo's refetch() not actually refetching
   (this was working just fine before).
-  
+
     The fix:
     - upgraded all apollo stuff (as a general good thing to do)
     - but this was not enough

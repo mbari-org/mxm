@@ -6,6 +6,7 @@ mutation(
   $required: Boolean!
   $defaultValue: String
   $defaultUnits: String
+  $valueCanReference: String
   $description: String
 ) {
   createParameter(
@@ -18,6 +19,7 @@ mutation(
         type: $type
         defaultValue: $defaultValue
         defaultUnits: $defaultUnits
+        valueCanReference: $valueCanReference
         required: $required
       }
     }
@@ -28,6 +30,9 @@ mutation(
       description
       paramName
       type
+      defaultValue
+      defaultUnits
+      valueCanReference
       required
     }
   }
