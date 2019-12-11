@@ -50,9 +50,10 @@
 </template>
 
 <script>
+  import allExecutorsListGql from '../graphql/executors.gql'
+  import executorDeleteGql from '../graphql/executorDelete.gql'
+
   import ExecutorNewButton from 'components/executor-new-button'
-  import allExecutorsList from '../graphql/executors.gql'
-  import executorDelete from '../graphql/executorDelete.gql'
 
   const debug = false
 
@@ -108,7 +109,7 @@
     },
 
     apollo: {
-      allExecutorsList
+      allExecutorsList: allExecutorsListGql,
     },
 
     mounted() {
@@ -145,7 +146,7 @@
       },
 
       doDeleteExecutor(row) {
-        const mutation = executorDelete
+        const mutation = executorDeleteGql
         const variables = {
           input: {
             id: row.id

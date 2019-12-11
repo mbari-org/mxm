@@ -6,6 +6,11 @@ query ($executorId: String!, $missionTplId: String!, $paramName: String!) {
   ) {
     id
     executorId
+    missionTplByExecutorIdAndMissionTplId {
+      executorByExecutorId {
+        descriptionFormat
+      }
+    }
     missionTplId
     paramName
     type

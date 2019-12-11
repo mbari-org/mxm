@@ -137,6 +137,7 @@
                   <mxm-markdown
                     style="min-height:4em;min-width:24em"
                     :text="parameter.description"
+                    :start-markdown="parameter.missionTplByExecutorIdAndMissionTplId.executorByExecutorId.descriptionFormat === 'markdown'"
                     editable edit-click
                     @saveDescription="d => { parameter.description = d }"
                   />

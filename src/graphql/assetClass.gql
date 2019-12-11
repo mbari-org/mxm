@@ -5,6 +5,9 @@ query ($executorId: String!, $className: String!) {
   }) {
     id
     executorId
+    executorByExecutorId {
+      descriptionFormat
+    }
     className
     description
     assetsByExecutorIdAndClassNameList {

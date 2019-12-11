@@ -2,6 +2,11 @@ query ($assetId: String!) {
   allAssetsList(condition: {
     assetId: $assetId
   }) {
+    assetClassByExecutorIdAndClassName {
+      executorByExecutorId {
+        descriptionFormat
+      }
+    }
     id
     assetId
     className

@@ -35,6 +35,7 @@
             <mxm-markdown
               expandable init-expanded expandable-title="Description:"
               :text="executor.description"
+              :start-markdown="executor.descriptionFormat === 'markdown'"
               editable
               @saveDescription="d => { executor.description = d }"
             />
@@ -128,6 +129,12 @@
               <td>Units of measure:</td>
               <td class="text-bold">
                 {{ executor.usesUnits ? 'Yes' : 'No '}}
+              </td>
+            </tr>
+            <tr v-if="executor.descriptionFormat">
+              <td>Description format:</td>
+              <td class="text-bold">
+                {{ executor.descriptionFormat }}
               </td>
             </tr>
             </tbody>

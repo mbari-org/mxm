@@ -1,5 +1,8 @@
 query ($executorId: String!, $missionTplId: String!) {
   missionTplByExecutorIdAndMissionTplId(executorId: $executorId, missionTplId: $missionTplId) {
+    executorByExecutorId {
+      descriptionFormat
+    }
     id
     missionTplId
     description

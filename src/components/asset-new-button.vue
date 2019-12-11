@@ -52,7 +52,7 @@
 </template>
 
 <script>
-  import assetInsert from '../graphql/assetInsert.gql'
+  import assetInsertGql from '../graphql/assetInsert.gql'
 
   export default {
     props: {
@@ -98,7 +98,7 @@
           description: this.description || null
         }
 
-        const mutation = assetInsert
+        const mutation = assetInsertGql
         this.$apollo.mutate({mutation, variables})
           .then((data) => {
             console.log('mutation data=', data)

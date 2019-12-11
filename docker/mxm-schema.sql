@@ -12,6 +12,7 @@ create table if not exists executors
   description varchar,
   can_validate boolean default false not null,
   uses_units boolean default false not null,
+  description_format varchar,
   primary key (executor_id)
 )
 ;

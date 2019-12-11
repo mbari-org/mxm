@@ -7,6 +7,7 @@
   >
     <mxm-markdown-editable
       :text="text"
+      :start-markdown="startMarkdown"
       :hide-empty="hideEmpty"
       :edit-click="editClick"
       :edit-button="editButton"
@@ -52,6 +53,11 @@
       text: {
         type: String,
         required: false
+      },
+
+      startMarkdown: {
+        type: Boolean,
+        default: false
       },
 
       hideEmpty: {

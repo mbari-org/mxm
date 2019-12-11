@@ -104,9 +104,11 @@
 </template>
 
 <script>
-  import parameterInsert from '../graphql/parameterInsert.gql'
+  import parameterInsertGql from '../graphql/parameterInsert.gql'
+
   import ParameterValue from 'components/parameter-value'
   import ParameterTypeSelect from 'components/parameter-type-select'
+
   import map from 'lodash/map'
   import cloneDeep from 'lodash/cloneDeep'
   import isEqual from 'lodash/isEqual'
@@ -185,7 +187,7 @@
         }
         if (debug) console.debug('variables=', variables)
 
-        const mutation = parameterInsert
+        const mutation = parameterInsertGql
         this.$apollo.mutate({mutation, variables})
           .then(data => {
             console.log('mutation data=', data)

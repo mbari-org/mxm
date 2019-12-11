@@ -41,7 +41,8 @@
 </template>
 
 <script>
-  import unit from '../graphql/unit.gql'
+  import unitGql from '../graphql/unit.gql'
+
   import UnitsTable from 'components/units-table.vue'
 
   const debug = false
@@ -71,7 +72,7 @@
 
     apollo: {
       unit: {
-        query: unit,
+        query: unitGql,
         variables() {
           return {
             executorId: this.params.executorId,

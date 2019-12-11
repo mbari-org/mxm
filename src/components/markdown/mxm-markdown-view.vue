@@ -67,6 +67,11 @@
         required: false
       },
 
+      startMarkdown: {
+        type: Boolean,
+        default: false
+      },
+
       hideEmpty: {
         type: Boolean,
         default: false
@@ -100,6 +105,10 @@
     data: () => ({
       useMarkdown: false,
     }),
+
+    mounted() {
+      this.useMarkdown = this.startMarkdown
+    },
 
     computed: {
       stylePlain() {

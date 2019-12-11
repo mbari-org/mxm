@@ -2,6 +2,7 @@
   <div>
     <mxm-markdown-view
       :text="contents"
+      :start-markdown="startMarkdown"
       :simple="simple"
       :hide-empty="hideEmpty"
       :empty-message="emptyMessage"
@@ -47,6 +48,11 @@
       text: {
         type: String,
         required: false
+      },
+
+      startMarkdown: {
+        type: Boolean,
+        default: false
       },
 
       hideEmpty: {

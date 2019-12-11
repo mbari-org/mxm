@@ -47,14 +47,18 @@
       <q-td slot="body-cell-description" slot-scope="props" :props="props"
             style="vertical-align:top"
       >
-        <mxm-markdown simple hide-empty :text="props.value"/>
+        <mxm-markdown
+          simple hide-empty :text="props.value"
+          :start-markdown="props.row.executorByExecutorId.descriptionFormat === 'markdown'"
+        />
       </q-td>
     </q-table>
   </q-page>
 </template>
 
 <script>
-  import allAssetClassesList from '../graphql/assetClasses.gql'
+  import allAssetClassesListGql from '../graphql/assetClasses.gql'
+
   import AssetClassNewButton from 'components/asset-class-new-button'
 
   const debug = false
@@ -99,7 +103,7 @@
 
     apollo: {
       allAssetClassesList: {
-        query: allAssetClassesList,
+        query: allAssetClassesListGql,
         variables() {
           return {
             executorId: this.params.executorId

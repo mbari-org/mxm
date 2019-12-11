@@ -67,10 +67,12 @@
 </template>
 
 <script>
-  import executor from '../graphql/executor.gql'
-  import missionInsert from '../graphql/missionInsert.gql'
+  import executorGql from '../graphql/executor.gql'
+  import missionInsertGql from '../graphql/missionInsert.gql'
+
   import MissionTplSelect from 'components/mission-tpl-select'
   import AssetSelect from 'components/asset-select'
+
   import find from 'lodash/find'
   import each from 'lodash/each'
 
@@ -131,7 +133,7 @@
 
     apollo: {
       executor: {
-        query: executor,
+        query: executorGql,
         variables() {
           return {
             executorId: this.executorId,
@@ -180,7 +182,7 @@
         const variables = {input: {mission}}
         if (debug) console.debug('variables=', variables)
 
-        const mutation = missionInsert
+        const mutation = missionInsertGql
         this.$apollo.mutate({mutation, variables})
           .then((data) => {
             if (debug) console.debug('mutation data=', data)

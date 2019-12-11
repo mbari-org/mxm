@@ -50,7 +50,7 @@
 </template>
 
 <script>
-  import missionTplInsert from '../graphql/missionTplInsert.gql'
+  import missionTplInsertGql from '../graphql/missionTplInsert.gql'
 
   const debug = true
 
@@ -93,7 +93,7 @@
         }
         if (debug) console.debug('variables=', variables)
 
-        const mutation = missionTplInsert
+        const mutation = missionTplInsertGql
         this.$apollo.mutate({mutation, variables})
           .then((data) => {
             console.log('mutation data=', data)

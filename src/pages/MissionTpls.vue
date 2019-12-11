@@ -51,7 +51,9 @@
         >
           <mxm-markdown
             expandable :expandable-subtitle-limit="80"
-            simple hide-empty :text="props.value"
+            simple hide-empty
+            :text="props.value"
+            :start-markdown="props.row.executorByExecutorId.descriptionFormat === 'markdown'"
           />
         </q-td>
 
@@ -66,7 +68,8 @@
 </template>
 
 <script>
-  import allMissionTplsList from '../graphql/missionTpls.gql'
+  import allMissionTplsListGql from '../graphql/missionTpls.gql'
+
   import MissionTplNewButton from 'components/mission-tpl-new-button'
 
   const debug = false
@@ -114,7 +117,7 @@
 
     apollo: {
       allMissionTplsList: {
-        query: allMissionTplsList,
+        query: allMissionTplsListGql,
         variables() {
           return {
             executorId: this.params.executorId

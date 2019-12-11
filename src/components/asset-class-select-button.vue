@@ -54,8 +54,10 @@
 </template>
 
 <script>
+  import allAssetClassesListGql from '../graphql/assetClasses.gql'
+
   import AssetClassNewButton from 'components/asset-class-new-button'
-  import allAssetClassesList from '../graphql/assetClasses.gql'
+
   import map from 'lodash/map'
   import filter from 'lodash/filter'
   import includes from 'lodash/includes'
@@ -115,7 +117,7 @@
 
     apollo: {
       allAssetClassesList: {
-        query: allAssetClassesList,
+        query: allAssetClassesListGql,
         variables() {
           return {
             executorId: this.executorId

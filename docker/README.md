@@ -9,8 +9,11 @@ Note:
 
 - Using *x.y.z* in instructions below just as a placeholder for
   actual version corresponding to the intended target image.
+
 - The user-visible MXM version is set in `../package.json`.
+
 - The version of the postgres image is set directly as needed.
+
 - Reflect such versions in `docker-compose.yml` for general consistency.
 
 

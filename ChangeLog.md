@@ -6,6 +6,7 @@
 
 2019-12
 
+- general update, incl adding descriptionFormat to capabilities
 - add valueCanReference property to parameter
 - add "capabilities" to executor, in particular to indicate `usesUnits`
 - 0.3.1: adding units to data model

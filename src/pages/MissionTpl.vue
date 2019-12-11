@@ -37,6 +37,7 @@
             expandable expandable-title="Description:"
             editable
             :text="missionTpl.description"
+            :start-markdown="missionTpl.executorByExecutorId.descriptionFormat === 'markdown'"
             @saveDescription="updateDescription"
           />
         </q-card-section>
@@ -159,6 +160,7 @@
           >
             <mxm-markdown
               simple hide-empty :text="props.row.description"
+              :start-markdown="missionTpl.executorByExecutorId.descriptionFormat === 'markdown'"
             />
           </q-td>
         </q-tr>

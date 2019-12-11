@@ -4,6 +4,9 @@ query missionTpls($executorId: String!) {
   }) {
     id
     executorId
+    executorByExecutorId {
+      descriptionFormat
+    }
     missionTplId
     description
     missionTplAssetClassesByExecutorIdAndMissionTplIdList {

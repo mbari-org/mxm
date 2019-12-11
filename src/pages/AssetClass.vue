@@ -21,6 +21,7 @@
         <q-card-section>
           <mxm-markdown
             :text="assetClass.description"
+            :start-markdown="assetClass.executorByExecutorId.descriptionFormat === 'markdown'"
             editable
             @saveDescription="updateDescription"
           />
@@ -76,7 +77,10 @@
 
         <q-td slot="body-cell-description" slot-scope="props" :props="props"
         >
-          <mxm-markdown simple hide-empty :text="props.value"/>
+          <mxm-markdown
+            simple hide-empty :text="props.value"
+            :start-markdown="assetClass.executorByExecutorId.descriptionFormat === 'markdown'"
+          />
         </q-td>
       </q-table>
 
@@ -89,9 +93,9 @@
 </template>
 
 <script>
-  import assetClass from '../graphql/assetClass.gql'
-  import assetClassUpdate from '../graphql/assetClassUpdate.gql'
-  import assetClassDelete from '../graphql/assetClassDelete.gql'
+  import assetClassGql from '../graphql/assetClass.gql'
+  import assetClassUpdateGql from '../graphql/assetClassUpdate.gql'
+  import assetClassDeleteGql from '../graphql/assetClassDelete.gql'
 
   import AssetNewButton from 'components/asset-new-button'
 
@@ -143,7 +147,7 @@
 
     apollo: {
       assetClass: {
-        query: assetClass,
+        query: assetClassGql,
         variables() {
           return {
             executorId: this.params.executorId,
@@ -185,7 +189,7 @@
 
       updateDescription(val) {
         if (debug) console.debug('updateDescription val=', val, 'id=', this.assetClass.id)
-        const mutation = assetClassUpdate
+        const mutation = assetClassUpdateGql
         const variables = {
           input: {
             id: this.assetClass.id,
@@ -220,7 +224,7 @@
           cancel: true,
           focus: 'cancel',
         }).onOk(() => {
-          const mutation = assetClassDelete
+          const mutation = assetClassDeleteGql
           const variables = {
             input: {
               id: this.assetClass.id

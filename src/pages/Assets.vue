@@ -52,7 +52,10 @@
       <q-td slot="body-cell-description" slot-scope="props" :props="props"
             style="vertical-align:top"
       >
-        <mxm-markdown simple hide-empty :text="props.value"/>
+        <mxm-markdown
+          simple hide-empty :text="props.value"
+          :start-markdown="props.row.assetClassByExecutorIdAndClassName.executorByExecutorId.descriptionFormat === 'markdown'"
+        />
       </q-td>
 
     </q-table>
@@ -60,7 +63,7 @@
 </template>
 
 <script>
-  import allAssetsList from '../graphql/assets.gql'
+  import allAssetsListGql from '../graphql/assets.gql'
 
   const debug = false
 
@@ -110,7 +113,7 @@
 
     apollo: {
       allAssetsList: {
-        query: allAssetsList,
+        query: allAssetsListGql,
         variables() {
           return {
             executorId: this.params.executorId

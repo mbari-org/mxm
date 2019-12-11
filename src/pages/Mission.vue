@@ -65,6 +65,7 @@
           <mxm-markdown
             expandable expandable-title="Description:"
             :text="mission.description"
+            :start-markdown="mission.missionTplByExecutorIdAndMissionTplId.executorByExecutorId.descriptionFormat === 'markdown'"
             :editable="editable()"
             @saveDescription="updateDescription"
           />
@@ -73,6 +74,7 @@
 
       <div class="row q-mb-sm justify-center q-gutter-x-lg">
           <q-btn
+            v-if="mission.missionTplByExecutorIdAndMissionTplId.executorByExecutorId.canValidate"
             label="Validate"
             icon="check"
             push color="secondary"
@@ -218,6 +220,7 @@
           >
             <mxm-markdown
               simple hide-empty :text="props.row.description"
+              :start-markdown="mission.missionTplByExecutorIdAndMissionTplId.executorByExecutorId.descriptionFormat === 'markdown'"
             />
           </q-td>
         </q-tr>
@@ -245,13 +248,16 @@
 </style>
 
 <script>
-  import executor from '../graphql/executor.gql'
-  import mission from '../graphql/mission.gql'
-  import argumentInsert from '../graphql/argumentInsert.gql'
-  import argumentUpdate from '../graphql/argumentUpdate.gql'
-  import argumentDelete from '../graphql/argumentDelete.gql'
-  import missionUpdate from '../graphql/missionUpdate.gql'
-  import missionDelete from '../graphql/missionDelete.gql'
+  // TODO "merge" any other needed elements from this query:
+  import executorGql from '../graphql/executor.gql'
+  // into missionGql:
+  import missionGql from '../graphql/mission.gql'
+  import argumentInsertGql from '../graphql/argumentInsert.gql'
+  import argumentUpdateGql from '../graphql/argumentUpdate.gql'
+  import argumentDeleteGql from '../graphql/argumentDelete.gql'
+  import missionUpdateGql from '../graphql/missionUpdate.gql'
+  import missionDeleteGql from '../graphql/missionDelete.gql'
+
   import ParameterValue from 'components/parameter-value'
   import ParameterValueInput from 'components/parameter-value-input'
 
@@ -319,9 +325,11 @@
       },
     },
 
+    mxmProviderClient: null,
+
     apollo: {
       executor: {
-        query: executor,
+        query: executorGql,
         variables() {
           return {
             executorId: this.params.executorId
@@ -330,13 +338,18 @@
         update(data) {
           if (debug) console.log('update: data=', data)
           if (data.allExecutorsList && data.allExecutorsList.length) {
-            return data.allExecutorsList[0]
+            const executor = data.allExecutorsList[0]
+            this.mxmProviderClient = this.$createMxmProvideClient({
+              httpEndpoint: executor.httpEndpoint,
+              apiType: executor.apiType,
+            })
+            return executor
           }
           else return null
         },
       },
       mission: {
-        query: mission,
+        query: missionGql,
         variables() {
           return {
             executorId: this.params.executorId,
@@ -526,7 +539,7 @@
       },
 
       insertArgument(paramName, paramValue, next) {
-        const mutation = argumentInsert
+        const mutation = argumentInsertGql
         const variables = {
           missionId: this.params.missionId,
           executorId: this.mission.executorId,
@@ -548,7 +561,7 @@
       },
 
       updateArgument(id, paramValue, next) {
-        const mutation = argumentUpdate
+        const mutation = argumentUpdateGql
         const variables = {
           input: {
             id,
@@ -569,7 +582,7 @@
       },
 
       deleteArgument(id, next) {
-        const mutation = argumentDelete
+        const mutation = argumentDeleteGql
         const variables = {
           input: {
             id
@@ -605,7 +618,7 @@
       updateMission(missionPatch) {
         return new Promise((resolve, reject) => {
           console.debug('updateMission missionPatch=', missionPatch)
-          const mutation = missionUpdate
+          const mutation = missionUpdateGql
           const variables = {
             input: {
               id: this.mission.id,
@@ -644,8 +657,7 @@
       },
 
       runMission() {
-        const mxmProviderClient = this.$createMxmProvideClient(executor)
-        if (!mxmProviderClient.isSupportedInterface()) {
+        if (!this.mxmProviderClient.isSupportedInterface()) {
           this.$q.notify({
             message: `Operation not implemented yet for apiType=${this.executor.apiType}`,
             timeout: 4000,
@@ -686,7 +698,7 @@
 
           console.debug('data=', data)
 
-          mxmProviderClient.postMission(data)
+          this.mxmProviderClient.postMission(data)
             .then(res => {
               if (!res.status) {
                 this.$q.notify("Executor reported no status")
@@ -717,8 +729,7 @@
       },
 
       checkStatus() {
-        const mxmProviderClient = this.$createMxmProvideClient(executor)
-        if (!mxmProviderClient.isSupportedInterface()) {
+        if (!this.mxmProviderClient.isSupportedInterface()) {
           this.$q.notify({
             message: `Operation not implemented yet for apiType=${this.executor.apiType}`,
             timeout: 4000,
@@ -728,7 +739,7 @@
           return
         }
 
-        mxmProviderClient.getMissionById(this.mission.missionId)
+        this.mxmProviderClient.getMissionById(this.mission.missionId)
           .then(res => {
             console.debug('getMission: res=', res)
             if (!res.status) {
@@ -784,7 +795,7 @@
           cancel: true,
           focus: 'cancel',
         }).onOk(() => {
-          const mutation = missionDelete
+          const mutation = missionDeleteGql
           const variables = {
             input: {
               id: this.mission.id,

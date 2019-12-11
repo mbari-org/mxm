@@ -8,7 +8,8 @@
 </template>
 
 <script>
-  import allUnitsList from '../graphql/units.gql'
+  import allUnitsListGql from '../graphql/units.gql'
+
   import UnitsTable from 'components/units-table.vue'
 
   const debug = false
@@ -32,7 +33,7 @@
 
     apollo: {
       allUnitsList: {
-        query: allUnitsList,
+        query: allUnitsListGql,
         variables() {
           return {
             executorId: this.params.executorId

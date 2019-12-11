@@ -4,6 +4,9 @@ query assetClasses($executorId: String!) {
   }) {
     id
     executorId
+    executorByExecutorId {
+      descriptionFormat
+    }
     className
     description
   }

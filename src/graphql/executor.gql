@@ -9,6 +9,7 @@ query executor($executorId: String!) {
     description
     canValidate
     usesUnits
+    descriptionFormat
     missionTplsByExecutorIdList {
       id
       missionTplId

@@ -28,6 +28,11 @@ query mission($executorId: String!, $missionTplId: String!, $missionId: String!)
       }
     }
     missionTplByExecutorIdAndMissionTplId {
+      executorByExecutorId {
+        canValidate
+        usesUnits
+        descriptionFormat
+      }
       parametersByExecutorIdAndMissionTplIdList {
         paramName
         type
