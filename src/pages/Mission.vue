@@ -248,9 +248,6 @@
 </style>
 
 <script>
-  // TODO "merge" any other needed elements from this query:
-  import executorGql from '../graphql/executor.gql'
-  // into missionGql:
   import missionGql from '../graphql/mission.gql'
   import argumentInsertGql from '../graphql/argumentInsert.gql'
   import argumentUpdateGql from '../graphql/argumentUpdate.gql'
@@ -270,7 +267,7 @@
   import reduce from 'lodash/reduce'
   import size from 'lodash/size'
 
-  const debug = false
+  const debug = window.location.search.match(/.*debug=.*mission.*/)
 
   export default {
     components: {
@@ -282,6 +279,7 @@
       debug,
       loading: false,
       mission: null,
+      executor: null,
       savingArgs: false,
 
       myArguments: [],
@@ -328,26 +326,6 @@
     mxmProviderClient: null,
 
     apollo: {
-      executor: {
-        query: executorGql,
-        variables() {
-          return {
-            executorId: this.params.executorId
-          }
-        },
-        update(data) {
-          if (debug) console.log('update: data=', data)
-          if (data.allExecutorsList && data.allExecutorsList.length) {
-            const executor = data.allExecutorsList[0]
-            this.mxmProviderClient = this.$createMxmProvideClient({
-              httpEndpoint: executor.httpEndpoint,
-              apiType: executor.apiType,
-            })
-            return executor
-          }
-          else return null
-        },
-      },
       mission: {
         query: missionGql,
         variables() {
@@ -358,13 +336,20 @@
           }
         },
         update(data) {
-          let res = null
           if (debug) console.debug('update: data=', data)
+          let mission = null
+
           if (data.missionByExecutorIdAndMissionTplIdAndMissionId) {
-            res = data.missionByExecutorIdAndMissionTplIdAndMissionId
+            mission = data.missionByExecutorIdAndMissionTplIdAndMissionId
+
+            this.executor = mission.missionTplByExecutorIdAndMissionTplId.executorByExecutorId
+            this.mxmProviderClient = this.$createMxmProvideClient({
+              httpEndpoint: this.executor.httpEndpoint,
+              apiType: this.executor.apiType,
+            })
           }
-          this.setMyArgumentsFromSaved(res)
-          return res
+          this.setMyArgumentsFromSaved(mission)
+          return mission
         },
       },
     },
@@ -387,7 +372,6 @@
     methods: {
       refreshMission() {
         this.$apollo.queries.mission.refetch()
-        this.$apollo.queries.executor.refetch()
       },
 
       editable() {

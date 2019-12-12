@@ -6,6 +6,7 @@
 
 2019-12
 
+- capture executor info in mission query
 - general update, incl adding descriptionFormat to capabilities
 - add valueCanReference property to parameter
 - add "capabilities" to executor, in particular to indicate `usesUnits`
