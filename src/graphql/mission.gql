@@ -38,6 +38,7 @@ query mission($executorId: String!, $missionTplId: String!, $missionId: String!)
       parametersByExecutorIdAndMissionTplIdList {
         paramName
         type
+        valueCanReference
         required
         defaultValue
         defaultUnits

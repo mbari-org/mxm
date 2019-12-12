@@ -6,6 +6,7 @@
 
 2019-12
 
+- also use valueCanReference to check value (preliminary)
 - capture executor info in mission query
 - general update, incl adding descriptionFormat to capabilities
 - add valueCanReference property to parameter

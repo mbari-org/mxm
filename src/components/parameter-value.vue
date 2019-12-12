@@ -69,6 +69,11 @@
         required: false
       },
 
+      valueCanReference: {
+        type: String,
+        required: false
+      },
+
       paramValue: {
         type: String,
         default: ''
@@ -105,7 +110,11 @@
 
     methods: {
       errorMessage() {
-        return this.$mxmVal && this.$mxmVal.checkValue(this.paramValue, this.paramType, this.paramRequired)
+        return this.$mxmVal &&
+          this.$mxmVal.checkValue(
+            this.paramValue, this.paramType, this.paramRequired,
+            this.valueCanReference
+          )
       },
 
       setValue() {

@@ -50,7 +50,7 @@
         :rows="inputProps.rows"
         :value="value"
         @change="val => { $emit('change', val) }"
-        @input="val => { $emit('input', val) }"
+        @input="val => { $emit('input', val.trim()) }"
       />
 
     </div>
@@ -123,6 +123,7 @@
         switch (this.paramType) {
           case 'float':
           case 'int':
+          case 'integer':
           case 'boolean':
             break
 

@@ -178,8 +178,18 @@
             >
               {{ props.row.paramName }}
             </q-btn>
-            <div class="text-grey-7 q-mt-sm" style="font-size:0.8em">
+
+            <div
+              class="text-grey-7 q-mt-sm" style="font-size:0.8em"
+            >
               ({{ props.row.type }})
+            </div>
+
+            <div
+              v-if="props.row.valueCanReference"
+              class="text-grey-7 q-mt-sm" style="font-size:0.8em"
+            >
+              ({{ props.row.valueCanReference }})
             </div>
           </q-td>
 
@@ -187,8 +197,8 @@
                 style="width:20em;font-family:monospace;vertical-align:top"
           >
             <q-field
-              :error="!!valueError(props.row.paramName)"
-              :error-message="valueError(props.row.paramName)"
+              :error="!!valueError(props.row)"
+              :error-message="valueError(props.row)"
               :class="paramValueClass(props.row)"
                style="white-space: normal"
             >
@@ -200,6 +210,7 @@
                 :label="`${props.row.paramName}:`"
                 :param-name="props.row.paramName"
                 :param-type="props.row.type"
+                :value-can-reference="props.row.valueCanReference"
                 :param-value="props.row.paramValue"
                 :original-value="props.row.defaultValue"
                 :editable="editable()"
@@ -393,6 +404,7 @@
           return {
             paramName: p.paramName,
             type: p.type,
+            valueCanReference: p.valueCanReference,
             paramValue,
             paramUnits,
             defaultValue: p.defaultValue,
@@ -404,7 +416,7 @@
       },
 
       paramValueClass(row) {
-        if (this.valueError(row.paramName)) {
+        if (this.valueError(row)) {
           return 'rounded-borders q-pa-xs bg-red-1 text-bold" style="color:white'
         }
         else if ((row.paramValue || '') !== (row.defaultValue || '')) {
@@ -424,7 +436,8 @@
         }
       },
 
-      valueError(paramName) {
+      valueError(row) {
+        const {paramName} = row
         const parval = this.$refs[`parameter-value_${paramName}`]
         const error = parval && parval.errorMessage()
         if (error) {

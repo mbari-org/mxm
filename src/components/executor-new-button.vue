@@ -123,13 +123,13 @@
       openDialog() {
         this.apiType = 'REST0'
 
-        // this.executorId = 'TethysDash'
-        // this.httpEndpoint = 'http://tethyssim.shore.mbari.org:8080/TethysDash/api/mxm'
-        // this.description = 'TethysDash/LRAUV System'
+        this.executorId = 'TethysDash'
+        this.httpEndpoint = 'http://tethyssim.shore.mbari.org:8080/TethysDash/api/mxm'
+        this.description = 'TethysDash/LRAUV System'
 
-        this.executorId = 'TFT'
-        this.httpEndpoint = 'http://localhost:8040'
-        this.description = 'TSAUV Front Tracking'
+        // this.executorId = 'TFT'
+        // this.httpEndpoint = 'http://localhost:8040'
+        // this.description = 'TSAUV Front Tracking'
 
         this.dialogOpened = true
       },

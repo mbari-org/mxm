@@ -10,42 +10,64 @@ export default ({ app, Vue }) => {
   }
 }
 
-function checkValue(value, simpleType, required) {
+function checkValue(value, simpleType, required, valueCanReference) {
   value = value && value.trim() || ''
   if (value) {
-    const lcType = simpleType.toLowerCase()
-    switch (lcType) {
-      case 'integer': {
-        return checkInteger(value)
+    let err = checkValueByType(value, simpleType)
+    if (err) {
+      if (valueCanReference) {
+        switch (valueCanReference) {
+          case 'anyString': {
+            // check it sort of begins like a typical identifier:
+            if (value.match(/[a-zA-Z_].*/)) {
+              return null  // OK
+            }
+          }
+          // TODO other cases
+        }
       }
-
-      case 'float': {
-        return checkFloat(value)
-      }
-
-      case 'boolean': {
-        return checkBoolean(value)
-      }
-
-      case 'point': {
-        return checkPointString(value)
-      }
-
-      case 'multipoint': {
-        return checkMultiPointString(value)
-      }
-
-      case 'polygon': {
-        return checkPolygonString(value)
-      }
-
-      case 'linestring': {
-        return checkLineStringString(value)
-      }
+      return err
     }
   }
   else if (required) {
     return 'A value is required'
+  }
+}
+
+function checkValueByType(value, simpleType) {
+  const lcType = simpleType.toLowerCase()
+  switch (lcType) {
+    case 'integer': {
+      return checkInteger(value)
+    }
+
+    case 'float': {
+      return checkFloat(value)
+    }
+
+    case 'boolean': {
+      return checkBoolean(value)
+    }
+
+    case 'point': {
+      return checkPointString(value)
+    }
+
+    case 'multipoint': {
+      return checkMultiPointString(value)
+    }
+
+    case 'polygon': {
+      return checkPolygonString(value)
+    }
+
+    case 'linestring': {
+      return checkLineStringString(value)
+    }
+
+    default: {
+      return `unrecognized type: ${simpleType}`
+    }
   }
 }
 
