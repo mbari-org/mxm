@@ -7,6 +7,7 @@
 
 2019-12
 
+- column for units and other adjs
 - keep the order of parameters as reported from provider
 - pass units when posting mission
 - also use valueCanReference to check value (preliminary)

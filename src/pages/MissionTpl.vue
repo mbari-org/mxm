@@ -81,12 +81,11 @@
       <q-table
         :dense="$q.screen.lt.md"
         :data="myParameters"
-        :columns="columns"
+        :columns="paramColumns"
         row-key="name"
         :rows-per-page-options="rowsPerPage"
         :pagination.sync="pagination"
         :filter="filter"
-        separator="cell"
         no-data-label="No parameters defined"
       >
         <div slot="top-left" slot-scope="props" class="row items-center">
@@ -115,28 +114,36 @@
         </div>
 
         <q-tr slot="body" slot-scope="props" :props="props">
-          <q-td key="paramName" :props="props"
-                style="width:5px;font-family:monospace;vertical-align:top"
+          <q-td
+            key="paramName" :props="props"
+            style="width:5px;font-family:monospace;vertical-align:top"
+            class="cursor-pointer"
+            @dblclick="$router.push($utl.routeLoc([params.executorId, 'mt', params.missionTplId, 'p', props.row.paramName]))"
           >
-            <q-btn
-              no-caps dense
-              style="min-width:3em; font-size:small"
-              :class="`text-primary ${props.row.required ? 'text-bold' : ''}`"
-              :to="$utl.routeLoc([params.executorId, 'mt', params.missionTplId, 'p', props.row.paramName])"
+            <div
+              style="font-size:1.1em"
+              :class="`text-black ${props.row.required ? 'text-bold' : ''}`"
             >
               {{ props.row.paramName }}
-            </q-btn>
-            <div class="text-grey-7 q-mt-sm" style="font-size:0.8em">
-              ({{ props.row.type }})
             </div>
+
+            <div
+              class="text-grey-7 q-mt-sm" style="font-size:0.8em"
+            >
+              {{ props.row.type }}
+              <span v-if="props.row.valueCanReference">
+                | {{ props.row.valueCanReference }}
+              </span>
+            </div>
+
           </q-td>
 
           <q-td key="defaultValue" :props="props"
-                style="width:20em;font-family:monospace;vertical-align:top"
+                style="width:12em;font-family:monospace;vertical-align:top"
           >
             <div
-              class="rounded-borders q-pa-xs bg-blue-1"
-              style="white-space: normal; min-height:1em"
+              class="q-pa-xs"
+              style="white-space: normal; min-height:1.5em; max-width:12em; overflow-x: auto;"
             >
               <parameter-value
                 :label="`${props.row.paramName} default value:`"
@@ -146,13 +153,14 @@
                 @save="val => { props.row.defaultValue = val }"
               />
             </div>
+          </q-td>
 
-            <q-chip
-              v-if="props.row.defaultUnits"
-              class="rounded-borders q-pa-xs bg-blue-1"
-            >
-              {{ props.row.defaultUnits }}
-            </q-chip>
+          <q-td
+            v-if="executor && executor.usesUnits"
+            key="defaultUnits" :props="props"
+            style="vertical-align:top"
+          >
+            {{ props.row.defaultUnits }}
           </q-td>
 
           <q-td key="description" :props="props"
@@ -206,27 +214,8 @@
       return {
         loading: false,
         missionTpl: null,
-        columns: [
-          {
-            field: 'paramName',
-            name: 'paramName',
-            label: 'Name',
-            align: 'left',
-            sortable: true
-          },
-          {
-            field: 'defaultValue',
-            name: 'defaultValue',
-            label: 'Default value',
-            align: 'left',
-          },
-          {
-            field: 'description',
-            name: 'description',
-            label: 'Description',
-            align: 'left',
-          }
-        ],
+        executor: null,
+
         rowsPerPage: [0],
         pagination: {
           rowsPerPage: 0
@@ -236,6 +225,40 @@
     },
 
     computed: {
+      paramColumns() {
+        const cols = [
+          {
+            field: 'paramName',
+            name: 'paramName',
+            label: 'Parameter',
+            align: 'left',
+            sortable: true
+          },
+          {
+            field: 'defaultValue',
+            name: 'defaultValue',
+            label: 'Default value',
+            align: 'left',
+          },
+        ]
+        if (this.executor && this.executor.usesUnits) {
+          cols.push({
+            field: 'defaultUnits',
+            name: 'defaultUnits',
+            label: 'Units',
+            align: 'left',
+          })
+        }
+        cols.push({
+          field: 'description',
+          name: 'description',
+          label: 'Description',
+          align: 'left',
+        })
+
+        return cols
+      },
+
       params() {
         return this.$route.params
       },
@@ -264,10 +287,12 @@
         },
         update(data) {
           if (debug) console.log('update: data=', data)
+          let missionTpl = null
           if (data.missionTplByExecutorIdAndMissionTplId) {
-            return data.missionTplByExecutorIdAndMissionTplId
+            missionTpl = data.missionTplByExecutorIdAndMissionTplId
+            this.executor = missionTpl.executorByExecutorId
           }
-          else return null
+          return missionTpl
         },
       },
     },

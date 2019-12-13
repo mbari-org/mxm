@@ -2,6 +2,7 @@ query ($executorId: String!, $missionTplId: String!) {
   missionTplByExecutorIdAndMissionTplId(executorId: $executorId, missionTplId: $missionTplId) {
     executorByExecutorId {
       descriptionFormat
+      usesUnits
     }
     id
     missionTplId
@@ -17,6 +18,7 @@ query ($executorId: String!, $missionTplId: String!) {
       id
       paramName
       type
+      valueCanReference
       required
       defaultValue
       defaultUnits

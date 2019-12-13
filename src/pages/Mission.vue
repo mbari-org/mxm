@@ -134,7 +134,6 @@
         :rows-per-page-options="rowsPerPage"
         :pagination.sync="pagination"
         :filter="filter"
-        separator="cell"
         :no-data-label="`No parameters defined in the mission template '${mission.missionTplId}'`"
       >
         <div slot="top-left" slot-scope="props" class="row items-center">
@@ -171,17 +170,18 @@
         </div>
 
         <q-tr slot="body" slot-scope="props" :props="props">
-          <q-td key="paramName" :props="props"
-                style="width:5px;font-family:monospace;vertical-align:top"
+          <q-td
+            key="paramName" :props="props"
+            style="width:5px;font-family:monospace;vertical-align:top"
+            class="cursor-pointer"
+            @click="$router.push($utl.routeLoc([mission.executorId, 'mt', mission.missionTplId, 'p', props.row.paramName]))"
           >
-            <q-btn
-              no-caps dense
-              style="min-width:3em; font-size:small"
-              :class="`text-primary ${props.row.required ? 'text-bold' : ''}`"
-              :to="$utl.routeLoc([mission.executorId, 'mt', mission.missionTplId, 'p', props.row.paramName])"
+            <div
+              style="font-size:1.1em"
+              :class="`text-black ${props.row.required ? 'text-bold' : ''}`"
             >
               {{ props.row.paramName }}
-            </q-btn>
+            </div>
 
             <div
               class="text-grey-7 q-mt-sm" style="font-size:0.8em"
@@ -195,7 +195,7 @@
           </q-td>
 
           <q-td key="paramValue" :props="props"
-                style="width:20em;font-family:monospace;vertical-align:top"
+                style="width:12em;font-family:monospace;vertical-align:top"
           >
             <q-field
               :error="!!valueError(props.row)"
@@ -209,7 +209,7 @@
               <parameter-value
                 :ref="`parameter-value_${props.row.paramName}`"
                 class="q-pa-xs"
-                style="font-family:monospace;min-width:24em;word-break:break-all;font-size:0.9em"
+                style="font-family:monospace;max-width:12em;word-break:break-all;font-size:0.9em; overflow-x: auto;"
                 :param-required="props.row.required"
                 :label="`${props.row.paramName}:`"
                 :param-name="props.row.paramName"
@@ -228,12 +228,12 @@
             key="paramUnits" :props="props"
             style="vertical-align:top"
           >
-            <q-chip
+            <div
               v-if="props.row.paramUnits"
-              :class="'q-ml-md ' + paramUnitsClass(props.row)"
+              :class="paramUnitsClass(props.row)"
             >
               {{ props.row.paramUnits }}
-            </q-chip>
+            </div>
           </q-td>
 
           <q-td key="description" :props="props"
@@ -446,16 +446,13 @@
           return 'rounded-borders q-pa-xs q-pt-lg bg-green-11'
         }
         else {
-          return 'rounded-borders q-pa-xs q-pt-lg bg-green-1'
+          return 'q-pa-xs q-pt-lg'
         }
       },
 
       paramUnitsClass(row) {
         if (row.paramUnits !== row.defaultUnits) {
           return 'rounded-borders q-pa-xs bg-green-11'
-        }
-        else {
-          return 'rounded-borders q-pa-xs bg-green-1'
         }
       },
 
