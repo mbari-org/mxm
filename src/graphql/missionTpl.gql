@@ -13,7 +13,7 @@ query ($executorId: String!, $missionTplId: String!) {
         description
       }
     }
-    parametersByExecutorIdAndMissionTplIdList {
+    parametersByExecutorIdAndMissionTplIdList(orderBy: PARAM_ORDER_ASC) {
       id
       paramName
       type

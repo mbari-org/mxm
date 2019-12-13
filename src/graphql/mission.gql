@@ -35,7 +35,7 @@ query mission($executorId: String!, $missionTplId: String!, $missionId: String!)
         usesUnits
         descriptionFormat
       }
-      parametersByExecutorIdAndMissionTplIdList {
+      parametersByExecutorIdAndMissionTplIdList(orderBy: PARAM_ORDER_ASC) {
         paramName
         type
         valueCanReference

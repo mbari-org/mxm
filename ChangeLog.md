@@ -4,10 +4,10 @@
 - TODO replicate undoParameter handling in other relevant components
 - TODO edit argument units
 
-- TODO keep the order of parameters as reported from provider
 
 2019-12
 
+- keep the order of parameters as reported from provider
 - pass units when posting mission
 - also use valueCanReference to check value (preliminary)
 - capture executor info in mission query
