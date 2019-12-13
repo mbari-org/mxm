@@ -4,6 +4,8 @@
 - TODO replicate undoParameter handling in other relevant components
 - TODO edit argument units
 
+- TODO keep the order of parameters as reported from provider
+
 2019-12
 
 - pass units when posting mission

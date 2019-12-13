@@ -3,10 +3,10 @@
     <div v-if="mission">
       <q-card class="q-mb-md">
         <q-card-section>
-          Mission: <q-chip square class="text-bold">{{ mission.missionId }}</q-chip>
-
-          <span class="q-ml-lg" style="font-size:smaller">
-            <span style="color:gray">
+          <div class="row items-center q-gutter-x-sm">
+            <div>Mission:</div>
+            <q-chip square class="text-bold">{{ mission.missionId }}</q-chip>
+            <div style="color:gray">
               Status: <q-chip dense>{{ mission.missionStatus }}</q-chip>
               <q-btn
                 v-if="mission.missionStatus !== 'DRAFT'"
@@ -18,24 +18,26 @@
               >
                 <q-tooltip>Check for status against external executor</q-tooltip>
               </q-btn>
-            </span>
+            </div>
+          </div>
 
-            <span class="q-ml-lg" style="color:gray">
+          <div class="row items-center q-gutter-x-sm" style="font-size:smaller">
+
+            <div class="text-gray">
               Template:
-            </span>
-            <span>
+            </div>
+            <q-chip dense>
               <router-link
                 :to="$utl.routeLoc([mission.executorId, 'mt', mission.missionTplId])"
               >
                 {{ mission.missionTplId }}
-                <q-tooltip>Mission Template</q-tooltip>
               </router-link>
-            </span>
+            </q-chip>
 
-            <span class="q-ml-lg" style="color:gray">
+            <div class="text-gray">
               Asset:
-            </span>
-            <span>
+            </div>
+            <q-chip dense>
               <router-link
                 :to="$utl.routeLoc([params.executorId, 'a', mission.assetId])"
               >
@@ -44,8 +46,9 @@
                   {{ mission.assetByExecutorIdAndAssetId.className }}
                 </q-tooltip>
               </router-link>
-            </span>
-          </span>
+            </q-chip>
+          </div>
+
           <table class="mission-table" style="font-size:smaller">
             <tbody>
             <tr v-if="mission.start">

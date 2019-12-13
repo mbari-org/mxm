@@ -417,7 +417,7 @@
           title: 'Confirm',
           message: `Delete mission template '${this.missionTpl.missionTplId}'?`,
           color: 'negative',
-          ok: `Yes, delete '${this.missionTpl.missionTplId}'`,
+          ok: `Yes, delete`,
           cancel: true,
           focus: 'cancel',
         }).onOk(() => {
