@@ -50,7 +50,7 @@
         :rows="inputProps.rows"
         :value="value"
         @change="val => { $emit('change', val) }"
-        @input="val => { $emit('input', val.trim()) }"
+        @input="val => { $emit('input', val && val.trim() || '') }"
       />
 
     </div>

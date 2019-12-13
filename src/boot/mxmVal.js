@@ -19,7 +19,7 @@ function checkValue(value, simpleType, required, valueCanReference) {
         switch (valueCanReference) {
           case 'anyString': {
             // check it sort of begins like a typical identifier:
-            if (value.match(/[a-zA-Z_].*/)) {
+            if (value.match(/^[a-zA-Z_].*/)) {
               return null  // OK
             }
           }
@@ -63,6 +63,10 @@ function checkValueByType(value, simpleType) {
 
     case 'linestring': {
       return checkLineStringString(value)
+    }
+
+    case 'string': {
+      return null  // OK
     }
 
     default: {

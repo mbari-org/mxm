@@ -186,15 +186,12 @@
             <div
               class="text-grey-7 q-mt-sm" style="font-size:0.8em"
             >
-              ({{ props.row.type }})
+              {{ props.row.type }}
+              <span v-if="props.row.valueCanReference">
+                | {{ props.row.valueCanReference }}
+              </span>
             </div>
 
-            <div
-              v-if="props.row.valueCanReference"
-              class="text-grey-7 q-mt-sm" style="font-size:0.8em"
-            >
-              ({{ props.row.valueCanReference }})
-            </div>
           </q-td>
 
           <q-td key="paramValue" :props="props"
@@ -204,7 +201,10 @@
               :error="!!valueError(props.row)"
               :error-message="valueError(props.row)"
               :class="paramValueClass(props.row)"
-               style="white-space: normal"
+              :style="valueError(props.row) ? '' : 'max-height:2.4em'"
+              no-error-icon
+              borderless
+              hide-bottom-space
             >
               <parameter-value
                 :ref="`parameter-value_${props.row.paramName}`"
@@ -221,7 +221,13 @@
                 @save="val => { props.row.paramValue = val; saveArguments(props.row) }"
               />
             </q-field>
+          </q-td>
 
+          <q-td
+            v-if="executor && executor.usesUnits"
+            key="paramUnits" :props="props"
+            style="vertical-align:top"
+          >
             <q-chip
               v-if="props.row.paramUnits"
               :class="'q-ml-md ' + paramUnitsClass(props.row)"
@@ -300,27 +306,6 @@
       myArguments: [],
       parametersWithError: {},
 
-      argColumns: [
-        {
-          field: 'paramName',
-          name: 'paramName',
-          label: 'Parameter',
-          align: 'left',
-          sortable: true
-        },
-        {
-          field: 'paramValue',
-          name: 'paramValue',
-          label: 'Value',
-          align: 'left',
-        },
-        {
-          field: 'description',
-          name: 'description',
-          label: 'Description',
-          align: 'left',
-        }
-      ],
       rowsPerPage: [0],
       pagination: {
         rowsPerPage: 0
@@ -329,6 +314,40 @@
     }),
 
     computed: {
+      argColumns() {
+        const cols = [
+          {
+            field: 'paramName',
+            name: 'paramName',
+            label: 'Parameter',
+            align: 'left',
+            sortable: true
+          },
+          {
+            field: 'paramValue',
+            name: 'paramValue',
+            label: 'Value',
+            align: 'left',
+          },
+        ]
+        if (this.executor && this.executor.usesUnits) {
+          cols.push({
+            field: 'paramUnits',
+            name: 'paramUnits',
+            label: 'Units',
+            align: 'left',
+          })
+        }
+        cols.push({
+          field: 'description',
+          name: 'description',
+          label: 'Description',
+          align: 'left',
+        })
+
+        return cols
+      },
+
       params() {
         return this.$route.params
       },
@@ -421,13 +440,13 @@
 
       paramValueClass(row) {
         if (this.valueError(row)) {
-          return 'rounded-borders q-pa-xs bg-red-1 text-bold" style="color:white'
+          return 'rounded-borders q-pa-xs bg-red-1 text-bold'
         }
         else if ((row.paramValue || '') !== (row.defaultValue || '')) {
-          return 'rounded-borders q-pa-xs bg-green-11'
+          return 'rounded-borders q-pa-xs q-pt-lg bg-green-11'
         }
         else {
-          return 'rounded-borders q-pa-xs bg-green-1'
+          return 'rounded-borders q-pa-xs q-pt-lg bg-green-1'
         }
       },
 
