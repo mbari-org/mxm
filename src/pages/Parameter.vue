@@ -71,7 +71,7 @@
               />
             </div>
 
-            <div class="row items-top no-wrap q-gutter-x-sm">
+            <div class="row items-start no-wrap q-gutter-x-sm">
               <div class="col-1">Default&nbsp;Value:</div>
               <div>
                 <div
@@ -127,7 +127,7 @@
               v-model="parameter.required"
             />
 
-            <div class="row items-top no-wrap q-gutter-x-sm">
+            <div class="row items-start no-wrap q-gutter-x-sm">
               <div class="col-1">Description:</div>
               <div>
                 <div

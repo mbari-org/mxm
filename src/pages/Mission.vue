@@ -3,50 +3,60 @@
     <div v-if="mission">
       <q-card class="q-mb-md">
         <q-card-section>
-          <div class="row items-center q-gutter-x-sm">
-            <div>Mission:</div>
-            <q-chip square class="text-bold">{{ mission.missionId }}</q-chip>
-            <div style="color:gray">
-              Status: <q-chip dense>{{ mission.missionStatus }}</q-chip>
-              <q-btn
-                v-if="mission.missionStatus !== 'DRAFT'"
-                icon="refresh"
-                dense color="accent"
-                class="q-ml-sm"
-                size="xs"
-                @click="checkStatus"
-              >
-                <q-tooltip>Check for status against external executor</q-tooltip>
-              </q-btn>
-            </div>
-          </div>
+          <div class="row no-wrap q-gutter-x-lg">
+            <div class="column">
+              <div class="row no-wrap items-center q-gutter-x-sm">
+                <div>Mission:</div>
+                <q-chip square class="text-bold">{{ mission.missionId }}</q-chip>
+                <div class="row no-wrap items-center text-grey">
+                  <div>Status:</div>
+                  <q-chip dense>{{ mission.missionStatus }}</q-chip>
+                  <q-btn
+                    v-if="mission.missionStatus !== 'DRAFT'"
+                    icon="refresh"
+                    dense color="accent"
+                    class="q-ml-sm"
+                    size="xs"
+                    @click="checkStatus"
+                  >
+                    <q-tooltip>Check for status against external executor</q-tooltip>
+                  </q-btn>
+                </div>
+              </div>
+              <div class="row no-wrap items-center q-gutter-x-sm" style="font-size:smaller">
+                <div class="text-gray">
+                  Template:
+                </div>
+                <q-chip dense>
+                  <router-link
+                    :to="$utl.routeLoc([mission.executorId, 'mt', mission.missionTplId])"
+                  >
+                    {{ mission.missionTplId }}
+                  </router-link>
+                </q-chip>
 
-          <div class="row items-center q-gutter-x-sm" style="font-size:smaller">
-
-            <div class="text-gray">
-              Template:
+                <div class="text-gray">
+                  Asset:
+                </div>
+                <q-chip dense>
+                  <router-link
+                    :to="$utl.routeLoc([params.executorId, 'a', mission.assetId])"
+                  >
+                    {{ mission.assetId }}
+                    <q-tooltip>
+                      {{ mission.assetByExecutorIdAndAssetId.className }}
+                    </q-tooltip>
+                  </router-link>
+                </q-chip>
+              </div>
             </div>
-            <q-chip dense>
-              <router-link
-                :to="$utl.routeLoc([mission.executorId, 'mt', mission.missionTplId])"
-              >
-                {{ mission.missionTplId }}
-              </router-link>
-            </q-chip>
-
-            <div class="text-gray">
-              Asset:
-            </div>
-            <q-chip dense>
-              <router-link
-                :to="$utl.routeLoc([params.executorId, 'a', mission.assetId])"
-              >
-                {{ mission.assetId }}
-                <q-tooltip>
-                  {{ mission.assetByExecutorIdAndAssetId.className }}
-                </q-tooltip>
-              </router-link>
-            </q-chip>
+            <mxm-markdown
+              expandable expandable-title="Description:"
+              :text="mission.description"
+              :start-markdown="mission.missionTplByExecutorIdAndMissionTplId.executorByExecutorId.descriptionFormat === 'markdown'"
+              :editable="editable()"
+              @saveDescription="updateDescription"
+            />
           </div>
 
           <table class="mission-table" style="font-size:smaller">
@@ -64,15 +74,6 @@
         </q-card-section>
 
         <q-separator/>
-        <q-card-section>
-          <mxm-markdown
-            expandable expandable-title="Description:"
-            :text="mission.description"
-            :start-markdown="mission.missionTplByExecutorIdAndMissionTplId.executorByExecutorId.descriptionFormat === 'markdown'"
-            :editable="editable()"
-            @saveDescription="updateDescription"
-          />
-        </q-card-section>
       </q-card>
 
       <div class="row q-mb-sm justify-center q-gutter-x-lg">

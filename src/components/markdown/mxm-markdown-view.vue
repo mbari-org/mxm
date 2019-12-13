@@ -3,55 +3,52 @@
     v-if="text || !hideEmpty"
     @click="() => editClick && $emit('edit')"
   >
-    <table style="width:100%">
-      <tbody>
-      <tr>
-        <td style="vertical-align:top">
-          <div :class="{'rounded-borders bg-light-blue-1': !simple}">
-            <vue-markdown
-              v-if="useMarkdown"
-              :source="text || emptyMessage"
-              :breaks="false"
-              table-class="markdownTable"
-              :class="'markdownText ' + (simple ? '' : 'q-pa-sm')"
-              :style="styleMarkdown"
-            />
-            <pre
-              v-else
-              v-text="text || emptyMessage"
-              :class="{'q-pa-sm': !simple}"
-              :style="stylePlain"
-            />
-          </div>
-        </td>
+    <div style="width:100%" class="row no-wrap items-start">
+      <div style="vertical-align:top">
+        <div :class="{'rounded-borders bg-light-blue-1': !simple}">
+          <vue-markdown
+            v-if="useMarkdown"
+            :source="text || emptyMessage"
+            :breaks="false"
+            table-class="markdownTable"
+            :class="'markdownText ' + (simple ? '' : 'q-pa-sm')"
+            :style="styleMarkdown"
+          />
+          <div
+            v-else
+            v-text="text || emptyMessage"
+            :class="'markdownText ' + (simple ? '' : 'q-pa-sm')"
+            :style="stylePlain"
+          />
+        </div>
+      </div>
 
-        <td
-          v-if="editButton || !simple && text"
-          style="width:5px;vertical-align:top"
-        >
-          <div class="column">
-            <q-btn
-              v-if="editButton"
-              class="text-grey"
-              size="xs" dense icon="edit"
-              color="yellow-2"
-              @click="$emit('edit')"
-            />
+      <div
+        v-if="editButton || !simple && text"
+        style="width:5px;vertical-align:top"
+        class="q-ml-xs"
+      >
+        <div class="column">
+          <q-btn
+            v-if="editButton"
+            class="text-grey"
+            size="xs" dense icon="edit"
+            color="white"
+            @click="$emit('edit')"
+          />
 
-            <q-btn
-              v-if="!simple && text"
-              class="text-grey q-mt-xs"
-              size="xs" dense icon="fab fa-markdown"
-              color="yellow-2"
-              @click.stop="useMarkdown = !useMarkdown"
-            >
-              <q-tooltip>Toggle markdown</q-tooltip>
-            </q-btn>
-          </div>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+          <q-btn
+            v-if="!simple && text"
+            class="text-grey q-mt-xs"
+            size="xs" dense icon="fab fa-markdown"
+            :color="useMarkdown ? 'yellow-2' : 'white'"
+            @click.stop="useMarkdown = !useMarkdown"
+          >
+            <q-tooltip>Toggle markdown</q-tooltip>
+          </q-btn>
+        </div>
+      </div>
+    </div>
 
     <slot></slot>
   </div>
@@ -112,14 +109,13 @@
 
     computed: {
       stylePlain() {
-        const s = 'min-height:4em; white-space:pre-wrap; font-size:smaller; margin:0'
+        const s = 'min-width:12em; min-height:4em; white-space:normal'
         return s + (this.text ? '' : '; color:gray-3;font-style:italic')
       },
 
       styleMarkdown() {
-        if (!this.text) {
-          return 'color:gray;font-style:italic;font-size:smaller'
-        }
+        const s = 'min-width:12em'
+        return s + (this.text ? '' : '; color:gray;font-style:italic;font-size:smaller')
       },
     },
   }
