@@ -6,6 +6,7 @@
 
 2019-12
 
+- pass units when posting mission
 - also use valueCanReference to check value (preliminary)
 - capture executor info in mission query
 - general update, incl adding descriptionFormat to capabilities

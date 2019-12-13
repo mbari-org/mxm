@@ -11,7 +11,7 @@
               <q-btn
                 v-if="mission.missionStatus !== 'DRAFT'"
                 icon="refresh"
-                dense color="tertiary"
+                dense color="accent"
                 class="q-ml-sm"
                 size="xs"
                 @click="checkStatus"
@@ -664,11 +664,6 @@
           return
         }
 
-        if (this.executor.apiType !== 'REST0') {
-          this.$q.notify('TODO runMission for apiType=' + this.executor.apiType)
-          return
-        }
-
         this.$q.dialog({
           title: 'Confirm',
           message: `Submit mission '${this.mission.missionId}' for execution?`,
@@ -684,21 +679,29 @@
           // console.debug('myArguments=', this.myArguments)
           const parametersChanged = this.parametersChanged()
           console.debug('parametersChanged=', parametersChanged)
-          const data = reduce(parametersChanged, (obj, {paramName, paramValue, type}) => {
-            obj[paramName] = convertValue(paramValue, type)
+          const args = reduce(parametersChanged, (obj, {paramName, paramValue, type, paramUnits}) => {
+            obj[paramName] = {
+              value: convertValue(paramValue, type),
+              units: paramUnits,
+            }
             return obj
           }, {})
 
-          data.exercise_name = this.params.missionId
-          data.missionTplId = this.params.missionTplId
-          data.assetId = this.mission.assetId
+          const data = {
+            missionTplId: this.params.missionTplId,
+            missionId: this.params.missionId,
+            assetId: this.mission.assetId,
+            description: this.mission.description,
+            arguments: args,
+          }
 
-          console.debug('data=', data)
+          console.debug('runMission: payload=', data)
+          // return
 
           this.mxmProviderClient.postMission(data)
             .then(res => {
               if (!res.status) {
-                this.$q.notify("Executor reported no status")
+                this.$q.notify("Executor reported no status for mission submission")
                 return
               }
               const status = res.status

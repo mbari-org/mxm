@@ -80,7 +80,9 @@ function doPost(httpEndpoint, route, data) {
           reject(response.data.error)
         }
         else {
-          resolve(response.data.data)
+          // TODO unify response API.
+          // Fore now: `.result` for TethysDash, `.data` for TFT(?)
+          resolve(response.data.result || response.data.data)
         }
       })
       .catch(e => {
