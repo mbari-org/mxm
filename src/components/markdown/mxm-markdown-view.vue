@@ -109,13 +109,13 @@
 
     computed: {
       stylePlain() {
-        const s = 'min-width:12em; min-height:4em; white-space:normal'
-        return s + (this.text ? '' : '; color:gray-3;font-style:italic')
+        const s = 'min-width:12em;min-height:4em;white-space:normal;'
+        return s + (this.text ? '' : 'color:gray;font-style:italic;font-size:smaller;')
       },
 
       styleMarkdown() {
-        const s = 'min-width:12em'
-        return s + (this.text ? '' : '; color:gray;font-style:italic;font-size:smaller')
+        const s = 'min-width:12em;'
+        return s + (this.text ? '' : 'color:gray;font-style:italic;font-size:smaller;')
       },
     },
   }
