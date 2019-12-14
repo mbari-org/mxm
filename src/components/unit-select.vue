@@ -3,7 +3,7 @@
     dense options-dense
     :options="options"
     placeholder="Select"
-    :value="value"
+    :value="displayUnits"
     @change="val => { $emit('change', val.value) }"
     @input="val => { $emit('input', val.value) }"
   >
@@ -36,30 +36,48 @@
         required: true
       },
 
-      baseUnit: {
-        type: String,
-        required: false
+      unitsByName: {
+        type: Object,
+        required: true
       },
 
-      value: String,
+      value: {
+        type: String,
+        required: true
+      },
     },
 
-    data: () => ({
-      options: [],
-    }),
+    computed: {
+      unitInfo() {
+        return this.unitsByName[this.value]
+      },
 
-    mounted() {
-      let units = this.units
-      if (this.value === 'count') {
-        units = filter(units, {unitName: this.value})
-      }
-      else if (this.baseUnit) {
-        units = filter(units, {baseUnit: this.baseUnit})
-      }
-      this.options = map(units, u => ({
-        label: u.abbreviation,
-        value: u.unitName,
-      }))
+      displayUnits() {
+        return get(this.unitInfo, 'abbreviation') || this.value
+      },
+
+      options() {
+        let units = this.units
+        if (this.value === 'count') {
+          // 'count' looks like only by itself per TethysDash behavior.
+          units = filter(units, {unitName: this.value})
+        }
+        else {
+          const baseUnit = get(this.unitInfo, 'baseUnit')
+          if (baseUnit) {
+            units = filter(units, u =>
+              u.baseUnit === baseUnit ||
+              u.unitName === baseUnit ||
+              u.unitName === this.value
+            )
+          }
+        }
+        return map(units, u => ({
+          label: u.abbreviation,
+          value: u.unitName,
+        }))
+
+      },
     },
   }
 </script>

@@ -6,6 +6,7 @@ mutation updateArgument($input: UpdateArgumentInput!) {
       missionTplId
       paramName
       paramValue
+      paramUnits
     }
   }
 }

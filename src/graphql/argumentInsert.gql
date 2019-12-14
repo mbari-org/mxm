@@ -4,6 +4,7 @@ mutation(
   $missionTplId: String!
   $paramName: String!
   $paramValue: String!
+  $paramUnits: String
 ) {
   createArgument(
     input: {
@@ -13,6 +14,7 @@ mutation(
         missionTplId: $missionTplId
         paramName: $paramName
         paramValue: $paramValue
+        paramUnits: $paramUnits
       }
     }
   ) {
@@ -22,6 +24,7 @@ mutation(
       missionTplId
       paramName
       paramValue
+      paramUnits
     }
   }
 }

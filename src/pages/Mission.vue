@@ -139,8 +139,12 @@
         <div slot="top-left" slot-scope="props" class="row items-center">
           <div class="col">
             <div class="row q-gutter-lg">
-              <div class="vertical-middle text-weight-light text-grey">
-                Overridden parameters: {{parametersChanged().length}}
+              <div
+                class="vertical-middle text-weight-light text-grey"
+              >
+                <span :class="{'text-green': parametersChanged().length}">
+                  Overridden parameters: {{parametersChanged().length}}
+                </span>
               </div>
               <div
                 v-if="parametersWithErrorCount"
@@ -231,16 +235,18 @@
             class="paramValueCell"
           >
             <div
-              v-if="props.row.paramUnits"
               :class="paramUnitsClass(props.row)"
             >
               <unit-select
                 :units="units"
-                :base-unit="unitsByName[props.row.paramUnits] && unitsByName[props.row.paramUnits].baseUnit"
-                :value="displayUnits(props.row)"
-                v-on:input="val => { props.row.paramUnits = val }"
+                :units-by-name="unitsByName"
+                :value="props.row.paramUnits || ''"
+                v-on:input="val => { props.row.paramUnits = val; saveArguments(props.row) }"
               />
-              <q-tooltip anchor="top left" self="bottom left" :delay="400">
+              <q-tooltip
+                v-if="props.row.paramUnits"
+                anchor="top left" self="bottom right" :delay="400"
+              >
                 <pre>{{ unitsByName[props.row.paramUnits] }}</pre>
               </q-tooltip>
             </div>
@@ -277,7 +283,7 @@
     vertical-align: top;
   }
   .paramValueCell:hover {
-    background-color: #d9ffe5;
+    background-color: #eeeeee;
   }
 </style>
 
@@ -501,15 +507,6 @@
         return error
       },
 
-      unitsInfo(unitName) {
-        return this.unitsByName[unitName]
-      },
-
-      displayUnits(row) {
-        const abbreviation = get(this.unitsInfo(row.paramUnits), 'abbreviation')
-        return abbreviation || row.paramUnits
-      },
-
       parametersChanged() {
         return filter(this.myArguments, a =>
           a.paramValue !== a.defaultValue ||
@@ -557,11 +554,13 @@
           const alreadySavedArg = find(alreadySavedArgs, x => x.paramName === arg.paramName)
           if (debug) console.debug(arg.paramName, 'alreadySavedArg=', alreadySavedArg)
 
-          if (arg.paramValue !== arg.defaultValue) {
+          if (arg.paramValue !== arg.defaultValue || arg.paramUnits !== arg.defaultUnits) {
             if (alreadySavedArg) {
-              if (alreadySavedArg.paramValue !== arg.paramValue) {
+              if (alreadySavedArg.paramValue !== arg.paramValue
+                || alreadySavedArg.paramUnits !== arg.paramUnits
+              ) {
                 if (debug) console.debug(arg.paramName, 'UPDATING', arg.paramValue)
-                this.updateArgument(alreadySavedArg.id, arg.paramValue, ok => {
+                this.updateArgument(alreadySavedArg.id, arg.paramValue, arg.paramUnits, ok => {
                   if (ok) {
                     numUpdated++
                   }
@@ -572,7 +571,7 @@
             }
             else {
               if (debug) console.debug(arg.paramName, 'INSERTING', arg.paramValue)
-              this.insertArgument(arg.paramName, arg.paramValue, ok => {
+              this.insertArgument(arg.paramName, arg.paramValue, arg.paramUnits, ok => {
                 if (ok) {
                   numInserted++
                 }
@@ -599,14 +598,15 @@
         nextArg()
       },
 
-      insertArgument(paramName, paramValue, next) {
+      insertArgument(paramName, paramValue, paramUnits, next) {
         const mutation = argumentInsertGql
         const variables = {
           missionId: this.params.missionId,
           executorId: this.mission.executorId,
           missionTplId: this.mission.missionTplId,
           paramName,
-          paramValue
+          paramValue,
+          paramUnits,
         }
         if (debug) console.debug('insertArgument: variables=', variables)
 
@@ -621,13 +621,14 @@
           })
       },
 
-      updateArgument(id, paramValue, next) {
+      updateArgument(id, paramValue, paramUnits, next) {
         const mutation = argumentUpdateGql
         const variables = {
           input: {
             id,
             argumentPatch: {
-              paramValue
+              paramValue,
+              paramUnits,
             }
           }
         }
