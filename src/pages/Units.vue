@@ -2,47 +2,28 @@
   <q-page class="q-pa-md">
     <units-table
       :executor-id="params.executorId"
-      :units="allUnitsList"
+      :units="units"
     />
   </q-page>
 </template>
 
 <script>
-  import allUnitsListGql from '../graphql/units.gql'
-
   import UnitsTable from 'components/units-table.vue'
 
-  const debug = false
+  const debug = window.location.search.match(/.*debug=.*units.*/)
 
   export default {
     components: {
       UnitsTable,
     },
 
-    data() {
-      return {
-        allUnitsList: [],
-      }
-    },
-
     computed: {
       params() {
         return this.$route.params
       },
-    },
 
-    apollo: {
-      allUnitsList: {
-        query: allUnitsListGql,
-        variables() {
-          return {
-            executorId: this.params.executorId
-          }
-        },
-        update(data) {
-          if (debug) console.log('update: data=', data)
-          return data.allUnitsList || []
-        },
+      units() {
+        return this.$store.state.units.unitsByExecutor[this.params.executorId] || []
       },
     },
 
@@ -61,7 +42,7 @@
 
     methods: {
       refreshUnits() {
-        this.$apollo.queries.allUnitsList.refetch()
+        this.$store.dispatch('units/getOrLoadUnitsForExecutor', this.params.executorId)
       },
     },
   }

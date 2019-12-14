@@ -19,13 +19,6 @@ query mission($executorId: String!, $missionTplId: String!, $missionId: String!)
       paramName
       paramValue
       paramUnits
-      parameterByExecutorIdAndMissionTplIdAndParamName {
-        type
-        required
-        defaultValue
-        defaultUnits
-        description
-      }
     }
     missionTplByExecutorIdAndMissionTplId {
       executorByExecutorId {

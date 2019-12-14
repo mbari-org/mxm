@@ -4,6 +4,25 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import VueApollo from 'vue-apollo'
 import { loadConfig } from 'boot/mxmConfig'
 
+let apolloClient = null;
+
+function getApolloClient() {
+  return new Promise((resolve, reject) => {
+    let id = setTimeout(check, 700)
+    let count = 1
+    function check() {
+      console.log('check', count++)
+      clearTimeout(id)
+      if (apolloClient)
+        resolve(apolloClient)
+      else
+        id = setTimeout(check, 300)
+    }
+  })
+}
+
+export { getApolloClient }
+
 export default async ({ store, app, Vue }) => {
   return new Promise((resolve, reject) => {
     loadConfig
@@ -19,7 +38,7 @@ export default async ({ store, app, Vue }) => {
       })
 
       // Create the apollo client
-      const apolloClient = new ApolloClient({
+      apolloClient = new ApolloClient({
         // TODO revisit the cache/fetch settings.
         // For now, it seems taht we need 'no-cache' in general
         defaultOptions: {

@@ -196,6 +196,7 @@
 
           <q-td key="paramValue" :props="props"
                 style="width:12em;font-family:monospace;vertical-align:top"
+                class="paramValueCell"
           >
             <q-field
               :error="!!valueError(props.row)"
@@ -209,7 +210,7 @@
               <parameter-value
                 :ref="`parameter-value_${props.row.paramName}`"
                 class="q-pa-xs"
-                style="font-family:monospace;max-width:12em;word-break:break-all;font-size:0.9em; overflow-x: auto;"
+                style="font-family:monospace;width:12em;word-break:break-all;font-size:0.9em; overflow-x: auto;"
                 :param-required="props.row.required"
                 :label="`${props.row.paramName}:`"
                 :param-name="props.row.paramName"
@@ -227,12 +228,16 @@
             v-if="executor && executor.usesUnits"
             key="paramUnits" :props="props"
             style="vertical-align:top"
+            class="paramValueCell"
           >
             <div
               v-if="props.row.paramUnits"
               :class="paramUnitsClass(props.row)"
             >
-              {{ props.row.paramUnits }}
+              {{ displayUnits(props.row) }}
+              <q-tooltip>
+                <pre>{{ unitsByName[props.row.paramUnits] }}</pre>
+              </q-tooltip>
             </div>
           </q-td>
 
@@ -265,6 +270,9 @@
   .mission-table td {
     padding: 2px 4px;
     vertical-align: top;
+  }
+  .paramValueCell:hover {
+    background-color: #d9ffe5;
   }
 </style>
 
@@ -355,6 +363,22 @@
       parametersWithErrorCount() {
         return size(this.parametersWithError)
       },
+
+      units() {
+        return this.$store.state.units.unitsByExecutor[this.params.executorId] || []
+      },
+
+      unitsByName() {
+        const unitsByName = {}
+        this.units.forEach(u => {
+          unitsByName[u.unitName] = {
+            unitName: u.unitName,
+            abbreviation: u.abbreviation,
+            baseUnit: u.baseUnit,
+          }
+        })
+        return unitsByName
+      },
     },
 
     mxmProviderClient: null,
@@ -401,6 +425,7 @@
 
       this.parametersWithError = {}
       this.refreshMission()
+      this.$store.dispatch('units/getOrLoadUnitsForExecutor', this.params.executorId)
     },
 
     methods: {
@@ -467,6 +492,15 @@
           this.$delete(this.parametersWithError, paramName)
         }
         return error
+      },
+
+      unitsInfo(unitName) {
+        return this.unitsByName[unitName]
+      },
+
+      displayUnits(row) {
+        const abbreviation = get(this.unitsInfo(row.paramUnits), 'abbreviation')
+        return abbreviation || row.paramUnits
       },
 
       parametersChanged() {
@@ -665,7 +699,7 @@
       },
 
       // TODO
-      cancelMission()   {
+      cancelMission() {
         this.$q.notify({
           message: `TODO cancelMission`,
           timeout: 100,
