@@ -234,8 +234,13 @@
               v-if="props.row.paramUnits"
               :class="paramUnitsClass(props.row)"
             >
-              {{ displayUnits(props.row) }}
-              <q-tooltip>
+              <unit-select
+                :units="units"
+                :base-unit="unitsByName[props.row.paramUnits] && unitsByName[props.row.paramUnits].baseUnit"
+                :value="displayUnits(props.row)"
+                v-on:input="val => { props.row.paramUnits = val }"
+              />
+              <q-tooltip anchor="top left" self="bottom left" :delay="400">
                 <pre>{{ unitsByName[props.row.paramUnits] }}</pre>
               </q-tooltip>
             </div>
@@ -286,6 +291,7 @@
 
   import ParameterValue from 'components/parameter-value'
   import ParameterValueInput from 'components/parameter-value-input'
+  import UnitSelect from 'components/unit-select'
 
   import get from 'lodash/get'
   import map from 'lodash/map'
@@ -302,6 +308,7 @@
     components: {
       ParameterValue,
       ParameterValueInput,
+      UnitSelect,
     },
 
     data: () => ({
@@ -504,7 +511,10 @@
       },
 
       parametersChanged() {
-        return filter(this.myArguments, a => a.paramValue !== a.defaultValue)
+        return filter(this.myArguments, a =>
+          a.paramValue !== a.defaultValue ||
+          a.paramUnits !== a.defaultUnits
+        )
       },
 
       saveArguments(row) {

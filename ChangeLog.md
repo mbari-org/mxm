@@ -2,11 +2,10 @@
 - TODO geo type: also allow text-based editing of the value?
 - TODO add Duration type
 - TODO replicate undoParameter handling in other relevant components
-- TODO edit argument units
-
 
 2019-12
 
+- initial unit selection, and consideting baseUnit
 - column for units and other adjs
 - keep the order of parameters as reported from provider
 - pass units when posting mission
