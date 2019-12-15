@@ -61,9 +61,7 @@ function doGet(httpEndpoint, route) {
           resolve(response.data.result || response.data.data)
         }
       })
-      .catch(e => {
-        reject(e)
-      })
+      .catch(reject)
   })
 }
 
@@ -85,8 +83,6 @@ function doPost(httpEndpoint, route, data) {
           resolve(response.data.result || response.data.data)
         }
       })
-      .catch(e => {
-        reject(e)
-      })
+      .catch(reject)
   })
 }

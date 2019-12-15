@@ -409,9 +409,7 @@
             assetClassName
           }
           this.$apollo.mutate({mutation, variables})
-            .then(data => {
-              resolve(data)
-            })
+            .then(resolve)
             .catch(error => {
               console.error('createAssociatedAssetClass: mutation error=', error)
               reject(error)
@@ -448,9 +446,7 @@
             variables.valueCanReference = parameter.valueCanReference
           }
           this.$apollo.mutate({mutation, variables})
-            .then(data => {
-              resolve(data)
-            })
+            .then(resolve)
             .catch(error => {
               console.error('createParameter: mutation error=', error)
               reject(error)

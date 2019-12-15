@@ -29,7 +29,7 @@ export default async ({ store, app, Vue }) => {
       .then(config => {
         resolve(initApollo(config))
       })
-      .catch(e => reject(e))
+      .catch(reject)
 
     function initApollo({graphqlUri}) {
       console.log('initApollo: graphqlUri=', graphqlUri)

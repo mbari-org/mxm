@@ -39,7 +39,7 @@ const actions = {
               commit('setUnitsForExecutor', {executorId, units})
               resolve(units)
             })
-            .catch(e => reject(e))
+            .catch(reject)
         })
     })
   },

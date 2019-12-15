@@ -12,9 +12,7 @@ const loadConfig = new Promise((resolve, reject) => {
       const config = response.data
       resolve(config)
     })
-    .catch(e => {
-      reject(e)
-    })
+    .catch(reject)
 })
 
 export default async ({ Vue }) => {
