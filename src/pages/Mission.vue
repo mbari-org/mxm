@@ -255,8 +255,8 @@
                 v-on:input="val => { props.row.paramUnits = val; saveArguments(props.row) }"
               />
               <q-tooltip
-                v-if="props.row.paramUnits"
-                anchor="top left" self="bottom right" :delay="400"
+                v-if="debug && props.row.paramUnits"
+                anchor="bottom left" self="bottom right"
               >
                 <pre>{{ unitsByName[props.row.paramUnits] }}</pre>
               </q-tooltip>
@@ -287,16 +287,6 @@
     </div>
   </q-page>
 </template>
-
-<style>
-  .mission-table td {
-    padding: 2px 4px;
-    vertical-align: top;
-  }
-  .paramValueCell:hover {
-    background-color: #eeeeee;
-  }
-</style>
 
 <script>
   import missionGql from '../graphql/mission.gql'
@@ -356,7 +346,6 @@
             name: 'paramName',
             label: 'Parameter',
             align: 'left',
-            sortable: true
           },
           {
             field: 'paramValue',
@@ -949,3 +938,13 @@
     }
   }
 </script>
+
+<style>
+  .mission-table td {
+    padding: 2px 4px;
+    vertical-align: top;
+  }
+  .paramValueCell:hover {
+    background-color: #eeeeee;
+  }
+</style>

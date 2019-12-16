@@ -161,13 +161,6 @@
   </q-page>
 </template>
 
-<style>
-  .mission-table td {
-    padding: 4px 4px;
-    vertical-align: top;
-  }
-</style>
-
 <script>
   import parameterGql from '../graphql/parameter.gql'
   import parameterUpdateGql from '../graphql/parameterUpdate.gql'
@@ -359,3 +352,10 @@
     }
   }
 </script>
+
+<style>
+  .mission-table td {
+    padding: 4px 4px;
+    vertical-align: top;
+  }
+</style>

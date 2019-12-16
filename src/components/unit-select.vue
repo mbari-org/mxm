@@ -16,42 +16,43 @@
         </div>
       </template>
 
-      <div class="q-ma-md column">
+      <div class="q-mt-xs column">
         <q-btn
           v-if="(resetValue || '') !== (value || '')"
-          no-caps flat
+          no-caps dense flat
+          v-close-popup
           @click="$emit('input', resetValue)"
         >
-          Reset to: {{ resetValue || '(undefined)' }}
+          <div class="text-left">
+            Reset to: {{ resetValue || '(undefined)' }}
+          </div>
         </q-btn>
 
         <q-input
+          v-if="unitOptions.length > 1"
+          class="q-ml-sm"
           color="secondary"
           v-model="filter"
           placeholder="Filter"
           autofocus
           clearable
         />
-<!--
-        <q-scroll-area
-          style="height:300px"
-        >
--->
-          <q-list separator>
-            <q-item
-              v-for="(u, index) in unitOptions" :key="index"
-              clickable v-close-popup
-              @click="$emit('input', u.unitName)"
-            >
-              <q-item-section>
-                <q-item-label>{{u.abbreviation}}</q-item-label>
-                <q-item-label caption>{{u.unitName}}</q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-list>
-<!--
-        </q-scroll-area>
--->
+
+        <q-list dense>
+          <q-item
+            v-for="(u, index) in unitOptions" :key="index"
+            clickable v-close-popup
+            @click="$emit('input', u.unitName)"
+          >
+            <q-item-section>
+              <q-item-label>
+                {{u.abbreviation}}
+                <i class="text-grey">- {{u.unitName}}</i>
+              </q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+
       </div>
     </q-btn-dropdown>
   </div>
@@ -102,7 +103,7 @@
 
       unitOptions() {
         let units = this.units
-        const baseUnit = get(this.unitInfo, 'baseUnit')
+        const baseUnit = get(this.unitInfo, 'baseUnit') || get(this.unitInfo, 'unitName')
         if (baseUnit) {
           units = filter(units, u =>
             u.baseUnit === baseUnit ||

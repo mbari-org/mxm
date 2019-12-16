@@ -5,7 +5,7 @@
 
 2019-12
 
-- initial unit handling, considering baseUnit for selection
+- more unit handling, considering baseUnit for selection
 - column for units and other adjs
 - keep the order of parameters as reported from provider
 - pass units when posting mission
