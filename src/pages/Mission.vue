@@ -251,6 +251,7 @@
                 :units="units"
                 :units-by-name="unitsByName"
                 :value="props.row.paramUnits || ''"
+                :reset-value="props.row.defaultUnits"
                 v-on:input="val => { props.row.paramUnits = val; saveArguments(props.row) }"
               />
               <q-tooltip

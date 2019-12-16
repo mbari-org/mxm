@@ -1,25 +1,60 @@
 <template>
-  <q-select
-    dense options-dense
-    :options="options"
-    placeholder="Select"
-    :value="displayUnits"
-    @change="val => { $emit('change', val.value) }"
-    @input="val => { $emit('input', val.value) }"
-  >
-    <template v-slot:option="scope">
-      <q-item
-        v-bind="scope.itemProps"
-        v-on="scope.itemEvents"
-      >
-        <q-item-section>
-          <q-item-label v-html="scope.opt.label">
-          </q-item-label>
-          <q-tooltip>{{ scope.opt.value }}</q-tooltip>
-        </q-item-section>
-      </q-item>
-    </template>
-  </q-select>
+  <div>
+    <q-btn
+      v-if="value === 'count'"
+      dense no-caps flat
+      :label="value"
+    />
+
+    <q-btn-dropdown
+      v-else
+      dense no-caps split flat
+    >
+      <template v-slot:label>
+        <div style="min-width:2em" class="text-left">
+          {{ displayUnits }}
+        </div>
+      </template>
+
+      <div class="q-ma-md column">
+        <q-btn
+          v-if="(resetValue || '') !== (value || '')"
+          no-caps flat
+          @click="$emit('input', resetValue)"
+        >
+          Reset to: {{ resetValue || '(undefined)' }}
+        </q-btn>
+
+        <q-input
+          color="secondary"
+          v-model="filter"
+          placeholder="Filter"
+          autofocus
+          clearable
+        />
+<!--
+        <q-scroll-area
+          style="height:300px"
+        >
+-->
+          <q-list separator>
+            <q-item
+              v-for="(u, index) in unitOptions" :key="index"
+              clickable v-close-popup
+              @click="$emit('input', u.unitName)"
+            >
+              <q-item-section>
+                <q-item-label>{{u.abbreviation}}</q-item-label>
+                <q-item-label caption>{{u.unitName}}</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+<!--
+        </q-scroll-area>
+-->
+      </div>
+    </q-btn-dropdown>
+  </div>
 </template>
 
 <script>
@@ -45,7 +80,16 @@
         type: String,
         required: true
       },
+
+      resetValue: {
+        type: String,
+        required: false
+      },
     },
+
+    data: () => ({
+      filter: '',
+    }),
 
     computed: {
       unitInfo() {
@@ -56,27 +100,24 @@
         return get(this.unitInfo, 'abbreviation') || this.value
       },
 
-      options() {
+      unitOptions() {
         let units = this.units
-        if (this.value === 'count') {
-          // 'count' looks like only by itself per TethysDash behavior.
-          units = filter(units, {unitName: this.value})
+        const baseUnit = get(this.unitInfo, 'baseUnit')
+        if (baseUnit) {
+          units = filter(units, u =>
+            u.baseUnit === baseUnit ||
+            u.unitName === baseUnit ||
+            u.unitName === this.value
+          )
         }
-        else {
-          const baseUnit = get(this.unitInfo, 'baseUnit')
-          if (baseUnit) {
-            units = filter(units, u =>
-              u.baseUnit === baseUnit ||
-              u.unitName === baseUnit ||
-              u.unitName === this.value
-            )
-          }
+        if (this.filter) {
+          const lc = this.filter.toLowerCase()
+          units = filter(units, u =>
+            u.unitName.toLowerCase().indexOf(lc) >= 0 ||
+            u.abbreviation && u.abbreviation.toLowerCase().indexOf(lc) >= 0
+          )
         }
-        return map(units, u => ({
-          label: u.abbreviation,
-          value: u.unitName,
-        }))
-
+        return units
       },
     },
   }
