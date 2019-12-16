@@ -29,7 +29,7 @@
         </q-btn>
 
         <q-input
-          v-if="unitOptions.length > 1"
+          v-if="units.length > 1"
           class="q-ml-sm"
           color="secondary"
           v-model="filter"
@@ -62,6 +62,7 @@
   import get from 'lodash/get'
   import map from 'lodash/map'
   import filter from 'lodash/filter'
+  import orderBy from "lodash/orderBy"
 
   const debug = true
 
@@ -117,6 +118,10 @@
             u.unitName.toLowerCase().indexOf(lc) >= 0 ||
             u.abbreviation && u.abbreviation.toLowerCase().indexOf(lc) >= 0
           )
+        }
+        if (baseUnit === 'second') {
+          // a little "exception" to show the long abbreviations at the end:
+          units = orderBy(units, u => u.abbreviation.length)
         }
         return units
       },
