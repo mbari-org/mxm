@@ -2,7 +2,7 @@ version: '3.6'
 services:
   mxm:
     container_name: mxm
-    image: mbari/mxm:0.3.3
+    image: mbari/mxm:0.3.2
     volumes:
       - ${MXM_CONFIG_DIR}:/usr/local/apache2/htdocs/statics/config
     ports:
@@ -37,7 +37,7 @@ services:
 
   mxm-postgres:
     container_name: mxm-postgres
-    image: mbari/mxm-postgres:0.3.3
+    image: mbari/mxm-postgres:0.3.4
     ports:
     - "25432:5432"
     restart: always

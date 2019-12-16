@@ -128,7 +128,7 @@
 
       <q-table
         :dense="$q.screen.lt.md"
-        :data="myArguments"
+        :data="orderedArguments"
         :columns="argColumns"
         row-key="name"
         :rows-per-page-options="rowsPerPage"
@@ -145,6 +145,16 @@
                 <span :class="{'text-green': parametersChanged().length}">
                   Overridden parameters: {{parametersChanged().length}}
                 </span>
+                <q-btn
+                  v-if="parametersChanged().length"
+                  class="q-ml-md"
+                  icon="arrow_upward"
+                  dense round color="green-4" size="xs"
+                  :outline="!overriddenFirst"
+                  @click="overriddenFirst = !overriddenFirst"
+                >
+                  <q-tooltip>Show overridden parameters first</q-tooltip>
+                </q-btn>
               </div>
               <div
                 v-if="parametersWithErrorCount"
@@ -307,6 +317,7 @@
   import assign from 'lodash/assign'
   import reduce from 'lodash/reduce'
   import size from 'lodash/size'
+  import orderBy from 'lodash/orderBy'
 
   const debug = window.location.search.match(/.*debug=.*mission.*/)
 
@@ -326,6 +337,8 @@
 
       myArguments: [],
       parametersWithError: {},
+
+      overriddenFirst: false,
 
       rowsPerPage: [0],
       pagination: {
@@ -391,6 +404,16 @@
           }
         })
         return unitsByName
+      },
+
+      orderedArguments() {
+        if (this.overriddenFirst) {
+          return orderBy(this.myArguments, a =>
+            !(a.paramValue !== a.defaultValue ||
+            a.paramUnits !== a.defaultUnits)
+          )
+        }
+        else return this.myArguments
       },
     },
 
