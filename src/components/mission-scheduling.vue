@@ -32,23 +32,22 @@
         <q-chip
           square
           class="q-ml-sm bg-blue-1"
-          style="min-width:12em"
         >
-          {{ schedInfo.schedDate }}
+          {{ masked }}
         </q-chip>
         <q-popup-edit
+          v-if="schedInfo.schedType === 'DATE'"
           v-model="dateStr"
-          title="Mission Template ID"
           buttons
-          @before-show="setDateStr"
-          @save="setSchedDate"
+          anchor="bottom middle" self="top middle"
+          @before-show="dateStr = getDateStr()"
+          @save="emitSchedDate"
         >
           <div class="column">
-            <div class="row justify-cetner">
+            <div class="row justify-center">
               <q-input
-                :disable="schedInfo.schedType !== 'DATE'"
                 class="q-pl-lg q-pr-lg bg-blue-1"
-                :style="schedInfo.schedType === 'DATE' ? 'width:13em' : 'width:3em'"
+                style="width:13em"
                 dense autofocus borderless
                 v-model="dateStr"
               />
@@ -95,6 +94,10 @@
       mask() {
         return 'YYYY-MM-DD HH:mm'
       },
+
+      masked() {
+        return this.getDateStr()
+      },
     },
 
     data: () => ({
@@ -102,16 +105,17 @@
     }),
 
     methods: {
-      setDateStr() {
-        this.dateStr = ''
+      getDateStr() {
+        let dateStr = ''
         const {schedType, schedDate} = this.schedInfo
         if (schedType === 'DATE') {
           const theDate = schedDate ? new Date(schedDate) : new Date()
-          this.dateStr = date.formatDate(theDate, this.mask)
+          dateStr = date.formatDate(theDate, this.mask)
         }
+        return dateStr
       },
 
-      setSchedDate(val) {
+      emitSchedDate(val) {
         const schedDate = val ? new Date(date.extractDate(val, this.mask)).toISOString() : null
         this.emit({schedDate})
       },
@@ -126,7 +130,7 @@
         }
         if (schedInfo.schedType === 'DATE') {
           if (!schedInfo.schedDate) {
-            schedInfo.schedDate = date.formatDate(new Date(), this.mask)
+            schedInfo.schedDate = new Date().toISOString()
           }
         }
         else {
