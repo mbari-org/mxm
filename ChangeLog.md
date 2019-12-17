@@ -5,6 +5,7 @@
 
 2019-12
 
+- improve mission-scheduling dispatch
 - adding support for mission scheduling:
     - one of 3 types: ASAP, QUEUE, DATE
     - a date captured in the DATE case

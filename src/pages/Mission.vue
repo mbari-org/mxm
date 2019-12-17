@@ -1,6 +1,6 @@
 <template>
   <q-page class="q-pa-md">
-    <div v-if="mission">
+    <div v-if="!loading && mission">
       <q-card class="q-mb-md">
         <q-card-section>
           <div class="row no-wrap q-gutter-x-lg">
@@ -81,9 +81,8 @@
         class="row q-mb-sm q-gutter-x-lg"
       >
         <mission-scheduling
-          :sched-type="mission.schedType"
-          @schedType="val => { mission.schedType = val; updateMissionSched() }"
-          @schedDate="val => { mission.schedDate = val.toISOString(); updateMissionSched() }"
+          :sched-info="{schedType: mission.schedType, schedDate: mission.schedDate}"
+          @schedInfo="updateMissionSched"
         />
       </div>
 
@@ -104,7 +103,7 @@
           icon="settings"
           push color="secondary"
           size="sm"
-          :disable="mission.missionStatus !== 'DRAFT' || parametersWithErrorCount > 0"
+          :disable="disableRun"
           @click="runMission"
         >
           <q-tooltip>Request execution of this mission</q-tooltip>
@@ -286,7 +285,10 @@
       </q-table>
     </div>
 
-    <div v-else-if="!loading">
+    <i v-else-if="loading">
+      Loading...
+    </i>
+    <div v-else>
       <div class="text-negative">Not found:</div>
       <table class="q-ml-md">
         <tbody>
@@ -336,6 +338,7 @@
       debug,
       loading: false,
       mission: null,
+      schedInfo: {},
       executor: null,
       savingArgs: false,
 
@@ -393,6 +396,12 @@
         return size(this.parametersWithError)
       },
 
+      disableRun() {
+        return this.mission.missionStatus !== 'DRAFT'
+          || this.parametersWithErrorCount > 0
+          || this.executor.usesSched && this.mission.schedType === 'DATE' && !this.mission.schedDate
+      },
+
       units() {
         return this.$store.state.units.unitsByExecutor[this.params.executorId] || []
       },
@@ -439,7 +448,7 @@
           if (data.missionByExecutorIdAndMissionTplIdAndMissionId) {
             mission = data.missionByExecutorIdAndMissionTplIdAndMissionId
 
-            //console.log(`schedType=${mission.schedType} schedDate=${mission.schedDate}`)
+            if (debug) console.log(`schedType=${mission.schedType} schedDate=${mission.schedDate}`)
 
             this.executor = mission.missionTplByExecutorIdAndMissionTplId.executorByExecutorId
             this.mxmProviderClient = this.$createMxmProvideClient({
@@ -448,6 +457,7 @@
             })
           }
           this.setMyArgumentsFromSaved(mission)
+          this.loading = false
           return mission
         },
       },
@@ -471,6 +481,7 @@
 
     methods: {
       refreshMission() {
+        this.loading = true
         this.$apollo.queries.mission.refetch()
       },
 
@@ -701,12 +712,13 @@
             })
       },
 
-      updateMissionSched() {
-        const schedType = this.mission.schedType
-        let schedDate = this.mission.schedDate
+      updateMissionSched({schedType, schedDate}) {
         if (schedType !== 'DATE') {
           schedDate = null
         }
+        this.mission.schedType = schedType
+        this.mission.schedDate = schedDate
+
         //console.log(`updateMissionSched: schedType=${schedType} schedDate=${schedDate}`)
         this.updateMission({schedType, schedDate})
           .then(_ => {
