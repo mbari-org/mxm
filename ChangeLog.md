@@ -5,6 +5,10 @@
 
 2019-12
 
+- adding support for mission scheduling:
+    - one of 3 types: ASAP, QUEUE, DATE
+    - a date captured in the DATE case
+
 - more unit handling, considering baseUnit for selection
 - column for units and other adjs
 - keep the order of parameters as reported from provider

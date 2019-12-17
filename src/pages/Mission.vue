@@ -76,54 +76,65 @@
         <q-separator/>
       </q-card>
 
-      <div class="row q-mb-sm justify-center q-gutter-x-lg">
-          <q-btn
-            v-if="mission.missionTplByExecutorIdAndMissionTplId.executorByExecutorId.canValidate"
-            label="Validate"
-            icon="check"
-            push color="secondary"
-            size="sm"
-            :disable="mission.missionStatus !== 'DRAFT' || parametersWithErrorCount > 0"
-            @click="validateMission"
-          >
-            <q-tooltip>Validate mission against external executor</q-tooltip>
-          </q-btn>
-          <q-btn
-            label="Run"
-            icon="settings"
-            push color="secondary"
-            size="sm"
-            :disable="mission.missionStatus !== 'DRAFT' || parametersWithErrorCount > 0"
-            @click="runMission"
-          >
-            <q-tooltip>Request execution of this mission</q-tooltip>
-          </q-btn>
-          <q-btn
-            v-if="mission.missionStatus === 'RUNNING' || mission.missionStatus === 'QUEUED'"
-            label="Cancel"
-            icon="cancel"
-            push color="secondary"
-            size="sm"
-            @click="cancelMission"
-          >
-            <q-tooltip>Request cancelation of submitted mission</q-tooltip>
-          </q-btn>
-          <q-btn
-            label="Delete"
-            icon="delete"
-            push color="secondary"
-            size="sm"
-            :disable="mission.missionStatus !== 'DRAFT' && mission.missionStatus !== 'TERMINATED'"
-            @click="deleteMission"
-          >
-            <q-tooltip>
-              Delete this mission<br/>
-              <span>
-                (only if in DRAFT or<br/>
-                TERMINATED status)
-              </span>
-            </q-tooltip>
-          </q-btn>
+      <div
+        v-if="executor && executor.usesSched"
+        class="row q-mb-sm q-gutter-x-lg"
+      >
+        <mission-scheduling
+          :sched-type="mission.schedType"
+          @schedType="val => { mission.schedType = val; updateMissionSched() }"
+          @schedDate="val => { mission.schedDate = val.toISOString(); updateMissionSched() }"
+        />
+      </div>
+
+      <div class="row q-mb-sm q-gutter-x-lg">
+        <q-btn
+          v-if="mission.missionTplByExecutorIdAndMissionTplId.executorByExecutorId.canValidate"
+          label="Validate"
+          icon="check"
+          push color="secondary"
+          size="sm"
+          :disable="mission.missionStatus !== 'DRAFT' || parametersWithErrorCount > 0"
+          @click="validateMission"
+        >
+          <q-tooltip>Validate mission against external executor</q-tooltip>
+        </q-btn>
+        <q-btn
+          label="Run"
+          icon="settings"
+          push color="secondary"
+          size="sm"
+          :disable="mission.missionStatus !== 'DRAFT' || parametersWithErrorCount > 0"
+          @click="runMission"
+        >
+          <q-tooltip>Request execution of this mission</q-tooltip>
+        </q-btn>
+        <q-btn
+          v-if="mission.missionStatus === 'RUNNING' || mission.missionStatus === 'QUEUED'"
+          label="Cancel"
+          icon="cancel"
+          push color="secondary"
+          size="sm"
+          @click="cancelMission"
+        >
+          <q-tooltip>Request cancelation of submitted mission</q-tooltip>
+        </q-btn>
+        <q-btn
+          label="Delete"
+          icon="delete"
+          push color="secondary"
+          size="sm"
+          :disable="mission.missionStatus !== 'DRAFT' && mission.missionStatus !== 'TERMINATED'"
+          @click="deleteMission"
+        >
+          <q-tooltip>
+            Delete this mission<br/>
+            <span>
+              (only if in DRAFT or<br/>
+              TERMINATED status)
+            </span>
+          </q-tooltip>
+        </q-btn>
       </div>
 
       <q-table
@@ -299,6 +310,7 @@
   import ParameterValue from 'components/parameter-value'
   import ParameterValueInput from 'components/parameter-value-input'
   import UnitSelect from 'components/unit-select'
+  import MissionScheduling from 'components/mission-scheduling'
 
   import get from 'lodash/get'
   import map from 'lodash/map'
@@ -317,6 +329,7 @@
       ParameterValue,
       ParameterValueInput,
       UnitSelect,
+      MissionScheduling,
     },
 
     data: () => ({
@@ -425,6 +438,8 @@
 
           if (data.missionByExecutorIdAndMissionTplIdAndMissionId) {
             mission = data.missionByExecutorIdAndMissionTplIdAndMissionId
+
+            //console.log(`schedType=${mission.schedType} schedDate=${mission.schedDate}`)
 
             this.executor = mission.missionTplByExecutorIdAndMissionTplId.executorByExecutorId
             this.mxmProviderClient = this.$createMxmProvideClient({
@@ -684,6 +699,24 @@
                 position: 'top',
               })
             })
+      },
+
+      updateMissionSched() {
+        const schedType = this.mission.schedType
+        let schedDate = this.mission.schedDate
+        if (schedType !== 'DATE') {
+          schedDate = null
+        }
+        //console.log(`updateMissionSched: schedType=${schedType} schedDate=${schedDate}`)
+        this.updateMission({schedType, schedDate})
+          .then(_ => {
+            this.$q.notify({
+              message: `Mission scheduling updated`,
+              timeout: 1200,
+              color: 'info',
+              position: 'top',
+            })
+          })
       },
 
       updateMissionStatus(missionStatus) {

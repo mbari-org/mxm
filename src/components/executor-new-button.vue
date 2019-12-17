@@ -166,6 +166,7 @@
               httpEndpoint: this.httpEndpoint,
               apiType: this.apiType,
               description: this.description,
+              usesSched: capabilities.usesSched,
               canValidate: capabilities.canValidate,
               usesUnits: capabilities.usesUnits,
               descriptionFormat: capabilities.descriptionFormat,

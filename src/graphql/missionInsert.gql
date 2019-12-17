@@ -7,6 +7,8 @@ mutation($input: CreateMissionInput!) {
       missionStatus
       assetId
       description
+      schedType
+      schedDate
       startDate
       endDate
     }
@@ -21,6 +23,8 @@ mutation($input: CreateMissionInput!) {
 #          "missionId": "m1",
 #          "assetId": "tiny",
 #          "description": "foo",
+#          "schedType": "ASAP",
+#          "schedDate": null,
 #          "startDate": "-30m",
 #          "missionStatus": "DRAFT"
 #        }

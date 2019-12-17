@@ -98,6 +98,7 @@
       assetId: '',
       missionId: '',
       description: null,
+      schedType: 'ASAP',
       arguments: [],
       startDate: null,
       endDate: null
@@ -157,6 +158,7 @@
         this.missionId = ''
         this.description = null
         this.arguments = []
+        this.schedType = 'ASAP'
         this.startDate = new Date()
         this.endDate = new Date()
         this.dialogOpened = true
@@ -169,6 +171,7 @@
           missionTplId: this.missionTplId,
           missionId: this.missionId,
           missionStatus: 'DRAFT',
+          schedType: this.schedType,
           assetId: this.assetId,
           description: this.description
         }

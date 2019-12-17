@@ -10,6 +10,7 @@ create table if not exists executors
   http_endpoint varchar not null,
   api_type executor_api_type not null,
   description varchar,
+  uses_sched boolean default false not null,
   can_validate boolean default false not null,
   uses_units boolean default false not null,
   description_format varchar,
@@ -98,6 +99,13 @@ create type mission_status_type as enum (
 )
 ;
 
+create type mission_sched_type as enum (
+  'asap',
+  'queue',
+  'date'
+)
+;
+
 create table if not exists missions
 (
   executor_id varchar not null,
@@ -106,6 +114,8 @@ create table if not exists missions
   mission_status mission_status_type not null,
   asset_id varchar not null,
   description varchar,
+  sched_type mission_sched_type not null,
+  sched_date timestamp with time zone,
   start_date timestamp with time zone,
   end_date timestamp with time zone,
   foreign key (executor_id, mission_tpl_id) references mission_tpls on update cascade on delete cascade,

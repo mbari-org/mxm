@@ -3,6 +3,7 @@ query ($executorId: String!, $missionTplId: String!) {
     executorByExecutorId {
       descriptionFormat
       usesUnits
+      usesSched
     }
     id
     missionTplId

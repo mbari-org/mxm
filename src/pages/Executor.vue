@@ -131,6 +131,12 @@
                 {{ executor.usesUnits ? 'Yes' : 'No '}}
               </td>
             </tr>
+            <tr>
+              <td>Scheduling:</td>
+              <td class="text-bold">
+                {{ executor.usesSched ? 'Yes' : 'No '}}
+              </td>
+            </tr>
             <tr v-if="executor.descriptionFormat">
               <td>Description format:</td>
               <td class="text-bold">
