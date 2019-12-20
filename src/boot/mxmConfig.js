@@ -4,7 +4,7 @@ const debug = false
 
 const loadConfig = new Promise((resolve, reject) => {
   const method = 'GET'
-  const url = '/statics/config/config.json'
+  const url = 'statics/config/config.json'
   if (debug) console.log(`${method} ${url}`)
   axios({method, url})
     .then(response => {

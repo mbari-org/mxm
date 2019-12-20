@@ -1,7 +1,7 @@
 {
   "name": "mxm",
-  "version": "0.3.0",
-  "description": "A Quasar Framework app",
+  "version": "0.3.5",
+  "description": "Mission Execution Mediation Service",
   "productName": "MXM",
   "cordovaId": "org.cordova.quasar.app",
   "capacitorId": "",

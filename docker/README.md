@@ -1,9 +1,6 @@
 # Building the images
 
-**TODO Some of the following still to be updated**
-
-Adjust the GraphQL endpoint URI in `config/config.json`
-depending on how you are going to run the UI below.
+**TODO Some of the following being updated**
 
 Note:
 
@@ -12,10 +9,12 @@ Note:
 
 - The user-visible MXM version is set in `../package.json`.
 
-- The version of the postgres image is set directly as needed.
+- The version of the postgres image is set directly as needed (see below).
 
-- Reflect such versions in `docker-compose.yml` for general consistency.
+- For deployment, reflect such versions in `docker-compose.yml` for general consistency.
 
+
+## MXM image
 
 To generate image `mbari/mxm:x.y.z`:
 
@@ -23,19 +22,23 @@ To generate image `mbari/mxm:x.y.z`:
     (quasar build && cd docker && ./dockerize.sh mxm x.y.z)
 
 
+## MXM Postgres iamge
+
 To generate image `mbari/mxm-postgres:x.y.z`:
 
     (cd docker && ./dockerize.sh mxm-postgres x.y.z)
 
-Launch:
+# Launch
+
+With image versions as needed in `docker/docker-compose.yml`:
 
     cd docker && docker-compose up -d
 
-Open the UI: http://localhost:38080/
-(again, this will be functional depending on the indicated GraphQL
-endpoint, proxy-passes in place, etc.)
+Then open the MXM UI at http://localhost:38080/.
+(Again, this will be functional depending on the indicated GraphQL
+endpoint in `config.json`, proxy-passes in place on the server, etc.)
 
-Open the GraphQL UI: http://localhost:5000/mxm-graphiql
+The GraphQL UI is at: http://localhost:5000/mxm-graphiql
 
 # TSAUV
 

@@ -1,9 +1,9 @@
-
-- TODO geo type: also allow text-based editing of the value?
-- TODO add Duration type
-- TODO replicate undoParameter handling in other relevant components
-
 2019-12
+
+- build and deploy 0.3.5.
+  Include adjustment in loading of `config.json` so it
+  actually works also when app deployed under some URL "context"
+  (not "root"), eg, `http://tsauv.shore.mbari.org/mxm/`
 
 - improve mission-scheduling dispatch
 - adding support for mission scheduling:

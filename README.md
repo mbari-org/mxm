@@ -42,9 +42,12 @@ some client requests:
 ```
 http post localhost:5000/mxm-graphql query='{
   allExecutorsList {
-    id
     executorId
     httpEndpoint
+    apiType
+    usesSched
+    canValidate
+    usesUnits
     description
   }
 }'
