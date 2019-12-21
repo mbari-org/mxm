@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/mbari-org/mxm.svg?branch=master)](https://travis-ci.org/mbari-org/mxm)
+
 # Mission Execution Mediation Service
 
 **WIP**
