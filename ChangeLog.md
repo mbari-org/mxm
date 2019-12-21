@@ -1,5 +1,27 @@
 2019-12
 
+- setup: `quasar ext add @quasar/testing` with Jest.
+  This comes with a simple demo `test/jest/__tests__/App.spec.js`,
+  add I added one basic one for an mxm component.
+
+    Some commands:
+    - `npm run test:unit`
+    - `quasar test --unit jest` - same effect as the above
+    - individual tests:
+        - `npm run test:unit test/jest/__tests__/App.spec.js`
+        - `npm run test:unit src/components/markdown/__tests__/mxm-markdown-view_jest.spec.js`
+    - open majestic: `npm run test:unit:ui`
+
+    For now, setting `collectCoverage: false`
+    and git-ignoring `test/jest/coverage`
+
+    Some refs:
+        - https://quasar.dev/quasar-cli/testing-and-auditing
+        - https://vue-test-utils.vuejs.org/guides/testing-single-file-components-with-jest.html
+        - https://jestjs.io/docs/en/snapshot-testing
+
+    Also, initial travis-ci
+
 - build and deploy 0.3.5.
   Include adjustment in loading of `config.json` so it
   actually works also when app deployed under some URL "context"

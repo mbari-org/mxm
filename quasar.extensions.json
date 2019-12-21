@@ -1,3 +1,15 @@
 {
-  "@mbari/qgeomap": {}
+  "@mbari/qgeomap": {},
+  "@quasar/testing": {
+    "harnesses": [
+      "unit-jest"
+    ]
+  },
+  "@quasar/testing-unit-jest": {
+    "babel": "babelrc",
+    "options": [
+      "scripts",
+      "majestic"
+    ]
+  }
 }

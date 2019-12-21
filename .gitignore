@@ -1,5 +1,6 @@
 src/statics/config/config.json
 docker/config/config.json
+test/jest/coverage
 .quasar
 .DS_Store
 .thumbs.db
