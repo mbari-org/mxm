@@ -6,4 +6,9 @@ describe('MxmMarkdownView', () => {
     const wrapper = mount(MxmMarkdownView)
     expect(wrapper.isVueInstance()).toBeTruthy()
   })
+
+  test('renders correctly', () => {
+    const wrapper = mount(MxmMarkdownView)
+    expect(wrapper.element).toMatchSnapshot()
+  })
 })

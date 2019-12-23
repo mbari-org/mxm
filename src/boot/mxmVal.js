@@ -1,13 +1,17 @@
 import map from 'lodash/map'
 
+const $mxmVal = {
+  checkValue,
+  toGeojson,
+  fromGeojson,
+  isGeojsonType,
+  isNumericType,
+}
+
+export { $mxmVal }
+
 export default ({ app, Vue }) => {
-  Vue.prototype.$mxmVal = {
-    checkValue,
-    toGeojson,
-    fromGeojson,
-    isGeojsonType,
-    isNumericType,
-  }
+  Vue.prototype.$mxmVal = $mxmVal
 }
 
 function checkValue(value, simpleType, required, valueCanReference) {

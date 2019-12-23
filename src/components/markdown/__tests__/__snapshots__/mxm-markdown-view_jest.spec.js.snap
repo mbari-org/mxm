@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MxmMarkdownView renders correctly 1`] = `
+<div>
+  <div
+    class="row no-wrap items-start"
+    style="width: 100%;"
+  >
+    <div
+      style="vertical-align: top;"
+    >
+      <div
+        class="rounded-borders bg-light-blue-1"
+      >
+        <div
+          class="markdownText q-pa-sm"
+          style="min-width: 12em; min-height: 4em; white-space: normal; color: gray; font-style: italic; font-size: smaller;"
+        >
+          (No description)
+        </div>
+      </div>
+    </div>
+     
+    <!---->
+  </div>
+   
+</div>
+`;
