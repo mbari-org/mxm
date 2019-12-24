@@ -86,7 +86,10 @@ function checkInteger(value) {
 }
 
 function checkFloat(value) {
-  if (!value.match(/^-?\d*(\.\d+)?$/) && !value.match(/^nan$/i) ) {
+  if (value.match(/^nan$/i)) {
+    return
+  }
+  if (+value === NaN) {
     return 'Invalid float value'
   }
 }
@@ -159,6 +162,9 @@ function checkPolygon(array) {
   if (!Array.isArray(array)) {
     return 'Not an array'
   }
+  if (array.length < 3) {
+    return 'At least 3 points for a polygon'
+  }
   for (let i = 0; i < array.length; i++) {
     const err = checkPoint(array[i])
     if (err) {
@@ -197,10 +203,12 @@ function toGeojson(simpleType, simple) {
     return emptyFeature()
   }
 
+  const lcType = simpleType.toLowerCase()
+
   const json = simple && JSON.parse(simple)
   if (json) {
-    switch (simpleType) {
-      case 'Point': {
+    switch (lcType) {
+      case 'point': {
         const [lat, lon] = json
         const coordinates = [lon, lat]
         return {
@@ -212,7 +220,7 @@ function toGeojson(simpleType, simple) {
         }
       }
 
-      case 'MultiPoint': {
+      case 'multipoint': {
         const coordinates = map(json, ([lat, lon]) => [lon, lat])
         return {
           type: 'Feature',
@@ -223,7 +231,7 @@ function toGeojson(simpleType, simple) {
         }
       }
 
-      case 'Polygon': {
+      case 'polygon': {
         const coordinates = [ map(json, ([lat, lon]) => [lon, lat]) ]
         return {
           type: 'Feature',
@@ -234,7 +242,7 @@ function toGeojson(simpleType, simple) {
         }
       }
 
-      case 'LineString': {
+      case 'linestring': {
         const coordinates = map(json, ([lat, lon]) => [lon, lat])
         return {
           type: 'Feature',
@@ -243,6 +251,10 @@ function toGeojson(simpleType, simple) {
             coordinates,
           }
         }
+      }
+
+      default: {
+        return `unrecognized type: ${simpleType}`
       }
     }
   }
