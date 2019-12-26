@@ -6,6 +6,7 @@ const $mxmVal = {
   fromGeojson,
   isGeojsonType,
   isNumericType,
+  emptyFeature,
 }
 
 export { $mxmVal }
@@ -13,6 +14,8 @@ export { $mxmVal }
 export default ({ app, Vue }) => {
   Vue.prototype.$mxmVal = $mxmVal
 }
+
+const debug = window.location.search.match(/.*debug=.*mxmval.*/)
 
 function checkValue(value, simpleType, required, valueCanReference) {
   value = value && value.trim() || ''
@@ -267,7 +270,7 @@ function fromGeojson(simpleType, geometry) {
   if (!geometry || Array.isArray(geometry) && !geometry.length) {
     return ''   // avoid returning `[]`
   }
-  console.log('fromGeojson:', 'simpleType=', simpleType,
+  if (debug) console.log('fromGeojson:', 'simpleType=', simpleType,
     'geometry.type=', geometry.type, 'geometry=', geometry)
 
   switch (geometry.type) {
@@ -290,7 +293,7 @@ function fromGeojson(simpleType, geometry) {
     }
 
     case 'FeatureCollection': {
-      console.log('fromGeojson: FeatureCollection: geometry=', geometry)
+      if (debug) console.log('fromGeojson: FeatureCollection: geometry=', geometry)
       if (!geometry.features || !geometry.features.length) {
         return ''
       }

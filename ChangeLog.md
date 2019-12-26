@@ -1,5 +1,7 @@
 2019-12
 
+TODO: "simple" geometry type as JSON, not string
+
 - setup: `quasar ext add @quasar/testing` with Jest.
   This comes with a simple demo `test/jest/__tests__/App.spec.js`,
   add I added one basic one for an mxm component.
