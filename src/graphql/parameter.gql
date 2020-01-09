@@ -1,13 +1,13 @@
-query ($executorId: String!, $missionTplId: String!, $paramName: String!) {
-  parameterByExecutorIdAndMissionTplIdAndParamName(
-    executorId: $executorId,
+query ($providerId: String!, $missionTplId: String!, $paramName: String!) {
+  parameterByProviderIdAndMissionTplIdAndParamName(
+    providerId: $providerId,
     missionTplId: $missionTplId,
     paramName: $paramName
   ) {
     id
-    executorId
-    missionTplByExecutorIdAndMissionTplId {
-      executorByExecutorId {
+    providerId
+    missionTplByProviderIdAndMissionTplId {
+      providerByProviderId {
         descriptionFormat
       }
     }

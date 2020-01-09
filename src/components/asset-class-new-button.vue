@@ -11,7 +11,7 @@
 
     <utl-dialog
       :dialog-opened="dialogOpened"
-      :title="`Register new asset class (for '${executorId}')`"
+      :title="`Register new asset class (for '${providerId}')`"
       :ok-to-submit="!!okToSubmit"
       :ok-to-dismiss="!!okToDismiss"
       @submit="submit"
@@ -55,7 +55,7 @@
 
   export default {
     props: {
-      executorId: {
+      providerId: {
         type: String,
         required: true
       },
@@ -86,7 +86,7 @@
 
       submit() {
         const variables = {
-          executorId: this.executorId,
+          providerId: this.providerId,
           className: this.className,
           description: this.description || null
         }

@@ -1,5 +1,5 @@
-query executorApiTypes {
-  __type(name: "ExecutorApiType") {
+query providerApiTypes {
+  __type(name: "ProviderApiType") {
     enumValues {
       name
     }

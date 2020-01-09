@@ -1,8 +1,8 @@
-mutation($executorId: String!, $className: String!, $assetId: String!, $description: String) {
+mutation($providerId: String!, $className: String!, $assetId: String!, $description: String) {
   createAsset(
     input: {
       asset: {
-        executorId: $executorId
+        providerId: $providerId
         className: $className
         assetId: $assetId
         description: $description
@@ -10,7 +10,7 @@ mutation($executorId: String!, $className: String!, $assetId: String!, $descript
     }
   ) {
     asset {
-      executorId
+      providerId
       className
       assetId
       description

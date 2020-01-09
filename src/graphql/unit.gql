@@ -1,14 +1,14 @@
-query units($executorId: String!, $unitName: String!) {
-  unitByExecutorIdAndUnitName(
-    executorId: $executorId
+query units($providerId: String!, $unitName: String!) {
+  unitByProviderIdAndUnitName(
+    providerId: $providerId
     unitName: $unitName
   ) {
     id
-    executorId
+    providerId
     unitName
     abbreviation
     baseUnit
-    unitsByExecutorIdAndBaseUnitList {
+    unitsByProviderIdAndBaseUnitList {
       unitName
       abbreviation
       baseUnit

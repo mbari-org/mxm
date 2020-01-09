@@ -9,7 +9,7 @@
 
     <utl-dialog
       :dialog-opened="dialogOpened"
-      :title="`Register new mission template for '${executorId}'`"
+      :title="`Register new mission template for '${providerId}'`"
       :ok-to-submit="!!okToSubmit"
       :ok-to-dismiss="!!okToDismiss"
       @submit="submit"
@@ -56,7 +56,7 @@
 
   export default {
     props: {
-      executorId: {
+      providerId: {
         type: String,
         required: true
       }
@@ -87,7 +87,7 @@
 
       submit() {
         const variables = {
-          executorId: this.executorId,
+          providerId: this.providerId,
           missionTplId: this.missionTplId,
           description: this.description,
         }

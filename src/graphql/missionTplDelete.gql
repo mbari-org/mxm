@@ -1,7 +1,7 @@
 mutation deleteMissionTpl($input: DeleteMissionTplInput!) {
   deleteMissionTpl(input: $input) {
     missionTpl {
-      executorId
+      providerId
       missionTplId
     }
   }

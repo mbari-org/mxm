@@ -1,7 +1,7 @@
-mutation($input: CreateExecutorInput!) {
-  createExecutor(input: $input) {
-    executor {
-      executorId
+mutation($input: CreateProviderInput!) {
+  createProvider(input: $input) {
+    provider {
+      providerId
       httpEndpoint
       apiType
       description
@@ -15,8 +15,8 @@ mutation($input: CreateExecutorInput!) {
 
 #    {
 #      "input": {
-#        "executor": {
-#          "executorId": "x1",
+#        "provider": {
+#          "providerId": "x1",
 #          "httpEndpoint": "h:/x1",
 #          "apiType": "REST0",
 #          "description": "...",

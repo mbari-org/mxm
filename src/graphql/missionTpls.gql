@@ -1,18 +1,18 @@
-query missionTpls($executorId: String!) {
+query missionTpls($providerId: String!) {
   allMissionTplsList(condition: {
-    executorId: $executorId
+    providerId: $providerId
   }) {
     id
-    executorId
-    executorByExecutorId {
+    providerId
+    providerByProviderId {
       descriptionFormat
     }
     missionTplId
     description
-    missionTplAssetClassesByExecutorIdAndMissionTplIdList {
+    missionTplAssetClassesByProviderIdAndMissionTplIdList {
       assetClassName
-      assetClassByExecutorIdAndAssetClassName {
-        assetsByExecutorIdAndClassNameList {
+      assetClassByProviderIdAndAssetClassName {
+        assetsByProviderIdAndClassNameList {
           assetId
         }
       }

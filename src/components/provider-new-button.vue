@@ -9,7 +9,7 @@
 
     <utl-dialog
       :dialog-opened="dialogOpened"
-      title="Register new executor"
+      title="Register new provider"
       :ok-to-submit="!!okToSubmit && !progress"
       :ok-to-dismiss="!!okToDismiss && !progress"
       @submit="submit"
@@ -19,12 +19,12 @@
         class="column q-gutter-sm"
       >
         <div>
-          Executor name:
+          Provider name:
           <q-input
             dense hide-bottom-space
-            :error="!executorId.length"
+            :error="!providerId.length"
             class="bg-light-blue-1"
-            v-model.trim="executorId"
+            v-model.trim="providerId"
             type="text"
             autofocus
             style="width:24em"
@@ -78,7 +78,7 @@
 </template>
 
 <script>
-  import executorInsertGql from '../graphql/executorInsert.gql'
+  import providerInsertGql from '../graphql/providerInsert.gql'
   import assetClassInsertGql from '../graphql/assetClassInsert.gql'
   import assetInsertGql from '../graphql/assetInsert.gql'
   import unitInsertGql from '../graphql/unitInsert.gql'
@@ -100,7 +100,7 @@
 
     data: () => ({
       dialogOpened: false,
-      executorId: '',
+      providerId: '',
       httpEndpoint: '',
       apiType: '',
       description: null,
@@ -111,11 +111,11 @@
 
     computed: {
       okToSubmit() {
-        return this.executorId && this.httpEndpoint && this.apiType
+        return this.providerId && this.httpEndpoint && this.apiType
       },
 
       okToDismiss() {
-        return !this.executorId
+        return !this.providerId
       },
     },
 
@@ -123,11 +123,11 @@
       openDialog() {
         this.apiType = 'REST0'
 
-        this.executorId = 'TethysDash'
+        this.providerId = 'TethysDash'
         this.httpEndpoint = 'http://tethyssim.shore.mbari.org:8080/TethysDash/api/mxm'
         this.description = 'TethysDash/LRAUV System'
 
-        // this.executorId = 'TFT'
+        // this.providerId = 'TFT'
         // this.httpEndpoint = 'http://localhost:8040'
         // this.description = 'TSAUV Front Tracking'
 
@@ -147,22 +147,22 @@
           mxmProviderClient.getCapabilities()
               .then(capabilities => {
                 this.progress += 0.1
-                this.createExecutorAndEntities(mxmProviderClient, capabilities)
+                this.createProviderAndEntities(mxmProviderClient, capabilities)
               })
               .catch(error => {
                 console.error('getCapabilities: error=', error)
               })
         }
         else {
-          this.createExecutorAndEntities(mxmProviderClient)
+          this.createProviderAndEntities(mxmProviderClient)
         }
       },
 
-      createExecutorAndEntities(mxmProviderClient, capabilities = {}) {
+      createProviderAndEntities(mxmProviderClient, capabilities = {}) {
         const variables = {
           input: {
-            executor: {
-              executorId: this.executorId,
+            provider: {
+              providerId: this.providerId,
               httpEndpoint: this.httpEndpoint,
               apiType: this.apiType,
               description: this.description,
@@ -174,15 +174,15 @@
           }
         }
 
-        const mutation = executorInsertGql
+        const mutation = providerInsertGql
         this.$apollo.mutate({mutation, variables})
             .then(data => {
               if (debug) console.debug('mutation data=', data)
               if (mxmProviderClient.isSupportedInterface()) {
-                this.createOtherEntities(mxmProviderClient, variables.input.executor, data)
+                this.createOtherEntities(mxmProviderClient, variables.input.provider, data)
               }
               else {
-                this.closeDialogAndNotify(variables.input.executor)
+                this.closeDialogAndNotify(variables.input.provider)
               }
             })
             .catch(error => {
@@ -190,17 +190,17 @@
             })
       },
 
-      createOtherEntities(mxmProviderClient, executor, data) {
+      createOtherEntities(mxmProviderClient, provider, data) {
         const getAndCreateAssetClasses = () => {
           this.progress += 0.1
           this.progressLabel = 'Importing asset classes...'
           mxmProviderClient.getAssetClasses()
               .then(assetClasses => {
                 this.progress += 0.1
-                this.createAssetClasses(executor, assetClasses)
+                this.createAssetClasses(provider, assetClasses)
                     .then(_ => {
                       this.progress += 0.1
-                      if (executor.usesUnits) {
+                      if (provider.usesUnits) {
                         getAndCreateUnits()
                       }
                       else {
@@ -220,7 +220,7 @@
           this.progressLabel = 'Importing units...'
           mxmProviderClient.getUnits()
               .then(units => {
-                this.createUnits(executor, units)
+                this.createUnits(provider, units)
                     .then(_ => {
                       this.progress += 0.1
                       getAndCreateMissionTpls()
@@ -236,9 +236,9 @@
           mxmProviderClient.getMissionTpls()
               .then(missionTpls => {
                 this.progress += 0.1
-                this.createMissionTpls(executor, missionTpls)
+                this.createMissionTpls(provider, missionTpls)
                     .then(_ => {
-                      this.closeDialogAndNotify(executor)
+                      this.closeDialogAndNotify(provider)
                     })
                     .catch(error => {
                       console.error('createMissionTpls: error=', error)
@@ -252,17 +252,17 @@
         getAndCreateAssetClasses()
       },
 
-      createAssetClasses(executor, assetClasses) {
+      createAssetClasses(provider, assetClasses) {
         if (debug) console.debug('assetClasses=', assetClasses)
         return this.$utl.runInSequence(map(assetClasses, assetClass =>
-          this.createAssetClass(executor, assetClass)
+          this.createAssetClass(provider, assetClass)
         ))
       },
 
-      createAssetClass(executor, assetClass) {
+      createAssetClass(provider, assetClass) {
         return new Promise((resolve, reject) => {
           const variables = {
-            executorId: executor.executorId,
+            providerId: provider.providerId,
             className: assetClass.assetClassName,
             description: assetClass.description || null
           }
@@ -273,7 +273,7 @@
             .then(data => {
               if (debug) console.debug('createAssetClass: mutation data=', data)
               const assets = assetClass.assets || []
-              this.createAssets(executor, assetClass, assets)
+              this.createAssets(provider, assetClass, assets)
               resolve(data)
             })
             .catch(error => {
@@ -283,17 +283,17 @@
         })
       },
 
-      createAssets(executor, assetClass, assets) {
+      createAssets(provider, assetClass, assets) {
         if (debug) console.debug('assets=', assets)
         return this.$utl.runInSequence(map(assets, asset =>
-          this.createAsset(executor, assetClass, asset)
+          this.createAsset(provider, assetClass, asset)
         ))
       },
 
-      createAsset(executor, assetClass, asset) {
+      createAsset(provider, assetClass, asset) {
         return new Promise((resolve, reject) => {
           const variables = {
-            executorId: executor.executorId,
+            providerId: provider.providerId,
             className: assetClass.assetClassName,
             assetId: asset.assetId,
             description: asset.description || null
@@ -313,12 +313,12 @@
         })
       },
 
-      createUnits(executor, units) {
+      createUnits(provider, units) {
         if (debug) console.debug('units=', units)
         // sort units so we first create the base units then the others:
         const sortedUnits = orderBy(units, u => u.baseUnit ? 1 : 0)
         const prom = this.$utl.runInSequence(map(sortedUnits, unit =>
-            this.createUnit(executor, unit)
+            this.createUnit(provider, unit)
         ))
         prom.catch(error => {
           console.error('createUnits: error=', error)
@@ -326,10 +326,10 @@
         return prom
       },
 
-      createUnit(executor, unit) {
+      createUnit(provider, unit) {
         return new Promise((resolve, reject) => {
           const variables = {
-            executorId: executor.executorId,
+            providerId: provider.providerId,
             unitName: unit.name,
           }
           if (unit.abbreviation) {
@@ -353,19 +353,19 @@
         })
       },
 
-      createMissionTpls(executor, missionTpls) {
+      createMissionTpls(provider, missionTpls) {
         if (debug) console.debug('missionTpls=', missionTpls)
         const remainingProgress = 1.0 - this.progress
         const stepProgress = missionTpls.length && remainingProgress / missionTpls.length
         return this.$utl.runInSequence(map(missionTpls, missionTpl =>
-          this.createMissionTpl(executor, missionTpl, stepProgress)
+          this.createMissionTpl(provider, missionTpl, stepProgress)
         ))
       },
 
-      createMissionTpl(executor, missionTpl, stepProgress) {
+      createMissionTpl(provider, missionTpl, stepProgress) {
         return new Promise((resolve, reject) => {
           const variables = {
-            executorId: executor.executorId,
+            providerId: provider.providerId,
             missionTplId: missionTpl.missionTplId,
             description: missionTpl.description,
           }
@@ -376,10 +376,10 @@
             .then(data => {
               if (debug) console.debug('createMissionTpl: mutation data=', data)
               const assetClassNames = missionTpl.assetClassNames || []
-              this.createAssociatedAssetClasses(executor, missionTpl, assetClassNames)
+              this.createAssociatedAssetClasses(provider, missionTpl, assetClassNames)
                 .then(data => {
                   const parameters = missionTpl.parameters || []
-                  this.createParameters(executor, missionTpl, parameters)
+                  this.createParameters(provider, missionTpl, parameters)
                   .then(data => {
                     this.progress += stepProgress
                     resolve(data)
@@ -394,18 +394,18 @@
         })
       },
 
-      createAssociatedAssetClasses(executor, missionTpl, assetClassNames) {
+      createAssociatedAssetClasses(provider, missionTpl, assetClassNames) {
         if (debug) console.debug('createAssociatedAssetClasses=', assetClassNames)
         return this.$utl.runInSequence(map(assetClassNames, assetClassName =>
-          this.createAssociatedAssetClass(executor, missionTpl, assetClassName)
+          this.createAssociatedAssetClass(provider, missionTpl, assetClassName)
         ))
       },
 
-      createAssociatedAssetClass(executor, missionTpl, assetClassName) {
+      createAssociatedAssetClass(provider, missionTpl, assetClassName) {
         return new Promise((resolve, reject) => {
           const mutation = missionTplAssetClassInsertGql
           const variables = {
-            executorId: executor.executorId,
+            providerId: provider.providerId,
             missionTplId: missionTpl.missionTplId,
             assetClassName
           }
@@ -418,19 +418,19 @@
         })
       },
 
-      createParameters(executor, missionTpl, parameters) {
+      createParameters(provider, missionTpl, parameters) {
         if (debug) console.debug('createParameters=', parameters)
         return this.$utl.runInSequence(map(parameters, parameter =>
-          this.createParameter(executor, missionTpl, parameter)
+          this.createParameter(provider, missionTpl, parameter)
         ))
       },
 
-      createParameter(executor, missionTpl, parameter) {
+      createParameter(provider, missionTpl, parameter) {
         if (debug) console.debug(':::: createParameter', parameter.paramName)
         return new Promise((resolve, reject) => {
           const mutation = parameterInsertGql
           const variables = {
-            executorId: executor.executorId,
+            providerId: provider.providerId,
             missionTplId: missionTpl.missionTplId,
             paramName: parameter.paramName,
             type: parameter.type,
@@ -455,17 +455,17 @@
         })
       },
 
-      closeDialogAndNotify(executor) {
+      closeDialogAndNotify(provider) {
         this.progress = null
         this.progressLabel = null
         this.dialogOpened = false
         this.$q.notify({
-          message: `Executor created: ${executor.executorId}`,
+          message: `Provider created: ${provider.providerId}`,
           timeout: 1000,
           position: 'top',
           color: 'info',
         })
-        this.$emit('created', executor)
+        this.$emit('created', provider)
       },
     }
   }

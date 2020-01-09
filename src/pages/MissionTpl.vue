@@ -37,7 +37,7 @@
             expandable expandable-title="Description:"
             editable
             :text="missionTpl.description"
-            :start-markdown="missionTpl.executorByExecutorId.descriptionFormat === 'markdown'"
+            :start-markdown="missionTpl.providerByProviderId.descriptionFormat === 'markdown'"
             @saveDescription="updateDescription"
           />
         </q-card-section>
@@ -58,19 +58,19 @@
             >
               <router-link
                 style="text-decoration:none" class="q-pr-sm"
-                :to="$utl.routeLoc([params.executorId, 'ac', c.assetClassName])"
+                :to="$utl.routeLoc([params.providerId, 'ac', c.assetClassName])"
               >
                 {{c.assetClassName}}
               </router-link>
-              <q-tooltip v-if="c.assetClassByExecutorIdAndAssetClassName.description">
-                {{c.assetClassByExecutorIdAndAssetClassName.description}}
+              <q-tooltip v-if="c.assetClassByProviderIdAndAssetClassName.description">
+                {{c.assetClassByProviderIdAndAssetClassName.description}}
               </q-tooltip>
             </q-chip>
 
             <asset-class-select-button
               class="col-auto q-ml-md"
               :exclude="myAssetClassNames"
-              :executor-id="params.executorId"
+              :provider-id="params.providerId"
               @selection="assetClassSelection"
             />
           </div>
@@ -107,7 +107,7 @@
 
         <div slot="top-right" slot-scope="props" class="fit">
           <parameter-new-button
-            :executor-id="params.executorId"
+            :provider-id="params.providerId"
             :mission-tpl-id="params.missionTplId"
             @created="parameterCreated"
           />
@@ -118,7 +118,7 @@
             key="paramName" :props="props"
             style="width:5px;font-family:monospace;vertical-align:top"
             class="cursor-pointer"
-            @dblclick="$router.push($utl.routeLoc([params.executorId, 'mt', params.missionTplId, 'p', props.row.paramName]))"
+            @dblclick="$router.push($utl.routeLoc([params.providerId, 'mt', params.missionTplId, 'p', props.row.paramName]))"
           >
             <div
               style="font-size:1.1em"
@@ -156,7 +156,7 @@
           </q-td>
 
           <q-td
-            v-if="executor && executor.usesUnits"
+            v-if="provider && provider.usesUnits"
             key="defaultUnits" :props="props"
             style="vertical-align:top"
           >
@@ -168,7 +168,7 @@
           >
             <mxm-markdown
               simple hide-empty :text="props.row.description"
-              :start-markdown="missionTpl.executorByExecutorId.descriptionFormat === 'markdown'"
+              :start-markdown="missionTpl.providerByProviderId.descriptionFormat === 'markdown'"
             />
           </q-td>
         </q-tr>
@@ -180,7 +180,7 @@
       <table class="q-ml-md">
         <tbody>
         <tr><td>Mission Template:<td/><td>{{params.missionTplId}}</td></tr>
-        <tr><td>Executor:<td/><td>{{params.executorId}}</td></tr>
+        <tr><td>Provider:<td/><td>{{params.providerId}}</td></tr>
         </tbody>
       </table>
     </div>
@@ -214,7 +214,7 @@
       return {
         loading: false,
         missionTpl: null,
-        executor: null,
+        provider: null,
 
         rowsPerPage: [0],
         pagination: {
@@ -241,7 +241,7 @@
             align: 'left',
           },
         ]
-        if (this.executor && this.executor.usesUnits) {
+        if (this.provider && this.provider.usesUnits) {
           cols.push({
             field: 'defaultUnits',
             name: 'defaultUnits',
@@ -264,7 +264,7 @@
       },
 
       myAssetClasses() {
-        return this.missionTpl && this.missionTpl.missionTplAssetClassesByExecutorIdAndMissionTplIdList || []
+        return this.missionTpl && this.missionTpl.missionTplAssetClassesByProviderIdAndMissionTplIdList || []
       },
 
       myAssetClassNames() {
@@ -272,7 +272,7 @@
       },
 
       myParameters() {
-        return this.missionTpl && this.missionTpl.parametersByExecutorIdAndMissionTplIdList || []
+        return this.missionTpl && this.missionTpl.parametersByProviderIdAndMissionTplIdList || []
       },
     },
 
@@ -281,16 +281,16 @@
         query: missionTplGql,
         variables() {
           return {
-            executorId: this.params.executorId,
+            providerId: this.params.providerId,
             missionTplId: this.params.missionTplId
           }
         },
         update(data) {
           if (debug) console.log('update: data=', data)
           let missionTpl = null
-          if (data.missionTplByExecutorIdAndMissionTplId) {
-            missionTpl = data.missionTplByExecutorIdAndMissionTplId
-            this.executor = missionTpl.executorByExecutorId
+          if (data.missionTplByProviderIdAndMissionTplId) {
+            missionTpl = data.missionTplByProviderIdAndMissionTplId
+            this.provider = missionTpl.providerByProviderId
           }
           return missionTpl
         },
@@ -301,8 +301,8 @@
       this.$store.commit('utl/setBreadcrumbs', {
         elements: [
           ['Home', []],
-          [this.params.executorId, [this.params.executorId]],
-          ['MissionTemplates', [this.params.executorId, 'mt']],
+          [this.params.providerId, [this.params.providerId]],
+          ['MissionTemplates', [this.params.providerId, 'mt']],
           [this.params.missionTplId],
         ],
         refresh: this.refreshMissionTpl
@@ -350,7 +350,7 @@
       addAssetClassName(assetClassName, next) {
         const mutation = missionTplAssetClassInsertGql
         const variables = {
-          executorId: this.params.executorId,
+          providerId: this.params.providerId,
           missionTplId: this.params.missionTplId,
           assetClassName
         }
@@ -424,7 +424,7 @@
               color: 'info',
             })
             if (missionTplPatch.missionTplId) {
-              this.$utl.replace([this.params.executorId, 'mt', missionTplPatch.missionTplId])
+              this.$utl.replace([this.params.providerId, 'mt', missionTplPatch.missionTplId])
               return
             }
             if (missionTplPatch.description) {
@@ -461,7 +461,7 @@
                   position: 'top',
                   color: 'info',
                 })
-                this.$utl.replace([this.params.executorId, 'missionTpls'])
+                this.$utl.replace([this.params.providerId, 'missionTpls'])
               })
               .catch(error => {
                 console.error('deleteMissionTpl: mutation error=', error)

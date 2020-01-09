@@ -28,7 +28,7 @@
       </div>
       <div slot="top-right" slot-scope="props" class="fit">
         <asset-class-new-button
-          :executor-id="params.executorId"
+          :provider-id="params.providerId"
           @created="assetClassCreated"
         />
       </div>
@@ -38,7 +38,7 @@
       >
         <router-link
           style="text-decoration:none"
-          :to="$utl.routeLoc([params.executorId, 'ac', props.row.className])"
+          :to="$utl.routeLoc([params.providerId, 'ac', props.row.className])"
         >
           {{props.row.className}}
         </router-link>
@@ -49,7 +49,7 @@
       >
         <mxm-markdown
           simple hide-empty :text="props.value"
-          :start-markdown="props.row.executorByExecutorId.descriptionFormat === 'markdown'"
+          :start-markdown="props.row.providerByProviderId.descriptionFormat === 'markdown'"
         />
       </q-td>
     </q-table>
@@ -106,7 +106,7 @@
         query: allAssetClassesListGql,
         variables() {
           return {
-            executorId: this.params.executorId
+            providerId: this.params.providerId
           }
         },
         update(data) {
@@ -120,7 +120,7 @@
       this.$store.commit('utl/setBreadcrumbs', {
         elements: [
           ['Home', []],
-          [this.params.executorId, [this.params.executorId]],
+          [this.params.providerId, [this.params.providerId]],
           ['AssetClasses'],
         ],
         refresh: this.refreshAssetClasses

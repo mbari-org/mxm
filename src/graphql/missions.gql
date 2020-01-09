@@ -1,11 +1,11 @@
-query missions($executorId: String!) {
+query missions($providerId: String!) {
   allMissionsList(condition: {
-    executorId: $executorId
+    providerId: $providerId
   }) {
     id
-    executorId
-    missionTplByExecutorIdAndMissionTplId {
-      executorByExecutorId {
+    providerId
+    missionTplByProviderIdAndMissionTplId {
+      providerByProviderId {
         descriptionFormat
       }
     }

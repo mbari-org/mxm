@@ -1,15 +1,15 @@
-mutation($executorId: String!, $missionTplId: String!, $assetClassName: String!) {
+mutation($providerId: String!, $missionTplId: String!, $assetClassName: String!) {
   createMissionTplAssetClass(
     input: {
       missionTplAssetClass: {
         missionTplId: $missionTplId
-        executorId: $executorId
+        providerId: $providerId
         assetClassName: $assetClassName
       }
     }
   ) {
     missionTplAssetClass {
-      executorId
+      providerId
       missionTplId
       assetClassName
     }

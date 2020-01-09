@@ -1,8 +1,8 @@
-mutation deleteExecutor($input: DeleteExecutorInput!) {
-  deleteExecutor(input: $input) {
-    executor {
+mutation deleteProvider($input: DeleteProviderInput!) {
+  deleteProvider(input: $input) {
+    provider {
       id
-      executorId
+      providerId
       httpEndpoint
       description
     }

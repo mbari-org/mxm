@@ -3,7 +3,7 @@ mutation updateMission($input: UpdateMissionInput!) {
     mission {
       id
       missionId
-      executorId
+      providerId
       missionTplId
       description
       assetId

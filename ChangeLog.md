@@ -1,3 +1,7 @@
+2020-01
+
+- do executor to provider renaming
+
 2019-12
 
 TODO: "simple" geometry type as JSON, not string

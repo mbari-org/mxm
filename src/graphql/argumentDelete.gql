@@ -2,7 +2,7 @@ mutation deleteArgument($input: DeleteArgumentInput!) {
   deleteArgument(input: $input) {
     argument {
       missionId
-      executorId
+      providerId
       missionTplId
       paramName
       paramValue

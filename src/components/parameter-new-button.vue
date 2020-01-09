@@ -125,7 +125,7 @@
 
   export default {
     props: {
-      executorId: {
+      providerId: {
         type: String,
         required: true
       },
@@ -174,7 +174,7 @@
 
       submit() {
         const variables = {
-          executorId: this.executorId,
+          providerId: this.providerId,
           missionTplId: this.missionTplId,
           paramName: this.data.paramName,
           type: this.data.typeSelected,

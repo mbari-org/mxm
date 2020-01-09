@@ -21,7 +21,7 @@
         <q-card-section>
           <mxm-markdown
             :text="assetClass.description"
-            :start-markdown="assetClass.executorByExecutorId.descriptionFormat === 'markdown'"
+            :start-markdown="assetClass.providerByProviderId.descriptionFormat === 'markdown'"
             editable
             @saveDescription="updateDescription"
           />
@@ -58,7 +58,7 @@
 
         <div slot="top-right" slot-scope="props" class="fit">
           <asset-new-button
-            :executor-id="params.executorId"
+            :provider-id="params.providerId"
             :asset-class-name="params.className"
             @created="assetCreated"
           />
@@ -69,7 +69,7 @@
         >
           <router-link
             style="text-decoration:none"
-            :to="$utl.routeLoc([params.executorId, 'a', props.row.assetId])"
+            :to="$utl.routeLoc([params.providerId, 'a', props.row.assetId])"
           >
             {{props.row.assetId}}
           </router-link>
@@ -79,7 +79,7 @@
         >
           <mxm-markdown
             simple hide-empty :text="props.value"
-            :start-markdown="assetClass.executorByExecutorId.descriptionFormat === 'markdown'"
+            :start-markdown="assetClass.providerByProviderId.descriptionFormat === 'markdown'"
           />
         </q-td>
       </q-table>
@@ -140,7 +140,7 @@
       },
 
       myAssets() {
-        const list = this.assetClass && this.assetClass.assetsByExecutorIdAndClassNameList || []
+        const list = this.assetClass && this.assetClass.assetsByProviderIdAndClassNameList || []
         return list
       },
     },
@@ -150,7 +150,7 @@
         query: assetClassGql,
         variables() {
           return {
-            executorId: this.params.executorId,
+            providerId: this.params.providerId,
             className: this.params.className
           }
         },
@@ -168,8 +168,8 @@
       this.$store.commit('utl/setBreadcrumbs', {
         elements: [
           ['Home', []],
-          [this.params.executorId, [this.params.executorId]],
-          ['AssetClasses', [this.params.executorId, 'ac']],
+          [this.params.providerId, [this.params.providerId]],
+          ['AssetClasses', [this.params.providerId, 'ac']],
           [this.params.className],
         ],
         refresh: this.refreshAssetClass
@@ -239,7 +239,7 @@
                   position: 'top',
                   color: 'info',
                 })
-                this.$utl.replace([this.params.executorId, 'ac'])
+                this.$utl.replace([this.params.providerId, 'ac'])
               })
               .catch(error => {
                 console.error('deleteAssetClass: mutation error=', error)

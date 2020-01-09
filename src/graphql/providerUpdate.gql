@@ -1,0 +1,10 @@
+mutation updateProvider($input: UpdateProviderInput!) {
+  updateProvider(input: $input) {
+    provider {
+      id
+      providerId
+      httpEndpoint
+      description
+    }
+  }
+}

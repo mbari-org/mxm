@@ -43,8 +43,8 @@ some client requests:
 
 ```
 http post localhost:5000/mxm-graphql query='{
-  allExecutorsList {
-    executorId
+  allProvidersList {
+    providerId
     httpEndpoint
     apiType
     usesSched

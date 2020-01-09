@@ -7,13 +7,13 @@
       @click="openDialog"
     >
       <q-tooltip>
-        Register new asset of class '{{assetClassName}}' (for '{{executorId}}')
+        Register new asset of class '{{assetClassName}}' (for '{{providerId}}')
       </q-tooltip>
     </q-btn>
 
     <utl-dialog
       :dialog-opened="dialogOpened"
-      :title="`Register new asset of class '${assetClassName}' (for '${executorId}')`"
+      :title="`Register new asset of class '${assetClassName}' (for '${providerId}')`"
       :ok-to-submit="!!okToSubmit"
       :ok-to-dismiss="!!okToDismiss"
       @submit="submit"
@@ -56,7 +56,7 @@
 
   export default {
     props: {
-      executorId: {
+      providerId: {
         type: String,
         required: true
       },
@@ -92,7 +92,7 @@
 
       submit() {
         const variables = {
-          executorId:  this.executorId,
+          providerId:  this.providerId,
           className: this.assetClassName,
           assetId: this.assetId,
           description: this.description || null

@@ -1,19 +1,19 @@
 mutation(
-  $executorId: String!
+  $providerId: String!
   $missionTplId: String!
   $description: String
 ) {
   createMissionTpl(
     input: {
       missionTpl: {
-        executorId: $executorId
+        providerId: $providerId
         missionTplId: $missionTplId
         description: $description
       }
     }
   ) {
     missionTpl {
-      executorId
+      providerId
       missionTplId
       description
     }

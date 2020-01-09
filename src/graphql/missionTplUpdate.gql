@@ -2,7 +2,7 @@ mutation updateMissionTpl($input: UpdateMissionTplInput!) {
   updateMissionTpl(input: $input) {
     missionTpl {
       id
-      executorId
+      providerId
       missionTplId
       description
     }

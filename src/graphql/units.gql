@@ -1,9 +1,9 @@
-query units($executorId: String!) {
+query units($providerId: String!) {
   allUnitsList(condition: {
-    executorId: $executorId
+    providerId: $providerId
   }) {
     id
-    executorId
+    providerId
     unitName
     abbreviation
     baseUnit

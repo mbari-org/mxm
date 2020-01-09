@@ -5,51 +5,51 @@ const routes = [
     children: [
       {
         path: '',
-        component: () => import('pages/Executors')
+        component: () => import('pages/Providers')
       },
       {
-        path: '/:executorId',
-        component: () => import('pages/Executor')
+        path: '/:providerId',
+        component: () => import('pages/Provider')
       },
-      { path: '/:executorId/mt/:missionTplId',
+      { path: '/:providerId/mt/:missionTplId',
         component: () => import('pages/MissionTpl')
       },
-      { path: '/:executorId/mt',
+      { path: '/:providerId/mt',
         component: () => import('pages/MissionTpls')
       },
-      { path: '/:executorId/mt/:missionTplId/p/:paramName',
+      { path: '/:providerId/mt/:missionTplId/p/:paramName',
         component: () => import('pages/Parameter')
       },
       {
-        path: '/:executorId/m',
+        path: '/:providerId/m',
         component: () => import('pages/Missions')
       },
       {
-        path: '/:executorId/mt/:missionTplId/m/:missionId',
+        path: '/:providerId/mt/:missionTplId/m/:missionId',
         component: () => import('pages/Mission')
       },
       {
-        path: '/:executorId/ac',
+        path: '/:providerId/ac',
         component: () => import('pages/AssetClasses')
       },
       {
-        path: '/:executorId/ac/:className',
+        path: '/:providerId/ac/:className',
         component: () => import('pages/AssetClass')
       },
       {
-        path: '/:executorId/a',
+        path: '/:providerId/a',
         component: () => import('pages/Assets')
       },
       {
-        path: '/:executorId/a/:assetId',
+        path: '/:providerId/a/:assetId',
         component: () => import('pages/Asset')
       },
       {
-        path: '/:executorId/u',
+        path: '/:providerId/u',
         component: () => import('pages/Units')
       },
       {
-        path: '/:executorId/u/:unitName',
+        path: '/:providerId/u/:unitName',
         component: () => import('pages/Unit')
       },
     ]

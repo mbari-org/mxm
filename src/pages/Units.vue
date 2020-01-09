@@ -1,7 +1,7 @@
 <template>
   <q-page class="q-pa-md">
     <units-table
-      :executor-id="params.executorId"
+      :provider-id="params.providerId"
       :units="units"
     />
   </q-page>
@@ -23,7 +23,7 @@
       },
 
       units() {
-        return this.$store.state.units.unitsByExecutor[this.params.executorId] || []
+        return this.$store.state.units.unitsByProvider[this.params.providerId] || []
       },
     },
 
@@ -31,7 +31,7 @@
       this.$store.commit('utl/setBreadcrumbs', {
         elements: [
           ['Home', []],
-          [this.params.executorId, [this.params.executorId]],
+          [this.params.providerId, [this.params.providerId]],
           ['Units'],
         ],
         refresh: this.refreshUnits
@@ -42,7 +42,7 @@
 
     methods: {
       refreshUnits() {
-        this.$store.dispatch('units/getOrLoadUnitsForExecutor', this.params.executorId)
+        this.$store.dispatch('units/getOrLoadUnitsForProvider', this.params.providerId)
       },
     },
   }

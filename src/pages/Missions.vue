@@ -29,7 +29,7 @@
 
       <div slot="top-right" slot-scope="props" class="fit">
         <mission-new-button
-          :executor-id="params.executorId"
+          :provider-id="params.providerId"
           @created="missionCreated"
         />
       </div>
@@ -39,7 +39,7 @@
       >
         <router-link
           style="text-decoration:none"
-          :to="$utl.routeLoc([params.executorId, 'mt', props.row.missionTplId, 'm', props.row.missionId])"
+          :to="$utl.routeLoc([params.providerId, 'mt', props.row.missionTplId, 'm', props.row.missionId])"
         >
           {{props.value}}
         </router-link>
@@ -50,7 +50,7 @@
       >
         <router-link
           style="text-decoration:none"
-          :to="$utl.routeLoc([params.executorId, 'mt', props.value])"
+          :to="$utl.routeLoc([params.providerId, 'mt', props.value])"
         >
           {{props.value}}
         </router-link>
@@ -61,7 +61,7 @@
       >
         <router-link
           style="text-decoration:none"
-          :to="$utl.routeLoc([params.executorId, 'a', props.value])"
+          :to="$utl.routeLoc([params.providerId, 'a', props.value])"
         >
           {{props.value}}
         </router-link>
@@ -72,7 +72,7 @@
         <mxm-markdown
           expandable :expandable-subtitle-limit="50"
           simple hide-empty :text="props.value"
-          :start-markdown="props.row.missionTplByExecutorIdAndMissionTplId.executorByExecutorId.descriptionFormat === 'markdown'"
+          :start-markdown="props.row.missionTplByProviderIdAndMissionTplId.providerByProviderId.descriptionFormat === 'markdown'"
         />
       </q-td>
 
@@ -157,7 +157,7 @@
         query: allMissionsListGql,
         variables() {
           return {
-            executorId: this.params.executorId
+            providerId: this.params.providerId
           }
         },
         update(data) {
@@ -171,7 +171,7 @@
       this.$store.commit('utl/setBreadcrumbs', {
         elements: [
           ['Home', []],
-          [this.params.executorId, [this.params.executorId]],
+          [this.params.providerId, [this.params.providerId]],
           ['Missions'],
         ],
         refresh: this.refreshMissions

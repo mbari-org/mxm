@@ -30,7 +30,7 @@
     >
       <router-link
         style="text-decoration:none"
-        :to="$utl.routeLoc([executorId, 'u', props.row.unitName])"
+        :to="$utl.routeLoc([providerId, 'u', props.row.unitName])"
       >
         {{props.row.unitName}}
       </router-link>
@@ -47,7 +47,7 @@
     >
       <router-link
         style="text-decoration:none"
-        :to="$utl.routeLoc([executorId, 'u', props.row.baseUnit])"
+        :to="$utl.routeLoc([providerId, 'u', props.row.baseUnit])"
       >
         {{props.row.baseUnit}}
       </router-link>
@@ -61,7 +61,7 @@
 
   export default {
     props: {
-      executorId: {
+      providerId: {
         type: String,
         required: true,
       },

@@ -137,7 +137,7 @@
                   <mxm-markdown
                     style="min-height:4em;min-width:24em"
                     :text="parameter.description"
-                    :start-markdown="parameter.missionTplByExecutorIdAndMissionTplId.executorByExecutorId.descriptionFormat === 'markdown'"
+                    :start-markdown="parameter.missionTplByProviderIdAndMissionTplId.providerByProviderId.descriptionFormat === 'markdown'"
                     editable edit-click
                     @saveDescription="d => { parameter.description = d }"
                   />
@@ -153,7 +153,7 @@
     <div v-else-if="!loading">
       Parameter not found.
       <div class="q-ml-md">
-        Executor: {{params.executorId}} <br/>
+        Provider: {{params.providerId}} <br/>
         Mission Template ID: {{params.missionTplId}}
       </div>
     </div>
@@ -201,15 +201,15 @@
         query: parameterGql,
         variables() {
           return {
-            executorId: this.params.executorId,
+            providerId: this.params.providerId,
             missionTplId: this.params.missionTplId,
             paramName: this.params.paramName,
           }
         },
         update(data) {
           let parameter = null
-          if (data.parameterByExecutorIdAndMissionTplIdAndParamName) {
-            parameter = data.parameterByExecutorIdAndMissionTplIdAndParamName
+          if (data.parameterByProviderIdAndMissionTplIdAndParamName) {
+            parameter = data.parameterByProviderIdAndMissionTplIdAndParamName
           }
           if (debug) console.log('update: parameter=', parameter)
           parameter.withUnits = !!parameter.defaultUnits
@@ -223,10 +223,10 @@
       this.$store.commit('utl/setBreadcrumbs', {
         elements: [
           ['Home', []],
-          [this.params.executorId, [this.params.executorId]],
-          ['MissionTemplates', [this.params.executorId, 'mt']],
-          [this.params.missionTplId, [this.params.executorId, 'mt', this.params.missionTplId]],
-          ['Params', [this.params.executorId, 'mt', this.params.missionTplId]],
+          [this.params.providerId, [this.params.providerId]],
+          ['MissionTemplates', [this.params.providerId, 'mt']],
+          [this.params.missionTplId, [this.params.providerId, 'mt', this.params.missionTplId]],
+          ['Params', [this.params.providerId, 'mt', this.params.missionTplId]],
           [this.params.paramName],
         ],
         refresh: this.refreshParameter
@@ -295,7 +295,7 @@
           .then((data) => {
             if (debug) console.debug('updateParameter: mutation data=', data)
             if (parameterPatch.paramName) {
-              this.$utl.replace([this.parameter.executorId, 'missionTpls', this.parameter.missionTplId, 'p', parameterPatch.paramName])
+              this.$utl.replace([this.parameter.providerId, 'missionTpls', this.parameter.missionTplId, 'p', parameterPatch.paramName])
               return
             }
             this.refreshParameter()
@@ -330,7 +330,7 @@
                   position: 'top',
                   color: 'info',
                 })
-                this.$utl.replace([this.parameter.executorId, 'missionTpls', this.parameter.missionTplId])
+                this.$utl.replace([this.parameter.providerId, 'missionTpls', this.parameter.missionTplId])
               })
               .catch(error => {
                 console.error('deleteParameter: mutation error=', error)

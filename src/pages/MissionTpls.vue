@@ -30,7 +30,7 @@
 
         <div slot="top-right" slot-scope="props" class="fit">
           <mission-tpl-new-button
-            :executor-id="params.executorId"
+            :provider-id="params.providerId"
             @created="missionTplCreated"
           />
         </div>
@@ -40,7 +40,7 @@
         >
           <router-link
             style="text-decoration:none"
-            :to="$utl.routeLoc([params.executorId, 'mt', props.row.missionTplId])"
+            :to="$utl.routeLoc([params.providerId, 'mt', props.row.missionTplId])"
           >
             {{props.row.missionTplId}}
           </router-link>
@@ -53,7 +53,7 @@
             expandable :expandable-subtitle-limit="80"
             simple hide-empty
             :text="props.value"
-            :start-markdown="props.row.executorByExecutorId.descriptionFormat === 'markdown'"
+            :start-markdown="props.row.providerByProviderId.descriptionFormat === 'markdown'"
           />
         </q-td>
 
@@ -61,7 +61,7 @@
     </div>
 
     <div v-else-if="!loading">
-      Executor not found: {{params.executorId}}
+      Provider not found: {{params.providerId}}
     </div>
 
   </q-page>
@@ -120,7 +120,7 @@
         query: allMissionTplsListGql,
         variables() {
           return {
-            executorId: this.params.executorId
+            providerId: this.params.providerId
           }
         },
         update(data) {
@@ -134,8 +134,8 @@
       this.$store.commit('utl/setBreadcrumbs', {
         elements: [
           ['Home', []],
-          [this.params.executorId, [this.params.executorId]],
-          ['MissionTemplates', [this.params.executorId, 'mt']],
+          [this.params.providerId, [this.params.providerId]],
+          ['MissionTemplates', [this.params.providerId, 'mt']],
         ],
         refresh: this.refreshMissionTpls
       })
@@ -158,8 +158,8 @@
         this.refreshMissionTpls()
       },
 
-      executor(val) {
-        if (debug) console.log('watch executor=', val)
+      provider(val) {
+        if (debug) console.log('watch provider=', val)
       }
     }
   }

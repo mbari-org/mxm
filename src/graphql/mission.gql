@@ -1,29 +1,29 @@
-query mission($executorId: String!, $missionTplId: String!, $missionId: String!) {
-  missionByExecutorIdAndMissionTplIdAndMissionId(
-    executorId: $executorId,
+query mission($providerId: String!, $missionTplId: String!, $missionId: String!) {
+  missionByProviderIdAndMissionTplIdAndMissionId(
+    providerId: $providerId,
     missionTplId: $missionTplId,
     missionId: $missionId
   ) {
     id
-    executorId
+    providerId
     missionTplId
     missionId
     missionStatus
     assetId
     schedType
     schedDate
-    assetByExecutorIdAndAssetId {
+    assetByProviderIdAndAssetId {
       className
     }
     description
-    argumentsByExecutorIdAndMissionTplIdAndMissionIdList {
+    argumentsByProviderIdAndMissionTplIdAndMissionIdList {
       id
       paramName
       paramValue
       paramUnits
     }
-    missionTplByExecutorIdAndMissionTplId {
-      executorByExecutorId {
+    missionTplByProviderIdAndMissionTplId {
+      providerByProviderId {
         httpEndpoint
         apiType
         canValidate
@@ -31,7 +31,7 @@ query mission($executorId: String!, $missionTplId: String!, $missionId: String!)
         usesUnits
         descriptionFormat
       }
-      parametersByExecutorIdAndMissionTplIdList(orderBy: PARAM_ORDER_ASC) {
+      parametersByProviderIdAndMissionTplIdList(orderBy: PARAM_ORDER_ASC) {
         paramName
         type
         valueCanReference

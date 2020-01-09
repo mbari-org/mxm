@@ -1,13 +1,13 @@
 <template>
   <q-page class="q-pa-md">
-    <!--<pre v-if="debug">executor={{executor}}</pre>-->
+    <!--<pre v-if="debug">provider={{provider}}</pre>-->
 
-    <div v-if="executor">
+    <div v-if="provider">
 
       <q-card class="q-mb-md q-mt-lg">
         <q-card-section class="row q-gutter-md items-center">
-          <span>Executor:</span>
-          <span class="text-bold">{{executor.executorId}}</span>
+          <span>Provider:</span>
+          <span class="text-bold">{{provider.providerId}}</span>
 
           <div class="q-ml-xl">
             <q-btn
@@ -16,7 +16,7 @@
               size="sm"
               :class="{'shadow-5': !noChanges()}"
               dense round icon="save"
-              @click="updateExecutor"
+              @click="updateProvider"
             />
             <q-btn
               v-if="!noChanges()"
@@ -24,7 +24,7 @@
               color="grey"
               size="sm"
               dense round icon="undo"
-              @click="refreshExecutor"
+              @click="refreshProvider"
             />
           </div>
         </q-card-section>
@@ -34,10 +34,10 @@
           <div>
             <mxm-markdown
               expandable init-expanded expandable-title="Description:"
-              :text="executor.description"
-              :start-markdown="executor.descriptionFormat === 'markdown'"
+              :text="provider.description"
+              :start-markdown="provider.descriptionFormat === 'markdown'"
               editable
-              @saveDescription="d => { executor.description = d }"
+              @saveDescription="d => { provider.description = d }"
             />
           </div>
           <q-separator/>
@@ -47,26 +47,26 @@
               <q-btn
                 :label="`Mission Templates (${numMissionTemplates()})`"
                 no-wrap no-caps dense
-                :to="$utl.routeLoc([params.executorId, 'mt'])"
+                :to="$utl.routeLoc([params.providerId, 'mt'])"
               />
 
               <q-btn
                 :label="`Asset Classes (${numAssetClasses()})`"
                 no-wrap no-caps dense
-                :to="$utl.routeLoc([params.executorId, 'ac'])"
+                :to="$utl.routeLoc([params.providerId, 'ac'])"
               />
 
               <q-btn
                 :label="`Assets (${numAssets()})`"
                 no-wrap no-caps dense
-                :to="$utl.routeLoc([params.executorId, 'a'])"
+                :to="$utl.routeLoc([params.providerId, 'a'])"
               />
 
               <q-btn
-                v-if="executor.usesUnits"
+                v-if="provider.usesUnits"
                 :label="`Units (${numUnits()})`"
                 no-wrap no-caps dense
-                :to="$utl.routeLoc([params.executorId, 'u'])"
+                :to="$utl.routeLoc([params.providerId, 'u'])"
               />
             </div>
 
@@ -74,7 +74,7 @@
               <q-btn
                 :label="`Missions (${numMissions()})`"
                 no-wrap no-caps dense
-                :to="$utl.routeLoc([params.executorId, 'm'])"
+                :to="$utl.routeLoc([params.providerId, 'm'])"
               />
             </div>
           </div>
@@ -86,15 +86,15 @@
               <td>Endpoint:</td>
               <td>
                 <span class="text-bold">
-                  {{executor.httpEndpoint}}
+                  {{provider.httpEndpoint}}
                 </span>
                 <q-popup-edit
-                  v-model="executor.httpEndpoint"
+                  v-model="provider.httpEndpoint"
                   title="Endpoint"
                   buttons
                 >
                   <q-input
-                    v-model.trim="executor.httpEndpoint"
+                    v-model.trim="provider.httpEndpoint"
                     clearable autofocus
                     class="bg-green-1"
                   />
@@ -105,16 +105,16 @@
               <td>API Type:</td>
               <td>
                 <span class="text-bold">
-                  {{executor.apiType}}
+                  {{provider.apiType}}
                 </span>
                 <q-popup-edit
-                  v-model="executor.apiType"
+                  v-model="provider.apiType"
                   title="API Type"
                   buttons
                 >
                   <api-type-select
-                    :value="executor.apiType"
-                    @input="val => { executor.apiType = val.value }"
+                    :value="provider.apiType"
+                    @input="val => { provider.apiType = val.value }"
                   />
                 </q-popup-edit>
               </td>
@@ -122,25 +122,25 @@
             <tr>
               <td>Can validate:</td>
               <td class="text-bold">
-                {{ executor.canValidate ? 'Yes' : 'No '}}
+                {{ provider.canValidate ? 'Yes' : 'No '}}
               </td>
             </tr>
             <tr>
               <td>Units of measure:</td>
               <td class="text-bold">
-                {{ executor.usesUnits ? 'Yes' : 'No '}}
+                {{ provider.usesUnits ? 'Yes' : 'No '}}
               </td>
             </tr>
             <tr>
               <td>Scheduling:</td>
               <td class="text-bold">
-                {{ executor.usesSched ? 'Yes' : 'No '}}
+                {{ provider.usesSched ? 'Yes' : 'No '}}
               </td>
             </tr>
-            <tr v-if="executor.descriptionFormat">
+            <tr v-if="provider.descriptionFormat">
               <td>Description format:</td>
               <td class="text-bold">
-                {{ executor.descriptionFormat }}
+                {{ provider.descriptionFormat }}
               </td>
             </tr>
             </tbody>
@@ -152,17 +152,17 @@
     </div>
 
     <div v-else-if="!loading">
-      Executor not found: {{params.executorId}}
+      Provider not found: {{params.providerId}}
     </div>
 
-<!--    <pre>{{executor}}</pre>-->
+<!--    <pre>{{provider}}</pre>-->
 
   </q-page>
 </template>
 
 <script>
-  import executorGql from '../graphql/executor.gql'
-  import executorUpdateGql from '../graphql/executorUpdate.gql'
+  import providerGql from '../graphql/provider.gql'
+  import providerUpdateGql from '../graphql/providerUpdate.gql'
 
   import apiTypeSelect from '../components/api-type-select'
   import cloneDeep from 'lodash/cloneDeep'
@@ -191,21 +191,21 @@
     },
 
     apollo: {
-      executor: {
-        query: executorGql,
+      provider: {
+        query: providerGql,
         variables() {
           return {
-            executorId: this.params.executorId
+            providerId: this.params.providerId
           }
         },
         update(data) {
           if (debug) console.log('update: data=', data)
-          let executor = null
-          if (data.allExecutorsList && data.allExecutorsList.length) {
-            executor = data.allExecutorsList[0]
+          let provider = null
+          if (data.allProvidersList && data.allProvidersList.length) {
+            provider = data.allProvidersList[0]
           }
-          this.original = cloneDeep(executor)
-          return executor
+          this.original = cloneDeep(provider)
+          return provider
         },
       },
     },
@@ -214,70 +214,70 @@
       this.$store.commit('utl/setBreadcrumbs', {
         elements: [
           ['Home', []],
-          [this.params.executorId],
+          [this.params.providerId],
         ],
-        refresh: this.refreshExecutor
+        refresh: this.refreshProvider
       })
 
-      this.refreshExecutor()
+      this.refreshProvider()
     },
 
     methods: {
       noChanges() {
-        return this.executor === null || isEqual(this.executor, this.original)
+        return this.provider === null || isEqual(this.provider, this.original)
       },
 
-      refreshExecutor() {
-        this.$apollo.queries.executor.refetch()
+      refreshProvider() {
+        this.$apollo.queries.provider.refetch()
       },
 
-      updateExecutor() {
-        if (debug) console.debug('updateExecutor executor=', this.executor)
-        const mutation = executorUpdateGql
-        const executorPatch = {}
+      updateProvider() {
+        if (debug) console.debug('updateProvider provider=', this.provider)
+        const mutation = providerUpdateGql
+        const providerPatch = {}
 
-        if (!isEqual(this.executor.description, this.original.description)) {
-          executorPatch.description = this.executor.description
+        if (!isEqual(this.provider.description, this.original.description)) {
+          providerPatch.description = this.provider.description
         }
-        if (!isEqual(this.executor.httpEndpoint, this.original.httpEndpoint)) {
-          executorPatch.httpEndpoint = this.executor.httpEndpoint
+        if (!isEqual(this.provider.httpEndpoint, this.original.httpEndpoint)) {
+          providerPatch.httpEndpoint = this.provider.httpEndpoint
         }
-        if (!isEqual(this.executor.apiType, this.original.apiType)) {
-          executorPatch.apiType = this.executor.apiType
+        if (!isEqual(this.provider.apiType, this.original.apiType)) {
+          providerPatch.apiType = this.provider.apiType
         }
 
         const variables = {
           input: {
-            id: this.executor.id,
-            executorPatch
+            id: this.provider.id,
+            providerPatch
           }
         }
         this.$apollo.mutate({mutation, variables})
           .then((data) => {
-            if (debug) console.debug('updateExecutor: mutation data=', data)
-            this.refreshExecutor()
+            if (debug) console.debug('updateProvider: mutation data=', data)
+            this.refreshProvider()
             this.$q.notify({
-              message: `Executor updated`,
+              message: `Provider updated`,
               timeout: 1000,
               color: 'info',
             })
           })
           .catch((error) => {
-            console.error('updateExecutor: mutation error=', error)
+            console.error('updateProvider: mutation error=', error)
           })
       },
 
       numMissionTemplates() {
-        if (this.executor) {
-          return this.executor.missionTplsByExecutorIdList.length
+        if (this.provider) {
+          return this.provider.missionTplsByProviderIdList.length
         }
         else return 0
       },
 
       numMissions() {
-        if (this.executor) {
-          return reduce(this.executor.missionTplsByExecutorIdList,
-              (result, missionTemplate) => result + missionTemplate.missionsByExecutorIdAndMissionTplIdList.length,
+        if (this.provider) {
+          return reduce(this.provider.missionTplsByProviderIdList,
+              (result, missionTemplate) => result + missionTemplate.missionsByProviderIdAndMissionTplIdList.length,
               0
           )
         }
@@ -285,16 +285,16 @@
       },
 
       numAssetClasses() {
-        if (this.executor) {
-          return this.executor.assetClassesByExecutorIdList.length
+        if (this.provider) {
+          return this.provider.assetClassesByProviderIdList.length
         }
         else return 0
       },
 
       numAssets() {
-        if (this.executor) {
-          return reduce(this.executor.assetClassesByExecutorIdList,
-              (result, assetClass) => result + assetClass.assetsByExecutorIdAndClassNameList.length,
+        if (this.provider) {
+          return reduce(this.provider.assetClassesByProviderIdList,
+              (result, assetClass) => result + assetClass.assetsByProviderIdAndClassNameList.length,
               0
           )
         }
@@ -302,8 +302,8 @@
       },
 
       numUnits() {
-        if (this.executor) {
-          return this.executor.unitsByExecutorIdList.length
+        if (this.provider) {
+          return this.provider.unitsByProviderIdList.length
         }
         else return 0
       },
@@ -311,11 +311,11 @@
 
     watch: {
       '$route'() {
-        this.refreshExecutor()
+        this.refreshProvider()
       },
 
-      executor(val) {
-        if (debug) console.log('watch executor=', val)
+      provider(val) {
+        if (debug) console.log('watch provider=', val)
       }
     }
   }

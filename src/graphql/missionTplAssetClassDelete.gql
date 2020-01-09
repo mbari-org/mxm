@@ -5,7 +5,7 @@ mutation($id: ID!) {
     }
   ) {
     missionTplAssetClass {
-      executorId
+      providerId
       missionTplId
       assetClassName
     }

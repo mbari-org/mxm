@@ -16,7 +16,7 @@
             <div v-if="unit.baseUnit" class="text-bold">
               <router-link
                 style="text-decoration:none"
-                :to="$utl.routeLoc([params.executorId, 'u', unit.baseUnit])"
+                :to="$utl.routeLoc([params.providerId, 'u', unit.baseUnit])"
               >
                 {{unit.baseUnit}}
               </router-link>
@@ -28,7 +28,7 @@
       </q-card>
 
       <units-table
-        :executor-id="params.executorId"
+        :provider-id="params.providerId"
         title="Derived Units"
         :units="derivedUnits"
       />
@@ -65,7 +65,7 @@
       },
 
       derivedUnits() {
-        const list = this.unit && this.unit.unitsByExecutorIdAndBaseUnitList || []
+        const list = this.unit && this.unit.unitsByProviderIdAndBaseUnitList || []
         return list
       },
     },
@@ -75,15 +75,15 @@
         query: unitGql,
         variables() {
           return {
-            executorId: this.params.executorId,
+            providerId: this.params.providerId,
             unitName: this.params.unitName
           }
         },
         update(data) {
           let res = null
           if (debug) console.debug('update: data=', data)
-          if (data.unitByExecutorIdAndUnitName) {
-            res = data.unitByExecutorIdAndUnitName
+          if (data.unitByProviderIdAndUnitName) {
+            res = data.unitByProviderIdAndUnitName
           }
           return res
         },
@@ -94,8 +94,8 @@
       this.$store.commit('utl/setBreadcrumbs', {
         elements: [
           ['Home', []],
-          [this.params.executorId, [this.params.executorId]],
-          ['Units', [this.params.executorId, 'u']],
+          [this.params.providerId, [this.params.providerId]],
+          ['Units', [this.params.providerId, 'u']],
           [this.params.unitName],
         ],
         refresh: this.refreshUnit

@@ -1,6 +1,6 @@
-query ($executorId: String!, $missionTplId: String!) {
-  missionTplByExecutorIdAndMissionTplId(executorId: $executorId, missionTplId: $missionTplId) {
-    executorByExecutorId {
+query ($providerId: String!, $missionTplId: String!) {
+  missionTplByProviderIdAndMissionTplId(providerId: $providerId, missionTplId: $missionTplId) {
+    providerByProviderId {
       descriptionFormat
       usesUnits
       usesSched
@@ -8,14 +8,14 @@ query ($executorId: String!, $missionTplId: String!) {
     id
     missionTplId
     description
-    missionTplAssetClassesByExecutorIdAndMissionTplIdList {
+    missionTplAssetClassesByProviderIdAndMissionTplIdList {
       id
       assetClassName
-      assetClassByExecutorIdAndAssetClassName {
+      assetClassByProviderIdAndAssetClassName {
         description
       }
     }
-    parametersByExecutorIdAndMissionTplIdList(orderBy: PARAM_ORDER_ASC) {
+    parametersByProviderIdAndMissionTplIdList(orderBy: PARAM_ORDER_ASC) {
       id
       paramName
       type

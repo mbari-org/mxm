@@ -1,8 +1,8 @@
-mutation($executorId: String!, $unitName: String!, $abbreviation: String, $baseUnit: String) {
+mutation($providerId: String!, $unitName: String!, $abbreviation: String, $baseUnit: String) {
   createUnit(
     input: {
       unit: {
-        executorId: $executorId
+        providerId: $providerId
         unitName: $unitName
         abbreviation: $abbreviation
         baseUnit: $baseUnit
@@ -10,7 +10,7 @@ mutation($executorId: String!, $unitName: String!, $abbreviation: String, $baseU
     }
   ) {
     unit {
-      executorId
+      providerId
       unitName
       abbreviation
       baseUnit

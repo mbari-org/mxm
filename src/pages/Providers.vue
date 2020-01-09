@@ -1,32 +1,32 @@
 <template>
   <q-page class="q-pa-md">
     <q-table
-      :data="allExecutorsList"
+      :data="allProvidersList"
       :columns="columns"
       row-key="name"
       :rows-per-page-options="rowsPerPage"
       :pagination.sync="pagination"
       separator="cell"
-      no-data-label="No executors registered"
+      no-data-label="No providers registered"
     >
       <div slot="top-left" slot-scope="props" class="row items-center">
         <div class="col-auto text-h5">
-          Executors
+          Providers
         </div>
       </div>
 
       <div slot="top-right" slot-scope="props" class="fit">
-        <executor-new-button @created="executorCreated"/>
+        <provider-new-button @created="providerCreated"/>
       </div>
 
-      <q-td slot="body-cell-executorId" slot-scope="props" :props="props"
+      <q-td slot="body-cell-providerId" slot-scope="props" :props="props"
             style="width:5px"
       >
         <router-link
           style="text-decoration:none"
-          :to="$utl.routeLoc([props.row.executorId])"
+          :to="$utl.routeLoc([props.row.providerId])"
         >
-          {{props.row.executorId}}
+          {{props.row.providerId}}
         </router-link>
       </q-td>
 
@@ -38,10 +38,10 @@
           icon="delete"
           color="negative"
           size="xs"
-          @click.exact="deleteExecutor(props.row)"
-          @click.shift.exact="doDeleteExecutor(props.row)"
+          @click.exact="deleteProvider(props.row)"
+          @click.shift.exact="doDeleteProvider(props.row)"
         >
-          <q-tooltip>Delete executor</q-tooltip>
+          <q-tooltip>Delete provider</q-tooltip>
         </q-btn>
       </q-td>
 
@@ -50,25 +50,25 @@
 </template>
 
 <script>
-  import allExecutorsListGql from '../graphql/executors.gql'
-  import executorDeleteGql from '../graphql/executorDelete.gql'
+  import allProvidersListGql from '../graphql/providers.gql'
+  import providerDeleteGql from '../graphql/providerDelete.gql'
 
-  import ExecutorNewButton from 'components/executor-new-button'
+  import ProviderNewButton from 'components/provider-new-button'
 
   const debug = false
 
   export default {
     components: {
-      ExecutorNewButton
+      ProviderNewButton
     },
 
     data() {
       return {
-        allExecutorsList: [],
+        allProvidersList: [],
         columns: [
           {
-            field: 'executorId',
-            name: 'executorId',
+            field: 'providerId',
+            name: 'providerId',
             label: 'ID',
             align: 'left',
             sortable: true
@@ -109,7 +109,7 @@
     },
 
     apollo: {
-      allExecutorsList: allExecutorsListGql,
+      allProvidersList: allProvidersListGql,
     },
 
     mounted() {
@@ -125,28 +125,28 @@
 
     methods: {
       refresh() {
-        this.$apollo.queries.allExecutorsList.refetch()
+        this.$apollo.queries.allProvidersList.refetch()
       },
 
-      executorCreated(executor) {
-        if (debug) console.debug('executorCreated executor=', executor)
+      providerCreated(provider) {
+        if (debug) console.debug('providerCreated provider=', provider)
         this.refresh()
       },
 
-      deleteExecutor(row) {
+      deleteProvider(row) {
         this.$q.dialog({
           title: 'Confirm',
-          message: `Are you sure you want to delete executor '${row.executorId}'` +
+          message: `Are you sure you want to delete provider '${row.providerId}'` +
           ' and all associated entities?',
           color: 'negative',
-          ok: `Yes, delete '${row.executorId}'`,
+          ok: `Yes, delete '${row.providerId}'`,
           cancel: true,
           focus: 'cancel',
-        }).onOk(() => this.doDeleteExecutor(row))
+        }).onOk(() => this.doDeleteProvider(row))
       },
 
-      doDeleteExecutor(row) {
-        const mutation = executorDeleteGql
+      doDeleteProvider(row) {
+        const mutation = providerDeleteGql
         const variables = {
           input: {
             id: row.id
@@ -154,19 +154,19 @@
         }
         this.$apollo.mutate({mutation, variables})
           .then((data) => {
-            if (debug) console.debug('deleteExecutor: mutation data=', data)
+            if (debug) console.debug('deleteProvider: mutation data=', data)
             this.refresh()
-            this.$q.notify(`${row.executorId} deleted.`)
+            this.$q.notify(`${row.providerId} deleted.`)
           })
           .catch((error) => {
-            console.error('deleteExecutor: mutation error=', error)
+            console.error('deleteProvider: mutation error=', error)
           })
       },
     },
 
     watch: {
-      allExecutorsList(val) {
-        if (debug) console.log('watch allExecutorsList=', val)
+      allProvidersList(val) {
+        if (debug) console.log('watch allProvidersList=', val)
       }
     }
 

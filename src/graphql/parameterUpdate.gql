@@ -1,7 +1,7 @@
 mutation updateParameter($input: UpdateParameterInput!) {
   updateParameter(input: $input) {
     parameter {
-      executorId
+      providerId
       missionTplId
       paramName
       type

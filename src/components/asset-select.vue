@@ -38,7 +38,7 @@
       options() {
         const list = []
         each(this.assetClasses, e => {
-          const instances = get(e, 'assetClassByExecutorIdAndAssetClassName.assetsByExecutorIdAndClassNameList') || []
+          const instances = get(e, 'assetClassByProviderIdAndAssetClassName.assetsByProviderIdAndClassNameList') || []
           if (debug) console.debug(':: instances=', instances)
           each(instances, i => {
             list.push({

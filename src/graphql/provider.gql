@@ -1,0 +1,40 @@
+query provider($providerId: String!) {
+  allProvidersList(condition: {
+    providerId: $providerId
+  }) {
+    id
+    providerId
+    httpEndpoint
+    apiType
+    description
+    canValidate
+    usesUnits
+    usesSched
+    descriptionFormat
+    missionTplsByProviderIdList {
+      id
+      missionTplId
+      description
+      missionTplAssetClassesByProviderIdAndMissionTplIdList {
+        assetClassName
+        assetClassByProviderIdAndAssetClassName {
+          assetsByProviderIdAndClassNameList {
+            assetId
+          }
+        }
+      }
+      missionsByProviderIdAndMissionTplIdList {
+        missionId
+      }
+    }
+    assetClassesByProviderIdList {
+      className
+      assetsByProviderIdAndClassNameList {
+        assetId
+      }
+    }
+    unitsByProviderIdList {
+      unitName
+    }
+  }
+}

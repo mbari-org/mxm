@@ -16,7 +16,7 @@
 </template>
 
 <script>
-  import executorApiTypesGql from '../graphql/executorApiTypes.gql'
+  import providerApiTypesGql from '../graphql/providerApiTypes.gql'
 
   import get from 'lodash/get'
   import map from 'lodash/map'
@@ -36,9 +36,9 @@
 
     apollo: {
       options: {
-        query: executorApiTypesGql,
+        query: providerApiTypesGql,
         update(data) {
-          if (debug) console.log('executorApiTypesGql update: data=', data)
+          if (debug) console.log('providerApiTypesGql update: data=', data)
           const enumValues = get(data, '__type.enumValues') || []
           return map(enumValues, o => ({
             label: o.name,

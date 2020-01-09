@@ -5,38 +5,38 @@ import Vue from 'vue'
 const debug = window.location.search.match(/.*debug=.*units.*/)
 
 const state = {
-  unitsByExecutor: {},
+  unitsByProvider: {},
 }
 
 const getters = {
 }
 
 const actions = {
-  getOrLoadUnitsForExecutor({ state, dispatch }, executorId) {
+  getOrLoadUnitsForProvider({ state, dispatch }, providerId) {
     return new Promise((resolve, reject) => {
-      const units = state.unitsByExecutor[executorId]
+      const units = state.unitsByProvider[providerId]
       if (units)
         resolve(units)
       else
-        return dispatch('loadUnitsForExecutor', executorId)
+        return dispatch('loadUnitsForProvider', providerId)
     })
   },
 
-  loadUnitsForExecutor({ commit, state, dispatch }, executorId) {
+  loadUnitsForProvider({ commit, state, dispatch }, providerId) {
     return new Promise((resolve, reject) => {
       getApolloClient()
         .then(apolloClient => {
-          if (debug) console.log(`loadUnitsForExecutor: executorId=${executorId}`)
+          if (debug) console.log(`loadUnitsForProvider: providerId=${providerId}`)
           apolloClient.query({
             query: allUnitsListGql,
             variables: {
-              executorId,
+              providerId,
             },
           })
             .then(res => {
               const units = res.data.allUnitsList
               if (debug) console.log('UNITS=', units)
-              commit('setUnitsForExecutor', {executorId, units})
+              commit('setUnitsForProvider', {providerId, units})
               resolve(units)
             })
             .catch(reject)
@@ -46,13 +46,13 @@ const actions = {
 }
 
 const mutations = {
-  setUnitsForExecutor(state, {executorId, units}) {
-    if (debug) console.log(`setUnitsForExecutor ${executorId}:`, units)
+  setUnitsForProvider(state, {providerId, units}) {
+    if (debug) console.log(`setUnitsForProvider ${providerId}:`, units)
     if (units) {
-      Vue.set(state.unitsByExecutor, executorId, units)
+      Vue.set(state.unitsByProvider, providerId, units)
     }
     else {
-      Vue.delete(state.unitsByExecutor, executorId)
+      Vue.delete(state.unitsByProvider, providerId)
     }
   },
 }

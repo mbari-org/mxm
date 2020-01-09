@@ -1,11 +1,11 @@
-query assets($executorId: String!) {
+query assets($providerId: String!) {
   allAssetsList(condition: {
-    executorId: $executorId
+    providerId: $providerId
   }) {
     id
-    executorId
-    assetClassByExecutorIdAndClassName {
-      executorByExecutorId {
+    providerId
+    assetClassByProviderIdAndClassName {
+      providerByProviderId {
         descriptionFormat
       }
     }

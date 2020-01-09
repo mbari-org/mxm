@@ -9,7 +9,7 @@
 
     <utl-dialog
       :dialog-opened="dialogOpened"
-      :title="`Register new mission (for '${executorId}')`"
+      :title="`Register new mission (for '${providerId}')`"
       :ok-to-submit="!!okToSubmit"
       :ok-to-dismiss="!!okToDismiss"
       @submit="submit"
@@ -67,7 +67,7 @@
 </template>
 
 <script>
-  import executorGql from '../graphql/executor.gql'
+  import providerGql from '../graphql/provider.gql'
   import missionInsertGql from '../graphql/missionInsert.gql'
 
   import MissionTplSelect from 'components/mission-tpl-select'
@@ -85,7 +85,7 @@
     },
 
     props: {
-      executorId: {
+      providerId: {
         type: String,
         required: true,
       }
@@ -93,7 +93,7 @@
 
     data: () => ({
       dialogOpened: false,
-      executor: null,
+      provider: null,
       missionTplId: '',
       assetId: '',
       missionId: '',
@@ -106,15 +106,15 @@
 
     computed: {
       missionTpls() {
-        return this.executor && this.executor.missionTplsByExecutorIdList || []
+        return this.provider && this.provider.missionTplsByProviderIdList || []
       },
 
       assetClasses() {
         const list = []
         const missionTpl = find(this.missionTpls, {missionTplId: this.missionTplId})
         if (debug) console.debug('missionTpl=', missionTpl)
-        if (missionTpl && missionTpl.missionTplAssetClassesByExecutorIdAndMissionTplIdList) {
-          each(missionTpl.missionTplAssetClassesByExecutorIdAndMissionTplIdList, c => {
+        if (missionTpl && missionTpl.missionTplAssetClassesByProviderIdAndMissionTplIdList) {
+          each(missionTpl.missionTplAssetClassesByProviderIdAndMissionTplIdList, c => {
             list.push(c)
           })
         }
@@ -133,17 +133,17 @@
     },
 
     apollo: {
-      executor: {
-        query: executorGql,
+      provider: {
+        query: providerGql,
         variables() {
           return {
-            executorId: this.executorId,
+            providerId: this.providerId,
           }
         },
         update(data) {
           if (debug) console.log('mission-new-button update: data=', data)
-          if (data.allExecutorsList && data.allExecutorsList.length) {
-            return data.allExecutorsList[0]
+          if (data.allProvidersList && data.allProvidersList.length) {
+            return data.allProvidersList[0]
           }
           else return null
         },
@@ -152,7 +152,7 @@
 
     methods: {
       openDialog() {
-        this.executor = null
+        this.provider = null
         this.missionTplId = ''
         this.assetId = ''
         this.missionId = ''
@@ -162,12 +162,12 @@
         this.startDate = new Date()
         this.endDate = new Date()
         this.dialogOpened = true
-        this.$apollo.queries.executor.refetch()
+        this.$apollo.queries.provider.refetch()
       },
 
       submit() {
         const mission = {
-          executorId: this.executorId,
+          providerId: this.providerId,
           missionTplId: this.missionTplId,
           missionId: this.missionId,
           missionStatus: 'DRAFT',
@@ -195,7 +195,7 @@
               timeout: 1000,
               color: 'info',
             })
-            this.$utl.push([this.executorId, 'mt', this.missionTplId, 'm', this.missionId])
+            this.$utl.push([this.providerId, 'mt', this.missionTplId, 'm', this.missionId])
             // this.$emit('created', variables)
           })
           .catch((error) => {
@@ -205,9 +205,9 @@
     },
 
     watch: {
-      executorId(val) {
-        if (debug) console.debug('watch executorId=', val)
-        this.$apollo.queries.executor.refetch()
+      providerId(val) {
+        if (debug) console.debug('watch providerId=', val)
+        this.$apollo.queries.provider.refetch()
       },
 
       assetClasses(val) {

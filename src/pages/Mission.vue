@@ -19,7 +19,7 @@
                     size="xs"
                     @click="checkStatus"
                   >
-                    <q-tooltip>Check for status against external executor</q-tooltip>
+                    <q-tooltip>Check for status against external provider</q-tooltip>
                   </q-btn>
                 </div>
               </div>
@@ -29,7 +29,7 @@
                 </div>
                 <q-chip dense>
                   <router-link
-                    :to="$utl.routeLoc([mission.executorId, 'mt', mission.missionTplId])"
+                    :to="$utl.routeLoc([mission.providerId, 'mt', mission.missionTplId])"
                   >
                     {{ mission.missionTplId }}
                   </router-link>
@@ -40,11 +40,11 @@
                 </div>
                 <q-chip dense>
                   <router-link
-                    :to="$utl.routeLoc([params.executorId, 'a', mission.assetId])"
+                    :to="$utl.routeLoc([params.providerId, 'a', mission.assetId])"
                   >
                     {{ mission.assetId }}
                     <q-tooltip>
-                      {{ mission.assetByExecutorIdAndAssetId.className }}
+                      {{ mission.assetByProviderIdAndAssetId.className }}
                     </q-tooltip>
                   </router-link>
                 </q-chip>
@@ -53,7 +53,7 @@
             <mxm-markdown
               expandable expandable-title="Description:"
               :text="mission.description"
-              :start-markdown="mission.missionTplByExecutorIdAndMissionTplId.executorByExecutorId.descriptionFormat === 'markdown'"
+              :start-markdown="mission.missionTplByProviderIdAndMissionTplId.providerByProviderId.descriptionFormat === 'markdown'"
               :editable="editable()"
               @saveDescription="updateDescription"
             />
@@ -77,7 +77,7 @@
       </q-card>
 
       <div
-        v-if="executor && executor.usesSched"
+        v-if="provider && provider.usesSched"
         class="row q-mb-sm q-gutter-x-lg"
       >
         <mission-scheduling
@@ -88,7 +88,7 @@
 
       <div class="row q-mb-sm q-gutter-x-lg">
         <q-btn
-          v-if="mission.missionTplByExecutorIdAndMissionTplId.executorByExecutorId.canValidate"
+          v-if="mission.missionTplByProviderIdAndMissionTplId.providerByProviderId.canValidate"
           label="Validate"
           icon="check"
           push color="secondary"
@@ -96,7 +96,7 @@
           :disable="mission.missionStatus !== 'DRAFT' || parametersWithErrorCount > 0"
           @click="validateMission"
         >
-          <q-tooltip>Validate mission against external executor</q-tooltip>
+          <q-tooltip>Validate mission against external provider</q-tooltip>
         </q-btn>
         <q-btn
           label="Run"
@@ -198,7 +198,7 @@
             key="paramName" :props="props"
             style="width:5px;font-family:monospace;vertical-align:top"
             class="cursor-pointer"
-            @click="$router.push($utl.routeLoc([mission.executorId, 'mt', mission.missionTplId, 'p', props.row.paramName]))"
+            @click="$router.push($utl.routeLoc([mission.providerId, 'mt', mission.missionTplId, 'p', props.row.paramName]))"
           >
             <div
               style="font-size:1.1em"
@@ -249,7 +249,7 @@
           </q-td>
 
           <q-td
-            v-if="executor && executor.usesUnits"
+            v-if="provider && provider.usesUnits"
             key="paramUnits" :props="props"
             style="vertical-align:top"
             class="paramValueCell"
@@ -278,7 +278,7 @@
           >
             <mxm-markdown
               simple hide-empty :text="props.row.description"
-              :start-markdown="mission.missionTplByExecutorIdAndMissionTplId.executorByExecutorId.descriptionFormat === 'markdown'"
+              :start-markdown="mission.missionTplByProviderIdAndMissionTplId.providerByProviderId.descriptionFormat === 'markdown'"
             />
           </q-td>
         </q-tr>
@@ -294,7 +294,7 @@
         <tbody>
         <tr><td>Mission:<td/><td>{{params.missionId}}</td></tr>
         <tr><td>Mission Template:<td/><td>{{params.missionTplId}}</td></tr>
-        <tr><td>Executor:<td/><td>{{params.executorId}}</td></tr>
+        <tr><td>Provider:<td/><td>{{params.providerId}}</td></tr>
         </tbody>
       </table>
     </div>
@@ -339,7 +339,7 @@
       loading: false,
       mission: null,
       schedInfo: {},
-      executor: null,
+      provider: null,
       savingArgs: false,
 
       myArguments: [],
@@ -370,7 +370,7 @@
             align: 'left',
           },
         ]
-        if (this.executor && this.executor.usesUnits) {
+        if (this.provider && this.provider.usesUnits) {
           cols.push({
             field: 'paramUnits',
             name: 'paramUnits',
@@ -399,11 +399,11 @@
       disableRun() {
         return this.mission.missionStatus !== 'DRAFT'
           || this.parametersWithErrorCount > 0
-          || this.executor.usesSched && this.mission.schedType === 'DATE' && !this.mission.schedDate
+          || this.provider.usesSched && this.mission.schedType === 'DATE' && !this.mission.schedDate
       },
 
       units() {
-        return this.$store.state.units.unitsByExecutor[this.params.executorId] || []
+        return this.$store.state.units.unitsByProvider[this.params.providerId] || []
       },
 
       unitsByName() {
@@ -436,7 +436,7 @@
         query: missionGql,
         variables() {
           return {
-            executorId: this.params.executorId,
+            providerId: this.params.providerId,
             missionTplId: this.params.missionTplId,
             missionId: this.params.missionId,
           }
@@ -445,15 +445,15 @@
           if (debug) console.debug('update: data=', data)
           let mission = null
 
-          if (data.missionByExecutorIdAndMissionTplIdAndMissionId) {
-            mission = data.missionByExecutorIdAndMissionTplIdAndMissionId
+          if (data.missionByProviderIdAndMissionTplIdAndMissionId) {
+            mission = data.missionByProviderIdAndMissionTplIdAndMissionId
 
             if (debug) console.log(`schedType=${mission.schedType} schedDate=${mission.schedDate}`)
 
-            this.executor = mission.missionTplByExecutorIdAndMissionTplId.executorByExecutorId
+            this.provider = mission.missionTplByProviderIdAndMissionTplId.providerByProviderId
             this.mxmProviderClient = this.$createMxmProvideClient({
-              httpEndpoint: this.executor.httpEndpoint,
-              apiType: this.executor.apiType,
+              httpEndpoint: this.provider.httpEndpoint,
+              apiType: this.provider.apiType,
             })
           }
           this.setMyArgumentsFromSaved(mission)
@@ -467,8 +467,8 @@
       this.$store.commit('utl/setBreadcrumbs', {
         elements: [
           ['Home', []],
-          [this.params.executorId, [this.params.executorId]],
-          ['Missions', [this.params.executorId, 'm']],
+          [this.params.providerId, [this.params.providerId]],
+          ['Missions', [this.params.providerId, 'm']],
           [this.params.missionId],
         ],
         refresh: this.refreshMission
@@ -476,7 +476,7 @@
 
       this.parametersWithError = {}
       this.refreshMission()
-      this.$store.dispatch('units/getOrLoadUnitsForExecutor', this.params.executorId)
+      this.$store.dispatch('units/getOrLoadUnitsForProvider', this.params.providerId)
     },
 
     methods: {
@@ -491,8 +491,8 @@
 
       setMyArgumentsFromSaved(mission) {
         if (debug) console.debug('setMyArgumentsFromSaved mission=', mission)
-        const alreadySavedArgs = get(mission, 'argumentsByExecutorIdAndMissionTplIdAndMissionIdList') || []
-        const parameters = get(mission, 'missionTplByExecutorIdAndMissionTplId.parametersByExecutorIdAndMissionTplIdList') || []
+        const alreadySavedArgs = get(mission, 'argumentsByProviderIdAndMissionTplIdAndMissionIdList') || []
+        const parameters = get(mission, 'missionTplByProviderIdAndMissionTplId.parametersByProviderIdAndMissionTplIdList') || []
 
         if (debug) console.debug('alreadySavedArgs=', alreadySavedArgs)
 
@@ -560,7 +560,7 @@
 
         this.savingArgs = true
 
-        const alreadySavedArgs = get(this.mission, 'argumentsByExecutorIdAndMissionTplIdAndMissionIdList') || []
+        const alreadySavedArgs = get(this.mission, 'argumentsByProviderIdAndMissionTplIdAndMissionIdList') || []
         if (debug) console.debug('saveArguments: alreadySavedArgs=', alreadySavedArgs)
 
         let numInserted = 0
@@ -641,7 +641,7 @@
         const mutation = argumentInsertGql
         const variables = {
           missionId: this.params.missionId,
-          executorId: this.mission.executorId,
+          providerId: this.mission.providerId,
           missionTplId: this.mission.missionTplId,
           paramName,
           paramValue,
@@ -779,7 +779,7 @@
       runMission() {
         if (!this.mxmProviderClient.isSupportedInterface()) {
           this.$q.notify({
-            message: `Operation not implemented yet for apiType=${this.executor.apiType}`,
+            message: `Operation not implemented yet for apiType=${this.provider.apiType}`,
             timeout: 4000,
             position: 'top',
             color: 'warning',
@@ -795,9 +795,9 @@
         }).onOk(() => doIt())
 
         const doIt = () => {
-          const httpEndpoint = this.executor.httpEndpoint
-          //console.debug('httpEndpoint=', this.executor.httpEndpoint)
-          //console.debug('apiType=', this.executor.apiType)
+          const httpEndpoint = this.provider.httpEndpoint
+          //console.debug('httpEndpoint=', this.provider.httpEndpoint)
+          //console.debug('apiType=', this.provider.apiType)
 
           // console.debug('myArguments=', this.myArguments)
           const parametersChanged = this.parametersChanged()
@@ -824,7 +824,7 @@
           this.mxmProviderClient.postMission(data)
             .then(res => {
               if (!res.status) {
-                this.$q.notify("Executor reported no status for mission submission")
+                this.$q.notify("Provider reported no status for mission submission")
                 return
               }
               const status = res.status
@@ -854,7 +854,7 @@
       checkStatus() {
         if (!this.mxmProviderClient.isSupportedInterface()) {
           this.$q.notify({
-            message: `Operation not implemented yet for apiType=${this.executor.apiType}`,
+            message: `Operation not implemented yet for apiType=${this.provider.apiType}`,
             timeout: 4000,
             position: 'top',
             color: 'warning',
@@ -866,7 +866,7 @@
           .then(res => {
             console.debug('getMission: res=', res)
             if (!res.status) {
-              this.$q.notify("Executor reported no status")
+              this.$q.notify("Provider reported no status")
               return
             }
             const status = res.status
@@ -888,7 +888,7 @@
             if (error === 'No such mission') {
               // assume we get back to DRAFT
               this.$q.notify({
-                message: `No such mission in the executor. Returning to DRAFT status`,
+                message: `No such mission in the provider. Returning to DRAFT status`,
                 timeout: 0,
                 closeBtn: 'Close',
                 color: 'info'
@@ -933,7 +933,7 @@
                 position: 'top',
                 color: 'info',
               })
-              this.$utl.replace([this.mission.executorId])
+              this.$utl.replace([this.mission.providerId])
             })
             .catch((error) => {
               console.error('deleteMission: mutation error=', error)

@@ -44,7 +44,7 @@
 
         <div class="q-ma-md">
           <asset-class-new-button
-            :executor-id="executorId"
+            :provider-id="providerId"
             @created="assetClassCreated"
           />
         </div>
@@ -73,7 +73,7 @@
     },
 
     props: {
-      executorId: {
+      providerId: {
         type: String,
         required: true
       },
@@ -120,7 +120,7 @@
         query: allAssetClassesListGql,
         variables() {
           return {
-            executorId: this.executorId
+            providerId: this.providerId
           }
         },
         update(data) {

@@ -10,7 +10,7 @@
               (class:
               <router-link
                 style="text-decoration:none"
-                :to="$utl.routeLoc([params.executorId, 'ac', asset.className])"
+                :to="$utl.routeLoc([params.providerId, 'ac', asset.className])"
               >{{ asset.className }}</router-link>)
             </div>
             <div class="q-ml-xl">
@@ -30,7 +30,7 @@
         <q-card-section>
           <mxm-markdown
             :text="asset.description"
-            :start-markdown="asset.assetClassByExecutorIdAndClassName.executorByExecutorId.descriptionFormat === 'markdown'"
+            :start-markdown="asset.assetClassByProviderIdAndClassName.providerByProviderId.descriptionFormat === 'markdown'"
             editable
             @saveDescription="updateDescription"
           />
@@ -110,8 +110,8 @@
       this.$store.commit('utl/setBreadcrumbs', {
         elements: [
           ['Home', []],
-          [this.params.executorId, [this.params.executorId]],
-          ['Assets', [this.params.executorId, 'a']],
+          [this.params.providerId, [this.params.providerId]],
+          ['Assets', [this.params.providerId, 'a']],
           [this.params.assetId],
         ],
         refresh: this.refreshAsset
@@ -181,7 +181,7 @@
                   position: 'top',
                   color: 'info',
                 })
-                this.$utl.replace([this.params.executorId, 'a'])
+                this.$utl.replace([this.params.providerId, 'a'])
               })
               .catch(error => {
                 console.error('deleteAsset: mutation error=', error)
