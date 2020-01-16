@@ -1,5 +1,8 @@
 2020-01
 
+- build ajustments while prepararing automated docker release
+  (including using the qgeomap extension from nom, not via local link)
+
 - do executor to provider renaming
 
 2019-12
