@@ -1,7 +1,9 @@
 2020-01
 
+- use multi-stage image build (mxm now 115MB instead of 684MB)
 - build ajustments while prepararing automated docker release
-  (including using the qgeomap extension from nom, not via local link)
+  (including using the qgeomap extension from npm, not via local link)
+- TODO(low prio) use `quasar serve` in mxm image (instead of via apache)
 
 - do executor to provider renaming
 

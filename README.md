@@ -1,8 +1,19 @@
 [![Build Status](https://travis-ci.org/mbari-org/mxm.svg?branch=master)](https://travis-ci.org/mbari-org/mxm)
+[![](https://images.microbadger.com/badges/version/mbari/mxm.svg)](https://microbadger.com/images/mbari/mxm)
+[![](https://images.microbadger.com/badges/image/mbari/mxm.svg)](https://microbadger.com/images/mbari/mxm)
 
 # Mission Execution Mediation Service
 
 **WIP**
+
+The Mission Execution Mediation Service (MXM) effort seeks to provide a set of
+programmatic and user interfaces to integrate mission information across
+diverse mission execution systems at MBARI, as well as to support the integration
+of third-party applications, in particular to facilitate extended planning
+capabilities on MBARI assets
+
+The proposed MXM interfaces will support a unified view of the information in terms
+of available mission definitions, parameterization, scheduling, and execution status.
 
 ## Development
 

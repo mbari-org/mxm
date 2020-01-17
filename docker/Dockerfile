@@ -1,18 +1,18 @@
-FROM httpd:2.4.41-alpine
-
-LABEL maintainer="carueda@mbari.org"
-
+FROM httpd:2.4.41-alpine AS builder
+COPY . /mxm
 RUN apk add --update nodejs nodejs-npm       && \
     apk add --update git                     && \
     npm install -g yarn                      && \
     export PATH="$(yarn global bin):$PATH"   && \
-    yarn global add @quasar/cli
+    yarn global add @quasar/cli              && \
+    cd /mxm                                  && \
+    yarn                                     && \
+    quasar build
 
-COPY . /mxm
-
-RUN cd /mxm                                                     && \
-    yarn                                                        && \
-    quasar build                                                && \
-    cp -r dist/spa/*   /usr/local/apache2/htdocs/               && \
-    rm -rf             /usr/local/apache2/htdocs/statics/config && \
-    cp docker/htaccess /usr/local/apache2/htdocs/.htaccess
+# --------------------------
+FROM httpd:2.4.41-alpine
+LABEL maintainer="carueda@mbari.org"
+WORKDIR /usr/local/apache2/htdocs/
+COPY --from=builder /mxm/dist/spa ./
+COPY docker/htaccess              ./.htaccess
+RUN  rm -rf                       ./statics/config

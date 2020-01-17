@@ -18,11 +18,11 @@ Note:
 
 To generate image `mbari/mxm:x.y.z`:
 
-    cd <to this project's root directory>
-    (quasar build && cd docker && ./dockerize.sh mxm x.y.z)
+    $ cd <to this project's root directory>
+    $ docker build -f docker/Dockerfile -t "mbari/mxm:x.y.z" .
 
 
-## MXM Postgres iamge
+## MXM Postgres image
 
 To generate image `mbari/mxm-postgres:x.y.z`:
 
@@ -40,7 +40,9 @@ endpoint in `config.json`, proxy-passes in place on the server, etc.)
 
 The GraphQL UI is at: http://localhost:5000/mxm-graphiql
 
-# TSAUV
+# mxm VM
+
+** TO BE UPDATED! **  as system recently migrated to mxm.shore.mbari.org
 
 ## docker-compose.yml
 
