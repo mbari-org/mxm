@@ -1,5 +1,8 @@
 2020-01
 
+- set v0.5.0 to reflect recent adjustments
+  and also to start exercising docker hub build with tag
+
 - use multi-stage image build (mxm now 115MB instead of 684MB)
 - build ajustments while prepararing automated docker release
   (including using the qgeomap extension from npm, not via local link)
