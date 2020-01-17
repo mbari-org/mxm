@@ -1,5 +1,6 @@
 2020-01
 
+- add watchtower toward enabling CD
 - workflow:
     - development against *develop* branch
     - releases by merging into *master* and pushing tag
