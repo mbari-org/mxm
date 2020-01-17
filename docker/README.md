@@ -1,32 +1,26 @@
-# Building the images
+# Building and publishing the images
 
-**TODO Some of the following being updated**
+The user-visible MXM version is the one set in `../package.json`.
 
-Note:
+## `mbari/mxm`
 
-- Using *x.y.z* in instructions below just as a placeholder for
-  actual version corresponding to the intended target image.
+The MXM images are automatically built and published on Docker Hub:
 
-- The user-visible MXM version is set in `../package.json`.
+- `mbari/mxm:latest` upon pushing to the **master** branch
+- `mbari/mxm:x.y.z`  upon pushing tag `vx.y.z`
 
-- The version of the postgres image is set directly as needed (see below).
-
-- For deployment, reflect such versions in `docker-compose.yml` for general consistency.
-
-
-## MXM image
-
-To generate image `mbari/mxm:x.y.z`:
+To build it manually:
 
     $ cd <to this project's root directory>
     $ docker build -f docker/Dockerfile -t "mbari/mxm:x.y.z" .
 
+## `mbari/mxm-postgres:x.y.z`
 
-## MXM Postgres image
+The MXM Postgres image is manually created and published as needed.
 
-To generate image `mbari/mxm-postgres:x.y.z`:
+    docker build -f Dockerfile-postgres -t mbari/mxm-postgres:x.y.z .
+    docker push mbari/mxm-postgres:x.y.z
 
-    (cd docker && ./dockerize.sh mxm-postgres x.y.z)
 
 # Launch
 
@@ -46,17 +40,14 @@ The GraphQL UI is at: http://localhost:5000/mxm-graphiql
 
 ## docker-compose.yml
 
-Located under `/opt/tsauv/mxm/`,
+Located under `mxm/`,
 `docker-compose.yml` basically only adjusts the local ports
 (mxm=38080; mxm-postgraphile=25000; mxm-postgres=25432).
 
-NOTE: using a subdirectory under `/opt/tsauv/` because that is
-an actual space under the 'tsauv' VM (ie., not a share, which
-would cause the mounted db data volume to fail).
 
 ## Apache proxy-passes
 
-Added the following in `/etc/httpd/conf.d/tsauv.conf`:
+Added the following in `/etc/httpd/conf.d/mxm.conf`:
 
 ```
   <Location /mxm/>
@@ -70,7 +61,7 @@ Added the following in `/etc/httpd/conf.d/tsauv.conf`:
 ```
 
 Also the following, in particular to have a working
-graphiql interface (at http://tsauv.shore.mbari.org/mxm-graphiql)
+graphiql interface (at http://mxm.shore.mbari.org/mxm-graphiql)
 because latest available postgraphile docker image is still 4.0.1,
 which does not properly have references to js resources
 (it seems this is better handled in 4.1.x):
@@ -86,8 +77,8 @@ which does not properly have references to js resources
   </Location>
 ```
 
-For the TSAUV Front Tracking REST endpoint for MXM, also added
-the following (see that project for launch instructions):
+For the TSAUV Front Tracking REST endpoint for MXM, added
+the following on 'tsauv' (see that project for launch instructions):
 
 ```
   <Location /tft-mxm/>
@@ -100,5 +91,5 @@ Then: `sudo systemctl restart httpd`
 
 Then open:
 
-- http://tsauv.shore.mbari.org/mxm/
-- http://tsauv.shore.mbari.org/mxm-graphiql
+- http://mxm.shore.mbari.org/mxm/
+- http://mxm.shore.mbari.org/mxm-graphiql

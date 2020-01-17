@@ -15,6 +15,15 @@ capabilities on MBARI assets
 The proposed MXM interfaces will support a unified view of the information in terms
 of available mission definitions, parameterization, scheduling, and execution status.
 
+## The MXM system
+
+The MXM system consists of three services:
+
+- MXM web application from image `mbari/mxm`
+- Postgraphile service from image `graphile/postgraphile`
+- MXM postgres database from image `mbari/mxm-postgres`
+
+
 ## Development
 
 - If not already, install dependencies:

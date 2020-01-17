@@ -2,7 +2,11 @@ version: '3.6'
 services:
   mxm:
     container_name: mxm
+
+    # NOTE: "latest" as default for convenience, especially during prototyping.
+    # General recommendation is to use explicit version on actual deployment.
     image: mbari/mxm:latest
+
     volumes:
       - ${MXM_CONFIG_DIR}:/usr/local/apache2/htdocs/statics/config
     ports:

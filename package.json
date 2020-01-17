@@ -1,6 +1,6 @@
 {
   "name": "mxm",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Mission Execution Mediation Service",
   "productName": "MXM",
   "cordovaId": "org.cordova.quasar.app",
