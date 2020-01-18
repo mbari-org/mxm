@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/mbari-org/mxm.svg?branch=master)](https://travis-ci.org/mbari-org/mxm)
-[![](https://images.microbadger.com/badges/version/mbari/mxm.svg)](https://microbadger.com/images/mbari/mxm)
-[![](https://images.microbadger.com/badges/image/mbari/mxm.svg)](https://microbadger.com/images/mbari/mxm)
+[![](https://img.shields.io/docker/cloud/build/mbari/mxm)](https://hub.docker.com/r/mbari/mxm)
+[![](https://img.shields.io/docker/cloud/automated/mbari/mxm)](https://hub.docker.com/r/mbari/mxm)
 
 # Mission Execution Mediation Service
 
