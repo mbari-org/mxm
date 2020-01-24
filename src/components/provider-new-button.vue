@@ -129,6 +129,8 @@
 
         // this.providerId = 'TFT'
         // this.httpEndpoint = 'http://localhost:8040'
+        //     OR:
+        // this.httpEndpoint = 'http://tsauv.shore.mbari.org/tft-mxm'
         // this.description = 'TSAUV Front Tracking'
 
         this.dialogOpened = true
