@@ -1,4 +1,4 @@
-mutation($providerId: String!, $unitName: String!, $abbreviation: String, $baseUnit: String) {
+mutation createUnit($providerId: String!, $unitName: String!, $abbreviation: String, $baseUnit: String) {
   createUnit(
     input: {
       unit: {

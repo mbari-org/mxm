@@ -1,4 +1,4 @@
-{
+query allProvidersList {
   allProvidersList {
     id
     providerId

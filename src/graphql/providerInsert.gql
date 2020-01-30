@@ -1,4 +1,4 @@
-mutation($input: CreateProviderInput!) {
+mutation createProvider($input: CreateProviderInput!) {
   createProvider(input: $input) {
     provider {
       providerId

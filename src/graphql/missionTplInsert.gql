@@ -1,4 +1,4 @@
-mutation(
+mutation createMissionTpl(
   $providerId: String!
   $missionTplId: String!
   $description: String

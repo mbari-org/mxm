@@ -1,4 +1,4 @@
-mutation($providerId: String!, $className: String!, $assetId: String!, $description: String) {
+mutation createAsset($providerId: String!, $className: String!, $assetId: String!, $description: String) {
   createAsset(
     input: {
       asset: {

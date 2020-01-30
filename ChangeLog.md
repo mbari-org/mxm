@@ -1,5 +1,8 @@
 2020-01
 
+- some adjustments to graphql queries/mutations while experimenting with codegen
+  (using https://github.com/apollographql/apollo-android in separate project)
+
 - add watchtower toward enabling CD
 - workflow:
     - development against *develop* branch

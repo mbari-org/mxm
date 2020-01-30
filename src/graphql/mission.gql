@@ -31,7 +31,7 @@ query mission($providerId: String!, $missionTplId: String!, $missionId: String!)
         usesUnits
         descriptionFormat
       }
-      parametersByProviderIdAndMissionTplIdList(orderBy: PARAM_ORDER_ASC) {
+      parametersByProviderIdAndMissionTplIdList(orderBy: [PARAM_ORDER_ASC]) {
         paramName
         type
         valueCanReference

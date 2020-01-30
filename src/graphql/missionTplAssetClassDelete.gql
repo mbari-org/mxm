@@ -1,4 +1,4 @@
-mutation($id: ID!) {
+mutation deleteMissionTplAssetClass($id: ID!) {
   deleteMissionTplAssetClass(
     input: {
       id: $id

@@ -1,4 +1,4 @@
-mutation($input: CreateMissionInput!) {
+mutation createMission($input: CreateMissionInput!) {
   createMission(input: $input) {
     mission {
       providerId

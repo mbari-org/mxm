@@ -1,4 +1,4 @@
-mutation(
+mutation createArgument(
   $missionId: String!
   $providerId: String!
   $missionTplId: String!

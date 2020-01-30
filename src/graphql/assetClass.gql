@@ -1,4 +1,4 @@
-query ($providerId: String!, $className: String!) {
+query allAssetClassesList($providerId: String!, $className: String!) {
   allAssetClassesList(condition: {
     providerId:$providerId,
     className: $className

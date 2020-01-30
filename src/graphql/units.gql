@@ -1,4 +1,4 @@
-query units($providerId: String!) {
+query allUnitsList($providerId: String!) {
   allUnitsList(condition: {
     providerId: $providerId
   }) {

@@ -1,4 +1,4 @@
-mutation(
+mutation createParameter(
   $providerId: String!
   $missionTplId: String!
   $paramName: String!

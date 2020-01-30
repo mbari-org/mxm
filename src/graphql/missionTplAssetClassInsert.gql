@@ -1,4 +1,4 @@
-mutation($providerId: String!, $missionTplId: String!, $assetClassName: String!) {
+mutation createMissionTplAssetClass($providerId: String!, $missionTplId: String!, $assetClassName: String!) {
   createMissionTplAssetClass(
     input: {
       missionTplAssetClass: {

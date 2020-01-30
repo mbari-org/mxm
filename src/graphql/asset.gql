@@ -1,4 +1,4 @@
-query ($assetId: String!) {
+query allAssetsList($assetId: String!) {
   allAssetsList(condition: {
     assetId: $assetId
   }) {

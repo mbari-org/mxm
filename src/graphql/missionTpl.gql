@@ -1,4 +1,4 @@
-query ($providerId: String!, $missionTplId: String!) {
+query getMission($providerId: String!, $missionTplId: String!) {
   missionTplByProviderIdAndMissionTplId(providerId: $providerId, missionTplId: $missionTplId) {
     providerByProviderId {
       descriptionFormat
@@ -15,7 +15,7 @@ query ($providerId: String!, $missionTplId: String!) {
         description
       }
     }
-    parametersByProviderIdAndMissionTplIdList(orderBy: PARAM_ORDER_ASC) {
+    parametersByProviderIdAndMissionTplIdList(orderBy: [PARAM_ORDER_ASC]) {
       id
       paramName
       type

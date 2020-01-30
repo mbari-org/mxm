@@ -1,4 +1,4 @@
-query ($providerId: String!, $missionTplId: String!, $paramName: String!) {
+query parameterByProviderIdAndMissionTplIdAndParamName($providerId: String!, $missionTplId: String!, $paramName: String!) {
   parameterByProviderIdAndMissionTplIdAndParamName(
     providerId: $providerId,
     missionTplId: $missionTplId,
