@@ -12,10 +12,10 @@ services:
     ports:
     - "38080:80"
     depends_on:
-    - graphql-engine
+    - mxm-postgraphile
     restart: always
 
-  graphql-engine:
+  mxm-postgraphile:
     container_name: mxm-postgraphile
     image: graphile/postgraphile:4
     ports:
@@ -36,6 +36,7 @@ services:
       - /mxm-graphql
       - --graphiql
       - /mxm-graphiql
+      - --enhance-graphiql
       - --export-schema-graphql
       - mxmExportedSchema.graphql
 
