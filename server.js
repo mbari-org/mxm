@@ -1,6 +1,9 @@
 // very preliminary!
 
 const express = require("express")
+const path = require('path')
+const serveStatic = require('serve-static')
+
 const { postgraphile } = require("postgraphile")
 const { Pool } = require('pg')
 
@@ -27,9 +30,25 @@ const app = express();
 // app.use(require('compression')({...}));
 // app.use(require('helmet')({...}));
 
+app.use(serveStatic(path.join(__dirname, 'dist/spa')))
+
+const graphqlRoute = '/graphql'
+const graphiqlRoute = '/graphiql'
+
+app.use(express.json())
+
+app.use(graphqlRoute, function (req, res, next) {
+  console.log('req.method=', req.method)
+  console.log('req.params=', req.params)
+  console.log('req.body=', req.body)
+  const isMutation = req.body.query && req.body.query.startsWith('mutation')
+  console.log('isMutation=', isMutation)
+  next()
+})
+
 const postgraphileOptions = {
-  graphqlRoute: '/graphql',
-  graphiqlRoute: '/graphiql',
+  graphqlRoute,
+  graphiqlRoute,
 
   // fist settings below reflecting what we've had in docker compose
   classicIds: true,

@@ -3,6 +3,7 @@
 - setting up express server on top of postgraphile
     - TODO launch webapp  (while removing httpd dependency)
     - TODO intercept provider-related mutations
+        - some exploration using postgraphile as middleware
 
 - some adjustments to graphql queries/mutations while experimenting with codegen
   (using https://github.com/apollographql/apollo-android in separate project)
