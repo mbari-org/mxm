@@ -1,9 +1,29 @@
 2020-01
 
-- setting up express server on top of postgraphile
-    - TODO launch webapp  (while removing httpd dependency)
-    - TODO intercept provider-related mutations
-        - some exploration using postgraphile as middleware
+Setting up express server on top of postgraphile to handle requests
+involving interaction with external MXM providers.
+
+Example:
+
+- client makes a request to submit a mission
+- server performs corresponding request to the provider
+- provider confirms mission has been submitted
+- server performs the update of the database
+- server replies to client with confirmation
+
+For greater flexibility, the server is to be implemented using postgraphile in a
+"schema only" fashion, that is, not as direct middleware, but with direct handling
+of queries as needed, along with any extra relevant logic.
+
+      $ npm run mon
+
+For reference, if using postgraphile as middleware ("library"):
+
+      $ node -r esm src/server/asmiddleware.js
+
+TODO also launch webapp from this express server and remove httpd dependency in docker.
+
+----
 
 - some adjustments to graphql queries/mutations while experimenting with codegen
   (using https://github.com/apollographql/apollo-android in separate project)

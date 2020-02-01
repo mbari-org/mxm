@@ -1,50 +1,28 @@
-// very preliminary!
+// Some basic defs.
 
-const express = require("express")
-const path = require('path')
-const serveStatic = require('serve-static')
+import {
+  createPostGraphileSchema,
+} from 'postgraphile'
+import { Pool } from 'pg'
 
-const { postgraphile } = require("postgraphile")
-const { Pool } = require('pg')
-
-const pool = new Pool({
+const pgPool = new Pool({
   connectionString: 'postgres://mxm@localhost:25432/mxm',
   max: 20,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,
 })
 
-// a simple test
+// a simple test of querying db directly:
 ;(async function() {
-  const client = await pool.connect()
+  const client = await pgPool.connect()
   const q = 'select * from public.providers'
   const res = await client.query(q)
   client.release()
-  console.log(`${q} => `, res.rows)
+  console.log(`DB: '${q}' => `, res.rows)
 })()
-
-const app = express();
-
-/* Example middleware you might want to put in front of PostGraphile */
-// app.use(require('morgan')(...));
-// app.use(require('compression')({...}));
-// app.use(require('helmet')({...}));
-
-app.use(serveStatic(path.join(__dirname, 'dist/spa')))
 
 const graphqlRoute = '/graphql'
 const graphiqlRoute = '/graphiql'
-
-app.use(express.json())
-
-app.use(graphqlRoute, function (req, res, next) {
-  console.log('req.method=', req.method)
-  console.log('req.params=', req.params)
-  console.log('req.body=', req.body)
-  const isMutation = req.body.query && req.body.query.startsWith('mutation')
-  console.log('isMutation=', isMutation)
-  next()
-})
 
 const postgraphileOptions = {
   graphqlRoute,
@@ -75,18 +53,40 @@ const postgraphileOptions = {
   // appendPlugins: [require("@graphile-contrib/pg-simplify-inflector")],
   allowExplain(req) {
     // TODO: customise condition!
-    return true;
+    return true
   },
   enableQueryBatching: true,
   legacyRelations: "omit",
-};
+}
 
-app.use(
-  postgraphile(
-    pool,
-    "public",
-    postgraphileOptions
-  )
-);
+let schema = null
 
-app.listen(process.env.PORT || 3000);
+const getSchema = () => new Promise((resolve, reject) => {
+  if (schema) {
+    resolve(schema)
+  }
+  else {
+    createPostGraphileSchema(
+      pgPool,
+      "public",
+      postgraphileOptions
+    )
+      .then(_schema => {
+        schema = _schema
+        // console.log('Got schema=', schema)
+        resolve(schema)
+      })
+      .catch(error => {
+        console.error(error)
+        reject(error)
+      })
+  }
+})
+
+export {
+  getSchema,
+  pgPool,
+  graphqlRoute,
+  graphiqlRoute,
+  postgraphileOptions,
+}
