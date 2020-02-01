@@ -37,26 +37,36 @@ const postgraphileOptions = {
   enableCors: true,
   simpleCollections: 'only',
 
-  pgSettings(req) {
-    /* TODO */
-  },
+  // NOTE: Documentation for `legacyRelations`:
+  //   "Some one-to-one relations were previously detected as one-to-many -
+  //   should we export 'only' the old relation shapes,
+  //   both new and old but mark the old ones as 'deprecated' (default),
+  //   or 'omit' (recommended) the old relation shapes entirely."
+  // I'm letting the default `deprecated` take place in consistency with the
+  // way postgraphile is launched in docker-compose.yml (no explicit `--legacy-relations` there).
+  // But this all is a bit confusing because I'm not seeing anything marked 'deprecated'
+  // in the generated schema, and when I use 'omit' then several elements are
+  // not created thus causing several queries to fail.
+  // TODO this all will need some more careful revision at some point.
 
-  // TODO review the following
-  subscriptions: false,
-  watchPg: true,
-  dynamicJson: true,
-  setofFunctionsContainNulls: false,
-  ignoreRBAC: false,
-  ignoreIndexes: false,
-  showErrorStack: "json",
-  extendedErrors: ["hint", "detail", "errcode"],
-  // appendPlugins: [require("@graphile-contrib/pg-simplify-inflector")],
-  allowExplain(req) {
-    // TODO: customise condition!
-    return true
-  },
-  enableQueryBatching: true,
-  legacyRelations: "omit",
+  // The folling from the documentation as a "quick" reference but commented out:
+  // subscriptions: false,
+  // watchPg: true,
+  // dynamicJson: true,
+  // setofFunctionsContainNulls: false,
+  // ignoreRBAC: false,
+  // ignoreIndexes: false,
+  // showErrorStack: "json",
+  // extendedErrors: ["hint", "detail", "errcode"],
+  // // appendPlugins: [require("@graphile-contrib/pg-simplify-inflector")],
+  // allowExplain(req) {
+  //   // TODO: customise condition!
+  //   return true
+  // },
+  // enableQueryBatching: true,
+  // pgSettings(req) {
+  //   /* TODO */
+  // },
 }
 
 let schema = null
