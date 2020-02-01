@@ -21,8 +21,8 @@ const pgPool = new Pool({
   console.log(`DB: '${q}' => `, res.rows)
 })()
 
-const graphqlRoute = '/graphql'
-const graphiqlRoute = '/graphiql'
+const graphqlRoute = '/mxm-graphql'
+const graphiqlRoute = '/mxm-graphiql'
 
 const postgraphileOptions = {
   graphqlRoute,

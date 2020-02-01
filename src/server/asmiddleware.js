@@ -1,21 +1,21 @@
 // Basic test of postgraphile as middleware.
-//   $ node server/asmiddleware.js
+//   $ node -r esm src/server/asmiddleware.js
 
-const express = require("express")
-const path = require('path')
-const serveStatic = require('serve-static')
+import express from 'express'
+import cors from 'cors'
 
-const {
-    pgPool,
-    graphqlRoute,
-    postgraphileOptions,
-  } = require('./base')
+import {
+  pgPool,
+  graphqlRoute,
+  postgraphileOptions,
+} from './base'
+
+import { postgraphile } from 'postgraphile'
 
 const app = express();
 
-app.use(serveStatic(path.join(__dirname, 'dist/spa')))
+app.use(cors())
 
-const { postgraphile } = require("postgraphile")
 app.use(
   postgraphile(
     pgPool,
