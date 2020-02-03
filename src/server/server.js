@@ -7,17 +7,29 @@ import path from 'path'
 import serveStatic from 'serve-static'
 
 import {
-  graphqlRoute,
+  pgPool,
+  postgraphileOptions,
 } from './base'
 
-import mxm from './mxm'
+import { postgraphile } from "postgraphile"
 
 const app = express()
 
 app.use(cors())
-app.use(express.json())
-app.use(serveStatic(path.join(__dirname, 'dist/spa')))
 
-app.use(graphqlRoute, mxm)
+const dbSchema = 'public'
 
-app.listen(process.env.PORT || 3000)
+app.use(postgraphile(
+  pgPool,
+  dbSchema,
+  postgraphileOptions
+))
+
+// to serve the Quasar based GUI:
+const staticDir = './dist/spa'
+console.log(`(staticDir: ${staticDir})`)
+app.use(serveStatic(staticDir))
+
+const port = process.env.PORT || 3000
+console.log(`mxm listening on port ${port}`)
+app.listen(port)

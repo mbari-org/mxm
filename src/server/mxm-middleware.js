@@ -1,5 +1,5 @@
-// MXM middleware.
-// Status: very preliminary.
+// MXM middleware using postgraphile in schema-only mode.
+// Status: incomplete -- was a basic exploration.
 
 export default mxm
 

@@ -1,18 +1,18 @@
-FROM node:12-alpine AS builder
+# TODO multi-stage build again
+# (basically to remove unneeded node_modules for the
+# quasar-based app, but retain the ones for the express-based app)
+
+FROM node:12-alpine
+LABEL maintainer="carueda@mbari.org"
+
 COPY . /mxm
 RUN yarn global add @quasar/cli              \
  && cd /mxm                                  \
  && yarn                                     \
- && quasar build
+ && quasar build                             \
+ # remove statics/config, which will be mapped to a host directory:
+ && rm -rf /mxm/dist/spa/statics/config
 
-# --------------------------
-FROM node:12-alpine
-LABEL maintainer="carueda@mbari.org"
-RUN yarn global add @quasar/cli              \
- && mkdir /mxm
-COPY --from=builder /mxm/dist/spa /mxm/
-# remove static/config -- this will be mapped to a host directory
-RUN  rm -rf ./statics/config
-EXPOSE 4000
+EXPOSE 3000
 WORKDIR /mxm/
-ENTRYPOINT ["quasar", "serve", ".", "--port", "4000", "--cors"]
+ENTRYPOINT ["bin/esm.js"]

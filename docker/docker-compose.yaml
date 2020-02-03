@@ -8,37 +8,16 @@ services:
     image: mbari/mxm:latest
 
     volumes:
-      - ${MXM_CONFIG_DIR}:/mxm/statics/config
+      - ${MXM_CONFIG_DIR}:/mxm/dist/spa/statics/config
     ports:
-    - "38080:4000"
-    depends_on:
-    - mxm-postgraphile
-    restart: always
+    - "38080:3000"
 
-  mxm-postgraphile:
-    container_name: mxm-postgraphile
-    image: graphile/postgraphile:4
-    ports:
-    - "5000:5000"
+    environment:
+      PG_CONN_STRING: postgres://mxm@mxm-postgres:5432/mxm
+
     depends_on:
     - mxm-postgres
     restart: always
-    command:
-      - --connection
-      - postgresql://mxm@mxm-postgres:5432/mxm
-      - --schema
-      - public
-      - --cors
-      - --simple-collections
-      - only
-      - --classic-ids
-      - --graphql
-      - /mxm-graphql
-      - --graphiql
-      - /mxm-graphiql
-      - --enhance-graphiql
-      - --export-schema-graphql
-      - mxmExportedSchema.graphql
 
   mxm-postgres:
     container_name: mxm-postgres

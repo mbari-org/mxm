@@ -1,5 +1,7 @@
 2020-02
 
+- mbari/mxm image now also as postgraphile-powered MXM server.
+  TODO new plugin to continue using postgraphile as middleware.
 - getSchema with db connection re-attempts to facilitate docker-compose launch
 - use node base image also for mxm container.
   (apache dependency removed)
