@@ -28,6 +28,9 @@ const postgraphileOptions = {
   graphqlRoute,
   graphiqlRoute,
 
+  // for docker-compose startup: "wait" until mxm-postgres is up
+  retryOnInitFail: true,
+
   // fist settings below reflecting what we've had in docker compose
   classicIds: true,
   exportGqlSchemaPath: "schema.graphql",
