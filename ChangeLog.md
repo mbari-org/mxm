@@ -1,3 +1,8 @@
+2020-02
+
+- use node base image as builder for mxm
+  (as part of prep for node-based executable as well)
+
 2020-01
 
 Setting up express server on top of postgraphile to handle requests

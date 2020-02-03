@@ -1,10 +1,6 @@
-FROM httpd:2.4.41-alpine AS builder
+FROM node:12.14.1-alpine3.10 AS builder
 COPY . /mxm
-RUN apk add --update nodejs nodejs-npm       && \
-    apk add --update git                     && \
-    npm install -g yarn                      && \
-    export PATH="$(yarn global bin):$PATH"   && \
-    yarn global add @quasar/cli              && \
+RUN yarn global add @quasar/cli              && \
     cd /mxm                                  && \
     yarn                                     && \
     quasar build
