@@ -8,9 +8,9 @@ services:
     image: mbari/mxm:latest
 
     volumes:
-      - ${MXM_CONFIG_DIR}:/usr/local/apache2/htdocs/statics/config
+      - ${MXM_CONFIG_DIR}:/mxm/statics/config
     ports:
-    - "38080:80"
+    - "38080:4000"
     depends_on:
     - mxm-postgraphile
     restart: always

@@ -1,7 +1,8 @@
 2020-02
 
+- use node base image also for mxm container.
+  (apache dependency removed)
 - use node base image as builder for mxm
-  (as part of prep for node-based executable as well)
 
 2020-01
 
@@ -26,8 +27,6 @@ For reference, if using postgraphile as middleware ("library"):
 
       $ node -r esm src/server/asmiddleware.js
 
-TODO also launch webapp from this express server and remove httpd dependency in docker.
-
 ----
 
 - some adjustments to graphql queries/mutations while experimenting with codegen
@@ -44,7 +43,6 @@ TODO also launch webapp from this express server and remove httpd dependency in 
 - use multi-stage image build (mxm now 115MB instead of 684MB)
 - build ajustments while prepararing automated docker release
   (including using the qgeomap extension from npm, not via local link)
-- TODO(low prio) use `quasar serve` in mxm image (instead of via apache)
 
 - do executor to provider renaming
 
