@@ -6,7 +6,7 @@ import {
 import { Pool } from 'pg'
 
 const pgPool = new Pool({
-  connectionString: 'postgres://mxm@localhost:25432/mxm',
+  connectionString: process.env.PG_CONN_STRING || 'postgres://mxm@localhost:25432/mxm',
   max: 20,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,
@@ -71,27 +71,39 @@ const postgraphileOptions = {
 
 let schema = null
 
-const getSchema = () => new Promise((resolve, reject) => {
+/**
+ * Gets the schema.
+ * Re-attempts connection to the database, which in particular
+ * allows for needed handling at launch time via docker-compose.
+ */
+const getSchema = async () => {
   if (schema) {
-    resolve(schema)
+    return schema
   }
   else {
-    createPostGraphileSchema(
-      pgPool,
-      "public",
-      postgraphileOptions
-    )
-      .then(_schema => {
-        schema = _schema
-        // console.log('Got schema=', schema)
-        resolve(schema)
-      })
-      .catch(error => {
-        console.error(error)
-        reject(error)
-      })
+    const maxAttempts = 20
+    const sleepMs = 1000
+    let lastError = null
+    for (let attempt = 1; attempt <= 20; attempt++) {
+      console.log(`\n-- getting schema (attempt=${attempt}/${maxAttempts}) --`)
+      try {
+        schema = await createPostGraphileSchema(
+          pgPool,
+          "public",
+          postgraphileOptions
+        )
+        console.log(`Got schema after ${attempt} attempt`, schema)
+        return schema
+      }
+      catch (error) {
+        lastError = error
+        await new Promise(resolve => setTimeout(resolve, sleepMs))
+      }
+    }
+    console.error(`Could not get schema after ${maxAttempts} attempts.`, lastError)
+    throw lastError
   }
-})
+}
 
 export {
   getSchema,

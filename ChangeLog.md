@@ -1,5 +1,6 @@
 2020-02
 
+- getSchema with db connection re-attempts to facilitate docker-compose launch
 - use node base image also for mxm container.
   (apache dependency removed)
 - use node base image as builder for mxm
