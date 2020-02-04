@@ -13,7 +13,7 @@ import {
 } from './base'
 
 
-async function performQuery(query, variables, operationName) {
+async function performQuery(query, variables, operationName, context_) {
   const schema = await getSchema()
   return await withPostGraphileContext(
     {
@@ -26,11 +26,12 @@ async function performQuery(query, variables, operationName) {
       // Execute your GraphQL query in this function with the provided
       // `context` object, which should NOT be used outside of this
       // function.
+      context_ = context_ || {}
       return await graphql(
         schema, // The schema from `createPostGraphileSchema`
         query,
         null,
-        { ...context }, // You can add more to context if you like
+        { ...context, ...context_ }, // You can add more to context if you like
         variables,
         operationName
       )

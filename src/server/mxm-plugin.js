@@ -3,6 +3,8 @@
 
 import { makeWrapResolversPlugin } from 'graphile-utils'
 
+import createProviderManager from './createProviderManager'
+
 export default makeWrapResolversPlugin({
   Mutation: {
     createProvider: createProviderResolverWrapper(),
@@ -14,9 +16,13 @@ function createProviderResolverWrapper() {
   return async (resolve, source, args, context, resolveInfo) => {
     // You can do something before the resolver executes
     console.log('entering createProviderResolverWrapper')
-    console.log('args=', args);
+    console.log('args=', args)
 
+    const providerManager = createProviderManager(args.input.provider, context)
+
+    await providerManager.preInsert()
     const result = await resolve()
+    await providerManager.postInsert()
 
     console.log('exiting createProviderResolverWrapper')
     console.log('result=', result)

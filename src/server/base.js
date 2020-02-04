@@ -11,7 +11,7 @@ const pgPool = new Pool({
   connectionString: process.env.PG_CONN_STRING || 'postgres://mxm@localhost:25432/mxm',
   max: 20,
   idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
+  connectionTimeoutMillis: 15000,
 })
 
 // a simple test of querying db directly:
@@ -99,7 +99,7 @@ const getSchema = async () => {
           "public",
           postgraphileOptions
         )
-        console.log(`Got schema after ${attempt} attempt`, schema)
+        console.log(`Got schema after ${attempt} attempts`) //, schema)
         return schema
       }
       catch (error) {

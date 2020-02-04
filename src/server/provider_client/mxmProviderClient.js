@@ -1,13 +1,9 @@
 // Helper to interact with external MXM provider.
 // Only 'REST0' interface being implemented at the moment.
 
-import rest0 from 'boot/rest0'
+import rest0 from './rest0'
 
-export default ({ Vue }) => {
-  Vue.prototype.$createMxmProvideClient = createMxmProvideClient
-}
-
-function createMxmProvideClient({httpEndpoint, apiType}) {
+export default function createMxmProvideClient({httpEndpoint, apiType}) {
   console.log('createMxmProvideClient: httpEndpoint=', httpEndpoint, 'apiType=', apiType)
   return {
     isSupportedInterface,
