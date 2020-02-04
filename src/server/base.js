@@ -5,6 +5,8 @@ import {
 } from 'postgraphile'
 import { Pool } from 'pg'
 
+import mxmPlugin from './mxm-plugin'
+
 const pgPool = new Pool({
   connectionString: process.env.PG_CONN_STRING || 'postgres://mxm@localhost:25432/mxm',
   max: 20,
@@ -13,7 +15,7 @@ const pgPool = new Pool({
 })
 
 // a simple test of querying db directly:
-;(async function() {
+if (false) (async function() {
   const client = await pgPool.connect()
   const q = 'select * from public.providers'
   const res = await client.query(q)
@@ -39,6 +41,8 @@ const postgraphileOptions = {
   enhanceGraphiql: true,
   enableCors: true,
   simpleCollections: 'only',
+
+  appendPlugins: [mxmPlugin],
 
   // NOTE: Documentation for `legacyRelations`:
   //   "Some one-to-one relations were previously detected as one-to-many -
