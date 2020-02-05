@@ -1,5 +1,8 @@
 2020-02
 
+- pass schedType and schedDate in postMission
+  (now handled in TethysDash 3.4.2)
+
 - simplify frontend code to reflect new backend behavior re provider registration
 
 - introduce "provider manager" to handle creation of all relevant entities

@@ -777,6 +777,8 @@
       },
 
       runMission() {
+        // console.log('runMission: mission=', this.mission); return
+
         if (!this.mxmProviderClient.isSupportedInterface()) {
           this.$q.notify({
             message: `Operation not implemented yet for apiType=${this.provider.apiType}`,
@@ -794,7 +796,7 @@
           cancel: true
         }).onOk(() => doIt())
 
-        const doIt = () => {
+        const doIt = async () => {
           const httpEndpoint = this.provider.httpEndpoint
           //console.debug('httpEndpoint=', this.provider.httpEndpoint)
           //console.debug('apiType=', this.provider.apiType)
@@ -818,36 +820,39 @@
             arguments: args,
           }
 
+          if (this.provider.usesSched) {
+            data.schedType = this.mission.schedType
+            data.schedDate = data.schedType === 'DATE' ? this.mission.schedDate : null
+          }
+
           console.debug('runMission: payload=', data)
           // return
 
-          this.mxmProviderClient.postMission(data)
-            .then(res => {
-              if (!res.status) {
-                this.$q.notify("Provider reported no status for mission submission")
-                return
-              }
-              const status = res.status
-              this.updateMissionStatus(status)
-                .then(_ => {
-                  this.$q.notify({
-                    message: `Mission submitted. Status: ${status}`,
-                    timeout: 2000,
-                    color: 'info',
-                    position: 'top',
-                  })
-                  this.refreshMission()
-                })
+          try {
+            const res = await this.mxmProviderClient.postMission(data)
+            if (!res.status) {
+              this.$q.notify("Provider reported no status for mission submission")
+              return
+            }
+            const status = res.status
+            await this.updateMissionStatus(status)
+            this.$q.notify({
+              message: `Mission submitted. Status: ${status}`,
+              timeout: 2000,
+              color: 'info',
+              position: 'top',
             })
-            .catch(error => {
-              this.$q.notify({
-                message: `Mission submission error: ${JSON.stringify(error)}`,
-                timeout: 0,
-                closeBtn: 'Close',
-                color: 'warning',
-              })
-              console.error('runMission: postMission: error=', error)
+            this.refreshMission()
+          }
+          catch(error) {
+            this.$q.notify({
+              message: `Mission submission error: ${JSON.stringify(error)}`,
+              timeout: 0,
+              closeBtn: 'Close',
+              color: 'warning',
             })
+            console.error('runMission: postMission: error=', error)
+          }
         }
       },
 
