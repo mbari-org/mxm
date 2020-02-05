@@ -2,25 +2,29 @@ import map from "lodash/map"
 
 export default createProviderManager
 
-import createMxmProvideClient from './provider_client/mxmProviderClient'
+import createMxmProviderClient from './provider_client/mxmProviderClient'
 import performQuery from './gql'
 import fs from 'fs'
 import orderBy from "lodash/orderBy"
 
 const debug = true
 
-function createProviderManager(provider, context) {
-  const {httpEndpoint, apiType} = provider
-  const mxmProviderClient = createMxmProvideClient({httpEndpoint, apiType})
+function createProviderManager(context) {
+  let mxmProviderClient = null
 
   return {
-    preInsert,
-    postInsert,
+    setMxmProviderClient,
+    preInsertProvider,
+    postInsertProvider,
   }
 
-  async function preInsert() {
+  function setMxmProviderClient(httpEndpoint, apiType) {
+    mxmProviderClient = createMxmProviderClient({httpEndpoint, apiType})
+  }
+
+  async function preInsertProvider(provider) {
     if (!mxmProviderClient.isSupportedInterface()) {
-      console.warn('preInsert: Not supported interface')
+      console.warn('preInsertProvider: Not supported interface')
       return
     }
 
@@ -38,9 +42,9 @@ function createProviderManager(provider, context) {
     }
   }
 
-  async function postInsert() {
+  async function postInsertProvider(provider) {
     if (!mxmProviderClient.isSupportedInterface()) {
-      console.warn('postInsert: Not supported interface')
+      console.warn('postInsertProvider: Not supported interface')
       return
     }
 
@@ -64,150 +68,150 @@ function createProviderManager(provider, context) {
     catch(error) {
       console.error('getAssetClasses: error=', error)
     }
-  }
 
-  async function createAssetClasses(assetClasses) {
-    return await runInSequence(assetClasses.map(async assetClass => await createAssetClass(assetClass)))
-  }
-
-  async function createAssetClass(assetClass) {
-    console.log('createAssetClass ', assetClass)
-
-    const query = fs.readFileSync('src/graphql/assetClassInsert.gql', {encoding: 'utf8'})
-
-    const variables = {
-      providerId: provider.providerId,
-      className: assetClass.assetClassName,
-      description: assetClass.description || null
+    async function createAssetClasses(assetClasses) {
+      return await runInSequence(assetClasses.map(async assetClass => await createAssetClass(assetClass)))
     }
-    const operationName = 'createAssetClass'
-    const result = await performQuery(query, variables, operationName, context)
-    console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
-    const assets = assetClass.assets || []
-    await createAssets(assetClass, assets)
-  }
 
-  async function createAssets(assetClass, assets) {
-    return await runInSequence(assets.map(async asset => await createAsset(assetClass, asset)))
-  }
+    async function createAssetClass(assetClass) {
+      console.log('createAssetClass ', assetClass)
 
-  async function createAsset(assetClass, asset) {
-    console.log('createAsset ', asset)
+      const query = fs.readFileSync('src/graphql/assetClassInsert.gql', {encoding: 'utf8'})
 
-    const query = fs.readFileSync('src/graphql/assetInsert.gql', {encoding: 'utf8'})
-
-    const variables = {
-      providerId: provider.providerId,
-      className: assetClass.assetClassName,
-      assetId: asset.assetId,
-      description: asset.description || null
+      const variables = {
+        providerId: provider.providerId,
+        className: assetClass.assetClassName,
+        description: assetClass.description || null
+      }
+      const operationName = 'createAssetClass'
+      const result = await performQuery(query, variables, operationName, context)
+      console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
+      const assets = assetClass.assets || []
+      await createAssets(assetClass, assets)
     }
-    const operationName = 'createAsset'
-    const result = await performQuery(query, variables, operationName, context)
-    console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
-  }
 
-  async function getAndCreateUnits() {
-    const units = await mxmProviderClient.getUnits()
-    await createUnits(units)
-    await getAndCreateMissionTpls()
-  }
-
-  async function createUnits(units) {
-    const sortedUnits = orderBy(units, u => u.baseUnit ? 1 : 0)
-    await runInSequence(sortedUnits.map(async unit => await createUnit(unit)))
-  }
-
-  async function createUnit(unit) {
-    const query = fs.readFileSync('src/graphql/unitInsert.gql', {encoding: 'utf8'})
-
-    const variables = {
-      providerId: provider.providerId,
-      unitName: unit.name,
+    async function createAssets(assetClass, assets) {
+      return await runInSequence(assets.map(async asset => await createAsset(assetClass, asset)))
     }
-    if (unit.abbreviation) {
-      variables.abbreviation = unit.abbreviation
+
+    async function createAsset(assetClass, asset) {
+      console.log('createAsset ', asset)
+
+      const query = fs.readFileSync('src/graphql/assetInsert.gql', {encoding: 'utf8'})
+
+      const variables = {
+        providerId: provider.providerId,
+        className: assetClass.assetClassName,
+        assetId: asset.assetId,
+        description: asset.description || null
+      }
+      const operationName = 'createAsset'
+      const result = await performQuery(query, variables, operationName, context)
+      console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
     }
-    if (unit.baseUnit) {
-      variables.baseUnit = unit.baseUnit
+
+    async function getAndCreateUnits() {
+      const units = await mxmProviderClient.getUnits()
+      await createUnits(units)
+      await getAndCreateMissionTpls()
     }
-    const operationName = 'createUnit'
-    const result = await performQuery(query, variables, operationName, context)
-    console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
-  }
 
-  async function getAndCreateMissionTpls() {
-    const missionTpls = await mxmProviderClient.getMissionTpls()
-    await createMissionTpls(missionTpls)
-  }
-
-  async function createMissionTpls(missionTpls) {
-    await runInSequence(missionTpls.map(async missionTpl => await createMissionTpl(missionTpl)))
-  }
-
-  async function createMissionTpl(missionTpl) {
-    const query = fs.readFileSync('src/graphql/missionTplInsert.gql', {encoding: 'utf8'})
-
-    const variables = {
-      providerId: provider.providerId,
-      missionTplId: missionTpl.missionTplId,
-      description: missionTpl.description,
+    async function createUnits(units) {
+      const sortedUnits = orderBy(units, u => u.baseUnit ? 1 : 0)
+      await runInSequence(sortedUnits.map(async unit => await createUnit(unit)))
     }
-    const operationName = 'createMissionTpl'
-    const result = await performQuery(query, variables, operationName, context)
-    console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
 
-    const assetClassNames = missionTpl.assetClassNames || []
-    await createAssociatedAssetClasses(missionTpl, assetClassNames)
+    async function createUnit(unit) {
+      const query = fs.readFileSync('src/graphql/unitInsert.gql', {encoding: 'utf8'})
 
-    const parameters = missionTpl.parameters || []
-    await createParameters(missionTpl, parameters)
-  }
-
-  async function createAssociatedAssetClasses(missionTpl, assetClassNames) {
-    await runInSequence(assetClassNames.map(async assetClassName => await createAssociatedAssetClass(missionTpl, assetClassName)))
-  }
-
-  async function createAssociatedAssetClass(missionTpl, assetClassName) {
-    const query = fs.readFileSync('src/graphql/missionTplAssetClassInsert.gql', {encoding: 'utf8'})
-
-    const variables = {
-      providerId: provider.providerId,
-      missionTplId: missionTpl.missionTplId,
-      assetClassName
+      const variables = {
+        providerId: provider.providerId,
+        unitName: unit.name,
+      }
+      if (unit.abbreviation) {
+        variables.abbreviation = unit.abbreviation
+      }
+      if (unit.baseUnit) {
+        variables.baseUnit = unit.baseUnit
+      }
+      const operationName = 'createUnit'
+      const result = await performQuery(query, variables, operationName, context)
+      console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
     }
-    const operationName = 'createMissionTplAssetClass'
-    const result = await performQuery(query, variables, operationName, context)
-    console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
-  }
 
-  async function createParameters(missionTpl, parameters) {
-    await runInSequence(parameters.map(async parameter => await createParameter(missionTpl, parameter)))
-  }
+    async function getAndCreateMissionTpls() {
+      const missionTpls = await mxmProviderClient.getMissionTpls()
+      await createMissionTpls(missionTpls)
+    }
 
-  async function createParameter(missionTpl, parameter) {
-    const query = fs.readFileSync('src/graphql/parameterInsert.gql', {encoding: 'utf8'})
+    async function createMissionTpls(missionTpls) {
+      await runInSequence(missionTpls.map(async missionTpl => await createMissionTpl(missionTpl)))
+    }
 
-    const variables = {
-      providerId: provider.providerId,
-      missionTplId: missionTpl.missionTplId,
-      paramName: parameter.paramName,
-      type: parameter.type,
-      required: parameter.required,
-      description: parameter.description,
+    async function createMissionTpl(missionTpl) {
+      const query = fs.readFileSync('src/graphql/missionTplInsert.gql', {encoding: 'utf8'})
+
+      const variables = {
+        providerId: provider.providerId,
+        missionTplId: missionTpl.missionTplId,
+        description: missionTpl.description,
+      }
+      const operationName = 'createMissionTpl'
+      const result = await performQuery(query, variables, operationName, context)
+      console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
+
+      const assetClassNames = missionTpl.assetClassNames || []
+      await createAssociatedAssetClasses(missionTpl, assetClassNames)
+
+      const parameters = missionTpl.parameters || []
+      await createParameters(missionTpl, parameters)
     }
-    if (parameter.defaultValue) {
-      variables.defaultValue = '' + parameter.defaultValue
+
+    async function createAssociatedAssetClasses(missionTpl, assetClassNames) {
+      await runInSequence(assetClassNames.map(async assetClassName => await createAssociatedAssetClass(missionTpl, assetClassName)))
     }
-    if (parameter.defaultUnits) {
-      variables.defaultUnits = parameter.defaultUnits
+
+    async function createAssociatedAssetClass(missionTpl, assetClassName) {
+      const query = fs.readFileSync('src/graphql/missionTplAssetClassInsert.gql', {encoding: 'utf8'})
+
+      const variables = {
+        providerId: provider.providerId,
+        missionTplId: missionTpl.missionTplId,
+        assetClassName
+      }
+      const operationName = 'createMissionTplAssetClass'
+      const result = await performQuery(query, variables, operationName, context)
+      console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
     }
-    if (parameter.valueCanReference) {
-      variables.valueCanReference = parameter.valueCanReference
+
+    async function createParameters(missionTpl, parameters) {
+      await runInSequence(parameters.map(async parameter => await createParameter(missionTpl, parameter)))
     }
-    const operationName = 'createParameter'
-    const result = await performQuery(query, variables, operationName, context)
-    console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
+
+    async function createParameter(missionTpl, parameter) {
+      const query = fs.readFileSync('src/graphql/parameterInsert.gql', {encoding: 'utf8'})
+
+      const variables = {
+        providerId: provider.providerId,
+        missionTplId: missionTpl.missionTplId,
+        paramName: parameter.paramName,
+        type: parameter.type,
+        required: parameter.required,
+        description: parameter.description,
+      }
+      if (parameter.defaultValue) {
+        variables.defaultValue = '' + parameter.defaultValue
+      }
+      if (parameter.defaultUnits) {
+        variables.defaultUnits = parameter.defaultUnits
+      }
+      if (parameter.valueCanReference) {
+        variables.valueCanReference = parameter.valueCanReference
+      }
+      const operationName = 'createParameter'
+      const result = await performQuery(query, variables, operationName, context)
+      console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
+    }
   }
 }
 

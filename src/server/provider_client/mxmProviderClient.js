@@ -3,8 +3,8 @@
 
 import rest0 from './rest0'
 
-export default function createMxmProvideClient({httpEndpoint, apiType}) {
-  console.log('createMxmProvideClient: httpEndpoint=', httpEndpoint, 'apiType=', apiType)
+export default function createMxmProviderClient({httpEndpoint, apiType}) {
+  console.log('createMxmProviderClient: httpEndpoint=', httpEndpoint, 'apiType=', apiType)
   return {
     isSupportedInterface,
     getCapabilities,

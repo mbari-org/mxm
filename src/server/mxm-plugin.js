@@ -19,11 +19,13 @@ function createProviderResolverWrapper() {
     console.log('entering createProviderResolverWrapper')
     console.log('args=', args)
 
-    const providerManager = createProviderManager(args.input.provider, context)
+    const providerManager = createProviderManager(context)
+    const {httpEndpoint, apiType} = args.input.provider
+    providerManager.setMxmProviderClient(httpEndpoint, apiType)
 
-    await providerManager.preInsert()
+    await providerManager.preInsertProvider(args.input.provider)
     const result = await resolve()
-    await providerManager.postInsert()
+    await providerManager.postInsertProvider(args.input.provider)
 
     console.log('exiting createProviderResolverWrapper')
     console.log('result=', result)

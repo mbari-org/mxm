@@ -4,11 +4,11 @@
 import rest0 from 'boot/rest0'
 
 export default ({ Vue }) => {
-  Vue.prototype.$createMxmProvideClient = createMxmProvideClient
+  Vue.prototype.$createMxmProvideClient = createMxmProviderClient
 }
 
-function createMxmProvideClient({httpEndpoint, apiType}) {
-  console.log('createMxmProvideClient: httpEndpoint=', httpEndpoint, 'apiType=', apiType)
+function createMxmProviderClient({httpEndpoint, apiType}) {
+  console.log('createMxmProviderClient: httpEndpoint=', httpEndpoint, 'apiType=', apiType)
   return {
     isSupportedInterface,
     getCapabilities,
