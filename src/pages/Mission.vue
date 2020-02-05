@@ -99,12 +99,12 @@
           <q-tooltip>Validate mission against external provider</q-tooltip>
         </q-btn>
         <q-btn
-          label="Run"
+          label="Submit"
           icon="settings"
           push color="secondary"
           size="sm"
           :disable="disableRun"
-          @click="runMission"
+          @click="submitMission"
         >
           <q-tooltip>Request execution of this mission</q-tooltip>
         </q-btn>
@@ -776,8 +776,8 @@
         })
       },
 
-      runMission() {
-        // console.log('runMission: mission=', this.mission); return
+      submitMission() {
+        // console.log('submitMission: mission=', this.mission); return
 
         if (!this.mxmProviderClient.isSupportedInterface()) {
           this.$q.notify({
@@ -825,7 +825,7 @@
             data.schedDate = data.schedType === 'DATE' ? this.mission.schedDate : null
           }
 
-          console.debug('runMission: payload=', data)
+          console.debug('submitMission: payload=', data)
           // return
 
           try {
@@ -851,7 +851,7 @@
               closeBtn: 'Close',
               color: 'warning',
             })
-            console.error('runMission: postMission: error=', error)
+            console.error('submitMission: postMission: error=', error)
           }
         }
       },

@@ -9,6 +9,7 @@ export default makeWrapResolversPlugin({
   Mutation: {
     createProvider: createProviderResolverWrapper(),
     updateProvider: updateProviderResolverWrapper(),
+    updateMission: updateMissionResolverWrapper(),
   }
 })
 
@@ -39,6 +40,23 @@ function updateProviderResolverWrapper() {
     const result = await resolve()
 
     console.log('exiting updateProviderResolverWrapper')
+    console.log('result=', result)
+
+    return result
+  }
+}
+
+function updateMissionResolverWrapper() {
+  return async (resolve, source, args, context, resolveInfo) => {
+    console.log('entering updateMissionResolverWrapper')
+    console.log('args=', args);
+
+    // const missionManager = createMissionManager(args.input, context)
+
+    // await missionManager.preUpdateMission()
+    const result = await resolve()
+
+    console.log('exiting updateMissionResolverWrapper')
     console.log('result=', result)
 
     return result

@@ -1,5 +1,7 @@
 2020-02
 
+- server preps for mission submission
+
 - pass schedType and schedDate in postMission
   (now handled in TethysDash 3.4.2)
 
@@ -35,15 +37,6 @@ Example:
 - server performs the update of the database
 - server replies to client with confirmation
 
-For greater flexibility, the server is to be implemented using postgraphile in a
-"schema only" fashion, that is, not as direct middleware, but with direct handling
-of queries as needed, along with any extra relevant logic.
-
-      $ npm run mon
-
-For reference, if using postgraphile as middleware ("library"):
-
-      $ node -r esm src/server/asmiddleware.js
 
 ----
 
