@@ -20,8 +20,6 @@ export default ({ app, Vue, router }) => {
     replace(loc) {
       router.replace(routeLoc(loc))
     },
-
-    runInSequence,
   }
 
   Vue.component('utl-dialog', UtlDialog)
@@ -35,12 +33,4 @@ function routeLoc(loc) {
     return '/' + map(loc, encodeURIComponent).join('/')
   }
   else return loc
-}
-
-function runInSequence(promises) {
-  return promises.reduce((acum, promise) => acum.then(results =>
-      promise.then(result => [...results, result])
-    ),
-    Promise.resolve([])
-  )
 }

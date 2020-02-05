@@ -53,7 +53,13 @@ module.exports = function (ctx) {
       plugins: [
         'Notify',
         'Dialog',
-      ]
+        'Loading',
+      ],
+      config: {
+        loading: {
+          /* Loading defaults */
+        }
+      }
     },
 
     // https://quasar.dev/quasar-cli/cli-documentation/supporting-ie

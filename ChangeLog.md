@@ -1,15 +1,13 @@
 2020-02
 
+- simplify frontend code to reflect new backend behavior re provider registration
+
 - introduce "provider manager" to handle creation of all relevant entities
   upon an insert of the basic provider information (providerId, httpEndpoint, apiType).
 
   TODO: revisit connectionTimeoutMillis for the PG Pool connection, which I
    made longer upon noting connection error while going through the createParameter
    request during a whole provider creation.
-
-
-  TODO: update frontend to reflect new backend behavior above.
-        (one aspect here is the progress bar we currently have)
 
   TODO: cleanup some duplication of code related with axios/rest requests
 
