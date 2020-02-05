@@ -53,9 +53,9 @@ function updateMissionResolverWrapper() {
     console.log('entering updateMissionResolverWrapper')
     console.log('args=', args);
 
-    // const missionManager = createMissionManager(args.input, context)
+    const providerManager = createProviderManager(context)
 
-    // await missionManager.preUpdateMission()
+    await providerManager.preUpdateMission(args.input)
     const result = await resolve()
 
     console.log('exiting updateMissionResolverWrapper')

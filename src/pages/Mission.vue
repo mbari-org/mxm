@@ -320,7 +320,6 @@
   import filter from 'lodash/filter'
   import clone from 'lodash/clone'
   import assign from 'lodash/assign'
-  import reduce from 'lodash/reduce'
   import size from 'lodash/size'
   import orderBy from 'lodash/orderBy'
 
@@ -731,31 +730,30 @@
           })
       },
 
-      updateMissionStatus(missionStatus) {
-        return this.updateMission({missionStatus})
+      async updateMissionStatus(missionStatus) {
+        return await this.updateMission({missionStatus})
       },
 
-      updateMission(missionPatch) {
-        return new Promise((resolve, reject) => {
-          console.debug('updateMission missionPatch=', missionPatch)
-          const mutation = missionUpdateGql
-          const variables = {
-            input: {
-              id: this.mission.id,
-              missionPatch
-            }
+      async updateMission(missionPatch) {
+        console.debug('updateMission missionPatch=', missionPatch)
+        const mutation = missionUpdateGql
+        const variables = {
+          input: {
+            id: this.mission.id,
+            missionPatch
           }
-          this.$apollo.mutate({mutation, variables})
-            .then((data) => {
-              if (debug) console.debug('updateMission: mutation data=', data)
-              assign(this.mission, missionPatch)
-              resolve(missionPatch)
-            })
-            .catch(error => {
-              console.error('updateMission: mutation error=', error)
-              reject(error)
-            })
-        })
+        }
+        try {
+          const data = await this.$apollo.mutate({mutation, variables})
+          /*if (debug)*/ console.debug('updateMission: mutation data=', data)
+          // TODO review the following!
+          assign(this.mission, data.updateMission.mission)
+          return missionPatch
+        }
+        catch(error) {
+          console.error('updateMission: mutation error=', error)
+          reject(error)
+        }
       },
 
       // TODO
@@ -778,17 +776,6 @@
 
       submitMission() {
         // console.log('submitMission: mission=', this.mission); return
-
-        if (!this.mxmProviderClient.isSupportedInterface()) {
-          this.$q.notify({
-            message: `Operation not implemented yet for apiType=${this.provider.apiType}`,
-            timeout: 4000,
-            position: 'top',
-            color: 'warning',
-          })
-          return
-        }
-
         this.$q.dialog({
           title: 'Confirm',
           message: `Submit mission '${this.mission.missionId}' for execution?`,
@@ -796,55 +783,23 @@
           cancel: true
         }).onOk(() => doIt())
 
+        // Note:
+        // - the submission effect is accomplished by requesting the status to become 'SUBMITTED'
+        // - no arguments are passed at all;  backend only needs the mission ID and the status change
         const doIt = async () => {
-          const httpEndpoint = this.provider.httpEndpoint
-          //console.debug('httpEndpoint=', this.provider.httpEndpoint)
-          //console.debug('apiType=', this.provider.apiType)
-
-          // console.debug('myArguments=', this.myArguments)
-          const parametersChanged = this.parametersChanged()
-          console.debug('parametersChanged=', parametersChanged)
-          const args = reduce(parametersChanged, (obj, {paramName, paramValue, type, paramUnits}) => {
-            obj[paramName] = {
-              value: convertValue(paramValue, type),
-              units: paramUnits,
-            }
-            return obj
-          }, {})
-
-          const data = {
-            missionTplId: this.params.missionTplId,
-            missionId: this.params.missionId,
-            assetId: this.mission.assetId,
-            description: this.mission.description,
-            arguments: args,
-          }
-
-          if (this.provider.usesSched) {
-            data.schedType = this.mission.schedType
-            data.schedDate = data.schedType === 'DATE' ? this.mission.schedDate : null
-          }
-
-          console.debug('submitMission: payload=', data)
-          // return
-
           try {
-            const res = await this.mxmProviderClient.postMission(data)
-            if (!res.status) {
-              this.$q.notify("Provider reported no status for mission submission")
-              return
-            }
-            const status = res.status
+            const status = 'SUBMITTED'
             await this.updateMissionStatus(status)
             this.$q.notify({
-              message: `Mission submitted. Status: ${status}`,
+              message: `Mission submitted. Status: ${this.mission.missionStatus}`,
               timeout: 2000,
               color: 'info',
               position: 'top',
             })
-            this.refreshMission()
+            // TODO all should be reflected, but maybe refresh again?
+            // this.refreshMission()
           }
-          catch(error) {
+          catch (error) {
             this.$q.notify({
               message: `Mission submission error: ${JSON.stringify(error)}`,
               timeout: 0,
@@ -957,34 +912,6 @@
       '$route'() {
         this.refreshMission()
       }
-    }
-  }
-
-  // TODO convertValue still pretty ad hoc
-  function convertValue(value, type) {
-    switch (type) {
-      case 'float': return parseFloat(value)
-      case 'int': return parseInt(value)
-      case 'boolean': return value && value.toLowerCase() === 'true'
-      case 'string': return value
-
-      // https://tools.ietf.org/html/rfc7946#section-3.1.1
-      case 'Point': return JSON.parse(value)
-      case 'MultiPoint': return JSON.parse(value)
-      case 'LineString': return JSON.parse(value)
-      case 'MultiLineString': return JSON.parse(value)
-      case 'Polygon': return JSON.parse(value)
-      case 'MultiPolygon': return JSON.parse(value)
-      case 'GeometryCollection': return JSON.parse(value)
-
-      // https://tools.ietf.org/html/rfc7946#section-3.2
-      case 'Feature': return JSON.parse(value)
-      case 'FeatureCollection': return JSON.parse(value)
-
-      // https://tools.ietf.org/html/rfc7946#section-3
-      case 'GeoJSON': return JSON.parse(value)
-
-      default: return value
     }
   }
 </script>

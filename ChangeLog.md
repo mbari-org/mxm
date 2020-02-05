@@ -1,5 +1,6 @@
 2020-02
 
+- handle mission submission in the server
 - server preps for mission submission
 
 - pass schedType and schedDate in postMission

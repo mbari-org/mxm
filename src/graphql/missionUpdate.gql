@@ -2,9 +2,10 @@ mutation updateMission($input: UpdateMissionInput!) {
   updateMission(input: $input) {
     mission {
       id
-      missionId
       providerId
       missionTplId
+      missionId
+      missionStatus
       description
       assetId
       startDate

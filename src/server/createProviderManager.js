@@ -6,6 +6,8 @@ import createMxmProviderClient from './provider_client/mxmProviderClient'
 import performQuery from './gql'
 import fs from 'fs'
 import orderBy from "lodash/orderBy"
+import get from "lodash/get"
+import reduce from "lodash/reduce"
 
 const debug = true
 
@@ -16,6 +18,8 @@ function createProviderManager(context) {
     setMxmProviderClient,
     preInsertProvider,
     postInsertProvider,
+
+    preUpdateMission,
   }
 
   function setMxmProviderClient(httpEndpoint, apiType) {
@@ -24,7 +28,7 @@ function createProviderManager(context) {
 
   async function preInsertProvider(provider) {
     if (!mxmProviderClient.isSupportedInterface()) {
-      console.warn('preInsertProvider: Not supported interface')
+      console.warn('preInsertProvider: Not supported interface to provider')
       return
     }
 
@@ -44,7 +48,7 @@ function createProviderManager(context) {
 
   async function postInsertProvider(provider) {
     if (!mxmProviderClient.isSupportedInterface()) {
-      console.warn('postInsertProvider: Not supported interface')
+      console.warn('postInsertProvider: Not supported interface to provider')
       return
     }
 
@@ -213,6 +217,80 @@ function createProviderManager(context) {
       console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
     }
   }
+
+  async function preUpdateMission(input) {
+    const {id, missionPatch} = input
+    console.log(`preUpdateMission: id=${id} missionPatch=`, missionPatch)
+
+    if (missionPatch.missionStatus !== 'submitted') {
+      return
+    }
+
+    // mission is being submitted.
+
+    // get the current state of the mission:
+    const query = fs.readFileSync('src/graphql/missionByID.gql', {encoding: 'utf8'})
+    const variables = { id }
+    const operationName = 'missionByID'
+    const result = await performQuery(query, variables, operationName, context)
+    console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
+    const mission = result.data.mission
+
+    // set up provider client:
+    const provider = mission.missionTplByProviderIdAndMissionTplId.providerByProviderId
+    const {httpEndpoint, apiType} = provider
+    setMxmProviderClient(httpEndpoint, apiType)
+    if (!mxmProviderClient.isSupportedInterface()) {
+      console.warn('preUpdateMission: Not supported interface to provider')
+      // let the operation continue.
+      return
+    }
+
+    if (mission.missionStatus !== 'DRAFT') {
+      throw new Error(`Expecting current missionStatus to be DRAFT, but got: ${missionStatus}`)
+    }
+
+    await submitMission(provider, mission)
+  }
+
+  async function submitMission(provider, mission) {
+    // TODO ....
+    let args = mission.argumentsByProviderIdAndMissionTplIdAndMissionIdList
+
+    args = reduce(args, (obj, {paramName, paramValue, type, paramUnits}) => {
+      obj[paramName] = {
+        value: convertValue(paramValue, type),
+        units: paramUnits,
+      }
+      return obj
+    }, {})
+
+    const data = {
+      missionTplId:   mission.missionTplId,
+      missionId:      mission.missionId,
+      assetId:        mission.assetId,
+      description:    mission.description,
+      arguments: args,
+    }
+
+    if (provider.usesSched) {
+      data.schedType = mission.schedType
+      data.schedDate = data.schedType === 'DATE' ? mission.schedDate : null
+    }
+
+    console.debug('submitMission: payload=', data)
+
+    try {
+      const res = await mxmProviderClient.postMission(data)
+      if (!res.status) {
+        throw new Error('Provider reported no status for mission submission')
+      }
+    }
+    catch(error) {
+      console.error('submitMission: postMission throw error=', error)
+      throw error
+    }
+  }
 }
 
 function runInSequence(promises) {
@@ -221,4 +299,32 @@ function runInSequence(promises) {
     ),
     Promise.resolve([])
   )
+}
+
+// TODO convertValue still pretty ad hoc
+function convertValue(value, type) {
+  switch (type) {
+    case 'float': return parseFloat(value)
+    case 'int': return parseInt(value)
+    case 'boolean': return value && value.toLowerCase() === 'true'
+    case 'string': return value
+
+    // https://tools.ietf.org/html/rfc7946#section-3.1.1
+    case 'Point': return JSON.parse(value)
+    case 'MultiPoint': return JSON.parse(value)
+    case 'LineString': return JSON.parse(value)
+    case 'MultiLineString': return JSON.parse(value)
+    case 'Polygon': return JSON.parse(value)
+    case 'MultiPolygon': return JSON.parse(value)
+    case 'GeometryCollection': return JSON.parse(value)
+
+    // https://tools.ietf.org/html/rfc7946#section-3.2
+    case 'Feature': return JSON.parse(value)
+    case 'FeatureCollection': return JSON.parse(value)
+
+    // https://tools.ietf.org/html/rfc7946#section-3
+    case 'GeoJSON': return JSON.parse(value)
+
+    default: return value
+  }
 }
