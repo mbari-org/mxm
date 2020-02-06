@@ -20,6 +20,7 @@ function createProviderManager(context) {
     postInsertProvider,
 
     preUpdateMission,
+    queryMissionStatus,
   }
 
   function setMxmProviderClient(httpEndpoint, apiType) {
@@ -290,6 +291,74 @@ function createProviderManager(context) {
       console.error('submitMission: postMission throw error=', error)
       throw error
     }
+  }
+
+  async function queryMissionStatus(providerId, missionTplId, missionId) {
+
+    // TODO
+
+    console.log('queryMissionStatus:', providerId, missionTplId, missionId)
+
+
+    // set up provider client:
+    const provider = mission.missionTplByProviderIdAndMissionTplId.providerByProviderId
+    const {httpEndpoint, apiType} = provider
+    setMxmProviderClient(httpEndpoint, apiType)
+    if (!mxmProviderClient.isSupportedInterface()) {
+      console.warn('preUpdateMission: Not supported interface to provider')
+      // let the operation continue.
+      return
+    }
+
+
+
+    return
+
+    this.mxmProviderClient.getMissionById(this.mission.missionId)
+      .then(res => {
+        console.debug('getMission: res=', res)
+        if (!res.status) {
+          this.$q.notify("Provider reported no status")
+          return
+        }
+        const status = res.status
+        this.$q.notify({
+          message: `Status: ${status}`,
+          timeout: 1000,
+          color: 'info',
+          position: 'top-left'
+        })
+        if (this.mission.missionStatus !== status) {
+          this.updateMissionStatus(status)
+            .then(_ => {
+              this.refreshMission()
+            })
+        }
+      })
+      .catch(error => {
+        console.error('checkStatus: getMission: error=', error)
+        if (error === 'No such mission') {
+          // assume we get back to DRAFT
+          this.$q.notify({
+            message: `No such mission in the provider. Returning to DRAFT status`,
+            timeout: 0,
+            closeBtn: 'Close',
+            color: 'info'
+          })
+          this.updateMissionStatus('DRAFT')
+            .then(_ => {
+              this.refreshMission()
+            })
+        }
+        else {
+          this.$q.notify({
+            message: `Mission submission error: ${JSON.stringify(error)}`,
+            timeout: 0,
+            closeBtn: 'Close',
+            color: 'info',
+          })
+        }
+      })
   }
 }
 

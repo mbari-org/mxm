@@ -10,7 +10,11 @@ export default makeWrapResolversPlugin({
     createProvider: createProviderResolverWrapper(),
     updateProvider: updateProviderResolverWrapper(),
     updateMission: updateMissionResolverWrapper(),
-  }
+  },
+
+  Mission: {
+    missionStatus: missionStatusResolverWrapper(),
+  },
 })
 
 function createProviderResolverWrapper() {
@@ -61,6 +65,39 @@ function updateMissionResolverWrapper() {
     console.log('exiting updateMissionResolverWrapper')
     console.log('result=', result)
 
+    return result
+  }
+}
+
+// TODO
+function missionStatusResolverWrapper() {
+  return async (resolve, source, args, context, resolveInfo) => {
+    console.log('entering missionStatusResolverWrapper')
+    console.log('args=', args)      // {}
+    // console.log('context=', context);
+    console.log('source=', source)  // { missionStatus: 'submitted' }
+    // console.log('resolveInfo=', resolveInfo);
+    // console.log('resolveInfo.operation=', resolveInfo.operation);
+    console.log('resolveInfo.variableValues=', resolveInfo.variableValues);
+    //     resolveInfo.variableValues= {
+    //       providerId: 'TethysDash @ tethyssim',
+    //       missionTplId: 'Science/cork_and_screw_2',
+    //       missionId: 'sdsdsd'
+    //     }
+
+    // const variableValues = resolveInfo.variableValues
+    // const providerId     = variableValues.providerId
+    // const missionTplId   = variableValues.missionTplId
+    // const missionId      = variableValues.missionId
+    //
+    // const providerManager = createProviderManager(context)
+    //
+    // await providerManager.queryMissionStatus(providerId, missionTplId, missionId)
+    const result = await resolve()
+
+    console.log(`missionStatus: result=${result}`)
+
+    // return 'terminated'
     return result
   }
 }

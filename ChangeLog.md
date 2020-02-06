@@ -1,5 +1,10 @@
 2020-02
 
+- more re mission submission and reviewing check-status handling:
+  TODO in general, a query for an already submitted mission should include
+  chcking for status against provider so that a change here gets propagated
+  to the database and ultimatly reported to the client with the update.
+
 - handle mission submission in the server
 - server preps for mission submission
 

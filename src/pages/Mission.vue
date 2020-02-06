@@ -11,16 +11,6 @@
                 <div class="row no-wrap items-center text-grey">
                   <div>Status:</div>
                   <q-chip dense>{{ mission.missionStatus }}</q-chip>
-                  <q-btn
-                    v-if="mission.missionStatus !== 'DRAFT'"
-                    icon="refresh"
-                    dense color="accent"
-                    class="q-ml-sm"
-                    size="xs"
-                    @click="checkStatus"
-                  >
-                    <q-tooltip>Check for status against external provider</q-tooltip>
-                  </q-btn>
                 </div>
               </div>
               <div class="row no-wrap items-center q-gutter-x-sm" style="font-size:smaller">
@@ -262,6 +252,7 @@
                 :units-by-name="unitsByName"
                 :value="props.row.paramUnits || ''"
                 :reset-value="props.row.defaultUnits"
+                :editable="editable()"
                 v-on:input="val => { props.row.paramUnits = val; saveArguments(props.row) }"
               />
               <q-tooltip
@@ -428,8 +419,6 @@
       },
     },
 
-    mxmProviderClient: null,
-
     apollo: {
       mission: {
         query: missionGql,
@@ -450,10 +439,6 @@
             if (debug) console.log(`schedType=${mission.schedType} schedDate=${mission.schedDate}`)
 
             this.provider = mission.missionTplByProviderIdAndMissionTplId.providerByProviderId
-            this.mxmProviderClient = this.$createMxmProvideClient({
-              httpEndpoint: this.provider.httpEndpoint,
-              apiType: this.provider.apiType,
-            })
           }
           this.setMyArgumentsFromSaved(mission)
           this.loading = false
@@ -699,19 +684,17 @@
           })
       },
 
-      updateDescription(description) {
-        this.updateMission({description})
-            .then(() => {
-              this.$q.notify({
-                message: 'Mission description saved',
-                timeout: 700,
-                color: 'info',
-                position: 'top',
-              })
-            })
+      async updateDescription(description) {
+        await this.updateMission({description})
+        this.$q.notify({
+          message: 'Mission description saved',
+          timeout: 700,
+          color: 'info',
+          position: 'top',
+        })
       },
 
-      updateMissionSched({schedType, schedDate}) {
+      async updateMissionSched({schedType, schedDate}) {
         if (schedType !== 'DATE') {
           schedDate = null
         }
@@ -719,15 +702,13 @@
         this.mission.schedDate = schedDate
 
         //console.log(`updateMissionSched: schedType=${schedType} schedDate=${schedDate}`)
-        this.updateMission({schedType, schedDate})
-          .then(_ => {
-            this.$q.notify({
-              message: `Mission scheduling updated`,
-              timeout: 1200,
-              color: 'info',
-              position: 'top',
-            })
-          })
+        await this.updateMission({schedType, schedDate})
+        this.$q.notify({
+          message: `Mission scheduling updated`,
+          timeout: 1200,
+          color: 'info',
+          position: 'top',
+        })
       },
 
       async updateMissionStatus(missionStatus) {
@@ -743,17 +724,13 @@
             missionPatch
           }
         }
-        try {
-          const data = await this.$apollo.mutate({mutation, variables})
-          /*if (debug)*/ console.debug('updateMission: mutation data=', data)
-          // TODO review the following!
-          assign(this.mission, data.updateMission.mission)
-          return missionPatch
+        const data = await this.$apollo.mutate({mutation, variables})
+        /*if (debug)*/ console.debug('updateMission: mutation data=', data)
+        // TODO review the following!
+        if (this.mission) {
+          assign(this.mission, get(data, 'data.updateMission.mission'))
         }
-        catch(error) {
-          console.error('updateMission: mutation error=', error)
-          reject(error)
-        }
+        return missionPatch
       },
 
       // TODO
@@ -809,64 +786,6 @@
             console.error('submitMission: postMission: error=', error)
           }
         }
-      },
-
-      checkStatus() {
-        if (!this.mxmProviderClient.isSupportedInterface()) {
-          this.$q.notify({
-            message: `Operation not implemented yet for apiType=${this.provider.apiType}`,
-            timeout: 4000,
-            position: 'top',
-            color: 'warning',
-          })
-          return
-        }
-
-        this.mxmProviderClient.getMissionById(this.mission.missionId)
-          .then(res => {
-            console.debug('getMission: res=', res)
-            if (!res.status) {
-              this.$q.notify("Provider reported no status")
-              return
-            }
-            const status = res.status
-            this.$q.notify({
-              message: `Status: ${status}`,
-              timeout: 1000,
-              color: 'info',
-              position: 'top-left'
-            })
-            if (this.mission.missionStatus !== status) {
-              this.updateMissionStatus(status)
-                .then(_ => {
-                  this.refreshMission()
-                })
-            }
-          })
-          .catch(error => {
-            console.error('checkStatus: getMission: error=', error)
-            if (error === 'No such mission') {
-              // assume we get back to DRAFT
-              this.$q.notify({
-                message: `No such mission in the provider. Returning to DRAFT status`,
-                timeout: 0,
-                closeBtn: 'Close',
-                color: 'info'
-              })
-              this.updateMissionStatus('DRAFT')
-                .then(_ => {
-                  this.refreshMission()
-                })
-            }
-            else {
-              this.$q.notify({
-                message: `Mission submission error: ${JSON.stringify(error)}`,
-                timeout: 0,
-                closeBtn: 'Close',
-                color: 'info',
-              })
-            }
-          })
       },
 
       deleteMission() {
