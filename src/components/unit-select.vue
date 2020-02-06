@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="editable">
     <q-btn
       v-if="value === 'count'"
       dense no-caps flat
@@ -56,6 +56,11 @@
       </div>
     </q-btn-dropdown>
   </div>
+
+  <div v-else>
+    {{ displayUnits }}
+    <q-tooltip>{{ value }}</q-tooltip>
+  </div>
 </template>
 
 <script>
@@ -86,6 +91,11 @@
       resetValue: {
         type: String,
         required: false
+      },
+
+      editable: {
+        type: Boolean,
+        default: false
       },
     },
 
