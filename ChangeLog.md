@@ -1,5 +1,7 @@
 2020-02
 
+- new image mbari/mxm-postgres:0.5.0 based on postgres:12.1-alpine
+
 - more re mission submission and reviewing check-status handling:
   TODO in general, a query for an already submitted mission should include
   chcking for status against provider so that a change here gets propagated
