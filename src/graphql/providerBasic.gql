@@ -1,0 +1,11 @@
+query providerBasic($providerId: String!) {
+  providerByProviderId(providerId: $providerId) {
+    httpEndpoint
+    apiType
+    description
+    canValidate
+    usesUnits
+    usesSched
+    descriptionFormat
+  }
+}

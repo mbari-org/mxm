@@ -1,5 +1,7 @@
 2020-02
 
+- new request `/info` for general provider info (including capabilities)
+
 - new image mbari/mxm-postgres:0.5.0 based on postgres:12.1-alpine
 
 - more re mission submission and reviewing check-status handling:

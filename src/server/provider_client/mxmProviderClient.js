@@ -7,7 +7,7 @@ export default function createMxmProviderClient({httpEndpoint, apiType}) {
   console.log('createMxmProviderClient: httpEndpoint=', httpEndpoint, 'apiType=', apiType)
   return {
     isSupportedInterface,
-    getCapabilities,
+    getGeneralInfo,
     getAssetClasses,
     getUnits,
     getMissionTpls,
@@ -21,8 +21,8 @@ export default function createMxmProviderClient({httpEndpoint, apiType}) {
     return apiType.toUpperCase() === 'REST0'
   }
 
-  function getCapabilities() {
-    return rest0.getCapabilities(httpEndpoint)
+  function getGeneralInfo() {
+    return rest0.getGeneralInfo(httpEndpoint)
   }
 
   function getAssetClasses() {

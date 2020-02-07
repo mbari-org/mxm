@@ -34,8 +34,14 @@ function createProviderManager(context) {
     }
 
     try {
-      const capabilities = await mxmProviderClient.getCapabilities()
-      console.log('GOT capabilities=', capabilities)
+      const info = await mxmProviderClient.getGeneralInfo()
+      console.log('GOT info=', info)
+
+      if (info.providerDescription)  {
+        provider.description = info.providerDescription
+      }
+
+      const capabilities = info.capabilities || {}
 
       provider.usesSched = capabilities.usesSched || false
       provider.canValidate = capabilities.canValidate || false
@@ -43,7 +49,7 @@ function createProviderManager(context) {
       provider.descriptionFormat = capabilities.descriptionFormat
     }
     catch(error) {
-      console.error('getCapabilities: error=', error)
+      console.error('getGeneralInfo: error=', error)
     }
   }
 

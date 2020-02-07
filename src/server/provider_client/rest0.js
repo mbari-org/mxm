@@ -1,7 +1,7 @@
 // TODO this is still preliminary
 
 export default {
-  getCapabilities,
+  getGeneralInfo,
   getAssetClasses,
   getUnits,
   getMissionTpls,
@@ -14,8 +14,8 @@ const debug = false
 
 import axios from 'axios'
 
-function getCapabilities(httpEndpoint) {
-  return doGet(httpEndpoint, 'capabilities')
+function getGeneralInfo(httpEndpoint) {
+  return doGet(httpEndpoint, 'info')
 }
 
 function getAssetClasses(httpEndpoint) {

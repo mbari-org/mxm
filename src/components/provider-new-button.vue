@@ -21,13 +21,16 @@
         <div>
           Provider name:
           <q-input
+            ref="providerName"
             dense hide-bottom-space
-            :error="!providerId.length"
+            :error="!providerId.length || !!providerNameInvalid"
+            :error-message="providerNameInvalid"
+            @input="providerNameInvalid = null"
             class="bg-light-blue-1"
             v-model.trim="providerId"
             type="text"
             autofocus
-            style="width:24em"
+            style="width:28em"
           />
         </div>
 
@@ -39,7 +42,7 @@
             class="bg-light-blue-1"
             v-model.trim="httpEndpoint"
             type="text"
-            style="width:24em"
+            style="width:28em"
           />
         </div>
 
@@ -48,18 +51,6 @@
           <api-type-select
             :value="apiType"
             @input="val => { apiType = val.value }"
-          />
-        </div>
-
-        <div>
-          Description:
-          <mxm-markdown
-            expandable
-            class="bg-light-blue-1"
-            style="min-height:4em;min-width:24em"
-            :text="description"
-            editable edit-click
-            @saveDescription="d => { description = d }"
           />
         </div>
 
@@ -78,9 +69,13 @@
 </template>
 
 <script>
+  import providerBasicGql from '../graphql/providerBasic.gql'
   import providerInsertGql from '../graphql/providerInsert.gql'
 
   import apiTypeSelect from '../components/api-type-select'
+
+  import get from 'lodash/get'
+  import some from 'lodash/some'
 
   const debug = false
 
@@ -94,8 +89,8 @@
       providerId: '',
       httpEndpoint: '',
       apiType: '',
-      description: null,
 
+      providerNameInvalid: null,
       progress: null,
       progressLabel: null,
     }),
@@ -116,13 +111,11 @@
 
         this.providerId = 'TethysDash'
         this.httpEndpoint = 'http://tethyssim.shore.mbari.org:8080/TethysDash/api/mxm'
-        this.description = 'TethysDash/LRAUV System'
 
         // this.providerId = 'TFT'
         // this.httpEndpoint = 'http://localhost:8040'
         //     OR:
         // this.httpEndpoint = 'http://tsauv.shore.mbari.org/tft-mxm'
-        // this.description = 'TSAUV Front Tracking'
 
         this.dialogOpened = true
       },
@@ -135,7 +128,6 @@
               providerId: this.providerId,
               httpEndpoint: this.httpEndpoint,
               apiType: this.apiType,
-              description: this.description,
             }
           }
         }
@@ -152,7 +144,23 @@
         }
         catch(error) {
           this.$q.loading.hide()
-          console.error('mutation error=', error)
+          const graphQLErrors = get(error, 'graphQLErrors') || []
+          const duplicateKey = some(graphQLErrors, e =>
+            e.message && e.message.match(/.*duplicate key.*/)
+          )
+          if (duplicateKey) {
+            this.providerNameInvalid = 'Provider name already registered'
+            this.$refs.providerName.focus()
+          }
+          else {
+            console.error('mutation error=', JSON.stringify(error))
+            this.$q.notify({
+              message: `Unexpected error. See dev console.`,
+              timeout: 0,
+              closeBtn: 'Close',
+              color: 'warn'
+            })
+          }
         }
       },
 
