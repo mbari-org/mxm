@@ -17,10 +17,9 @@ of available mission definitions, parameterization, scheduling, and execution st
 
 ## The MXM system
 
-The MXM system consists of three services:
+The MXM system consists of the following components:
 
-- MXM web application from image `mbari/mxm`
-- Postgraphile service from image `graphile/postgraphile`
+- MXM service and webapp from image `mbari/mxm`
 - MXM postgres database from image `mbari/mxm-postgres`
 
 
@@ -47,7 +46,7 @@ this will open http://localhost:8080/
 
       quasar build
 
-Note that a build is typically for a docker release, so in this case the
+Note that a build is typically intended for a docker release, so in this case the
 particular file `src/statics/config/config.json` is not used.
 Instead, the location of the `config.json` file (which is still required)
 is indicated as a setting prior to running the container.
