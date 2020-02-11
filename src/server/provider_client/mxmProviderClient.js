@@ -10,6 +10,8 @@ export default function createMxmProviderClient({httpEndpoint, apiType}) {
     getGeneralInfo,
     getAssetClasses,
     getUnits,
+    listMissionTemplates,
+    getMissionTemplate,
     getMissionTpls,
     getMissions,
     getMissionById,
@@ -33,6 +35,15 @@ export default function createMxmProviderClient({httpEndpoint, apiType}) {
     return rest0.getUnits(httpEndpoint)
   }
 
+  function listMissionTemplates(subDir) {
+    return rest0.listMissionTemplates(httpEndpoint, subDir)
+  }
+
+  function getMissionTemplate(filePath) {
+    return rest0.getMissionTemplate(httpEndpoint, filePath)
+  }
+
+  // TODO remove
   function getMissionTpls() {
     return rest0.getMissionTpls(httpEndpoint)
   }

@@ -1,7 +1,22 @@
 // module for queries/mutations.
 // very preliminary.
 
-export default performQuery
+import fs from "fs"
+
+const readGql = baseName => fs.readFileSync(`src/graphql/${baseName}.gql`, {encoding: 'utf8'})
+
+const Gql = {
+  assetClassInsert:            () => readGql('assetClassInsert'),
+  assetInsert:                 () => readGql('assetInsert'),
+  unitInsert:                  () => readGql('unitInsert'),
+  missionTplInsert:            () => readGql('missionTplInsert'),
+  missionTplAssetClassInsert:  () => readGql('missionTplAssetClassInsert'),
+  parameterInsert:             () => readGql('parameterInsert'),
+  missionByID:                 () => readGql('missionByID'),
+}
+
+
+export { Gql, performQuery }
 
 import Promise from 'promise'
 

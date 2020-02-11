@@ -4,6 +4,8 @@ export default {
   getGeneralInfo,
   getAssetClasses,
   getUnits,
+  listMissionTemplates,
+  getMissionTemplate,
   getMissionTpls,
   getMissions,
   postMission,
@@ -26,6 +28,15 @@ function getUnits(httpEndpoint) {
   return doGet(httpEndpoint, 'units')
 }
 
+function listMissionTemplates(httpEndpoint, subDir) {
+  return doGet(httpEndpoint, `missiontemplates/${subDir}`)
+}
+
+function getMissionTemplate(httpEndpoint, filePath) {
+  return doGet(httpEndpoint, `missiontemplate/${filePath}`)
+}
+
+// TODO remove
 function getMissionTpls(httpEndpoint) {
   return doGet(httpEndpoint, 'missiontpls')
 }

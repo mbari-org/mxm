@@ -3,7 +3,7 @@
 
 export default mxm
 
-import performQuery from './gql'
+import {performQuery} from './gql'
 
 function mxm(req, res, next) {
   console.log('mxm: req.method=', req.method, '\n',

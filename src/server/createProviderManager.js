@@ -1,12 +1,8 @@
-import map from "lodash/map"
-
 export default createProviderManager
 
 import createMxmProviderClient from './provider_client/mxmProviderClient'
-import performQuery from './gql'
-import fs from 'fs'
+import { Gql, performQuery } from './gql'
 import orderBy from "lodash/orderBy"
-import get from "lodash/get"
 import reduce from "lodash/reduce"
 
 const debug = true
@@ -87,7 +83,7 @@ function createProviderManager(context) {
     async function createAssetClass(assetClass) {
       console.log('createAssetClass ', assetClass)
 
-      const query = fs.readFileSync('src/graphql/assetClassInsert.gql', {encoding: 'utf8'})
+      const query = Gql.assetClassInsert()
 
       const variables = {
         providerId: provider.providerId,
@@ -108,7 +104,7 @@ function createProviderManager(context) {
     async function createAsset(assetClass, asset) {
       console.log('createAsset ', asset)
 
-      const query = fs.readFileSync('src/graphql/assetInsert.gql', {encoding: 'utf8'})
+      const query = Gql.assetInsert()
 
       const variables = {
         providerId: provider.providerId,
@@ -133,7 +129,7 @@ function createProviderManager(context) {
     }
 
     async function createUnit(unit) {
-      const query = fs.readFileSync('src/graphql/unitInsert.gql', {encoding: 'utf8'})
+      const query = Gql.unitInsert()
 
       const variables = {
         providerId: provider.providerId,
@@ -151,16 +147,32 @@ function createProviderManager(context) {
     }
 
     async function getAndCreateMissionTpls() {
-      const missionTpls = await mxmProviderClient.getMissionTpls()
-      await createMissionTpls(missionTpls)
-    }
+      // capture entries at the "root" directory:
+      const subDir = ''
+      const missionTplListing = await mxmProviderClient.listMissionTemplates(subDir)
+      console.log('missionTplListing=', missionTplListing)
 
-    async function createMissionTpls(missionTpls) {
-      await runInSequence(missionTpls.map(async missionTpl => await createMissionTpl(missionTpl)))
+      const filenames = missionTplListing.filenames || []
+
+      await runInSequence(filenames.map(async filename => {
+        const filePath = `${subDir}${filename}`
+
+        let missionTpl;
+        if (filename.endsWith('/')) {  // directory entry
+          missionTpl = {
+            missionTplId: filePath,
+          }
+        }
+        else {
+          missionTpl = await mxmProviderClient.getMissionTemplate(filePath)
+        }
+
+        await createMissionTpl(missionTpl)
+      }))
     }
 
     async function createMissionTpl(missionTpl) {
-      const query = fs.readFileSync('src/graphql/missionTplInsert.gql', {encoding: 'utf8'})
+      const query = Gql.missionTplInsert()
 
       const variables = {
         providerId: provider.providerId,
@@ -174,8 +186,10 @@ function createProviderManager(context) {
       const assetClassNames = missionTpl.assetClassNames || []
       await createAssociatedAssetClasses(missionTpl, assetClassNames)
 
-      const parameters = missionTpl.parameters || []
-      await createParameters(missionTpl, parameters)
+      if (!missionTpl.missionTplId.endsWith('/')) {
+        const parameters = missionTpl.parameters || []
+        await createParameters(missionTpl, parameters)
+      }
     }
 
     async function createAssociatedAssetClasses(missionTpl, assetClassNames) {
@@ -183,7 +197,7 @@ function createProviderManager(context) {
     }
 
     async function createAssociatedAssetClass(missionTpl, assetClassName) {
-      const query = fs.readFileSync('src/graphql/missionTplAssetClassInsert.gql', {encoding: 'utf8'})
+      const query = Gql.missionTplAssetClassInsert()
 
       const variables = {
         providerId: provider.providerId,
@@ -200,7 +214,7 @@ function createProviderManager(context) {
     }
 
     async function createParameter(missionTpl, parameter) {
-      const query = fs.readFileSync('src/graphql/parameterInsert.gql', {encoding: 'utf8'})
+      const query = Gql.parameterInsert()
 
       const variables = {
         providerId: provider.providerId,
@@ -236,7 +250,7 @@ function createProviderManager(context) {
     // mission is being submitted.
 
     // get the current state of the mission:
-    const query = fs.readFileSync('src/graphql/missionByID.gql', {encoding: 'utf8'})
+    const query = Gql.missionByID()
     const variables = { id }
     const operationName = 'missionByID'
     const result = await performQuery(query, variables, operationName, context)
