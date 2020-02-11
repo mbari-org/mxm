@@ -11,7 +11,7 @@
 #
 # - graphqlUri:  (Required)
 #   Indicates the external URI of the MXM GraphQL endpoint.
-#   The default value here, "http://localhost:5000/mxm-graphql", is just intended
+#   The default value here, "http://localhost:38080/mxm-graphql", is just intended
 #   for basic local testing using the dockerized package.
 #
 # - learnMoreUrl: (Optional)
@@ -24,7 +24,7 @@
 #################################################################################
 
 {
-  "graphqlUri": "http://localhost:5000/mxm-graphql",
+  "graphqlUri": "http://localhost:38080/mxm-graphql",
   "learnMoreUrl": ...,
   "googleApiKey": ...
 }

@@ -57,11 +57,11 @@ See `docker/README.md`
 
 ## misc
 
-Assuming the MXM GraphQL endpoint is running at `localhost:5000/mxm-graphql`,
+Assuming the MXM GraphQL endpoint is running at `localhost:38080/mxm-graphql`,
 some client requests:
 
 ```
-http post localhost:5000/mxm-graphql query='{
+http post localhost:38080/mxm-graphql query='{
   allProvidersList {
     providerId
     httpEndpoint
@@ -71,5 +71,22 @@ http post localhost:5000/mxm-graphql query='{
     usesUnits
     description
   }
+}'
+```
+
+```
+http post 'http://localhost:38080/mxm-graphql' <<<'
+  {
+   "operationName": "createProvider",
+   "variables": {
+     "input": {
+       "provider": {
+         "providerId": "SomeProv",
+         "httpEndpoint": "http://example.net/api/mxm",
+         "apiType": "GRAPHQL"
+        }
+      }
+    },
+    "query": "mutation createProvider($input: CreateProviderInput!) { createProvider(input: $input) { provider { providerId httpEndpoint apiType description canValidate usesUnits usesSched descriptionFormat } } }"
 }'
 ```

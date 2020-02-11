@@ -34,4 +34,4 @@ Then open the MXM UI at http://localhost:38080/.
 (Again, this will be functional depending on the indicated GraphQL
 endpoint in `config.json`, proxy-passes in place on the server, etc.)
 
-The GraphQL UI is at: http://localhost:5000/mxm-graphiql
+The GraphQL UI is at: http://localhost:38080/mxm-graphiql
