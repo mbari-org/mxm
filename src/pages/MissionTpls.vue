@@ -1,6 +1,5 @@
 <template>
   <div>
-    <pre>subDir={{subDir}}</pre>
     <div v-if="allMissionTplsList">
       <q-table
         :data="sortedAllMissionTplsList"
@@ -148,10 +147,6 @@
       },
     },
 
-    mounted() {
-      this.refreshMissionTpls()
-    },
-
     methods: {
       setBreadcrumbs() {
         this.$store.commit('utl/setBreadcrumbs', {
@@ -166,7 +161,9 @@
       },
 
       refreshMissionTpls() {
-        this.setBreadcrumbs()
+        // this conditional call needed to avoid 'TypeError: Cannot read property 'refetch' of undefined'
+        // apparently upon very first request upon the "immediate" watch below:
+        this.$apollo.queries.allMissionTplsList &&
         this.$apollo.queries.allMissionTplsList.refetch()
       },
 
@@ -176,12 +173,13 @@
     },
 
     watch: {
-      '$route'() {
-        this.refreshMissionTpls()
-      },
-
-      provider(val) {
-        if (debug) console.log('watch provider=', val)
+      '$route.path': {
+        handler(val) {
+          // console.log('WATCH $route=', val)
+          this.setBreadcrumbs()
+          this.refreshMissionTpls()
+        },
+        immediate: true,
       }
     }
   }
