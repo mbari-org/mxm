@@ -166,7 +166,7 @@ function createProviderManager(context) {
       let missionTpl;
       if (filename.endsWith('/')) {  // directory entry
         missionTpl = {
-          missionTplId: filePath,
+          missionTplId: filePath + '/',
         }
       }
       else {

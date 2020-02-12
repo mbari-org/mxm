@@ -44,10 +44,27 @@ create table if not exists mission_tpls
   provider_id varchar not null,
   mission_tpl_id varchar not null,
   description varchar,
+  retrieved_at timestamp with time zone,
   foreign key (provider_id) references providers on update cascade on delete cascade,
   primary key (provider_id, mission_tpl_id)
 )
 ;
+
+create or replace function mission_tpls_set_retrieved_at() returns trigger as $$
+begin
+  if new.mission_tpl_id !~ '^.*/$' then   -- it's a template
+    new.retrieved_at = now();
+  end if;
+  return new;
+end
+$$ language plpgsql;
+
+drop trigger if exists mission_tpls_set_retrieved_at on mission_tpls;
+create trigger mission_tpls_set_retrieved_at
+  before insert on mission_tpls
+  for each row
+  execute procedure mission_tpls_set_retrieved_at();
+
 
 -- Will expose `Query.listMissionTplsDirectoryList(providerId: String!, directory: String!, ...)` to GraphQL.
 -- Gets the mission templates "under" the given directory.
