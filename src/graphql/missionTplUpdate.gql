@@ -5,6 +5,7 @@ mutation updateMissionTpl($input: UpdateMissionTplInput!) {
       providerId
       missionTplId
       description
+      retrievedAt
     }
   }
 }

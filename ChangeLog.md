@@ -1,5 +1,6 @@
 2020-02
 
+- show retrieved_at in template and template listing pages
 - db schema: mission template now with a `retrieved_at` column to indicate when
   the info was last retrieved from the provider.
   At insertion time, this will be `null` for a directory, and a datetime for

@@ -1,4 +1,4 @@
-query getMission($providerId: String!, $missionTplId: String!) {
+query getMissionTpl($providerId: String!, $missionTplId: String!) {
   missionTplByProviderIdAndMissionTplId(providerId: $providerId, missionTplId: $missionTplId) {
     providerByProviderId {
       descriptionFormat
@@ -8,6 +8,7 @@ query getMission($providerId: String!, $missionTplId: String!) {
     id
     missionTplId
     description
+    retrievedAt
     missionTplAssetClassesByProviderIdAndMissionTplIdList {
       id
       assetClassName

@@ -20,7 +20,7 @@
                 />
               </q-popup-edit>
             </div>
-            <div class="q-ml-xl">
+            <div class="q-ml-xl row">
               <q-btn
                 class="q-ml-md"
                 color="red"
@@ -28,6 +28,11 @@
                 dense round icon="delete"
                 @click="deleteMissionTpl"
               />
+
+              <div class="q-ml-lg text-grey" style="font-size:smaller">
+                {{ missionTpl.retrievedAt }}
+                <q-tooltip>Time when this template was last retrieved from the provider</q-tooltip>
+              </div>
             </div>
           </div>
         </q-card-section>

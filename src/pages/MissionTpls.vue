@@ -1,5 +1,16 @@
 <template>
   <div>
+    <div v-if="missionTplBasic && missionTplBasic.missionTplId" class="row q-mb-sm">
+      <div class="text-bold">{{ missionTplBasic.missionTplId }}</div>
+      <div
+        v-if="missionTplBasic.retrievedAt"
+        class="q-ml-lg text-grey" style="font-size:smaller"
+      >
+        {{ missionTplBasic.retrievedAt }}
+        <q-tooltip>Time when this template listing was last retrieved from the provider</q-tooltip>
+      </div>
+    </div>
+
     <div v-if="allMissionTplsList">
       <q-table
         :data="sortedAllMissionTplsList"
@@ -73,6 +84,7 @@
 </template>
 
 <script>
+  import missionTplBasicGql from '../graphql/missionTplBasic.gql'
   import missionTplsDirectoryGql from '../graphql/missionTplsDirectory.gql'
 
   import MissionTplNewButton from 'components/mission-tpl-new-button'
@@ -89,6 +101,7 @@
       return {
         debug,
         loading: false,
+        missionTplBasic: {},
         allMissionTplsList: [],
 
         missionTplColumns: [
@@ -132,6 +145,20 @@
     },
 
     apollo: {
+      missionTplBasic: {
+        query: missionTplBasicGql,
+        variables() {
+          return {
+            providerId: this.params.providerId,
+            missionTplId: this.params.missionTplId || '',
+          }
+        },
+        update(data) {
+          if (debug) console.log('missionTplBasicGql update: data=', data)
+          return data.missionTplByProviderIdAndMissionTplId || {}
+        },
+      },
+
       allMissionTplsList: {
         query: missionTplsDirectoryGql,
         variables() {
@@ -141,7 +168,7 @@
           }
         },
         update(data) {
-          if (debug) console.log('update: data=', data)
+          /*if (debug)*/ console.log('update: data=', data)
           return data.listMissionTplsDirectoryList && data.listMissionTplsDirectoryList || []
         },
       },
@@ -165,6 +192,9 @@
         // apparently upon very first request upon the "immediate" watch below:
         this.$apollo.queries.allMissionTplsList &&
         this.$apollo.queries.allMissionTplsList.refetch()
+
+        this.$apollo.queries.missionTplBasic &&
+        this.$apollo.queries.missionTplBasic.refetch()
       },
 
       missionTplCreated(data) {
