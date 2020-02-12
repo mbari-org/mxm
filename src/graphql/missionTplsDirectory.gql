@@ -1,7 +1,5 @@
-query missionTpls($providerId: String!) {
-  allMissionTplsList(condition: {
-    providerId: $providerId
-  }) {
+query missionTplsDirectory($providerId: String!, $directory: String!) {
+  listMissionTplsDirectoryList(providerId: $providerId, directory: $directory) {
     id
     providerId
     providerByProviderId {

@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-pa-md">
+  <div>
     <div v-if="missionTpl">
       <q-card class="q-mb-md">
         <q-card-section>
@@ -185,7 +185,7 @@
       </table>
     </div>
 
-  </q-page>
+  </div>
 </template>
 
 <script>

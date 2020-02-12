@@ -11,13 +11,16 @@ const routes = [
         path: '/:providerId',
         component: () => import('pages/Provider')
       },
-      { path: '/:providerId/mt/:missionTplId',
-        component: () => import('pages/MissionTpl')
+      {
+        path: '/:providerId/mt',
+        component: () => import('pages/MissionTplsOrTpl')
       },
-      { path: '/:providerId/mt',
-        component: () => import('pages/MissionTpls')
+      {
+        path: '/:providerId/mt/:missionTplId',
+        component: () => import('pages/MissionTplsOrTpl')
       },
-      { path: '/:providerId/mt/:missionTplId/p/:paramName',
+      {
+        path: '/:providerId/mt/:missionTplId/p/:paramName',
         component: () => import('pages/Parameter')
       },
       {

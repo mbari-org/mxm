@@ -1,6 +1,11 @@
 2020-02
 
 - adding handling for directory-based dispatch of mission templates
+    - add page to dispatch either template directory listing or specific template
+      depending on missionTplId.
+      This includes new SQL function `list_mission_tpls_directory`
+      TODO note adjustment in MissionTpls' setBreadcrumbs - reflect similar pattern
+      in other places.
 
 - new request `/info` for general provider info (including capabilities)
 

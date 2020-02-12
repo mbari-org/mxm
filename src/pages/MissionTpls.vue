@@ -1,8 +1,9 @@
 <template>
-  <q-page class="q-pa-md">
+  <div>
+    <pre>subDir={{subDir}}</pre>
     <div v-if="allMissionTplsList">
       <q-table
-        :data="allMissionTplsList"
+        :data="sortedAllMissionTplsList"
         :columns="missionTplColumns"
         row-key="name"
         :rows-per-page-options="rowsPerPage"
@@ -38,6 +39,11 @@
         <q-td slot="body-cell-missionTplId" slot-scope="props" :props="props"
               style="width:5px;vertical-align:top"
         >
+          <q-icon
+            :name="`far ${props.row.missionTplId.endsWith('/') ? 'fa-folder' : 'fa-file-alt'}`"
+            size="12px"
+            class="q-mr-xs"
+          />
           <router-link
             style="text-decoration:none"
             :to="$utl.routeLoc([params.providerId, 'mt', props.row.missionTplId])"
@@ -64,13 +70,14 @@
       Provider not found: {{params.providerId}}
     </div>
 
-  </q-page>
+  </div>
 </template>
 
 <script>
-  import allMissionTplsListGql from '../graphql/missionTpls.gql'
+  import missionTplsDirectoryGql from '../graphql/missionTplsDirectory.gql'
 
   import MissionTplNewButton from 'components/mission-tpl-new-button'
+  import orderBy from "lodash/orderBy"
 
   const debug = false
 
@@ -113,38 +120,53 @@
       params() {
         return this.$route.params
       },
+
+      subDir() {
+        const subDir = this.params.missionTplId
+        console.assert(!subDir || subDir.endsWith('/'))
+        return subDir
+      },
+
+      sortedAllMissionTplsList() {
+        return orderBy(this.allMissionTplsList, mt => mt.missionTplId.endsWith('/') ? 1 : 0)
+      },
     },
 
     apollo: {
       allMissionTplsList: {
-        query: allMissionTplsListGql,
+        query: missionTplsDirectoryGql,
         variables() {
           return {
-            providerId: this.params.providerId
+            providerId: this.params.providerId,
+            directory: this.params.missionTplId || '',
           }
         },
         update(data) {
           if (debug) console.log('update: data=', data)
-          return data.allMissionTplsList && data.allMissionTplsList || []
+          return data.listMissionTplsDirectoryList && data.listMissionTplsDirectoryList || []
         },
       },
     },
 
     mounted() {
-      this.$store.commit('utl/setBreadcrumbs', {
-        elements: [
-          ['Home', []],
-          [this.params.providerId, [this.params.providerId]],
-          ['MissionTemplates', [this.params.providerId, 'mt']],
-        ],
-        refresh: this.refreshMissionTpls
-      })
-
       this.refreshMissionTpls()
     },
 
     methods: {
+      setBreadcrumbs() {
+        this.$store.commit('utl/setBreadcrumbs', {
+          elements: [
+            ['Home', []],
+            [this.params.providerId, [this.params.providerId]],
+            ['MissionTemplates', [this.params.providerId, 'mt']],
+            [this.subDir],
+          ],
+          refresh: this.refreshMissionTpls
+        })
+      },
+
       refreshMissionTpls() {
+        this.setBreadcrumbs()
         this.$apollo.queries.allMissionTplsList.refetch()
       },
 
