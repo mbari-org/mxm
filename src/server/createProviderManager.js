@@ -5,7 +5,7 @@ import { Gql, performQuery } from './gql'
 import orderBy from "lodash/orderBy"
 import reduce from "lodash/reduce"
 
-const debug = true
+const debug = false
 
 function createProviderManager(context) {
   let mxmProviderClient = null
@@ -31,7 +31,7 @@ function createProviderManager(context) {
 
     try {
       const info = await mxmProviderClient.getGeneralInfo()
-      console.log('GOT info=', info)
+      if (debug) console.log('GOT general info=', info)
 
       if (info.providerDescription)  {
         provider.description = info.providerDescription
@@ -57,7 +57,7 @@ function createProviderManager(context) {
 
     try {
       const assetClasses = await mxmProviderClient.getAssetClasses()
-      console.log('GOT getAssetClasses=', assetClasses)
+      if (debug) console.log('GOT getAssetClasses=', assetClasses)
       await createAssetClasses(assetClasses)
     }
     catch(error) {
@@ -81,7 +81,7 @@ function createProviderManager(context) {
     }
 
     async function createAssetClass(assetClass) {
-      console.log('createAssetClass ', assetClass)
+      if (debug) console.log('createAssetClass ', assetClass)
 
       const query = Gql.assetClassInsert()
 
@@ -92,7 +92,7 @@ function createProviderManager(context) {
       }
       const operationName = 'createAssetClass'
       const result = await performQuery(query, variables, operationName, context)
-      console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
+      if (debug) console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
       const assets = assetClass.assets || []
       await createAssets(assetClass, assets)
     }
@@ -102,7 +102,7 @@ function createProviderManager(context) {
     }
 
     async function createAsset(assetClass, asset) {
-      console.log('createAsset ', asset)
+      if (debug) console.log('createAsset ', asset)
 
       const query = Gql.assetInsert()
 
@@ -114,7 +114,7 @@ function createProviderManager(context) {
       }
       const operationName = 'createAsset'
       const result = await performQuery(query, variables, operationName, context)
-      console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
+      if (debug) console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
     }
 
     async function getAndCreateUnits() {
@@ -143,7 +143,7 @@ function createProviderManager(context) {
       }
       const operationName = 'createUnit'
       const result = await performQuery(query, variables, operationName, context)
-      console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
+      if (debug) console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
     }
 
     async function getAndCreateMissionTpls() {
@@ -174,6 +174,8 @@ function createProviderManager(context) {
     async function createMissionTpl(missionTpl) {
       const query = Gql.missionTplInsert()
 
+      console.log(`createMissionTpl: missionTplId=`, missionTpl.missionTplId)
+
       const variables = {
         providerId: provider.providerId,
         missionTplId: missionTpl.missionTplId,
@@ -181,7 +183,7 @@ function createProviderManager(context) {
       }
       const operationName = 'createMissionTpl'
       const result = await performQuery(query, variables, operationName, context)
-      console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
+      if (debug) console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
 
       const assetClassNames = missionTpl.assetClassNames || []
       await createAssociatedAssetClasses(missionTpl, assetClassNames)
@@ -206,7 +208,7 @@ function createProviderManager(context) {
       }
       const operationName = 'createMissionTplAssetClass'
       const result = await performQuery(query, variables, operationName, context)
-      console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
+      if (debug) console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
     }
 
     async function createParameters(missionTpl, parameters) {
@@ -235,13 +237,13 @@ function createProviderManager(context) {
       }
       const operationName = 'createParameter'
       const result = await performQuery(query, variables, operationName, context)
-      console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
+      if (debug) console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
     }
   }
 
   async function preUpdateMission(input) {
     const {id, missionPatch} = input
-    console.log(`preUpdateMission: id=${id} missionPatch=`, missionPatch)
+    if (debug) console.log(`preUpdateMission: id=${id} missionPatch=`, missionPatch)
 
     if (missionPatch.missionStatus !== 'submitted') {
       return
@@ -254,7 +256,7 @@ function createProviderManager(context) {
     const variables = { id }
     const operationName = 'missionByID'
     const result = await performQuery(query, variables, operationName, context)
-    console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
+    if (debug) console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
     const mission = result.data.mission
 
     // set up provider client:
@@ -299,7 +301,7 @@ function createProviderManager(context) {
       data.schedDate = data.schedType === 'DATE' ? mission.schedDate : null
     }
 
-    console.debug('submitMission: payload=', data)
+    if (debug) console.debug('submitMission: payload=', data)
 
     try {
       const res = await mxmProviderClient.postMission(data)
