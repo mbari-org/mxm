@@ -1,5 +1,7 @@
 2020-02
 
+- db schema: mission template relations only to actual templates, not directories
+
 - adding handling for directory-based dispatch of mission templates
     - add page to dispatch either template directory listing or specific template
       depending on missionTplId.

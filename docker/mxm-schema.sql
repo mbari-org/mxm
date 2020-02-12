@@ -64,7 +64,7 @@ create or replace function list_mission_tpls_directory(provider_id varchar, dire
 create table if not exists mission_tpl_asset_class
 (
   provider_id varchar not null,
-  mission_tpl_id varchar not null,
+  mission_tpl_id varchar not null check (mission_tpl_id !~ '^.*/$'),
   asset_class_name varchar not null,
   foreign key (provider_id, mission_tpl_id) references mission_tpls on update cascade on delete cascade,
   foreign key (provider_id, asset_class_name) references asset_classes on update cascade on delete cascade,
@@ -87,7 +87,7 @@ create table if not exists units
 create table if not exists parameters
 (
   provider_id varchar not null,
-  mission_tpl_id varchar not null,
+  mission_tpl_id varchar not null check (mission_tpl_id !~ '^.*/$'),
   param_name varchar not null,
   type varchar not null,
   required boolean default false not null,
@@ -121,7 +121,7 @@ create type mission_sched_type as enum (
 create table if not exists missions
 (
   provider_id varchar not null,
-  mission_tpl_id varchar not null,
+  mission_tpl_id varchar not null check (mission_tpl_id !~ '^.*/$'),
   mission_id varchar not null,
   mission_status mission_status_type not null,
   asset_id varchar not null,
@@ -139,7 +139,7 @@ create table if not exists missions
 create table if not exists arguments
 (
   provider_id varchar not null,
-  mission_tpl_id varchar not null,
+  mission_tpl_id varchar not null check (mission_tpl_id !~ '^.*/$'),
   mission_id varchar not null,
   param_name varchar not null,
   param_value varchar not null,
