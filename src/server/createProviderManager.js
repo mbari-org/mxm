@@ -7,6 +7,10 @@ import reduce from "lodash/reduce"
 
 const debug = false
 
+// E.g: "//aa//b/c////dddd/" --> "aa/b/c/dddd"
+const cleanFilePath = filePath =>
+  filePath.replace(/^\/+|\/+$/g, '').replace(/\/\/+/g, '/')
+
 function createProviderManager(context) {
   let mxmProviderClient = null
 
@@ -15,12 +19,14 @@ function createProviderManager(context) {
     preInsertProvider,
     postInsertProvider,
 
+    listMissionTplsDirectory,
+
     preUpdateMission,
     queryMissionStatus,
   }
 
-  function setMxmProviderClient(httpEndpoint, apiType) {
-    mxmProviderClient = createMxmProviderClient({httpEndpoint, apiType})
+  function setMxmProviderClient(providerId, httpEndpoint, apiType) {
+    mxmProviderClient = createMxmProviderClient({providerId, httpEndpoint, apiType})
   }
 
   async function preInsertProvider(provider) {
@@ -69,7 +75,7 @@ function createProviderManager(context) {
         await getAndCreateUnits()
       }
       else {
-        await getAndCreateMissionTpls()
+        await getAndCreateMissionTpls('/')
       }
     }
     catch(error) {
@@ -120,7 +126,7 @@ function createProviderManager(context) {
     async function getAndCreateUnits() {
       const units = await mxmProviderClient.getUnits()
       await createUnits(units)
-      await getAndCreateMissionTpls()
+      await getAndCreateMissionTpls('/')
     }
 
     async function createUnits(units) {
@@ -145,100 +151,129 @@ function createProviderManager(context) {
       const result = await performQuery(query, variables, operationName, context)
       if (debug) console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
     }
+  }
 
-    async function getAndCreateMissionTpls() {
-      // capture entries at the "root" directory:
-      const subDir = ''
-      const missionTplListing = await mxmProviderClient.listMissionTemplates(subDir)
-      console.log('missionTplListing=', missionTplListing)
+  // capture entries at the given directory:
+  async function getAndCreateMissionTpls(directory) {
+    const missionTplListing = await mxmProviderClient.listMissionTemplates(directory)
+    console.log('missionTplListing=', missionTplListing)
 
-      const filenames = missionTplListing.filenames || []
+    const filenames = missionTplListing.filenames || []
 
-      await runInSequence(filenames.map(async filename => {
-        const filePath = `${subDir}${filename}`
+    await runInSequence(filenames.map(async filename => {
+      const filePath = cleanFilePath(`${directory}/${filename}`)
 
-        let missionTpl;
-        if (filename.endsWith('/')) {  // directory entry
-          missionTpl = {
-            missionTplId: filePath,
-          }
+      let missionTpl;
+      if (filename.endsWith('/')) {  // directory entry
+        missionTpl = {
+          missionTplId: filePath,
         }
-        else {
-          missionTpl = await mxmProviderClient.getMissionTemplate(filePath)
-        }
+      }
+      else {
+        missionTpl = await mxmProviderClient.getMissionTemplate(filePath)
+      }
 
-        await createMissionTpl(missionTpl)
-      }))
+      await createMissionTpl(missionTpl)
+    }))
+  }
+
+  async function createMissionTpl(missionTpl) {
+    const providerId = mxmProviderClient.providerId
+
+    const query = Gql.missionTplInsert()
+
+    console.log(`createMissionTpl: missionTplId=`, missionTpl.missionTplId)
+
+    const variables = {
+      providerId,
+      missionTplId: missionTpl.missionTplId,
+      description: missionTpl.description,
+    }
+    const operationName = 'createMissionTpl'
+    const result = await performQuery(query, variables, operationName, context)
+    if (debug) console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
+
+    const assetClassNames = missionTpl.assetClassNames || []
+    await createAssociatedAssetClasses(missionTpl, assetClassNames)
+
+    if (!missionTpl.missionTplId.endsWith('/')) {
+      const parameters = missionTpl.parameters || []
+      await createParameters(missionTpl, parameters)
+    }
+  }
+
+  async function createAssociatedAssetClasses(missionTpl, assetClassNames) {
+    await runInSequence(assetClassNames.map(async assetClassName => await createAssociatedAssetClass(missionTpl, assetClassName)))
+  }
+
+  async function createAssociatedAssetClass(missionTpl, assetClassName) {
+    const providerId = mxmProviderClient.providerId
+
+    const query = Gql.missionTplAssetClassInsert()
+
+    const variables = {
+      providerId,
+      missionTplId: missionTpl.missionTplId,
+      assetClassName
+    }
+    const operationName = 'createMissionTplAssetClass'
+    const result = await performQuery(query, variables, operationName, context)
+    if (debug) console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
+  }
+
+  async function createParameters(missionTpl, parameters) {
+    await runInSequence(parameters.map(async parameter => await createParameter(missionTpl, parameter)))
+  }
+
+  async function createParameter(missionTpl, parameter) {
+    const providerId = mxmProviderClient.providerId
+
+    const query = Gql.parameterInsert()
+
+    const variables = {
+      providerId,
+      missionTplId: missionTpl.missionTplId,
+      paramName: parameter.paramName,
+      type: parameter.type,
+      required: parameter.required,
+      description: parameter.description,
+    }
+    if (parameter.defaultValue) {
+      variables.defaultValue = '' + parameter.defaultValue
+    }
+    if (parameter.defaultUnits) {
+      variables.defaultUnits = parameter.defaultUnits
+    }
+    if (parameter.valueCanReference) {
+      variables.valueCanReference = parameter.valueCanReference
+    }
+    const operationName = 'createParameter'
+    const result = await performQuery(query, variables, operationName, context)
+    if (debug) console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
+  }
+
+  async function listMissionTplsDirectory({ _providerId, _directory }) {
+    const [providerId, directory] = [_providerId, _directory]
+    /*if (debug)*/ console.log('listMissionTplsDirectory providerId=', providerId, 'directory=', directory)
+
+    const query = Gql.providerBasic()
+    const variables = {
+      providerId,
+    }
+    const operationName = 'providerBasic'
+    const result = await performQuery(query, variables, operationName, context)
+    if (debug) console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
+
+    const provider = result.data.providerByProviderId
+    console.log('provider=', provider)
+    const {httpEndpoint, apiType} = provider
+    setMxmProviderClient(providerId, httpEndpoint, apiType)
+    if (!mxmProviderClient.isSupportedInterface()) {
+      console.warn('listMissionTplsDirectory: Not supported interface to provider')
+      return
     }
 
-    async function createMissionTpl(missionTpl) {
-      const query = Gql.missionTplInsert()
-
-      console.log(`createMissionTpl: missionTplId=`, missionTpl.missionTplId)
-
-      const variables = {
-        providerId: provider.providerId,
-        missionTplId: missionTpl.missionTplId,
-        description: missionTpl.description,
-      }
-      const operationName = 'createMissionTpl'
-      const result = await performQuery(query, variables, operationName, context)
-      if (debug) console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
-
-      const assetClassNames = missionTpl.assetClassNames || []
-      await createAssociatedAssetClasses(missionTpl, assetClassNames)
-
-      if (!missionTpl.missionTplId.endsWith('/')) {
-        const parameters = missionTpl.parameters || []
-        await createParameters(missionTpl, parameters)
-      }
-    }
-
-    async function createAssociatedAssetClasses(missionTpl, assetClassNames) {
-      await runInSequence(assetClassNames.map(async assetClassName => await createAssociatedAssetClass(missionTpl, assetClassName)))
-    }
-
-    async function createAssociatedAssetClass(missionTpl, assetClassName) {
-      const query = Gql.missionTplAssetClassInsert()
-
-      const variables = {
-        providerId: provider.providerId,
-        missionTplId: missionTpl.missionTplId,
-        assetClassName
-      }
-      const operationName = 'createMissionTplAssetClass'
-      const result = await performQuery(query, variables, operationName, context)
-      if (debug) console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
-    }
-
-    async function createParameters(missionTpl, parameters) {
-      await runInSequence(parameters.map(async parameter => await createParameter(missionTpl, parameter)))
-    }
-
-    async function createParameter(missionTpl, parameter) {
-      const query = Gql.parameterInsert()
-
-      const variables = {
-        providerId: provider.providerId,
-        missionTplId: missionTpl.missionTplId,
-        paramName: parameter.paramName,
-        type: parameter.type,
-        required: parameter.required,
-        description: parameter.description,
-      }
-      if (parameter.defaultValue) {
-        variables.defaultValue = '' + parameter.defaultValue
-      }
-      if (parameter.defaultUnits) {
-        variables.defaultUnits = parameter.defaultUnits
-      }
-      if (parameter.valueCanReference) {
-        variables.valueCanReference = parameter.valueCanReference
-      }
-      const operationName = 'createParameter'
-      const result = await performQuery(query, variables, operationName, context)
-      if (debug) console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
-    }
+    await getAndCreateMissionTpls(directory)
   }
 
   async function preUpdateMission(input) {
@@ -261,8 +296,8 @@ function createProviderManager(context) {
 
     // set up provider client:
     const provider = mission.missionTplByProviderIdAndMissionTplId.providerByProviderId
-    const {httpEndpoint, apiType} = provider
-    setMxmProviderClient(httpEndpoint, apiType)
+    const {providerId, httpEndpoint, apiType} = provider
+    setMxmProviderClient(providerId, httpEndpoint, apiType)
     if (!mxmProviderClient.isSupportedInterface()) {
       console.warn('preUpdateMission: Not supported interface to provider')
       // let the operation continue.
@@ -325,7 +360,7 @@ function createProviderManager(context) {
     // set up provider client:
     const provider = mission.missionTplByProviderIdAndMissionTplId.providerByProviderId
     const {httpEndpoint, apiType} = provider
-    setMxmProviderClient(httpEndpoint, apiType)
+    setMxmProviderClient(providerId, httpEndpoint, apiType)
     if (!mxmProviderClient.isSupportedInterface()) {
       console.warn('preUpdateMission: Not supported interface to provider')
       // let the operation continue.

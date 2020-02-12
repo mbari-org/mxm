@@ -28,8 +28,8 @@ function getUnits(httpEndpoint) {
   return doGet(httpEndpoint, 'units')
 }
 
-function listMissionTemplates(httpEndpoint, subDir) {
-  return doGet(httpEndpoint, `missiontemplates/${subDir}`)
+function listMissionTemplates(httpEndpoint, directory) {
+  return doGet(httpEndpoint, `missiontemplates/${directory}`)
 }
 
 function getMissionTemplate(httpEndpoint, filePath) {

@@ -120,10 +120,10 @@
         return this.$route.params
       },
 
-      subDir() {
-        const subDir = this.params.missionTplId
-        console.assert(!subDir || subDir.endsWith('/'))
-        return subDir
+      directory() {
+        const directory = this.params.missionTplId
+        console.assert(!directory || directory.endsWith('/'))
+        return directory
       },
 
       sortedAllMissionTplsList() {
@@ -154,7 +154,7 @@
             ['Home', []],
             [this.params.providerId, [this.params.providerId]],
             ['MissionTemplates', [this.params.providerId, 'mt']],
-            [this.subDir],
+            [this.directory],
           ],
           refresh: this.refreshMissionTpls
         })

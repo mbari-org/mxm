@@ -6,6 +6,7 @@
       This includes new SQL function `list_mission_tpls_directory`
       TODO note adjustment in MissionTpls' setBreadcrumbs - reflect similar pattern
       in other places.
+    - TODO reflect result of directory listing in database and in response to client
 
 - new request `/info` for general provider info (including capabilities)
 

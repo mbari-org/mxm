@@ -1,5 +1,5 @@
 query missionTplsDirectory($providerId: String!, $directory: String!) {
-  listMissionTplsDirectoryList(providerId: $providerId, directory: $directory) {
+  listMissionTplsDirectoryList(_providerId: $providerId, _directory: $directory) {
     id
     providerId
     providerByProviderId {

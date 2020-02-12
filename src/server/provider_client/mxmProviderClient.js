@@ -3,9 +3,10 @@
 
 import rest0 from './rest0'
 
-export default function createMxmProviderClient({httpEndpoint, apiType}) {
-  console.log('createMxmProviderClient: httpEndpoint=', httpEndpoint, 'apiType=', apiType)
+export default function createMxmProviderClient({providerId, httpEndpoint, apiType}) {
+  console.log('createMxmProviderClient: providerId=',providerId, ' httpEndpoint=', httpEndpoint, 'apiType=', apiType)
   return {
+    providerId,
     isSupportedInterface,
     getGeneralInfo,
     getAssetClasses,
@@ -20,7 +21,7 @@ export default function createMxmProviderClient({httpEndpoint, apiType}) {
 
   /** Call any of the other methods only if this returns true. */
   function isSupportedInterface() {
-    return apiType.toUpperCase() === 'REST0'
+    return apiType && apiType.toUpperCase() === 'REST0'
   }
 
   function getGeneralInfo() {
@@ -35,8 +36,8 @@ export default function createMxmProviderClient({httpEndpoint, apiType}) {
     return rest0.getUnits(httpEndpoint)
   }
 
-  function listMissionTemplates(subDir) {
-    return rest0.listMissionTemplates(httpEndpoint, subDir)
+  function listMissionTemplates(directory) {
+    return rest0.listMissionTemplates(httpEndpoint, directory)
   }
 
   function getMissionTemplate(filePath) {

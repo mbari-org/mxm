@@ -6,6 +6,7 @@ import fs from "fs"
 const readGql = baseName => fs.readFileSync(`src/graphql/${baseName}.gql`, {encoding: 'utf8'})
 
 const Gql = {
+  providerBasic:               () => readGql('providerBasic'),
   assetClassInsert:            () => readGql('assetClassInsert'),
   assetInsert:                 () => readGql('assetInsert'),
   unitInsert:                  () => readGql('unitInsert'),

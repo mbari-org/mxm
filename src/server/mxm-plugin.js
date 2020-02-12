@@ -1,21 +1,49 @@
 // MXM plugin to intercept mutations involving MXM providers.
 // Status: very preliminary.
 
-import { makeWrapResolversPlugin } from 'graphile-utils'
+import {
+  makeWrapResolversPlugin,
+  makePluginByCombiningPlugins,
+} from 'graphile-utils'
 
 import createProviderManager from './createProviderManager'
 
-export default makeWrapResolversPlugin({
+const plugin1 = makeWrapResolversPlugin({
   Mutation: {
     createProvider: createProviderResolverWrapper(),
     updateProvider: updateProviderResolverWrapper(),
     updateMission: updateMissionResolverWrapper(),
   },
 
+  Query: {
+    listMissionTplsDirectoryList: listMissionTplsDirectoryResolverWrapper(),
+  },
+
   Mission: {
     missionStatus: missionStatusResolverWrapper(),
   },
 })
+
+const plugin2 = makeWrapResolversPlugin(
+  context => {
+    return { scope: context.scope }
+    // if (context.scope.isRootMutation) {
+    //   return { scope: context.scope }
+    // }
+    // return null
+  },
+  ({ scope }) => async (resolver, user, args, context, _resolveInfo) => {
+    console.log(`PRE '${scope.fieldName}' starting with arguments:`, args)
+    const result = await resolver()
+    console.log(`POST '${scope.fieldName}' result:`, result)
+    return result
+  }
+)
+
+export default makePluginByCombiningPlugins(
+  plugin1,
+  // plugin2
+)
 
 function createProviderResolverWrapper() {
   return async (resolve, source, args, context, resolveInfo) => {
@@ -24,8 +52,9 @@ function createProviderResolverWrapper() {
     console.log('args=', args)
 
     const providerManager = createProviderManager(context)
+    const providerId = args.input.provider.providerId
     const {httpEndpoint, apiType} = args.input.provider
-    providerManager.setMxmProviderClient(httpEndpoint, apiType)
+    providerManager.setMxmProviderClient(providerId, httpEndpoint, apiType)
 
     await providerManager.preInsertProvider(args.input.provider)
     const result = await resolve()
@@ -47,6 +76,24 @@ function updateProviderResolverWrapper() {
 
     console.log('exiting updateProviderResolverWrapper')
     console.log('result=', result)
+
+    return result
+  }
+}
+
+// TODO
+function listMissionTplsDirectoryResolverWrapper() {
+  return async (resolve, source, args, context, resolveInfo) => {
+    console.log('entering listMissionTplsDirectoryResolverWrapper')
+    console.log('args=', args)
+    console.log('resolveInfo.variableValues=', resolveInfo.variableValues);
+
+    const providerManager = createProviderManager(context)
+
+    await providerManager.listMissionTplsDirectory(args)
+    const result = await resolve()
+
+    console.log(`exiting listMissionTplsDirectoryResolverWrapper: result=`, result)
 
     return result
   }
