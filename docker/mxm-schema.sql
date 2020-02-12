@@ -49,15 +49,15 @@ create table if not exists mission_tpls
 )
 ;
 
--- Will expose `Query.listMissionTplsDirectoryList(_providerId: String!, _directory: String!, ...)` to GraphQL.
+-- Will expose `Query.listMissionTplsDirectoryList(providerId: String!, directory: String!, ...)` to GraphQL.
 -- Gets the mission templates "under" the given directory.
-create or replace function list_mission_tpls_directory(_provider_id varchar, _directory varchar)
+create or replace function list_mission_tpls_directory(provider_id varchar, directory varchar)
   returns setof mission_tpls as $$
     select *
     from mission_tpls
-    where provider_id = _provider_id
-      and mission_tpl_id != _directory
-      and mission_tpl_id ~ ('^' || _directory || '[^/]*/?')
+    where provider_id = $1
+      and mission_tpl_id != $2
+      and mission_tpl_id ~ ('^' || $2 || '[^/]*/?')
       -- the regex is to allow for direct subdirectories, but not further descendents.
   $$ language sql stable;
 

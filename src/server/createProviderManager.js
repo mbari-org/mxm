@@ -252,8 +252,7 @@ function createProviderManager(context) {
     if (debug) console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
   }
 
-  async function listMissionTplsDirectory({ _providerId, _directory }) {
-    const [providerId, directory] = [_providerId, _directory]
+  async function listMissionTplsDirectory({ providerId, directory }) {
     /*if (debug)*/ console.log('listMissionTplsDirectory providerId=', providerId, 'directory=', directory)
 
     const query = Gql.providerBasic()
