@@ -1,8 +1,11 @@
 2020-02
 
 - complete core reload functionality for MissionTpls
-    - TODO auto-trigger reload when retrieved_at is null
-    - TODO update retrieved_at for MissionTpls reload
+- MissionTpls: auto-trigger reload when retrieved_at is null.
+  Using vue-apollo `skip` option to coordinate distpach,
+  https://vue-apollo.netlify.com/guide/apollo/queries.html#skipping-the-query .
+  See also https://github.com/vuejs/vue-apollo/issues/441
+
 - TODO note: all missionTplId's with leading slash at least for the moment
 - adjustments and logging while trying to determine why listMissionTplsDirectoryResolverWrapper
   is being called twice, eg with directories `/` and `/Demo/`, upon a single the client query for `/Demo/`.

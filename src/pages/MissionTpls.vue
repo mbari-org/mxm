@@ -12,7 +12,7 @@
         <div>{{ directory }}</div>
       </div>
       <div
-        v-if="missionTplBasic.retrievedAt"
+        v-if="missionTplBasic && missionTplBasic.retrievedAt"
         class="q-ml-lg text-grey" style="font-size:smaller"
       >
         {{ missionTplBasic.retrievedAt }}
@@ -99,7 +99,7 @@
       return {
         debug,
         loading: false,
-        missionTplBasic: {},
+        missionTplBasic: null,
         allMissionTplsList: [],
 
         missionTplColumns: [
@@ -148,7 +148,7 @@
         variables() {
           return {
             providerId: this.params.providerId,
-            missionTplId: this.params.missionTplId || '/',
+            missionTplId: this.directory,
           }
         },
         update(data) {
@@ -158,9 +158,21 @@
       },
 
       allMissionTplsList: {
+        skip () {
+          if (!this.missionTplBasic) {
+            return true
+          }
+          else if (this.missionTplBasic.retrievedAt) {
+            return false
+          }
+          else {
+            // trigger reload so retrievedAt is first set
+            this.reloadMissionTpls()
+            return true
+          }
+        },
         query: missionTplsDirectoryGql,
         variables() {
-          console.warn('allMissionTplsList: variables() called. directory=', this.directory)
           return {
             providerId: this.params.providerId,
             directory: this.directory,
@@ -185,16 +197,20 @@
         })
       },
 
-      refreshMissionTpls() {
-        // this conditional call needed to avoid 'TypeError: Cannot read property 'refetch' of undefined'
-        // apparently upon very first request upon the "immediate" watch below:
-        if (this.$apollo.queries.allMissionTplsList) {
-          console.debug('refreshMissionTpls: directory=', this.directory)
-          this.$apollo.queries.allMissionTplsList.refetch()
-        }
+      async refreshMissionTpls() {
+        // conditional refetch calls needed to avoid 'TypeError: Cannot read property 'refetch' of undefined'
+        // apparently upon very first request from the "immediate" watch below.
+        // See https://github.com/vuejs/vue-apollo/issues/880
 
         if (this.$apollo.queries.missionTplBasic) {
-          this.$apollo.queries.missionTplBasic.refetch()
+          console.warn('xxxxxxxxx refreshMissionTpls missionTplBasic query available')
+          const x = await this.$apollo.queries.missionTplBasic.refetch()
+          console.warn('xxxxxxxxx=', x)
+
+          if (this.$apollo.queries.allMissionTplsList) {
+            console.debug('refreshMissionTpls: directory=', this.directory)
+            this.$apollo.queries.allMissionTplsList.refetch()
+          }
         }
       },
 

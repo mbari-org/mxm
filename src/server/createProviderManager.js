@@ -170,7 +170,8 @@ function createProviderManager(context) {
     console.assert(directory.endsWith('/'))
 
     // create a MissionTpl entry for the directory itself:
-    await getAndCreateMissionTpl(directory)
+    const retrievedAt = new Date().toISOString()
+    await getAndCreateMissionTpl(directory, retrievedAt)
 
     const missionTplListing = await mxmProviderClient.listMissionTemplates(
       directory.replace(/^\/+/, '')   // TODO consistent path name handling
@@ -184,7 +185,7 @@ function createProviderManager(context) {
     }))
   }
 
-  async function getAndCreateMissionTpl(missionTplId) {
+  async function getAndCreateMissionTpl(missionTplId, retrievedAt = null) {
     missionTplId = cleanPath(missionTplId)
     const isDirectory = missionTplId.endsWith('/')
 
@@ -199,10 +200,10 @@ function createProviderManager(context) {
       missionTpl.missionTplId = cleanPath(missionTpl.missionTplId)
     }
 
-    await createMissionTpl(missionTpl)
+    await createMissionTpl(missionTpl, retrievedAt)
   }
 
-  async function createMissionTpl(missionTpl) {
+  async function createMissionTpl(missionTpl, retrievedAt = null) {
     const providerId = mxmProviderClient.providerId
 
     const query = Gql.missionTplInsert()
@@ -213,6 +214,7 @@ function createProviderManager(context) {
       providerId,
       missionTplId: missionTpl.missionTplId,
       description: missionTpl.description,
+      retrievedAt,
     }
     const operationName = 'createMissionTpl'
     const result = await performQuery(query, variables, operationName, context)

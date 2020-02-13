@@ -2,6 +2,7 @@ mutation createMissionTpl(
   $providerId: String!
   $missionTplId: String!
   $description: String
+  $retrievedAt: Datetime
 ) {
   createMissionTpl(
     input: {
@@ -9,6 +10,7 @@ mutation createMissionTpl(
         providerId: $providerId
         missionTplId: $missionTplId
         description: $description
+        retrievedAt: $retrievedAt
       }
     }
   ) {
@@ -16,6 +18,7 @@ mutation createMissionTpl(
       providerId
       missionTplId
       description
+      retrievedAt
     }
   }
 }

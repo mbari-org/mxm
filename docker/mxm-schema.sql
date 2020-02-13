@@ -52,7 +52,8 @@ create table if not exists mission_tpls
 
 create or replace function mission_tpls_set_retrieved_at() returns trigger as $$
 begin
-  if new.mission_tpl_id !~ '^.*/$' then   -- it's a template
+  -- set retrieved_at only if not yet set and this is an actual template (not a directory)
+  if new.retrieved_at is null && new.mission_tpl_id !~ '^.*/$' then
     new.retrieved_at = now();
   end if;
   return new;
