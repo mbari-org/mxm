@@ -1,6 +1,6 @@
 <template>
   <div>
-    <pre>{{missionTplBasic}}</pre>
+    <pre>missionTplBasic={{missionTplBasic}}</pre>
 
     <div class="row q-mb-sm">
       <div class="text-bold row items-center">
@@ -160,9 +160,10 @@
       allMissionTplsList: {
         query: missionTplsDirectoryGql,
         variables() {
+          console.warn('allMissionTplsList: variables() called. directory=', this.directory)
           return {
             providerId: this.params.providerId,
-            directory: this.params.missionTplId || '/',
+            directory: this.directory,
           }
         },
         update(data) {
@@ -188,11 +189,14 @@
       refreshMissionTpls() {
         // this conditional call needed to avoid 'TypeError: Cannot read property 'refetch' of undefined'
         // apparently upon very first request upon the "immediate" watch below:
-        this.$apollo.queries.allMissionTplsList &&
-        this.$apollo.queries.allMissionTplsList.refetch()
+        if (this.$apollo.queries.allMissionTplsList) {
+          console.debug('refreshMissionTpls: directory=', this.directory)
+          this.$apollo.queries.allMissionTplsList.refetch()
+        }
 
-        this.$apollo.queries.missionTplBasic &&
-        this.$apollo.queries.missionTplBasic.refetch()
+        if (this.$apollo.queries.missionTplBasic) {
+          this.$apollo.queries.missionTplBasic.refetch()
+        }
       },
 
       async reloadMissionTpls() {
@@ -233,9 +237,9 @@
     },
 
     watch: {
-      '$route.path': {
-        handler(val) {
-          // console.log('WATCH $route=', val)
+      directory: {
+        handler(val, old) {
+          console.warn(`WATCH directory=${val} old=${old}`)
           this.setBreadcrumbs()
           this.refreshMissionTpls()
         },

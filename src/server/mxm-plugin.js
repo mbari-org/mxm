@@ -91,17 +91,19 @@ function updateProviderResolverWrapper() {
 
 // TODO
 function listMissionTplsDirectoryResolverWrapper() {
+  console.log('CREATING listMissionTplsDirectoryResolverWrapper')
   return async (resolve, source, args, context, resolveInfo) => {
-    console.log('entering listMissionTplsDirectoryResolverWrapper')
-    console.log('args=', args)
-    console.log('resolveInfo.variableValues=', resolveInfo.variableValues);
+    console.log('<<< entering listMissionTplsDirectoryResolverWrapper')
+    console.log('args=', args, '\n')
+    console.log('source=', source, '\n')
+    // console.log('resolveInfo.variableValues=', resolveInfo.variableValues);
 
     const providerManager = createProviderManager(context)
 
     await providerManager.listMissionTplsDirectory(args)
     const result = await resolve()
 
-    console.log(`exiting listMissionTplsDirectoryResolverWrapper: result=`, result)
+    console.log(`>>> exiting listMissionTplsDirectoryResolverWrapper:`)// result=`, result)
 
     return result
   }

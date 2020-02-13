@@ -170,11 +170,11 @@ function createProviderManager(context) {
   async function getAndCreateMissionTplsForDirectory(directory) {
     console.assert(directory.endsWith('/'))
 
-    const missionTplListing = await mxmProviderClient.listMissionTemplates(directory)
-    console.log('missionTplListing=', missionTplListing)
-
     // create a MissionTpl entry for the directory itself:
     await getAndCreateMissionTpl(directory)
+
+    const missionTplListing = await mxmProviderClient.listMissionTemplates(directory)
+    console.log('missionTplListing=', missionTplListing)
 
     // and for each of the listing:
     const filenames = missionTplListing.filenames || []
@@ -288,7 +288,7 @@ function createProviderManager(context) {
     if (debug) console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
 
     const provider = result.data.providerByProviderId
-    console.log('provider=', provider)
+    // console.log('provider=', provider)
     const {httpEndpoint, apiType} = provider
     setMxmProviderClient(providerId, httpEndpoint, apiType)
     if (!mxmProviderClient.isSupportedInterface()) {
@@ -317,9 +317,19 @@ function createProviderManager(context) {
     await deleteMissionTplByID(context, id)
     console.log('missionTpl DELETED')
 
+    const missionTplId = missionTpl.missionTplId
     // reload and recreate:
-    console.log('RELOADING/RECREATING missionTplId=', missionTpl.missionTplId)
-    await getAndCreateMissionTpl(missionTpl.missionTplId)
+
+    if (missionTplId.endsWith('/')) {
+      console.log('RELOADING/RECREATING DIRECTORY missionTplId=', missionTplId)
+      // create directory entry and the direct children:
+      await getAndCreateMissionTplsForDirectory(missionTplId)
+    }
+    else {
+      console.log('RELOADING/RECREATING template missionTplId=', missionTplId)
+      // just the template:
+      await getAndCreateMissionTpl(missionTplId)
+    }
   }
 
   async function preUpdateMission(input) {

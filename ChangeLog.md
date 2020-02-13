@@ -1,5 +1,8 @@
 2020-02
 
+- adjustments and logging while trying to determine why listMissionTplsDirectoryResolverWrapper
+  is being called twice, eg with directories `/` and `/Demo/`, upon a single the client query for `/Demo/`.
+
 - removing editing/deletion of existing mission template (and all associated entities).
     - instead, the only "update" operation is to trigger a refresh from the provider.
     - remove edit/delete in MissionTpl (including adding params, class associations, etc)

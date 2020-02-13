@@ -4,7 +4,7 @@
 import rest0 from './rest0'
 
 export default function createMxmProviderClient({providerId, httpEndpoint, apiType}) {
-  console.log('createMxmProviderClient: providerId=',providerId, ' httpEndpoint=', httpEndpoint, 'apiType=', apiType)
+  // console.log('createMxmProviderClient: providerId=',providerId, ' httpEndpoint=', httpEndpoint, 'apiType=', apiType)
   return {
     providerId,
     isSupportedInterface,
