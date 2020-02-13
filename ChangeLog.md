@@ -1,5 +1,9 @@
 2020-02
 
+- removing editing/deletion of existing mission template (and all associated entities).
+    - instead, the only "update" operation is to trigger a refresh from the provider.
+    - TODO remove edit/delete in MissionTpl (including adding params, class associations, etc)
+
 - show retrieved_at in template and template listing pages
 - db schema: mission template now with a `retrieved_at` column to indicate when
   the info was last retrieved from the provider.

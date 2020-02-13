@@ -1,0 +1,12 @@
+query missionTplByID($id: ID!) {
+  missionTpl(id: $id) {
+    providerId
+    missionTplId
+    retrievedAt
+    providerByProviderId {
+      providerId
+      httpEndpoint
+      apiType
+    }
+  }
+}

@@ -1,15 +1,28 @@
 export default createProviderManager
 
 import createMxmProviderClient from './provider_client/mxmProviderClient'
-import { Gql, performQuery } from './gql'
+import {
+  Gql,
+  getMissionTplByID,
+  deleteMissionTplByID,
+  performQuery,
+} from './gql'
 import orderBy from "lodash/orderBy"
 import reduce from "lodash/reduce"
 
 const debug = false
 
-// E.g: "//aa//b/c////dddd/" --> "aa/b/c/dddd"
-const cleanFilePath = filePath =>
-  filePath.replace(/^\/+|\/+$/g, '').replace(/\/\/+/g, '/')
+/**
+ * Cleans directory or file path string so no leading slashes,
+ * max only one trailing slash, and no consecutive slashes:
+ *   "//aa//b/c////dddd///" --> "aa/b/c/dddd/"
+ *   "//aa//b/c////ffff"    --> "aa/b/c/fff"
+ */
+const cleanPath = filePath =>
+  filePath
+    .replace(/^\/+/, '')     // remove all leading /
+    .replace(/\/+$/g, '/')   // max only one trailing /
+    .replace(/\/\/+/g, '/')  // no consecutive /
 
 function createProviderManager(context) {
   let mxmProviderClient = null
@@ -20,6 +33,7 @@ function createProviderManager(context) {
     postInsertProvider,
 
     listMissionTplsDirectory,
+    preUpdateMissionTpl,
 
     preUpdateMission,
     queryMissionStatus,
@@ -161,20 +175,23 @@ function createProviderManager(context) {
     const filenames = missionTplListing.filenames || []
 
     await runInSequence(filenames.map(async filename => {
-      const filePath = cleanFilePath(`${directory}/${filename}`)
-
-      let missionTpl;
-      if (filename.endsWith('/')) {  // directory entry
-        missionTpl = {
-          missionTplId: filePath + '/',
-        }
-      }
-      else {
-        missionTpl = await mxmProviderClient.getMissionTemplate(filePath)
-      }
-
-      await createMissionTpl(missionTpl)
+      await getAndCreateMissionTpl(`${directory}/${filename}`)
     }))
+  }
+
+  async function getAndCreateMissionTpl(missionTplId) {
+    missionTplId = cleanPath(missionTplId)
+    const isDirectory = missionTplId.endsWith('/')
+
+    let missionTpl;
+    if (isDirectory) {
+      missionTpl = { missionTplId }
+    }
+    else {
+      missionTpl = await mxmProviderClient.getMissionTemplate(missionTplId)
+    }
+
+    await createMissionTpl(missionTpl)
   }
 
   async function createMissionTpl(missionTpl) {
@@ -273,6 +290,28 @@ function createProviderManager(context) {
     }
 
     await getAndCreateMissionTpls(directory)
+  }
+
+  /**
+   * Performs a reload of the mission template from the provider.
+   */
+  async function preUpdateMissionTpl(input) {
+    const {id, missionTplPatch} = input
+    if (debug) console.log(`preUpdateMissionTpl: id=${id} missionTplPatch=`, missionTplPatch)
+
+    // get the current state of the missionTpl:
+    const missionTpl = await getMissionTplByID(context, id)
+    console.log('missionTpl=', missionTpl)
+    const {providerId, httpEndpoint, apiType} = missionTpl.providerByProviderId
+    setMxmProviderClient(providerId, httpEndpoint, apiType)
+
+    // delete it:
+    await deleteMissionTplByID(context, id)
+    console.log('missionTpl DELETED')
+
+    // reload and recreate:
+    console.log('RELOADING/RECREATING missionTplId=', missionTpl.missionTplId)
+    await getAndCreateMissionTpl(missionTpl.missionTplId)
   }
 
   async function preUpdateMission(input) {

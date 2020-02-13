@@ -310,7 +310,7 @@
           ['MissionTemplates', [this.params.providerId, 'mt']],
           [this.params.missionTplId],
         ],
-        refresh: this.refreshMissionTpl
+        refresh: this.reloadMissionTpl
       })
 
       this.refreshMissionTpl()
@@ -319,6 +319,10 @@
     methods: {
       refreshMissionTpl() {
         this.$apollo.queries.missionTpl.refetch()
+      },
+
+      reloadMissionTpl() {
+        this.updateMissionTpl({})
       },
 
       assetClassSelection(data) {

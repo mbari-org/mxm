@@ -12,6 +12,9 @@ const plugin1 = makeWrapResolversPlugin({
   Mutation: {
     createProvider: createProviderResolverWrapper(),
     updateProvider: updateProviderResolverWrapper(),
+
+    updateMissionTpl: updateMissionTplResolverWrapper(),
+
     updateMission: updateMissionResolverWrapper(),
   },
 
@@ -58,7 +61,12 @@ function createProviderResolverWrapper() {
 
     await providerManager.preInsertProvider(args.input.provider)
     const result = await resolve()
+
+    // Note: we could omit `await` to more quickly return to the client:
     await providerManager.postInsertProvider(args.input.provider)
+    // TODO decide on final mechanism, perhaps using a worker.
+    // But this is not critical as we are currently implementing a more
+    // on-demand loading/update of the mission templates.
 
     console.log('exiting createProviderResolverWrapper')
     console.log('result=', result)
@@ -94,6 +102,29 @@ function listMissionTplsDirectoryResolverWrapper() {
     const result = await resolve()
 
     console.log(`exiting listMissionTplsDirectoryResolverWrapper: result=`, result)
+
+    return result
+  }
+}
+
+function updateMissionTplResolverWrapper() {
+  return async (resolve, source, args, context, resolveInfo) => {
+    console.log('entering updateMissionTplResolverWrapper')
+    console.log('args=', args)
+
+    // args= {
+    //   input: {
+    //     id: 'WyJtaXNzaW9uX3RwbHMiLCJUZXRoeXNEYXNoMyIsIkRlZmF1bHQiXQ==',
+    //   }
+    // }
+
+    const providerManager = createProviderManager(context)
+
+    await providerManager.preUpdateMissionTpl(args.input)
+    const result = await resolve()
+
+    console.log('exiting updateMissionTplResolverWrapper')
+    console.log('result=', result)
 
     return result
   }

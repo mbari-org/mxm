@@ -17,9 +17,12 @@ const Gql = {
 }
 
 
-export { Gql, performQuery }
-
-import Promise from 'promise'
+export {
+  Gql,
+  getMissionTplByID,
+  deleteMissionTplByID,
+  performQuery,
+}
 
 import { graphql } from 'graphql'
 import { withPostGraphileContext } from 'postgraphile'
@@ -28,6 +31,27 @@ import {
   getSchema,
 } from './base'
 
+
+async function getMissionTplByID(context, id) {
+  const query = Gql.missionTplByID()
+  const variables = { id }
+  const operationName = 'missionTplByID'
+  const result = await performQuery(query, variables, operationName, context)
+  /*if (debug)*/ console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
+  return result.data.missionTpl
+}
+
+async function deleteMissionTplByID(context, id) {
+  const query = Gql.missionTplDelete()
+  const variables = {
+    input: {
+      id
+    }
+  }
+  const operationName = 'deleteMissionTpl'
+  const result = await performQuery(query, variables, operationName, context)
+  /*if (debug)*/ console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
+}
 
 async function performQuery(query, variables, operationName, context_) {
   const schema = await getSchema()
