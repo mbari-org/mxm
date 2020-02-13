@@ -15,23 +15,21 @@
           </q-toolbar-title>
         </span>
 
-        <small>
-          Prototype {{$utl.appInfo.version}}
-          <span v-if="$mxmConfig">
-            <span v-if="$mxmConfig.learnMoreUrl">
-              -
-              <a style="color:white;text-decoration:none"
-                 :href="$mxmConfig.learnMoreUrl"
-                 target="mxm_learnmore"
-              >
-                Learn more
-              </a>
-            </span>
-            <div>
-              GraphQL endpoint: {{ $mxmConfig.graphqlUri }}
-            </div>
-          </span>
-        </small>
+        <div v-if="$mxmConfig" class="columns" >
+          <div class="row">
+            <div>Preliminary prototype {{$utl.appInfo.version}} -</div>
+            <a v-if="$mxmConfig.learnMoreUrl"
+               style="color:white;text-decoration:none;margin-left:4px"
+               :href="$mxmConfig.learnMoreUrl"
+               target="mxm_learnmore"
+            >
+              Learn more.
+            </a>
+          </div>
+          <small>
+            GraphQL endpoint: {{ $mxmConfig.graphqlUri }}
+          </small>
+        </div>
       </q-toolbar>
 
       <utl-breadcrumbs />
