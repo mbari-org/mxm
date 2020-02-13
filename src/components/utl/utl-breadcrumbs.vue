@@ -6,6 +6,13 @@
     <q-breadcrumbs
       active-color="secondary" color="light"
     >
+      <template v-slot:separator>
+        <q-icon
+          size="1.5em"
+          name="chevron_right"
+        />
+      </template>
+
       <q-breadcrumbs-el
         v-for="(e, index) in _elements" :key="index"
         :label="e[0]"
@@ -21,8 +28,6 @@
 </template>
 
 <script>
-  import map from 'lodash/map'
-
   export default {
     name: 'utl-breadcrumbs',
 
