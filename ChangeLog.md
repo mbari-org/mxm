@@ -3,6 +3,9 @@
 - removing editing/deletion of existing mission template (and all associated entities).
     - instead, the only "update" operation is to trigger a refresh from the provider.
     - remove edit/delete in MissionTpl (including adding params, class associations, etc)
+    - TODO complete similar adjustments for MissionTpls
+        - not yet fully reflecting non-root template listing
+        - all missionTplId with leading slash at least for the moment
 
 - show retrieved_at in template and template listing pages
 - db schema: mission template now with a `retrieved_at` column to indicate when

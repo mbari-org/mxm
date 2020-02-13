@@ -7,22 +7,15 @@ import {
   deleteMissionTplByID,
   performQuery,
 } from './gql'
+import {
+  cleanPath,
+} from './utl.js'
+
 import orderBy from "lodash/orderBy"
 import reduce from "lodash/reduce"
+import isEmpty from "lodash/isEmpty"
 
 const debug = false
-
-/**
- * Cleans directory or file path string so no leading slashes,
- * max only one trailing slash, and no consecutive slashes:
- *   "//aa//b/c////dddd///" --> "aa/b/c/dddd/"
- *   "//aa//b/c////ffff"    --> "aa/b/c/fff"
- */
-const cleanPath = filePath =>
-  filePath
-    .replace(/^\/+/, '')     // remove all leading /
-    .replace(/\/+$/g, '/')   // max only one trailing /
-    .replace(/\/\/+/g, '/')  // no consecutive /
 
 function createProviderManager(context) {
   let mxmProviderClient = null
@@ -75,6 +68,7 @@ function createProviderManager(context) {
       return
     }
 
+    // Asset Classes
     try {
       const assetClasses = await mxmProviderClient.getAssetClasses()
       if (debug) console.log('GOT getAssetClasses=', assetClasses)
@@ -84,13 +78,19 @@ function createProviderManager(context) {
       console.error('getAssetClasses: error=', error)
     }
 
-    try {
-      if (provider.usesUnits) {
+    // Units:
+    if (provider.usesUnits) {
+      try {
         await getAndCreateUnits()
       }
-      else {
-        await getAndCreateMissionTpls('/')
+      catch(error) {
+        console.error('getAndCreateUnits: error=', error)
       }
+    }
+
+    // MissionTpls:
+    try {
+      await getAndCreateMissionTplsForDirectory('/')
     }
     catch(error) {
       console.error('getAssetClasses: error=', error)
@@ -140,7 +140,6 @@ function createProviderManager(context) {
     async function getAndCreateUnits() {
       const units = await mxmProviderClient.getUnits()
       await createUnits(units)
-      await getAndCreateMissionTpls('/')
     }
 
     async function createUnits(units) {
@@ -168,12 +167,17 @@ function createProviderManager(context) {
   }
 
   // capture entries at the given directory:
-  async function getAndCreateMissionTpls(directory) {
+  async function getAndCreateMissionTplsForDirectory(directory) {
+    console.assert(directory.endsWith('/'))
+
     const missionTplListing = await mxmProviderClient.listMissionTemplates(directory)
     console.log('missionTplListing=', missionTplListing)
 
-    const filenames = missionTplListing.filenames || []
+    // create a MissionTpl entry for the directory itself:
+    await getAndCreateMissionTpl(directory)
 
+    // and for each of the listing:
+    const filenames = missionTplListing.filenames || []
     await runInSequence(filenames.map(async filename => {
       await getAndCreateMissionTpl(`${directory}/${filename}`)
     }))
@@ -189,6 +193,9 @@ function createProviderManager(context) {
     }
     else {
       missionTpl = await mxmProviderClient.getMissionTemplate(missionTplId)
+
+      // TODO this is a trick while provider reports id with leading slash:
+      missionTpl.missionTplId = cleanPath(missionTpl.missionTplId)
     }
 
     await createMissionTpl(missionTpl)
@@ -210,10 +217,10 @@ function createProviderManager(context) {
     const result = await performQuery(query, variables, operationName, context)
     if (debug) console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
 
-    const assetClassNames = missionTpl.assetClassNames || []
-    await createAssociatedAssetClasses(missionTpl, assetClassNames)
-
     if (!missionTpl.missionTplId.endsWith('/')) {
+      const assetClassNames = missionTpl.assetClassNames || []
+      await createAssociatedAssetClasses(missionTpl, assetClassNames)
+
       const parameters = missionTpl.parameters || []
       await createParameters(missionTpl, parameters)
     }
@@ -289,7 +296,7 @@ function createProviderManager(context) {
       return
     }
 
-    await getAndCreateMissionTpls(directory)
+    await getAndCreateMissionTplsForDirectory(directory)
   }
 
   /**
@@ -297,7 +304,8 @@ function createProviderManager(context) {
    */
   async function preUpdateMissionTpl(input) {
     const {id, missionTplPatch} = input
-    if (debug) console.log(`preUpdateMissionTpl: id=${id} missionTplPatch=`, missionTplPatch)
+    console.assert(isEmpty(missionTplPatch))
+    if (debug) console.log(`preUpdateMissionTpl: id=${id}`)
 
     // get the current state of the missionTpl:
     const missionTpl = await getMissionTplByID(context, id)

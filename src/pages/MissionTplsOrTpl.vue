@@ -14,8 +14,8 @@
 
     computed: {
       doListing() {
-        const missionTplId = this.$route.params.missionTplId || ''
-        return !missionTplId || missionTplId.endsWith('/')
+        const missionTplId = this.$route.params.missionTplId || '/'
+        return missionTplId.endsWith('/')
       },
     },
   }

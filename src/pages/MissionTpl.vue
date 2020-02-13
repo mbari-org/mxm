@@ -272,22 +272,22 @@
 
     methods: {
       refreshMissionTpl() {
-        this.$apollo.queries.missionTpl.refetch()
+        return this.$apollo.queries.missionTpl.refetch()
       },
 
       async reloadMissionTpl() {
-        await this.updateMissionTpl()
-        this.refreshMissionTpl()
+        // TODO get updated info from the mutation itself
+        this.updateMissionTpl()
+          .then(this.refreshMissionTpl)
       },
 
       async updateMissionTpl() {
         if (debug) console.debug('updateMissionTpl')
         const mutation = missionTplUpdateGql
-        const missionTplPatch = {}  // required but unused
         const variables = {
           input: {
             id: this.missionTpl.id,
-            missionTplPatch
+            missionTplPatch: {}  // required but unused
           }
         }
         try {
@@ -299,13 +299,6 @@
             position: 'top',
             color: 'info',
           })
-          if (missionTplPatch.missionTplId) {
-            this.$utl.replace([this.params.providerId, 'mt', missionTplPatch.missionTplId])
-            return
-          }
-          if (missionTplPatch.description) {
-            this.missionTpl.description = missionTplPatch.description
-          }
         }
         catch(error) {
           console.error('updateMissionTpl: mutation error=', error)

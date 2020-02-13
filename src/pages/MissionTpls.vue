@@ -1,7 +1,16 @@
 <template>
   <div>
-    <div v-if="missionTplBasic && missionTplBasic.missionTplId" class="row q-mb-sm">
-      <div class="text-bold">{{ missionTplBasic.missionTplId }}</div>
+    <pre>{{missionTplBasic}}</pre>
+
+    <div class="row q-mb-sm">
+      <div class="text-bold row items-center">
+        <q-icon
+          name="far fa-folder"
+          size="12px"
+          class="q-mr-xs"
+        />
+        <div>{{ directory }}</div>
+      </div>
       <div
         v-if="missionTplBasic.retrievedAt"
         class="q-ml-lg text-grey" style="font-size:smaller"
@@ -37,13 +46,6 @@
               clearable
             />
           </div>
-        </div>
-
-        <div slot="top-right" slot-scope="props" class="fit">
-          <mission-tpl-new-button
-            :provider-id="params.providerId"
-            @created="missionTplCreated"
-          />
         </div>
 
         <q-td slot="body-cell-missionTplId" slot-scope="props" :props="props"
@@ -85,18 +87,14 @@
 
 <script>
   import missionTplBasicGql from '../graphql/missionTplBasic.gql'
+  import missionTplUpdateGql from '../graphql/missionTplUpdate.gql'
   import missionTplsDirectoryGql from '../graphql/missionTplsDirectory.gql'
 
-  import MissionTplNewButton from 'components/mission-tpl-new-button'
   import orderBy from "lodash/orderBy"
 
   const debug = false
 
   export default {
-    components: {
-      MissionTplNewButton,
-    },
-
     data() {
       return {
         debug,
@@ -134,8 +132,8 @@
       },
 
       directory() {
-        const directory = this.params.missionTplId
-        console.assert(!directory || directory.endsWith('/'))
+        const directory = this.params.missionTplId || '/'
+        console.assert(directory.endsWith('/'))
         return directory
       },
 
@@ -150,7 +148,7 @@
         variables() {
           return {
             providerId: this.params.providerId,
-            missionTplId: this.params.missionTplId || '',
+            missionTplId: this.params.missionTplId || '/',
           }
         },
         update(data) {
@@ -164,7 +162,7 @@
         variables() {
           return {
             providerId: this.params.providerId,
-            directory: this.params.missionTplId || '',
+            directory: this.params.missionTplId || '/',
           }
         },
         update(data) {
@@ -183,7 +181,7 @@
             ['MissionTemplates', [this.params.providerId, 'mt']],
             [this.directory],
           ],
-          refresh: this.refreshMissionTpls
+          refresh: this.reloadMissionTpls
         })
       },
 
@@ -197,8 +195,40 @@
         this.$apollo.queries.missionTplBasic.refetch()
       },
 
-      missionTplCreated(data) {
-        this.allMissionTplsList.splice(0, 0, data)
+      async reloadMissionTpls() {
+        // TODO get updated info from the mutation itself
+        this.updateMissionTplBasic()
+          .then(this.refreshMissionTpls)
+      },
+
+      async updateMissionTplBasic() {
+        const id = this.missionTplBasic && this.missionTplBasic.id
+        if (!id) {
+          // TODO handing this root directory case.
+          return
+        }
+
+        if (debug) console.debug('updateMissionTplBasic')
+        const mutation = missionTplUpdateGql
+        const variables = {
+          input: {
+            id: this.missionTplBasic.id,
+            missionTplPatch: {}  // required but unused
+          }
+        }
+        try {
+          const data = await this.$apollo.mutate({mutation, variables})
+          if (debug) console.debug('updateMissionTpl: mutation data=', data)
+          this.$q.notify({
+            message: `Mission template directory updated`,
+            timeout: 1000,
+            position: 'top',
+            color: 'info',
+          })
+        }
+        catch(error) {
+          console.error('updateMissionTplBasic: mutation error=', error)
+        }
       },
     },
 
