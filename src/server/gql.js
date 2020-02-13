@@ -31,13 +31,15 @@ import {
   getSchema,
 } from './base'
 
+const debug = false
+
 
 async function getMissionTplByID(context, id) {
   const query = readGql('missionTplByID')
   const variables = { id }
   const operationName = 'missionTplByID'
   const result = await performQuery(query, variables, operationName, context)
-  /*if (debug)*/ console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
+  if (debug) console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
   return result.data.missionTpl
 }
 
@@ -50,7 +52,7 @@ async function deleteMissionTplByID(context, id) {
   }
   const operationName = 'deleteMissionTpl'
   const result = await performQuery(query, variables, operationName, context)
-  /*if (debug)*/ console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
+  if (debug) console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
 }
 
 async function performQuery(query, variables, operationName, context_) {

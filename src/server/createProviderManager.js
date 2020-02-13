@@ -25,7 +25,6 @@ function createProviderManager(context) {
     preInsertProvider,
     postInsertProvider,
 
-    listMissionTplsDirectory,
     preUpdateMissionTpl,
 
     preUpdateMission,
@@ -173,8 +172,10 @@ function createProviderManager(context) {
     // create a MissionTpl entry for the directory itself:
     await getAndCreateMissionTpl(directory)
 
-    const missionTplListing = await mxmProviderClient.listMissionTemplates(directory)
-    console.log('missionTplListing=', missionTplListing)
+    const missionTplListing = await mxmProviderClient.listMissionTemplates(
+      directory.replace(/^\/+/, '')   // TODO consistent path name handling
+    )
+    console.log(`missionTplListing: directory=${directory} =>`, missionTplListing)
 
     // and for each of the listing:
     const filenames = missionTplListing.filenames || []
@@ -276,29 +277,6 @@ function createProviderManager(context) {
     if (debug) console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
   }
 
-  async function listMissionTplsDirectory({ providerId, directory }) {
-    /*if (debug)*/ console.log('listMissionTplsDirectory providerId=', providerId, 'directory=', directory)
-
-    const query = Gql.providerBasic()
-    const variables = {
-      providerId,
-    }
-    const operationName = 'providerBasic'
-    const result = await performQuery(query, variables, operationName, context)
-    if (debug) console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
-
-    const provider = result.data.providerByProviderId
-    // console.log('provider=', provider)
-    const {httpEndpoint, apiType} = provider
-    setMxmProviderClient(providerId, httpEndpoint, apiType)
-    if (!mxmProviderClient.isSupportedInterface()) {
-      console.warn('listMissionTplsDirectory: Not supported interface to provider')
-      return
-    }
-
-    await getAndCreateMissionTplsForDirectory(directory)
-  }
-
   /**
    * Performs a reload of the mission template from the provider.
    */
@@ -310,14 +288,15 @@ function createProviderManager(context) {
     // get the current state of the missionTpl:
     const missionTpl = await getMissionTplByID(context, id)
     console.log('missionTpl=', missionTpl)
+    const missionTplId = missionTpl.missionTplId
+
     const {providerId, httpEndpoint, apiType} = missionTpl.providerByProviderId
     setMxmProviderClient(providerId, httpEndpoint, apiType)
 
     // delete it:
     await deleteMissionTplByID(context, id)
-    console.log('missionTpl DELETED')
+    console.log(`missionTpl DELETED  missionTplId=${missionTplId}  id=${id}`)
 
-    const missionTplId = missionTpl.missionTplId
     // reload and recreate:
 
     if (missionTplId.endsWith('/')) {

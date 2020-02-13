@@ -200,9 +200,17 @@
       },
 
       async reloadMissionTpls() {
-        // TODO get updated info from the mutation itself
-        this.updateMissionTplBasic()
-          .then(this.refreshMissionTpls)
+        this.$q.loading.show({
+          message: `Reloading template directory ${this.directory} ...`
+        })
+        try {
+          // TODO get updated info from the mutation itself
+          await this.updateMissionTplBasic()
+          await this.refreshMissionTpls()
+        }
+        finally {
+          this.$q.loading.hide()
+        }
       },
 
       async updateMissionTplBasic() {
