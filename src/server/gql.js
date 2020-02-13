@@ -33,7 +33,7 @@ import {
 
 
 async function getMissionTplByID(context, id) {
-  const query = Gql.missionTplByID()
+  const query = readGql('missionTplByID')
   const variables = { id }
   const operationName = 'missionTplByID'
   const result = await performQuery(query, variables, operationName, context)
@@ -42,7 +42,7 @@ async function getMissionTplByID(context, id) {
 }
 
 async function deleteMissionTplByID(context, id) {
-  const query = Gql.missionTplDelete()
+  const query = readGql('missionTplDelete')
   const variables = {
     input: {
       id

@@ -7,28 +7,8 @@
             <div>Mission Template:</div>
             <div class="text-bold" style="font-size:1.1em">
               {{ params.missionTplId }}
-              <q-popup-edit
-                v-model="missionTpl.missionTplId"
-                title="Mission Template ID"
-                buttons
-                @save="updateMissionTplId"
-              >
-                <q-input
-                  v-model.trim="missionTpl.missionTplId"
-                  clearable autofocus
-                  class="bg-green-1"
-                />
-              </q-popup-edit>
             </div>
             <div class="q-ml-xl row">
-              <q-btn
-                class="q-ml-md"
-                color="red"
-                size="xs"
-                dense round icon="delete"
-                @click="deleteMissionTpl"
-              />
-
               <div class="q-ml-lg text-grey" style="font-size:smaller">
                 {{ missionTpl.retrievedAt }}
                 <q-tooltip>Time when this template was last retrieved from the provider</q-tooltip>
@@ -40,10 +20,8 @@
         <q-card-section>
           <mxm-markdown
             expandable expandable-title="Description:"
-            editable
             :text="missionTpl.description"
             :start-markdown="missionTpl.providerByProviderId.descriptionFormat === 'markdown'"
-            @saveDescription="updateDescription"
           />
         </q-card-section>
       </q-card>
@@ -58,8 +36,6 @@
               :key="c.assetClassName"
               color="white" text-color="black"
               square
-              removable
-              @remove="removeAssetClass(c)"
             >
               <router-link
                 style="text-decoration:none" class="q-pr-sm"
@@ -72,12 +48,6 @@
               </q-tooltip>
             </q-chip>
 
-            <asset-class-select-button
-              class="col-auto q-ml-md"
-              :exclude="myAssetClassNames"
-              :provider-id="params.providerId"
-              @selection="assetClassSelection"
-            />
           </div>
 
         </q-card-section>
@@ -108,14 +78,6 @@
               clearable
             />
           </div>
-        </div>
-
-        <div slot="top-right" slot-scope="props" class="fit">
-          <parameter-new-button
-            :provider-id="params.providerId"
-            :mission-tpl-id="params.missionTplId"
-            @created="parameterCreated"
-          />
         </div>
 
         <q-tr slot="body" slot-scope="props" :props="props">
@@ -195,23 +157,15 @@
 
 <script>
   import missionTplGql from '../graphql/missionTpl.gql'
-  import missionTplAssetClassInsertGql from '../graphql/missionTplAssetClassInsert.gql'
-  import missionTplAssetClassDeleteGql from '../graphql/missionTplAssetClassDelete.gql'
   import missionTplUpdateGql from '../graphql/missionTplUpdate.gql'
-  import missionTplDeleteGql from '../graphql/missionTplDelete.gql'
 
-  import AssetClassSelectButton from 'components/asset-class-select-button'
-  import ParameterNewButton from 'components/parameter-new-button'
   import ParameterValue from 'components/parameter-value'
   import map from 'lodash/map'
-  import difference from 'lodash/difference'
 
   const debug = false
 
   export default {
     components: {
-      AssetClassSelectButton,
-      ParameterNewButton,
       ParameterValue,
     },
 
@@ -321,167 +275,41 @@
         this.$apollo.queries.missionTpl.refetch()
       },
 
-      reloadMissionTpl() {
-        this.updateMissionTpl({})
-      },
-
-      assetClassSelection(data) {
-        const newAssetClassNames = difference(data, this.myAssetClassNames)
-        if (debug) console.debug('assetClassSelection: newAssetClassNames=', newAssetClassNames)
-
-        const added = []
-        const next = () => {
-          const assetClassName = newAssetClassNames.pop()
-          if (assetClassName) {
-            if (debug) console.debug('assetClassSelection: next=', assetClassName)
-            this.addAssetClassName(assetClassName, ok => {
-              if (ok) {
-                added.push(assetClassName)
-              }
-              next()
-            })
-          }
-          else {
-            if (added.length) {
-              this.$q.notify({
-                message: `Asset associated (${added.length})`,
-                timeout: 1000,
-                color: 'info'
-              })
-              this.refreshMissionTpl()
-            }
-          }
-        }
-
-        next()
-      },
-
-      addAssetClassName(assetClassName, next) {
-        const mutation = missionTplAssetClassInsertGql
-        const variables = {
-          providerId: this.params.providerId,
-          missionTplId: this.params.missionTplId,
-          assetClassName
-        }
-        this.$apollo.mutate({mutation, variables})
-          .then((data) => {
-            next(true)
-          })
-          .catch((error) => {
-            console.error('mutation error=', error)
-            next(false)
-          })
-      },
-
-      removeAssetClass(c) {
-        this.$q.dialog({
-          title: 'Confirm',
-          message: `Remove associated asset class '${c.assetClassName}'?`,
-          color: 'negative',
-          ok: `Yes, delete association`,
-          cancel: true,
-          focus: 'cancel',
-        }).onOk(() => doIt())
-
-        const doIt = () => {
-          if (debug) console.debug('removeAssetClass: id=', c.id)
-
-          const mutation = missionTplAssetClassDeleteGql
-          const variables = {
-            id: c.id
-          }
-          this.$apollo.mutate({mutation, variables})
-            .then((data) => {
-              if (data.data) {
-                this.refreshMissionTpl()
-              }
-            })
-            .catch((error) => {
-              console.error('mutation error=', error)
-            })
-        }
-      },
-
-      parameterCreated(data) {
+      async reloadMissionTpl() {
+        await this.updateMissionTpl()
         this.refreshMissionTpl()
       },
 
-      updateMissionTplId(missionTplId) {
-        this.updateMissionTpl({missionTplId})
-      },
-
-      updateDescription(description) {
-        this.updateMissionTpl({description})
-      },
-
-      updateMissionTpl(missionTplPatch) {
-        if (debug) console.debug('updateMissionTpl missionTplPatch=', missionTplPatch)
+      async updateMissionTpl() {
+        if (debug) console.debug('updateMissionTpl')
         const mutation = missionTplUpdateGql
+        const missionTplPatch = {}  // required but unused
         const variables = {
           input: {
             id: this.missionTpl.id,
             missionTplPatch
           }
         }
-        this.$apollo.mutate({mutation, variables})
-          .then((data) => {
-            if (debug) console.debug('updateMissionTpl: mutation data=', data)
-            this.$q.notify({
-              message: `Mission template updated`,
-              timeout: 1000,
-              position: 'top',
-              color: 'info',
-            })
-            if (missionTplPatch.missionTplId) {
-              this.$utl.replace([this.params.providerId, 'mt', missionTplPatch.missionTplId])
-              return
-            }
-            if (missionTplPatch.description) {
-              this.missionTpl.description = missionTplPatch.description
-            }
+        try {
+          const data = await this.$apollo.mutate({mutation, variables})
+          if (debug) console.debug('updateMissionTpl: mutation data=', data)
+          this.$q.notify({
+            message: `Mission template updated`,
+            timeout: 1000,
+            position: 'top',
+            color: 'info',
           })
-          .catch((error) => {
-            console.error('updateMissionTpl: mutation error=', error)
-          })
-      },
-
-      deleteMissionTpl() {
-        console.log('deleteMissionTpl: missionTpl=', this.missionTpl)
-        this.$q.dialog({
-          title: 'Confirm',
-          message: `Delete mission template '${this.missionTpl.missionTplId}'?`,
-          color: 'negative',
-          ok: `Yes, delete`,
-          cancel: true,
-          focus: 'cancel',
-        }).onOk(() => {
-          const mutation = missionTplDeleteGql
-          const variables = {
-            input: {
-              id: this.missionTpl.id
-            }
+          if (missionTplPatch.missionTplId) {
+            this.$utl.replace([this.params.providerId, 'mt', missionTplPatch.missionTplId])
+            return
           }
-          this.$apollo.mutate({mutation, variables})
-              .then(data => {
-                if (debug) console.debug('deleteMissionTpl: mutation data=', data)
-                this.$q.notify({
-                  message: `Mission template deleted: '${this.missionTpl.missionTplId}'`,
-                  timeout: 2000,
-                  position: 'top',
-                  color: 'info',
-                })
-                this.$utl.replace([this.params.providerId, 'missionTpls'])
-              })
-              .catch(error => {
-                console.error('deleteMissionTpl: mutation error=', error)
-                this.$q.notify({
-                  message: `Mission template deletion error: ${JSON.stringify(error)}`,
-                  timeout: 0,
-                  closeBtn: 'Close',
-                  color: 'warning',
-                })
-              })
-        })
+          if (missionTplPatch.description) {
+            this.missionTpl.description = missionTplPatch.description
+          }
+        }
+        catch(error) {
+          console.error('updateMissionTpl: mutation error=', error)
+        }
       },
     },
 
