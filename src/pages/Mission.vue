@@ -450,7 +450,6 @@
     mounted() {
       this.$store.commit('utl/setBreadcrumbs', {
         elements: [
-          ['Home', []],
           [this.params.providerId, [this.params.providerId]],
           ['Missions', [this.params.providerId, 'm']],
           [this.params.missionId],

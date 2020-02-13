@@ -14,10 +14,16 @@
       </template>
 
       <q-breadcrumbs-el
+        icon="home"
+        to="/"
+      />
+
+      <q-breadcrumbs-el
         v-for="(e, index) in _elements" :key="index"
         :label="e[0]"
         :to="_getTo(e[1])"
       />
+
       <q-btn
         v-if="!!_refresh"
         dense round icon="refresh" class="q-ml-lg" size="xs"

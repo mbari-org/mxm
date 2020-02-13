@@ -115,7 +115,6 @@
     mounted() {
       this.$store.commit('utl/setBreadcrumbs', {
         elements: [
-          ['Home', []],
         ],
         refresh: this.refresh
       })

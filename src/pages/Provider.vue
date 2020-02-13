@@ -213,7 +213,6 @@
     mounted() {
       this.$store.commit('utl/setBreadcrumbs', {
         elements: [
-          ['Home', []],
           [this.params.providerId],
         ],
         refresh: this.refreshProvider

@@ -167,22 +167,21 @@
       },
     },
 
-    mounted() {
-      this.$store.commit('utl/setBreadcrumbs', {
-        elements: [
-          ['Home', []],
-          [this.params.providerId, [this.params.providerId]],
-          ['Missions'],
-        ],
-        refresh: this.refreshMissions
-      })
-
-      this.refreshMissions()
-    },
-
     methods: {
+      setBreadcrumbs() {
+        this.$store.commit('utl/setBreadcrumbs', {
+          elements: [
+            [this.params.providerId, [this.params.providerId]],
+            ['Missions'],
+          ],
+          refresh: this.refreshMissions
+        })
+      },
+
       refreshMissions() {
-        this.$apollo.queries.allMissionsList.refetch()
+        if (this.$apollo.queries.allMissionsList) {
+          this.$apollo.queries.allMissionsList.refetch()
+        }
       },
 
       missionCreated(data) {
@@ -191,9 +190,14 @@
     },
 
     watch: {
-      allMissionsList(val) {
-        if (debug) console.log('watch allMissionsList=', val)
-      }
+      'params.providerId': {
+        handler(val, old) {
+          console.warn(`WATCH params.providerId val=`, val, 'old=', old)
+          this.setBreadcrumbs()
+          this.refreshMissions()
+        },
+        immediate: true,
+      },
     }
   }
 </script>
