@@ -28,28 +28,29 @@
 
       <q-card class="q-mb-lg">
         <q-card-section>
-          Associated asset classes:
-          <div class="row q-gutter-x-md items-center">
-            <q-chip
-              class="col-auto shadow-1 q-pr-md"
-              v-for="c in myAssetClasses"
-              :key="c.assetClassName"
-              color="white" text-color="black"
-              square
-            >
-              <router-link
-                style="text-decoration:none" class="q-pr-sm"
-                :to="$utl.routeLoc([params.providerId, 'ac', c.assetClassName])"
+          <div v-if="myAssetClasses.length">
+            <div class="row q-gutter-x-md items-center">
+              <div>Associated asset class{{myAssetClasses.length > 1 ? 'es' : ''}}:</div>
+              <q-chip
+                class="col-auto shadow-1"
+                v-for="c in myAssetClasses"
+                :key="c.assetClassName"
+                color="white" text-color="black"
+                square dense
               >
-                {{c.assetClassName}}
-              </router-link>
-              <q-tooltip v-if="c.assetClassByProviderIdAndAssetClassName.description">
-                {{c.assetClassByProviderIdAndAssetClassName.description}}
-              </q-tooltip>
-            </q-chip>
-
+                <router-link
+                  style="text-decoration:none" class="q-pr-sm"
+                  :to="$utl.routeLoc([params.providerId, 'ac', c.assetClassName])"
+                >
+                  {{c.assetClassName}}
+                </router-link>
+                <q-tooltip v-if="c.assetClassByProviderIdAndAssetClassName.description">
+                  {{c.assetClassByProviderIdAndAssetClassName.description}}
+                </q-tooltip>
+              </q-chip>
+            </div>
           </div>
-
+          <div v-else class="text-grey-7">No associated asset classes</div>
         </q-card-section>
       </q-card>
 
