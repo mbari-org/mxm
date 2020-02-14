@@ -50,7 +50,8 @@
               style="width:5px;vertical-align:top"
         >
           <q-icon
-            :name="`far ${props.row.missionTplId.endsWith('/') ? 'fa-folder' : 'fa-file-alt'}`"
+            v-if="props.row.missionTplId.endsWith('/')"
+            name="far fa-folder"
             size="12px"
             class="q-mr-xs"
           />
