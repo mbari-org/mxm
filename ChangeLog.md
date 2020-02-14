@@ -1,5 +1,9 @@
 2020-02
 
+- complete version 0.6.0
+
+- Parameter page is now read-only (all editing removed)
+
 - TODO nicer route display to reflect mission template directory organization.
   Example:
     - Right now: `/#/TethysDash/mt/%2FInsert%2FNeedGPS`
