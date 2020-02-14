@@ -1,16 +1,14 @@
 <template>
   <div>
-    <pre>missionTplBasic={{missionTplBasic}}</pre>
+    <pre v-if="false">missionTplBasic={{missionTplBasic}}</pre>
 
-    <div class="row q-mb-sm">
-      <div class="text-bold row items-center">
-        <q-icon
-          name="far fa-folder"
-          size="12px"
-          class="q-mr-xs"
-        />
-        <div>{{ directory }}</div>
-      </div>
+    <div class="row q-mb-sm items-center">
+      <q-icon
+        name="far fa-folder"
+        size="16px"
+        class="q-mr-xs"
+      />
+      <div style="font-size:large">{{ directory }}</div>
       <div
         v-if="missionTplBasic && missionTplBasic.retrievedAt"
         class="q-ml-lg text-grey" style="font-size:smaller"

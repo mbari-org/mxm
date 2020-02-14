@@ -294,7 +294,7 @@
           const data = await this.$apollo.mutate({mutation, variables})
           if (debug) console.debug('updateMissionTpl: mutation data=', data)
           this.$q.notify({
-            message: `Mission template updated`,
+            message: `Mission template reloaded from provider`,
             timeout: 1000,
             position: 'top',
             color: 'info',

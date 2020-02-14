@@ -1,5 +1,15 @@
 2020-02
 
+- TODO nicer route display to reflect mission template directory organization.
+  Example:
+    - Right now: `/#/TethysDash/mt/%2FInsert%2FNeedGPS`
+    - Desirable: `/#/TethysDash/mt/Insert/NeedGPS`
+
+- TODO show some sort of "Connected to provider" status icon.
+  This can be initially be set to GREEN and then updated as attempted interactions happen,
+  and also making use of the "ping" operation against provider (in a debounced fashion).
+  In general, gracefully handle unsuccessful interaction with provider.
+
 - complete core reload functionality for MissionTpls
 - MissionTpls: auto-trigger reload when retrieved_at is null.
   Using vue-apollo `skip` option to coordinate distpach,
