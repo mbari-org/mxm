@@ -75,8 +75,7 @@ create or replace function list_mission_tpls_directory(provider_id varchar, dire
     from mission_tpls
     where provider_id = $1
       and mission_tpl_id != $2
-      and mission_tpl_id ~ ('^' || $2 || '.*/?')
-      and mission_tpl_id !~ ('^' || $2 || '.*/[^/]+')
+      and mission_tpl_id ~ ('^' || $2 || '[^/]*/?$')
       -- the regex is to allow for direct subdirectories, but not further descendents.
   $$ language sql stable;
 
