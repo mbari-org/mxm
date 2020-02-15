@@ -112,24 +112,23 @@
       allProvidersList: allProvidersListGql,
     },
 
-    mounted() {
-      this.$store.commit('utl/setBreadcrumbs', {
-        elements: [
-        ],
-        refresh: this.refresh
-      })
-
-      this.refresh()
-    },
-
     methods: {
-      refresh() {
-        this.$apollo.queries.allProvidersList.refetch()
+      setBreadcrumbs() {
+        this.$store.commit('utl/setBreadcrumbs', {
+          elements: [],
+          refresh: this.refreshProviders
+        })
+      },
+
+      refreshProviders() {
+        if (this.$apollo.queries.allProvidersList) {
+          this.$apollo.queries.allProvidersList.refetch()
+        }
       },
 
       providerCreated(provider) {
         if (debug) console.debug('providerCreated provider=', provider)
-        this.refresh()
+        this.refreshProviders()
       },
 
       deleteProvider(row) {
@@ -154,7 +153,7 @@
         this.$apollo.mutate({mutation, variables})
           .then((data) => {
             if (debug) console.debug('deleteProvider: mutation data=', data)
-            this.refresh()
+            this.refreshProviders()
             this.$q.notify(`${row.providerId} deleted.`)
           })
           .catch((error) => {
@@ -164,10 +163,15 @@
     },
 
     watch: {
-      allProvidersList(val) {
-        if (debug) console.log('watch allProvidersList=', val)
-      }
-    }
-
+      params: {
+        handler(val) {
+          console.warn('WATCH params=', val)
+          this.setBreadcrumbs()
+          this.refreshProviders()
+        },
+        deep: true,
+        immediate: true,
+      },
+    },
   }
 </script>

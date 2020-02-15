@@ -87,33 +87,35 @@
       },
     },
 
-    mounted() {
-      this.$store.commit('utl/setBreadcrumbs', {
-        elements: [
-          [this.params.providerId, [this.params.providerId]],
-          ['Assets', [this.params.providerId, 'a']],
-          [this.params.assetId],
-        ],
-        refresh: this.refreshAsset
-      })
-
-      this.refreshAsset()
-    },
-
     methods: {
+      setBreadcrumbs() {
+        this.$store.commit('utl/setBreadcrumbs', {
+          elements: [
+            [this.params.providerId, [this.params.providerId]],
+            ['Assets', [this.params.providerId, 'a']],
+            [this.params.assetId],
+          ],
+          refresh: this.refreshAsset
+        })
+      },
+
       refreshAsset() {
-        this.$apollo.queries.asset.refetch()
+        if (this.$apollo.queries.asset) {
+          this.$apollo.queries.asset.refetch()
+        }
       },
     },
 
     watch: {
-      '$route'() {
-        this.refreshAsset()
+      params: {
+        handler(val) {
+          console.warn('WATCH params=', val)
+          this.setBreadcrumbs()
+          this.refreshAsset()
+        },
+        deep: true,
+        immediate: true,
       },
-
-      asset(val) {
-        if (debug) console.log('watch asset=', val)
-      }
-    }
+    },
   }
 </script>

@@ -257,14 +257,15 @@
     },
 
     watch: {
-      directory: {
-        handler(val, old) {
-          console.warn(`WATCH directory=${val} old=${old}`)
+      params: {
+        handler(val) {
+          console.warn(`WATCH params=`, val)
           this.setBreadcrumbs()
           this.refreshMissionTpls()
         },
+        deep: true,
         immediate: true,
-      }
-    }
+      },
+    },
   }
 </script>

@@ -447,25 +447,23 @@
       },
     },
 
-    mounted() {
-      this.$store.commit('utl/setBreadcrumbs', {
-        elements: [
-          [this.params.providerId, [this.params.providerId]],
-          ['Missions', [this.params.providerId, 'm']],
-          [this.params.missionId],
-        ],
-        refresh: this.refreshMission
-      })
-
-      this.parametersWithError = {}
-      this.refreshMission()
-      this.$store.dispatch('units/getOrLoadUnitsForProvider', this.params.providerId)
-    },
-
     methods: {
+      setBreadcrumbs() {
+        this.$store.commit('utl/setBreadcrumbs', {
+          elements: [
+            [this.params.providerId, [this.params.providerId]],
+            ['Missions', [this.params.providerId, 'm']],
+            [this.params.missionId],
+          ],
+          refresh: this.refreshMission
+        })
+      },
+
       refreshMission() {
-        this.loading = true
-        this.$apollo.queries.mission.refetch()
+        if (this.$apollo.queries.mission) {
+          this.loading = true
+          this.$apollo.queries.mission.refetch()
+        }
       },
 
       editable() {
@@ -827,10 +825,19 @@
     },
 
     watch: {
-      '$route'() {
-        this.refreshMission()
-      }
-    }
+      params: {
+        handler(val) {
+          console.warn(`WATCH params=`, val)
+          this.setBreadcrumbs()
+
+          this.parametersWithError = {}
+          this.refreshMission()
+          this.$store.dispatch('units/getOrLoadUnitsForProvider', this.params.providerId)
+        },
+        deep: true,
+        immediate: true,
+      },
+    },
   }
 </script>
 

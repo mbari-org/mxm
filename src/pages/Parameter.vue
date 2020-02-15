@@ -162,24 +162,24 @@
       },
     },
 
-    mounted() {
-      this.$store.commit('utl/setBreadcrumbs', {
-        elements: [
-          [this.params.providerId, [this.params.providerId]],
-          ['MissionTemplates', [this.params.providerId, 'mt']],
-          [this.params.missionTplId, [this.params.providerId, 'mt', this.params.missionTplId]],
-          ['Params', [this.params.providerId, 'mt', this.params.missionTplId]],
-          [this.params.paramName],
-        ],
-        refresh: this.refreshParameter
-      })
-
-      this.refreshParameter()
-    },
-
     methods: {
+      setBreadcrumbs() {
+        this.$store.commit('utl/setBreadcrumbs', {
+          elements: [
+            [this.params.providerId, [this.params.providerId]],
+            ['MissionTemplates', [this.params.providerId, 'mt']],
+            [this.params.missionTplId, [this.params.providerId, 'mt', this.params.missionTplId]],
+            ['Params', [this.params.providerId, 'mt', this.params.missionTplId]],
+            [this.params.paramName],
+          ],
+          refresh: this.refreshParameter
+        })
+      },
+
       refreshParameter() {
-        this.$apollo.queries.parameter.refetch()
+        if (this.$apollo.queries.parameter) {
+          this.$apollo.queries.parameter.refetch()
+        }
       },
 
       defaultValueError() {
@@ -189,10 +189,16 @@
     },
 
     watch: {
-      '$route'() {
-        this.refreshParameter()
-      }
-    }
+      params: {
+        handler(val) {
+          console.warn('WATCH params=', val)
+          this.setBreadcrumbs()
+          this.refreshParameter()
+        },
+        deep: true,
+        immediate: true,
+      },
+    },
   }
 </script>
 

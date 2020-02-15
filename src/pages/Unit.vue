@@ -90,28 +90,34 @@
       },
     },
 
-    mounted() {
-      this.$store.commit('utl/setBreadcrumbs', {
-        elements: [
-          [this.params.providerId, [this.params.providerId]],
-          ['Units', [this.params.providerId, 'u']],
-          [this.params.unitName],
-        ],
-        refresh: this.refreshUnit
-      })
-
-      this.refreshUnit()
-    },
-
     methods: {
+      setBreadcrumbs() {
+        this.$store.commit('utl/setBreadcrumbs', {
+          elements: [
+            [this.params.providerId, [this.params.providerId]],
+            ['Units', [this.params.providerId, 'u']],
+            [this.params.unitName],
+          ],
+          refresh: this.refreshUnit
+        })
+      },
+
       refreshUnit() {
-        this.$apollo.queries.unit.refetch()
+        if (this.$apollo.queries.unit) {
+          this.$apollo.queries.unit.refetch()
+        }
       },
     },
 
     watch: {
-      '$route'() {
-        this.refreshUnit()
+      params: {
+        handler(val) {
+          console.warn('WATCH params=', val)
+          this.setBreadcrumbs()
+          this.refreshUnit()
+        },
+        deep: true,
+        immediate: true,
       },
     },
   }

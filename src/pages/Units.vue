@@ -27,21 +27,31 @@
       },
     },
 
-    mounted() {
-      this.$store.commit('utl/setBreadcrumbs', {
-        elements: [
-          [this.params.providerId, [this.params.providerId]],
-          ['Units'],
-        ],
-        refresh: this.refreshUnits
-      })
-
-      this.refreshUnits()
-    },
-
     methods: {
+      setBreadcrumbs() {
+        this.$store.commit('utl/setBreadcrumbs', {
+          elements: [
+            [this.params.providerId, [this.params.providerId]],
+            ['Units'],
+          ],
+          refresh: this.refreshUnits
+        })
+      },
+
       refreshUnits() {
         this.$store.dispatch('units/getOrLoadUnitsForProvider', this.params.providerId)
+      },
+    },
+
+    watch: {
+      params: {
+        handler(val) {
+          console.warn('WATCH params=', val)
+          this.setBreadcrumbs()
+          this.refreshUnits()
+        },
+        deep: true,
+        immediate: true,
       },
     },
   }

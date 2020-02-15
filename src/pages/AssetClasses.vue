@@ -104,21 +104,33 @@
       },
     },
 
-    mounted() {
-      this.$store.commit('utl/setBreadcrumbs', {
-        elements: [
-          [this.params.providerId, [this.params.providerId]],
-          ['AssetClasses'],
-        ],
-        refresh: this.refreshAssetClasses
-      })
+    methods: {
+      setBreadcrumbs() {
+        this.$store.commit('utl/setBreadcrumbs', {
+          elements: [
+            [this.params.providerId, [this.params.providerId]],
+            ['AssetClasses'],
+          ],
+          refresh: this.refreshAssetClasses
+        })
+      },
 
-      this.refreshAssetClasses()
+      refreshAssetClasses() {
+        if (this.$apollo.queries.allAssetClassesList) {
+          this.$apollo.queries.allAssetClassesList.refetch()
+        }
+      },
     },
 
-    methods: {
-      refreshAssetClasses() {
-        this.$apollo.queries.allAssetClassesList.refetch()
+    watch: {
+      params: {
+        handler(val) {
+          console.warn(`WATCH params=`, val)
+          this.setBreadcrumbs()
+          this.refreshAssetClasses()
+        },
+        deep: true,
+        immediate: true,
       },
     },
   }

@@ -123,21 +123,33 @@
       },
     },
 
-    mounted() {
-      this.$store.commit('utl/setBreadcrumbs', {
-        elements: [
-          [this.params.providerId, [this.params.providerId]],
-          ['Assets'],
-        ],
-        refresh: this.refreshAssets
-      })
+    methods: {
+      setBreadcrumbs() {
+        this.$store.commit('utl/setBreadcrumbs', {
+          elements: [
+            [this.params.providerId, [this.params.providerId]],
+            ['Assets'],
+          ],
+          refresh: this.refreshAssets
+        })
+      },
 
-      this.refreshAssets()
+      refreshAssets() {
+        if (this.$apollo.queries.allAssetsList) {
+          this.$apollo.queries.allAssetsList.refetch()
+        }
+      },
     },
 
-    methods: {
-      refreshAssets() {
-        this.$apollo.queries.allAssetsList.refetch()
+    watch: {
+      params: {
+        handler(val) {
+          console.warn('WATCH params=', val)
+          this.setBreadcrumbs()
+          this.refreshAssets()
+        },
+        deep: true,
+        immediate: true,
       },
     },
   }

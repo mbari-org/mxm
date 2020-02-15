@@ -1,6 +1,7 @@
 2020-02
 
 - 0.6.1 AssetClass and Asset related pages are now read-only
+- general more consistent handling of params change reaction
 
 - complete version 0.6.0
 

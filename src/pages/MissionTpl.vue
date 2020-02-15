@@ -257,22 +257,22 @@
       },
     },
 
-    mounted() {
-      this.$store.commit('utl/setBreadcrumbs', {
-        elements: [
-          [this.params.providerId, [this.params.providerId]],
-          ['MissionTemplates', [this.params.providerId, 'mt']],
-          [this.params.missionTplId],
-        ],
-        refresh: this.reloadMissionTpl
-      })
-
-      this.refreshMissionTpl()
-    },
-
     methods: {
+      setBreadcrumbs() {
+        this.$store.commit('utl/setBreadcrumbs', {
+          elements: [
+            [this.params.providerId, [this.params.providerId]],
+            ['MissionTemplates', [this.params.providerId, 'mt']],
+            [this.params.missionTplId],
+          ],
+          refresh: this.reloadMissionTpl
+        })
+      },
+
       refreshMissionTpl() {
-        return this.$apollo.queries.missionTpl.refetch()
+        if (this.$apollo.queries.missionTpl) {
+          return this.$apollo.queries.missionTpl.refetch()
+        }
       },
 
       async reloadMissionTpl() {
@@ -307,9 +307,15 @@
     },
 
     watch: {
-      '$route'() {
-        this.refreshMissionTpl()
-      }
-    }
+      params: {
+        handler(val) {
+          console.warn(`WATCH params=`, val)
+          this.setBreadcrumbs()
+          this.refreshMissionTpl()
+        },
+        deep: true,
+        immediate: true,
+      },
+    },
   }
 </script>

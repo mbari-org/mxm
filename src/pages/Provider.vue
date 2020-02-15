@@ -210,24 +210,24 @@
       },
     },
 
-    mounted() {
-      this.$store.commit('utl/setBreadcrumbs', {
-        elements: [
-          [this.params.providerId],
-        ],
-        refresh: this.refreshProvider
-      })
-
-      this.refreshProvider()
-    },
-
     methods: {
+      setBreadcrumbs() {
+        this.$store.commit('utl/setBreadcrumbs', {
+          elements: [
+            [this.params.providerId],
+          ],
+          refresh: this.refreshProvider
+        })
+      },
+
       noChanges() {
         return this.provider === null || isEqual(this.provider, this.original)
       },
 
       refreshProvider() {
-        this.$apollo.queries.provider.refetch()
+        if (this.$apollo.queries.provider) {
+          this.$apollo.queries.provider.refetch()
+        }
       },
 
       updateProvider() {
@@ -309,13 +309,15 @@
     },
 
     watch: {
-      '$route'() {
-        this.refreshProvider()
+      params: {
+        handler(val) {
+          console.warn('WATCH params=', val)
+          this.setBreadcrumbs()
+          this.refreshProvider()
+        },
+        deep: true,
+        immediate: true,
       },
-
-      provider(val) {
-        if (debug) console.log('watch provider=', val)
-      }
-    }
+    },
   }
 </script>
