@@ -68,9 +68,6 @@
   const debug = false
 
   export default {
-    components: {
-    },
-
     data() {
       return {
         allAssetsList: [],
@@ -142,16 +139,6 @@
       refreshAssets() {
         this.$apollo.queries.allAssetsList.refetch()
       },
-
-      assetCreated(data) {
-        this.refreshAssets()
-      }
     },
-
-    watch: {
-      allAssetsList(val) {
-        if (debug) console.log('watch allAssetsList=', val)
-      }
-    }
   }
 </script>

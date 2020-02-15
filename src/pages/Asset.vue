@@ -13,26 +13,15 @@
                 :to="$utl.routeLoc([params.providerId, 'ac', asset.className])"
               >{{ asset.className }}</router-link>)
             </div>
-            <div class="q-ml-xl">
-              <q-btn
-                class="q-ml-md"
-                color="red"
-                size="xs"
-                dense round icon="delete"
-                @click="deleteAsset"
-              />
-            </div>
           </div>
-
         </q-card-section>
 
         <q-separator/>
+
         <q-card-section>
           <mxm-markdown
             :text="asset.description"
             :start-markdown="asset.assetClassByProviderIdAndClassName.providerByProviderId.descriptionFormat === 'markdown'"
-            editable
-            @saveDescription="updateDescription"
           />
         </q-card-section>
       </q-card>
@@ -47,18 +36,10 @@
 
 <script>
   import assetGql from '../graphql/asset.gql'
-  import assetUpdateGql from '../graphql/assetUpdate.gql'
-  import assetDeleteGql from '../graphql/assetDelete.gql'
-
-  import AssetNewButton from 'components/asset-new-button'
 
   const debug = false
 
   export default {
-    components: {
-      AssetNewButton,
-    },
-
     data() {
       return {
         loading: false,
@@ -122,76 +103,6 @@
     methods: {
       refreshAsset() {
         this.$apollo.queries.asset.refetch()
-      },
-
-      assetCreated(data) {
-        this.refreshAsset()
-      },
-
-      updateDescription(val) {
-        if (debug) console.debug('updateDescription val=', val, 'id=', this.asset.id)
-        const mutation = assetUpdateGql
-        const variables = {
-          input: {
-            id: this.asset.id,
-            assetPatch: {
-              description: val
-            }
-          }
-        }
-        this.$apollo.mutate({mutation, variables})
-          .then((data) => {
-            if (debug) console.debug('updateDescription: mutation data=', data)
-            this.asset.description = val
-            this.$q.notify({
-              message: `Asset description saved`,
-              timeout: 1000,
-              position: 'top',
-              color: 'info',
-            })
-          })
-          .catch((error) => {
-            console.error('updateDescription: mutation error=', error)
-          })
-      },
-
-      deleteAsset() {
-        console.log('deleteAsset: asset=', this.asset)
-        this.$q.dialog({
-          title: 'Confirm',
-          message: `Delete asset ID '${this.asset.assetId}'?`,
-          color: 'negative',
-          ok: `Yes, delete '${this.asset.assetId}'`,
-          cancel: true,
-          focus: 'cancel',
-        }).onOk(() => {
-          const mutation = assetDeleteGql
-          const variables = {
-            input: {
-              id: this.asset.id
-            }
-          }
-          this.$apollo.mutate({mutation, variables})
-              .then(data => {
-                if (debug) console.debug('deleteAsset: mutation data=', data)
-                this.$q.notify({
-                  message: `Asset deleted: '${this.asset.assetId}'`,
-                  timeout: 2000,
-                  position: 'top',
-                  color: 'info',
-                })
-                this.$utl.replace([this.params.providerId, 'a'])
-              })
-              .catch(error => {
-                console.error('deleteAsset: mutation error=', error)
-                this.$q.notify({
-                  message: `Asset deletion error: ${JSON.stringify(error)}`,
-                  timeout: 0,
-                  closeBtn: 'Close',
-                  color: 'warning',
-                })
-              })
-        })
       },
     },
 

@@ -1,5 +1,7 @@
 2020-02
 
+- 0.6.1 AssetClass and Asset related pages are now read-only
+
 - complete version 0.6.0
 
 - Parameter page is now read-only (all editing removed)

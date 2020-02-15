@@ -202,12 +202,10 @@
         // See https://github.com/vuejs/vue-apollo/issues/880
 
         if (this.$apollo.queries.missionTplBasic) {
-          console.warn('xxxxxxxxx refreshMissionTpls missionTplBasic query available')
-          const x = await this.$apollo.queries.missionTplBasic.refetch()
-          console.warn('xxxxxxxxx=', x)
+          await this.$apollo.queries.missionTplBasic.refetch()
 
           if (this.$apollo.queries.allMissionTplsList) {
-            console.debug('refreshMissionTpls: directory=', this.directory)
+            // console.debug('refreshMissionTpls: directory=', this.directory)
             this.$apollo.queries.allMissionTplsList.refetch()
           }
         }

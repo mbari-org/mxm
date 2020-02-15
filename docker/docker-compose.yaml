@@ -5,7 +5,7 @@ services:
 
     # NOTE: sometimes pushed with "latest" as default for convenience, especially during prototyping.
     # General recommendation is to use explicit version on actual deployment.
-    image: mbari/mxm:0.6.0
+    image: mbari/mxm:0.6.1
 
     volumes:
       - ${MXM_CONFIG_DIR}:/mxm/dist/spa/statics/config

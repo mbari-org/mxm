@@ -6,15 +6,6 @@
           <div class="row q-gutter-x-sm">
             <div>Asset Class:</div>
             <div class="text-bold">{{assetClass.className}}</div>
-            <div class="q-ml-xl">
-              <q-btn
-                class="q-ml-md"
-                color="red"
-                size="xs"
-                dense round icon="delete"
-                @click="deleteAssetClass"
-              />
-            </div>
           </div>
         </q-card-section>
         <q-separator/>
@@ -22,12 +13,9 @@
           <mxm-markdown
             :text="assetClass.description"
             :start-markdown="assetClass.providerByProviderId.descriptionFormat === 'markdown'"
-            editable
-            @saveDescription="updateDescription"
           />
         </q-card-section>
       </q-card>
-
 
       <q-table
         :data="myAssets"
@@ -54,14 +42,6 @@
               clearable
             />
           </div>
-        </div>
-
-        <div slot="top-right" slot-scope="props" class="fit">
-          <asset-new-button
-            :provider-id="params.providerId"
-            :asset-class-name="params.className"
-            @created="assetCreated"
-          />
         </div>
 
         <q-td slot="body-cell-assetId" slot-scope="props" :props="props"
@@ -94,18 +74,10 @@
 
 <script>
   import assetClassGql from '../graphql/assetClass.gql'
-  import assetClassUpdateGql from '../graphql/assetClassUpdate.gql'
-  import assetClassDeleteGql from '../graphql/assetClassDelete.gql'
-
-  import AssetNewButton from 'components/asset-new-button'
 
   const debug = false
 
   export default {
-    components: {
-      AssetNewButton,
-    },
-
     data() {
       return {
         loading: false,
@@ -180,76 +152,6 @@
     methods: {
       refreshAssetClass() {
         this.$apollo.queries.assetClass.refetch()
-      },
-
-      assetCreated(data) {
-        this.refreshAssetClass()
-      },
-
-      updateDescription(val) {
-        if (debug) console.debug('updateDescription val=', val, 'id=', this.assetClass.id)
-        const mutation = assetClassUpdateGql
-        const variables = {
-          input: {
-            id: this.assetClass.id,
-            assetClassPatch: {
-              description: val
-            }
-          }
-        }
-        this.$apollo.mutate({mutation, variables})
-          .then((data) => {
-            if (debug) console.debug('updateDescription: mutation data=', data)
-            this.assetClass.description = val
-            this.$q.notify({
-              message: `Asset class description saved`,
-              timeout: 1000,
-              position: 'top',
-              color: 'info',
-            })
-          })
-          .catch((error) => {
-            console.error('updateDescription: mutation error=', error)
-          })
-      },
-
-      deleteAssetClass() {
-        console.log('deleteAssetClass: assetClass=', this.assetClass)
-        this.$q.dialog({
-          title: 'Confirm',
-          message: `Delete asset class '${this.assetClass.className}'?`,
-          color: 'negative',
-          ok: `Yes, delete '${this.assetClass.className}'`,
-          cancel: true,
-          focus: 'cancel',
-        }).onOk(() => {
-          const mutation = assetClassDeleteGql
-          const variables = {
-            input: {
-              id: this.assetClass.id
-            }
-          }
-          this.$apollo.mutate({mutation, variables})
-              .then(data => {
-                if (debug) console.debug('deleteAssetClass: mutation data=', data)
-                this.$q.notify({
-                  message: `Asset class deleted: '${this.assetClass.className}'`,
-                  timeout: 2000,
-                  position: 'top',
-                  color: 'info',
-                })
-                this.$utl.replace([this.params.providerId, 'ac'])
-              })
-              .catch(error => {
-                console.error('deleteAssetClass: mutation error=', error)
-                this.$q.notify({
-                  message: `Asset class deletion error: ${JSON.stringify(error)}`,
-                  timeout: 0,
-                  closeBtn: 'Close',
-                  color: 'warning',
-                })
-              })
-        })
       },
     },
 

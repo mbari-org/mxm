@@ -26,12 +26,6 @@
           />
         </div>
       </div>
-      <div slot="top-right" slot-scope="props" class="fit">
-        <asset-class-new-button
-          :provider-id="params.providerId"
-          @created="assetClassCreated"
-        />
-      </div>
 
       <q-td slot="body-cell-className" slot-scope="props" :props="props"
             style="width:5px;vertical-align:top"
@@ -59,15 +53,9 @@
 <script>
   import allAssetClassesListGql from '../graphql/assetClasses.gql'
 
-  import AssetClassNewButton from 'components/asset-class-new-button'
-
   const debug = false
 
   export default {
-    components: {
-      AssetClassNewButton,
-    },
-
     data() {
       return {
         allAssetClassesList: [],
@@ -132,16 +120,6 @@
       refreshAssetClasses() {
         this.$apollo.queries.allAssetClassesList.refetch()
       },
-
-      assetClassCreated(data) {
-        this.refreshAssetClasses()
-      }
     },
-
-    watch: {
-      allAssetClassesList(val) {
-        if (debug) console.log('watch allAssetClassesList=', val)
-      }
-    }
   }
 </script>
