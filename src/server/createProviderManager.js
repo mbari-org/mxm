@@ -5,6 +5,7 @@ import {
   Gql,
   getMissionTplByID,
   deleteMissionTplByID,
+  getMissionByID,
   performQuery,
 } from './gql'
 import {
@@ -315,7 +316,7 @@ function createProviderManager(context) {
 
   async function preUpdateMission(input) {
     const {id, missionPatch} = input
-    if (debug) console.log(`preUpdateMission: id=${id} missionPatch=`, missionPatch)
+    /*if (debug)*/ console.log(`preUpdateMission: id=${id} missionPatch=`, missionPatch)
 
     if (missionPatch.missionStatus !== 'submitted') {
       return
@@ -324,12 +325,8 @@ function createProviderManager(context) {
     // mission is being submitted.
 
     // get the current state of the mission:
-    const query = Gql.missionByID()
-    const variables = { id }
-    const operationName = 'missionByID'
-    const result = await performQuery(query, variables, operationName, context)
-    if (debug) console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
-    const mission = result.data.mission
+    const mission = await getMissionByID(context, id)
+    // console.log(`MISSION=`, mission)
 
     // set up provider client:
     const provider = mission.missionTplByProviderIdAndMissionTplId.providerByProviderId

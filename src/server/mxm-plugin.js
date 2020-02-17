@@ -17,10 +17,6 @@ const plugin1 = makeWrapResolversPlugin({
 
     updateMission: updateMissionResolverWrapper(),
   },
-
-  Mission: {
-    missionStatus: missionStatusResolverWrapper(),
-  },
 })
 
 const plugin2 = makeWrapResolversPlugin(
@@ -124,68 +120,3 @@ function updateMissionResolverWrapper() {
     return result
   }
 }
-
-// TODO
-function missionStatusResolverWrapper() {
-  return async (resolve, source, args, context, resolveInfo) => {
-    console.log('entering missionStatusResolverWrapper')
-    console.log('args=', args)      // {}
-    // console.log('context=', context);
-    console.log('source=', source)  // { missionStatus: 'submitted' }
-    // console.log('resolveInfo=', resolveInfo);
-    // console.log('resolveInfo.operation=', resolveInfo.operation);
-    console.log('resolveInfo.variableValues=', resolveInfo.variableValues);
-    //     resolveInfo.variableValues= {
-    //       providerId: 'TethysDash @ tethyssim',
-    //       missionTplId: 'Science/cork_and_screw_2',
-    //       missionId: 'sdsdsd'
-    //     }
-
-    // const variableValues = resolveInfo.variableValues
-    // const providerId     = variableValues.providerId
-    // const missionTplId   = variableValues.missionTplId
-    // const missionId      = variableValues.missionId
-    //
-    // const providerManager = createProviderManager(context)
-    //
-    // await providerManager.queryMissionStatus(providerId, missionTplId, missionId)
-    const result = await resolve()
-
-    console.log(`missionStatus: result=${result}`)
-
-    // return 'terminated'
-    return result
-  }
-}
-
-/*
-Output looks like:
-
-    entering createProviderResolverWrapper
-    args= {
-      input: {
-        provider: {
-          providerId: 'AAATethysDash',
-          httpEndpoint: 'http://tethyssim.shore.mbari.org:8080/TethysDash/api/mxm',
-          apiType: 'graphql',
-          description: 'TethysDash/LRAUV System'
-        }
-      }
-    }
-    exiting createProviderResolverWrapper
-    result= {
-      clientMutationId: undefined,
-      data: {
-        '@provider': {
-          providerId: 'AAATethysDash',
-          httpEndpoint: 'http://tethyssim.shore.mbari.org:8080/TethysDash/api/mxm',
-          apiType: 'graphql',
-          description: 'TethysDash/LRAUV System',
-          canValidate: false,
-          usesUnits: false,
-          usesSched: false,
-          descriptionFormat: null
-        }
-      }
-    }
- */

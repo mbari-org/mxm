@@ -21,6 +21,7 @@ export {
   Gql,
   getMissionTplByID,
   deleteMissionTplByID,
+  getMissionByID,
   performQuery,
 }
 
@@ -53,6 +54,15 @@ async function deleteMissionTplByID(context, id) {
   const operationName = 'deleteMissionTpl'
   const result = await performQuery(query, variables, operationName, context)
   if (debug) console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
+}
+
+async function getMissionByID(context, id) {
+  const query = readGql('missionByID')
+  const variables = { id }
+  const operationName = 'missionByID'
+  const result = await performQuery(query, variables, operationName, context)
+  /*if (debug)*/ console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
+  return result.data.mission
 }
 
 async function performQuery(query, variables, operationName, context_) {

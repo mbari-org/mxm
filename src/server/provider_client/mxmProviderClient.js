@@ -9,11 +9,11 @@ export default function createMxmProviderClient({providerId, httpEndpoint, apiTy
     providerId,
     isSupportedInterface,
     getGeneralInfo,
+    ping,
     getAssetClasses,
     getUnits,
     listMissionTemplates,
     getMissionTemplate,
-    getMissionTpls,
     getMissions,
     getMissionById,
     postMission,
@@ -26,6 +26,10 @@ export default function createMxmProviderClient({providerId, httpEndpoint, apiTy
 
   function getGeneralInfo() {
     return rest0.getGeneralInfo(httpEndpoint)
+  }
+
+  function ping() {
+    return rest0.ping(httpEndpoint)
   }
 
   function getAssetClasses() {
@@ -42,11 +46,6 @@ export default function createMxmProviderClient({providerId, httpEndpoint, apiTy
 
   function getMissionTemplate(filePath) {
     return rest0.getMissionTemplate(httpEndpoint, filePath)
-  }
-
-  // TODO remove
-  function getMissionTpls() {
-    return rest0.getMissionTpls(httpEndpoint)
   }
 
   function getMissions() {

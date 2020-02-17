@@ -2,11 +2,11 @@
 
 export default {
   getGeneralInfo,
+  ping,
   getAssetClasses,
   getUnits,
   listMissionTemplates,
   getMissionTemplate,
-  getMissionTpls,
   getMissions,
   postMission,
   getMission,
@@ -18,6 +18,10 @@ import axios from 'axios'
 
 function getGeneralInfo(httpEndpoint) {
   return doGet(httpEndpoint, 'info')
+}
+
+function ping(httpEndpoint) {
+  return doGet(httpEndpoint, 'ping')
 }
 
 function getAssetClasses(httpEndpoint) {
@@ -34,11 +38,6 @@ function listMissionTemplates(httpEndpoint, directory) {
 
 function getMissionTemplate(httpEndpoint, filePath) {
   return doGet(httpEndpoint, `missiontemplate/${filePath}`)
-}
-
-// TODO remove
-function getMissionTpls(httpEndpoint) {
-  return doGet(httpEndpoint, 'missiontpls')
 }
 
 function getMissions(httpEndpoint) {
