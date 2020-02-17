@@ -8,25 +8,6 @@
         <q-card-section class="row q-gutter-md items-center">
           <span>Provider:</span>
           <span class="text-bold">{{provider.providerId}}</span>
-
-          <div class="q-ml-xl">
-            <q-btn
-              :disable="noChanges()"
-              :color="noChanges() ? 'grey' : 'red'"
-              size="sm"
-              :class="{'shadow-5': !noChanges()}"
-              dense round icon="save"
-              @click="updateProvider"
-            />
-            <q-btn
-              v-if="!noChanges()"
-              class="q-ml-md"
-              color="grey"
-              size="sm"
-              dense round icon="undo"
-              @click="refreshProvider"
-            />
-          </div>
         </q-card-section>
 
         <q-separator/>
@@ -36,8 +17,6 @@
               expandable init-expanded expandable-title="Description:"
               :text="provider.description"
               :start-markdown="provider.descriptionFormat === 'markdown'"
-              editable
-              @saveDescription="d => { provider.description = d }"
             />
           </div>
           <q-separator/>
@@ -88,17 +67,6 @@
                 <span class="text-bold">
                   {{provider.httpEndpoint}}
                 </span>
-                <q-popup-edit
-                  v-model="provider.httpEndpoint"
-                  title="Endpoint"
-                  buttons
-                >
-                  <q-input
-                    v-model.trim="provider.httpEndpoint"
-                    clearable autofocus
-                    class="bg-green-1"
-                  />
-                </q-popup-edit>
               </td>
             </tr>
             <tr>
@@ -107,16 +75,6 @@
                 <span class="text-bold">
                   {{provider.apiType}}
                 </span>
-                <q-popup-edit
-                  v-model="provider.apiType"
-                  title="API Type"
-                  buttons
-                >
-                  <api-type-select
-                    :value="provider.apiType"
-                    @input="val => { provider.apiType = val.value }"
-                  />
-                </q-popup-edit>
               </td>
             </tr>
             <tr>
@@ -162,27 +120,16 @@
 
 <script>
   import providerGql from '../graphql/provider.gql'
-  import providerUpdateGql from '../graphql/providerUpdate.gql'
 
-  import apiTypeSelect from '../components/api-type-select'
-  import cloneDeep from 'lodash/cloneDeep'
-  import isEqual from 'lodash/isEqual'
   import reduce from 'lodash/reduce'
 
-  const debug = false
+  const debug = window.location.search.match(/.*debug=.*provider.*/)
 
   export default {
-    components: {
-      apiTypeSelect,
-    },
-
-    data() {
-      return {
-        debug,
-        loading: false,
-        original: null,
-      }
-    },
+    data: () => ({
+      debug,
+      loading: false,
+    }),
 
     computed: {
       params() {
@@ -204,7 +151,6 @@
           if (data.allProvidersList && data.allProvidersList.length) {
             provider = data.allProvidersList[0]
           }
-          this.original = cloneDeep(provider)
           return provider
         },
       },
@@ -216,54 +162,29 @@
           elements: [
             [this.params.providerId],
           ],
-          refresh: this.refreshProvider
+          refresh: this.reloadProvider
         })
       },
 
-      noChanges() {
-        return this.provider === null || isEqual(this.provider, this.original)
+      async reloadProvider() {
+        this.provider = null
+        this.$q.loading.show({
+          message: `Reloading ${this.params.providerId} ...`
+        })
+        try {
+          // TODO actual reload against provider.
+
+          await this.refreshProvider()
+        }
+        finally {
+          this.$q.loading.hide()
+        }
       },
 
-      refreshProvider() {
+      async refreshProvider() {
         if (this.$apollo.queries.provider) {
-          this.$apollo.queries.provider.refetch()
+          await this.$apollo.queries.provider.refetch()
         }
-      },
-
-      updateProvider() {
-        if (debug) console.debug('updateProvider provider=', this.provider)
-        const mutation = providerUpdateGql
-        const providerPatch = {}
-
-        if (!isEqual(this.provider.description, this.original.description)) {
-          providerPatch.description = this.provider.description
-        }
-        if (!isEqual(this.provider.httpEndpoint, this.original.httpEndpoint)) {
-          providerPatch.httpEndpoint = this.provider.httpEndpoint
-        }
-        if (!isEqual(this.provider.apiType, this.original.apiType)) {
-          providerPatch.apiType = this.provider.apiType
-        }
-
-        const variables = {
-          input: {
-            id: this.provider.id,
-            providerPatch
-          }
-        }
-        this.$apollo.mutate({mutation, variables})
-          .then((data) => {
-            if (debug) console.debug('updateProvider: mutation data=', data)
-            this.refreshProvider()
-            this.$q.notify({
-              message: `Provider updated`,
-              timeout: 1000,
-              color: 'info',
-            })
-          })
-          .catch((error) => {
-            console.error('updateProvider: mutation error=', error)
-          })
       },
 
       numMissionTemplates() {
