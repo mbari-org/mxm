@@ -43,9 +43,6 @@
     - add page to dispatch either template directory listing or specific template
       depending on missionTplId.
       This includes new SQL function `list_mission_tpls_directory`
-      TODO note adjustment in MissionTpls' setBreadcrumbs - reflect similar pattern
-      in other places.
-    - TODO reflect result of directory listing in database and in response to client
 
 - new request `/info` for general provider info (including capabilities)
 
@@ -431,8 +428,6 @@ TODO: review contraint about deleting a missionTpl's assetClass
 - adjusting queries/mutations per execution of `postgraphile` as follows:
 
       postgraphile -c postgresql://pxs@localhost:25432/pxs --schema public -o --simple-collections only
-
-   TODO adjust docker-compose to use postgraphile
 
 - looking again into PostGraphile after facing Hasura issues:
     - https://github.com/hasura/graphql-engine/issues/284
