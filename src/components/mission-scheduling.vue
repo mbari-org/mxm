@@ -9,6 +9,7 @@
         label="ASAP"
         val="ASAP"
         dense
+        :disable="!editable"
         :value="schedInfo.schedType"
         @input="schedType => emit({schedType})"
       />
@@ -17,6 +18,7 @@
         label="Queue"
         val="QUEUE"
         dense
+        :disable="!editable"
         :value="schedInfo.schedType"
         @input="schedType => emit({schedType})"
       />
@@ -26,6 +28,7 @@
           label="At:"
           val="DATE"
           dense
+          :disable="!editable"
           :value="schedInfo.schedType"
           @input="schedType => emit({schedType})"
         />
@@ -36,7 +39,7 @@
           {{ masked }}
         </q-chip>
         <q-popup-edit
-          v-if="schedInfo.schedType === 'DATE'"
+          v-if="editable && schedInfo.schedType === 'DATE'"
           v-model="dateStr"
           buttons
           anchor="bottom middle" self="top middle"
@@ -87,6 +90,11 @@
       schedInfo: {
         type: Object,
         required: true
+      },
+
+      editable: {
+        type: Boolean,
+        default: false
       },
     },
 

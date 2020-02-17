@@ -72,6 +72,7 @@
       >
         <mission-scheduling
           :sched-info="{schedType: mission.schedType, schedDate: mission.schedDate}"
+          :editable="mission.missionStatus === 'DRAFT'"
           @schedInfo="updateMissionSched"
         />
       </div>
