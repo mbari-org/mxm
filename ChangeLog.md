@@ -1,5 +1,8 @@
 2020-02
 
+- TODO do keep order of parameters!
+- TODO add filter in selection of template when creating mission
+
 - improve handling of request for mission status involving provider
 - add canReportMissionStatus to Provider model
 
