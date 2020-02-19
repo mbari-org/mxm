@@ -29,10 +29,10 @@ function createProviderManager(context) {
     preUpdateMissionTpl,
 
     preUpdateMission,
-    queryMissionStatus,
   }
 
   function setMxmProviderClient(providerId, httpEndpoint, apiType) {
+    console.assert(providerId && httpEndpoint && apiType)
     mxmProviderClient = createMxmProviderClient({providerId, httpEndpoint, apiType})
   }
 
@@ -312,10 +312,11 @@ function createProviderManager(context) {
     // get the current state of the mission:
     const mission = await getMissionByID(context, id)
     // console.log(`MISSION=`, mission)
+    const providerId = mission.providerId
 
     // set up provider client:
     const provider = mission.missionTplByProviderIdAndMissionTplId.providerByProviderId
-    const {providerId, httpEndpoint, apiType} = provider
+    const {httpEndpoint, apiType} = provider
     setMxmProviderClient(providerId, httpEndpoint, apiType)
     if (!mxmProviderClient.isSupportedInterface()) {
       console.warn('preUpdateMission: Not supported interface to provider')
@@ -323,26 +324,41 @@ function createProviderManager(context) {
       return
     }
 
+    console.log('preUpdateMission: provider=', provider)
+
     // depending on current missionStatus:
     switch (mission.missionStatus) {
       case 'DRAFT': {
         // is mission being submitted?
         if (missionPatch.missionStatus === 'submitted') {
           await submitMission(provider, mission)
+          break
+        }
+        else if (!missionPatch.missionStatus || missionPatch.missionStatus === 'draft') {
+          // OK, no requested change in status; let mutation proceed.
+          break
         }
         else {
-          throw new Error('Expecting mission being submitted when in DRAFT status')
+          throw new Error(`Unexpected missionPatch.missionStatus=${missionPatch.missionStatus} in DRAFT status`)
         }
-        break
       }
 
       default:
-        if (!isEmpty(missionPatch)) {
-          throw new Error(`Invalid modification request from client in: ${mission.missionStatus}`)
+        if (isEmpty(missionPatch)) {
+          // This is a request for refreshing the mission status.
+          if (provider.canReportMissionStatus) {
+            const status = await retrieveMissionStatus(mission)
+            if (status) {
+              missionPatch.missionStatus = status
+            }
+          }
+          else {
+            console.debug(`provider '${providerId}' does not support reporting mission status`)
+          }
         }
-
-        console.log('provider=', provider)
-        // TODO check status with provider
+        else {
+          throw new Error(`Invalid modification request from client as misssion is in status: ${mission.missionStatus}`)
+        }
     }
   }
 
@@ -385,72 +401,15 @@ function createProviderManager(context) {
     }
   }
 
-  async function queryMissionStatus(providerId, missionTplId, missionId) {
-
-    // TODO
-
-    console.log('queryMissionStatus:', providerId, missionTplId, missionId)
-
-
-    // set up provider client:
-    const provider = mission.missionTplByProviderIdAndMissionTplId.providerByProviderId
-    const {httpEndpoint, apiType} = provider
-    setMxmProviderClient(providerId, httpEndpoint, apiType)
-    if (!mxmProviderClient.isSupportedInterface()) {
-      console.warn('preUpdateMission: Not supported interface to provider')
-      // let the operation continue.
-      return
+  async function retrieveMissionStatus(mission) {
+    const res = await mxmProviderClient.getMissionById(mission.missionId)
+    console.debug('mxmProviderClient.getMissionById: res=', res)
+    if (res.status) {
+      return res.status
     }
-
-
-
-    return
-
-    this.mxmProviderClient.getMissionById(this.mission.missionId)
-      .then(res => {
-        console.debug('getMission: res=', res)
-        if (!res.status) {
-          this.$q.notify("Provider reported no status")
-          return
-        }
-        const status = res.status
-        this.$q.notify({
-          message: `Status: ${status}`,
-          timeout: 1000,
-          color: 'info',
-          position: 'top-left'
-        })
-        if (this.mission.missionStatus !== status) {
-          this.updateMissionStatus(status)
-            .then(_ => {
-              this.refreshMission()
-            })
-        }
-      })
-      .catch(error => {
-        console.error('checkStatus: getMission: error=', error)
-        if (error === 'No such mission') {
-          // assume we get back to DRAFT
-          this.$q.notify({
-            message: `No such mission in the provider. Returning to DRAFT status`,
-            timeout: 0,
-            closeBtn: 'Close',
-            color: 'info'
-          })
-          this.updateMissionStatus('DRAFT')
-            .then(_ => {
-              this.refreshMission()
-            })
-        }
-        else {
-          this.$q.notify({
-            message: `Mission submission error: ${JSON.stringify(error)}`,
-            timeout: 0,
-            closeBtn: 'Close',
-            color: 'info',
-          })
-        }
-      })
+    else {
+      console.error(`provider '${mission.providerId}' reported no status for missionId=${mission.missionId}`)
+    }
   }
 }
 

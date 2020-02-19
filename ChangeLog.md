@@ -1,5 +1,6 @@
 2020-02
 
+- improve handling of request for mission status involving provider
 - add canReportMissionStatus to Provider model
 
 - Provider page is now read-only (all editing removed)

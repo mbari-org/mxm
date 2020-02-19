@@ -67,10 +67,7 @@ const postgraphileOptions = {
   // extendedErrors: ["hint", "detail", "errcode"],
   extendedErrors: ['severity', 'code', 'detail', 'hint', 'position', 'internalPosition', 'internalQuery', 'where', 'schema', 'table', 'column', 'dataType', 'constraint', 'file', 'line', 'routine'],
   // // appendPlugins: [require("@graphile-contrib/pg-simplify-inflector")],
-  // allowExplain(req) {
-  //   // TODO: customise condition!
-  //   return true
-  // },
+  allowExplain: req => true,
   // enableQueryBatching: true,
   // pgSettings(req) {
   //   /* TODO */

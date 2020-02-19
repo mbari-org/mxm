@@ -49,16 +49,16 @@ function postMission(httpEndpoint, data) {
 }
 
 function getMission(httpEndpoint, missionId) {
-  return doGet(httpEndpoint, `missions/${missionId}`)
+  return doGet(httpEndpoint, 'mission', {missionId})
 }
 
-function doGet(httpEndpoint, route) {
+function doGet(httpEndpoint, route, params = {}) {
+  const method = 'GET'
+  const url = `${httpEndpoint}/${route}`
   return new Promise((resolve, reject) => {
-    const method = 'GET'
-    const url = `${httpEndpoint}/${route}`
-    if (debug) console.debug('getGet', 'url=', url)
+    if (debug) console.debug('doGet', 'url=', url, 'params=', params)
 
-    axios({method, url})
+    axios({method, url, params})
       .then(response => {
         if (debug) console.debug(`${method} ${url}: response=`, response)
         if (response.data.error) {
