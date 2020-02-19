@@ -277,8 +277,8 @@
 
       async reloadMissionTpl() {
         // TODO get updated info from the mutation itself
-        this.updateMissionTpl()
-          .then(this.refreshMissionTpl)
+        await this.updateMissionTpl()
+        this.refreshMissionTpl()
       },
 
       async updateMissionTpl() {

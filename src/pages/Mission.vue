@@ -456,7 +456,7 @@
             ['Missions', [this.params.providerId, 'm']],
             [this.params.missionId],
           ],
-          refresh: this.refreshMission
+          refresh: this.reloadMission
         })
       },
 
@@ -465,6 +465,12 @@
           this.loading = true
           this.$apollo.queries.mission.refetch()
         }
+      },
+
+      async reloadMission() {
+        // TODO get updated info from the mutation itself
+        await this.updateMission({})
+        this.refreshMission()
       },
 
       editable() {

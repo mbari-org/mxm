@@ -61,7 +61,7 @@ function createProviderResolverWrapper() {
     // on-demand loading/update of the mission templates.
 
     console.log('exiting createProviderResolverWrapper')
-    console.log('result=', result)
+    // console.log('result=', result)
 
     return result
   }

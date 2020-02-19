@@ -4,6 +4,7 @@ query getMissionTpl($providerId: String!, $missionTplId: String!) {
       descriptionFormat
       usesUnits
       usesSched
+      canReportMissionStatus
     }
     id
     missionTplId

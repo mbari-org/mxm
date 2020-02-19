@@ -13,6 +13,7 @@ create table if not exists providers
   uses_sched boolean default false not null,
   can_validate boolean default false not null,
   uses_units boolean default false not null,
+  can_report_mission_status boolean default false not null,
   description_format varchar,
   primary key (provider_id)
 )
@@ -53,7 +54,7 @@ create table if not exists mission_tpls
 create or replace function mission_tpls_set_retrieved_at() returns trigger as $$
 begin
   -- set retrieved_at only if not yet set and this is an actual template (not a directory)
-  if new.retrieved_at is null && new.mission_tpl_id !~ '^.*/$' then
+  if new.retrieved_at is null and new.mission_tpl_id !~ '^.*/$' then
     new.retrieved_at = now();
   end if;
   return new;

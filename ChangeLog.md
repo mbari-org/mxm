@@ -1,5 +1,7 @@
 2020-02
 
+- add canReportMissionStatus to Provider model
+
 - Provider page is now read-only (all editing removed)
 
 - 0.6.1 AssetClass and Asset related pages are now read-only

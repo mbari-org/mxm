@@ -25,6 +25,7 @@ query missionByID($id: ID!) {
         canValidate
         usesSched
         usesUnits
+        canReportMissionStatus
         descriptionFormat
       }
     }

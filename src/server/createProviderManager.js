@@ -55,6 +55,7 @@ function createProviderManager(context) {
       provider.usesSched = capabilities.usesSched || false
       provider.canValidate = capabilities.canValidate || false
       provider.usesUnits = capabilities.usesUnits || false
+      provider.canReportMissionStatus = capabilities.canReportMissionStatus || false
       provider.descriptionFormat = capabilities.descriptionFormat
     }
     catch(error) {
@@ -69,32 +70,17 @@ function createProviderManager(context) {
     }
 
     // Asset Classes
-    try {
-      const assetClasses = await mxmProviderClient.getAssetClasses()
-      if (debug) console.log('GOT getAssetClasses=', assetClasses)
-      await createAssetClasses(assetClasses)
-    }
-    catch(error) {
-      console.error('getAssetClasses: error=', error)
-    }
+    const assetClasses = await mxmProviderClient.getAssetClasses()
+    if (debug) console.log('GOT getAssetClasses=', assetClasses)
+    await createAssetClasses(assetClasses)
 
     // Units:
     if (provider.usesUnits) {
-      try {
-        await getAndCreateUnits()
-      }
-      catch(error) {
-        console.error('getAndCreateUnits: error=', error)
-      }
+      await getAndCreateUnits()
     }
 
     // MissionTpls:
-    try {
-      await getAndCreateMissionTplsForDirectory('/')
-    }
-    catch(error) {
-      console.error('getAssetClasses: error=', error)
-    }
+    await getAndCreateMissionTplsForDirectory('/')
 
     async function createAssetClasses(assetClasses) {
       return await runInSequence(assetClasses.map(async assetClass => await createAssetClass(assetClass)))
@@ -168,6 +154,7 @@ function createProviderManager(context) {
 
   // capture entries at the given directory:
   async function getAndCreateMissionTplsForDirectory(directory) {
+    console.log(`getAndCreateMissionTplsForDirectory: directory=${directory}`)
     console.assert(directory.endsWith('/'))
 
     // create a MissionTpl entry for the directory itself:
@@ -209,8 +196,6 @@ function createProviderManager(context) {
 
     const query = Gql.missionTplInsert()
 
-    console.log(`createMissionTpl: missionTplId=`, missionTpl.missionTplId)
-
     const variables = {
       providerId,
       missionTplId: missionTpl.missionTplId,
@@ -219,7 +204,13 @@ function createProviderManager(context) {
     }
     const operationName = 'createMissionTpl'
     const result = await performQuery(query, variables, operationName, context)
-    if (debug) console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
+    if (result.errors) {
+      result.errors.forEach(error => {
+        console.log('ERROR=', error)
+      })
+      return
+    }
+    /*if (debug)*/ console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
 
     if (!missionTpl.missionTplId.endsWith('/')) {
       const assetClassNames = missionTpl.assetClassNames || []
@@ -318,12 +309,6 @@ function createProviderManager(context) {
     const {id, missionPatch} = input
     /*if (debug)*/ console.log(`preUpdateMission: id=${id} missionPatch=`, missionPatch)
 
-    if (missionPatch.missionStatus !== 'submitted') {
-      return
-    }
-
-    // mission is being submitted.
-
     // get the current state of the mission:
     const mission = await getMissionByID(context, id)
     // console.log(`MISSION=`, mission)
@@ -338,11 +323,27 @@ function createProviderManager(context) {
       return
     }
 
-    if (mission.missionStatus !== 'DRAFT') {
-      throw new Error(`Expecting current missionStatus to be DRAFT, but got: ${missionStatus}`)
-    }
+    // depending on current missionStatus:
+    switch (mission.missionStatus) {
+      case 'DRAFT': {
+        // is mission being submitted?
+        if (missionPatch.missionStatus === 'submitted') {
+          await submitMission(provider, mission)
+        }
+        else {
+          throw new Error('Expecting mission being submitted when in DRAFT status')
+        }
+        break
+      }
 
-    await submitMission(provider, mission)
+      default:
+        if (!isEmpty(missionPatch)) {
+          throw new Error(`Invalid modification request from client in: ${mission.missionStatus}`)
+        }
+
+        console.log('provider=', provider)
+        // TODO check status with provider
+    }
   }
 
   async function submitMission(provider, mission) {

@@ -29,6 +29,7 @@ query mission($providerId: String!, $missionTplId: String!, $missionId: String!)
         canValidate
         usesSched
         usesUnits
+        canReportMissionStatus
         descriptionFormat
       }
       parametersByProviderIdAndMissionTplIdList(orderBy: [PARAM_ORDER_ASC]) {

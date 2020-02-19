@@ -5,7 +5,7 @@ services:
 
     # NOTE: sometimes pushed with "latest" as default for convenience, especially during prototyping.
     # General recommendation is to use explicit version on actual deployment.
-    image: mbari/mxm:0.6.1
+    image: mbari/mxm:latest
 
     volumes:
       - ${MXM_CONFIG_DIR}:/mxm/dist/spa/statics/config
@@ -21,7 +21,7 @@ services:
 
   mxm-postgres:
     container_name: mxm-postgres
-    image: mbari/mxm-postgres:0.5.2
+    image: mbari/mxm-postgres:0.5.3
     ports:
     - "25432:5432"
     restart: always
