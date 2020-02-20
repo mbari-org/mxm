@@ -1,6 +1,9 @@
 2020-02
 
-- TODO do keep order of parameters!
+- do keep order of parameters and order of other entity lists as reported from provider.
+  runInSequence now accepts function as list element to generate corresponding promise; 
+  so no subsequent promise is even created until the ongoing one is completed.
+
 - TODO add filter in selection of template when creating mission
 
 - improve handling of request for mission status involving provider

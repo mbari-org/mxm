@@ -83,7 +83,9 @@ function createProviderManager(context) {
     await getAndCreateMissionTplsForDirectory('/')
 
     async function createAssetClasses(assetClasses) {
-      return await runInSequence(assetClasses.map(async assetClass => await createAssetClass(assetClass)))
+      return await runInSequence(
+          assetClasses.map(assetClass => () => createAssetClass(assetClass))
+      )
     }
 
     async function createAssetClass(assetClass) {
@@ -104,7 +106,9 @@ function createProviderManager(context) {
     }
 
     async function createAssets(assetClass, assets) {
-      return await runInSequence(assets.map(async asset => await createAsset(assetClass, asset)))
+      return await runInSequence(
+          assets.map(asset => () => createAsset(assetClass, asset))
+      )
     }
 
     async function createAsset(assetClass, asset) {
@@ -130,7 +134,9 @@ function createProviderManager(context) {
 
     async function createUnits(units) {
       const sortedUnits = orderBy(units, u => u.baseUnit ? 1 : 0)
-      await runInSequence(sortedUnits.map(async unit => await createUnit(unit)))
+      return await runInSequence(
+          sortedUnits.map(unit => () => createUnit(unit))
+      )
     }
 
     async function createUnit(unit) {
@@ -168,9 +174,9 @@ function createProviderManager(context) {
 
     // and for each of the listing:
     const filenames = missionTplListing.filenames || []
-    await runInSequence(filenames.map(async filename => {
-      await getAndCreateMissionTpl(`${directory}/${filename}`)
-    }))
+    return await runInSequence(
+        filenames.map(filename => () => getAndCreateMissionTpl(`${directory}/${filename}`))
+    )
   }
 
   async function getAndCreateMissionTpl(missionTplId, retrievedAt = null) {
@@ -183,6 +189,7 @@ function createProviderManager(context) {
     }
     else {
       missionTpl = await mxmProviderClient.getMissionTemplate(missionTplId)
+      //console.log('retrieved from provider: missionTpl.parameters=', missionTpl.parameters)
 
       // TODO this is a trick while provider reports id with leading slash:
       missionTpl.missionTplId = cleanPath(missionTpl.missionTplId)
@@ -222,7 +229,9 @@ function createProviderManager(context) {
   }
 
   async function createAssociatedAssetClasses(missionTpl, assetClassNames) {
-    await runInSequence(assetClassNames.map(async assetClassName => await createAssociatedAssetClass(missionTpl, assetClassName)))
+    return await runInSequence(
+        assetClassNames.map(assetClassName => () => createAssociatedAssetClass(missionTpl, assetClassName))
+    )
   }
 
   async function createAssociatedAssetClass(missionTpl, assetClassName) {
@@ -241,10 +250,13 @@ function createProviderManager(context) {
   }
 
   async function createParameters(missionTpl, parameters) {
-    await runInSequence(parameters.map(async parameter => await createParameter(missionTpl, parameter)))
+    await runInSequence(
+        parameters.map(parameter => () => createParameter(missionTpl, parameter))
+    )
   }
 
   async function createParameter(missionTpl, parameter) {
+    // console.log(`<<< createParameter: parameter.paramName=${parameter.paramName}`)
     const providerId = mxmProviderClient.providerId
 
     const query = Gql.parameterInsert()
@@ -269,7 +281,9 @@ function createProviderManager(context) {
     const operationName = 'createParameter'
     const result = await performQuery(query, variables, operationName, context)
     if (debug) console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
+    // console.log(`>>> createParameter: parameter.paramName=${parameter.paramName}`)
   }
+
 
   /**
    * Performs a reload of the mission template from the provider.
@@ -413,9 +427,19 @@ function createProviderManager(context) {
   }
 }
 
+/**
+ * Runs the given promises in sequence.
+ * @param promises  List of promises or functions that generate the promise.
+ * @return list of results.
+ */
 function runInSequence(promises) {
-  return promises.reduce((acum, promise) => acum.then(results =>
-      promise.then(result => [...results, result])
+  return promises.reduce(
+      (acum, promise) => acum.then(results => {
+        if (typeof promise === 'function') {
+          promise = promise()
+        }
+        return promise.then(result => [...results, result])
+      }
     ),
     Promise.resolve([])
   )
