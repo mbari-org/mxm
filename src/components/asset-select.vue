@@ -1,16 +1,24 @@
 <template>
-
-  <div>
-    <q-select
-      dense
-      class="bg-light-blue-1 col-auto"
-      v-model="assedId"
-      :options="options"
-      @input="atInput"
-      placeholder="Select asset"
-    />
-  </div>
-
+  <q-select
+    filled
+    dense
+    class="bg-light-blue-1 col-auto"
+    v-model="assedId"
+    :options="theOptions"
+    use-input
+    input-debounce="0"
+    clearable
+    @filter="filterFn"
+    @input="val => val && $emit('input', val.value)"
+  >
+    <template v-slot:no-option>
+      <q-item>
+        <q-item-section class="text-grey">
+          No results
+        </q-item-section>
+      </q-item>
+    </template>
+  </q-select>
 </template>
 
 <script>
@@ -20,6 +28,8 @@
   const debug = false
 
   export default {
+    name: 'asset-select',
+
     props: {
       assetClasses: {
         type: Array,
@@ -31,6 +41,7 @@
     data() {
       return {
         assedId: this.value,
+        theOptions: [],
       }
     },
 
@@ -52,15 +63,17 @@
     },
 
     methods: {
-      atInput(val) {
-        this.$emit('input', val.value)
+      filterFn(val, update) {
+        update(() => {
+          if (val) {
+            const lc = val.toLowerCase()
+            this.theOptions = this.options.filter(o => o.label.toLowerCase().indexOf(lc) > -1)
+          }
+          else {
+            this.theOptions = this.options
+          }
+        })
       },
-    },
-
-    watch: {
-      assetClasses(val) {
-        if (debug) console.log('asset-select: watch assetClasses=', val)
-      }
     },
   }
 </script>

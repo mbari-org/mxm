@@ -4,7 +4,8 @@
   runInSequence now accepts function as list element to generate corresponding promise; 
   so no subsequent promise is even created until the ongoing one is completed.
 
-- TODO add filter in selection of template when creating mission
+- add filters to selection of template and asset when creating mission
+- TODO template directory navigation (eg. when creating mission)
 
 - improve handling of request for mission status involving provider
 - add canReportMissionStatus to Provider model

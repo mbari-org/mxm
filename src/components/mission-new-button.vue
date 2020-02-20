@@ -15,7 +15,7 @@
       @submit="submit"
       @dialogClosing="dialogOpened = false"
     >
-      <p style="color:gray;font-size:small;width:24em">
+      <p style="color:gray;font-size:small">
         The mission will be registered with 'DRAFT' status.
         You can then edit any arguments and submit it for execution.
       </p>
@@ -106,7 +106,8 @@
 
     computed: {
       missionTpls() {
-        return this.provider && this.provider.missionTplsByProviderIdList || []
+        const all = this.provider && this.provider.missionTplsByProviderIdList || []
+        return all.filter(mt => !mt.missionTplId.endsWith('/'))
       },
 
       assetClasses() {
