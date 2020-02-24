@@ -24,26 +24,26 @@
           <div class="column q-mb-md q-gutter-md">
             <div class="row q-gutter-md">
               <q-btn
-                :label="`Mission Templates (${numMissionTemplates()})`"
+                :label="`Mission Templates (${numMissionTemplates})`"
                 no-wrap no-caps dense
                 :to="$utl.routeLoc([params.providerId, 'mt'])"
               />
 
               <q-btn
-                :label="`Asset Classes (${numAssetClasses()})`"
+                :label="`Asset Classes (${numAssetClasses})`"
                 no-wrap no-caps dense
                 :to="$utl.routeLoc([params.providerId, 'ac'])"
               />
 
               <q-btn
-                :label="`Assets (${numAssets()})`"
+                :label="`Assets (${numAssets})`"
                 no-wrap no-caps dense
                 :to="$utl.routeLoc([params.providerId, 'a'])"
               />
 
               <q-btn
                 v-if="provider.usesUnits"
-                :label="`Units (${numUnits()})`"
+                :label="`Units (${numUnits})`"
                 no-wrap no-caps dense
                 :to="$utl.routeLoc([params.providerId, 'u'])"
               />
@@ -51,7 +51,7 @@
 
             <div class="row q-gutter-md">
               <q-btn
-                :label="`Missions (${numMissions()})`"
+                :label="`Missions (${numMissions})`"
                 no-wrap no-caps dense
                 :to="$utl.routeLoc([params.providerId, 'm'])"
               />
@@ -135,6 +135,49 @@
       params() {
         return this.$route.params
       },
+
+      numMissionTemplates() {
+        if (this.provider) {
+          const all = this.provider.missionTplsByProviderIdList
+          const actualTemplates = all.filter(mt => !mt.missionTplId.endsWith('/'))
+          return actualTemplates.length
+        }
+        else return 0
+      },
+
+      numAssetClasses() {
+        if (this.provider) {
+          return this.provider.assetClassesByProviderIdList.length
+        }
+        else return 0
+      },
+
+      numAssets() {
+        if (this.provider) {
+          return reduce(this.provider.assetClassesByProviderIdList,
+                  (result, assetClass) => result + assetClass.assetsByProviderIdAndClassNameList.length,
+                  0
+          )
+        }
+        else return 0
+      },
+
+      numUnits() {
+        if (this.provider) {
+          return this.provider.unitsByProviderIdList.length
+        }
+        else return 0
+      },
+
+      numMissions() {
+        if (this.provider) {
+          return reduce(this.provider.missionTplsByProviderIdList,
+                  (result, missionTemplate) => result + missionTemplate.missionsByProviderIdAndMissionTplIdList.length,
+                  0
+          )
+        }
+        else return 0
+      },
     },
 
     apollo: {
@@ -185,47 +228,6 @@
         if (this.$apollo.queries.provider) {
           await this.$apollo.queries.provider.refetch()
         }
-      },
-
-      numMissionTemplates() {
-        if (this.provider) {
-          return this.provider.missionTplsByProviderIdList.length
-        }
-        else return 0
-      },
-
-      numMissions() {
-        if (this.provider) {
-          return reduce(this.provider.missionTplsByProviderIdList,
-              (result, missionTemplate) => result + missionTemplate.missionsByProviderIdAndMissionTplIdList.length,
-              0
-          )
-        }
-        else return 0
-      },
-
-      numAssetClasses() {
-        if (this.provider) {
-          return this.provider.assetClassesByProviderIdList.length
-        }
-        else return 0
-      },
-
-      numAssets() {
-        if (this.provider) {
-          return reduce(this.provider.assetClassesByProviderIdList,
-              (result, assetClass) => result + assetClass.assetsByProviderIdAndClassNameList.length,
-              0
-          )
-        }
-        else return 0
-      },
-
-      numUnits() {
-        if (this.provider) {
-          return this.provider.unitsByProviderIdList.length
-        }
-        else return 0
       },
     },
 
