@@ -107,15 +107,19 @@
 
     methods: {
       openDialog() {
+        this.providerNameInvalid = null
+        this.progress = null
+        this.progressLabel = null
+
         this.apiType = 'REST0'
 
-        this.providerId = 'TethysDash'
-        this.httpEndpoint = 'http://tethyssim.shore.mbari.org:8080/TethysDash/api/mxm'
+        // this.providerId = 'TethysDash'
+        // this.httpEndpoint = 'http://tethyssim.shore.mbari.org:8080/TethysDash/api/mxm'
 
-        // this.providerId = 'TFT'
+        this.providerId = 'TFT'
         // this.httpEndpoint = 'http://localhost:8040'
         //     OR:
-        // this.httpEndpoint = 'http://tsauv.shore.mbari.org/tft-mxm'
+        this.httpEndpoint = 'http://tsauv.shore.mbari.org/tft-mxm'
 
         this.dialogOpened = true
       },

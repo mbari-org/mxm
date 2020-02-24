@@ -37,7 +37,7 @@ function listMissionTemplates(httpEndpoint, directory) {
 }
 
 function getMissionTemplate(httpEndpoint, filePath) {
-  return doGet(httpEndpoint, `missiontemplate/${filePath}`)
+  return doGet(httpEndpoint, `missiontemplate/${filePath.replace(/^\/+/, '')}`)
 }
 
 function getMissions(httpEndpoint) {

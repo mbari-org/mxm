@@ -1,5 +1,8 @@
 2020-02
 
+- 0.6.2 minor adjustments while testing again against TFT provider
+- TODO mission template counting should not include directories
+
 - do keep order of parameters and order of other entity lists as reported from provider.
   runInSequence now accepts function as list element to generate corresponding promise; 
   so no subsequent promise is even created until the ongoing one is completed.
