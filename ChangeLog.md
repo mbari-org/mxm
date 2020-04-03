@@ -1,3 +1,8 @@
+\2020-04
+
+- quasar upgrade (now 1.6.1) as a general way to also address
+  recently reported vulnerability re "kind-of"
+
 2020-02
 
 - 0.6.2 minor adjustments while testing again against TFT provider
