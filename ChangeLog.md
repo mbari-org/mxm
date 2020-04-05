@@ -1,5 +1,10 @@
-\2020-04
+2020-04
 
+- recent merge of dependabot PR didn't actually include some other acorn related
+  dependency that also triggered a "moderate vulnerability" while running
+  "yarn audit" locally. I just addressed this by removing entry for 
+  `acorn@^6.0.1, acorn@^6.2.1` in yarn.lock and running `yarn` again.
+  
 - quasar upgrade (now 1.6.1) as a general way to also address
   recently reported vulnerability re "kind-of"
 
