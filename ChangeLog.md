@@ -1,5 +1,6 @@
 2020-04
 
+- some upgrades triggered by reported minimist vulnerability
 - recent merge of dependabot PR didn't actually include some other acorn related
   dependency that also triggered a "moderate vulnerability" while running
   "yarn audit" locally. I just addressed this by removing entry for 
