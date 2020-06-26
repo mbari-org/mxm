@@ -1,3 +1,9 @@
+2020-06
+
+- rebuild/publish postgres image. MXM @ http://mxm.shore.mbari.org/mxm/ working well again.
+- upgrade quasar  (hmnm, but seems like it's not watching files as usual(?))
+- move version info (taken from package.json) from boot/utl to App.vue
+
 2020-04
 
 - some upgrades triggered by reported minimist vulnerability

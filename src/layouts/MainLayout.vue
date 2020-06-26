@@ -17,7 +17,7 @@
 
         <div v-if="$mxmConfig" class="columns" >
           <div class="row">
-            <div>Preliminary prototype {{$utl.appInfo.version}} -</div>
+            <div>Preliminary prototype {{ $version.mxm }} -</div>
             <a v-if="$mxmConfig.learnMoreUrl"
                style="color:white;text-decoration:none;margin-left:4px"
                :href="$mxmConfig.learnMoreUrl"

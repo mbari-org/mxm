@@ -2,15 +2,10 @@ import UtlDialog from 'components/utl/utl-dialog'
 import UtlBreadcrumbs from 'components/utl/utl-breadcrumbs'
 import UtlExpansion from 'components/utl/utl-expansion'
 import MxmMarkdown from 'components/markdown/mxm-markdown'
-import { version } from '../../package.json'
 import map from 'lodash/map'
 
 export default ({ app, Vue, router }) => {
   Vue.prototype.$utl = {
-    appInfo: {
-      version,
-    },
-
     routeLoc,
 
     push(loc) {
