@@ -1,5 +1,6 @@
 2020-06
 
+- basic typescript enabling
 - rebuild/publish postgres image. MXM @ http://mxm.shore.mbari.org/mxm/ working well again.
 - upgrade quasar  (hmnm, but seems like it's not watching files as usual(?))
 - move version info (taken from package.json) from boot/utl to App.vue
@@ -9,19 +10,19 @@
 - some upgrades triggered by reported minimist vulnerability
 - recent merge of dependabot PR didn't actually include some other acorn related
   dependency that also triggered a "moderate vulnerability" while running
-  "yarn audit" locally. I just addressed this by removing entry for 
+  "yarn audit" locally. I just addressed this by removing entry for
   `acorn@^6.0.1, acorn@^6.2.1` in yarn.lock and running `yarn` again.
-  
+
 - quasar upgrade (now 1.6.1) as a general way to also address
   recently reported vulnerability re "kind-of"
 
 2020-02
 
 - 0.6.2 minor adjustments while testing again against TFT provider
-- exclude directories in mission template counting 
+- exclude directories in mission template counting
 
 - do keep order of parameters and order of other entity lists as reported from provider.
-  runInSequence now accepts function as list element to generate corresponding promise; 
+  runInSequence now accepts function as list element to generate corresponding promise;
   so no subsequent promise is even created until the ongoing one is completed.
 
 - add filters to selection of template and asset when creating mission
