@@ -88,15 +88,20 @@ module.exports = function (ctx) {
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
     devServer: {
-      watchOptions: {
-        ignored: [
-          'node_modules',
-
-          // be sure to change <myextid> below to
-          // your App Extension name:
-          '!node_modules/quasar-app-extension-qgeomap'
-        ]
-      },
+      // Re https://quasar.dev/app-extensions/development-guide/introduction, under "HMR (hot module reload)"
+      // for an extension under development/testing, actually no need to do the watchOptions as suggested at least
+      // in the case of referring to an extension outside of `node_modules` (eg `yarn add --dev link:../qgeomap`),
+      // and even when under it if the extension is just to be used ("readonly").
+      // watchOptions: {
+      //   ignored: [
+      //     'node_modules',
+      //
+      //     // be sure to change <myextid> below to your App Extension name:
+      //     '!node_modules/quasar-app-extension-qgeomap'
+      //   ]
+      // },
+      // (Besides, I also found today that the above started preventing the whole watch capability for
+      // some reason, similarly as described here: https://github.com/quasarframework/quasar/issues/6923.)
 
       // https: true,
       // port: 8080,

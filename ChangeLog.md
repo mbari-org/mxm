@@ -1,5 +1,7 @@
 2020-06
 
+- disable `watchOptions.ignored`: actually unneeded and, besides, causing the whole
+  watch capability to stop working upomn the recent upgrades
 - basic typescript enabling
 - rebuild/publish postgres image. MXM @ http://mxm.shore.mbari.org/mxm/ working well again.
 - upgrade quasar  (hmnm, but seems like it's not watching files as usual(?))
