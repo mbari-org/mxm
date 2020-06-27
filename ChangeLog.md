@@ -1,5 +1,10 @@
 2020-06
 
+- use qgeomap 0.0.2:
+
+        quasar ext remove @mbari/qgeomap
+        quasar ext add @mbari/qgeomap
+
 - disable `watchOptions.ignored`: actually unneeded and, besides, causing the whole
   watch capability to stop working upomn the recent upgrades
 - basic typescript enabling

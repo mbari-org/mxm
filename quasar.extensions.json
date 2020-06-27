@@ -1,5 +1,4 @@
 {
-  "@mbari/qgeomap": {},
   "@quasar/testing": {
     "harnesses": [
       "unit-jest"
@@ -11,5 +10,6 @@
       "scripts",
       "majestic"
     ]
-  }
+  },
+  "@mbari/qgeomap": {}
 }

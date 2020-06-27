@@ -1180,11 +1180,6 @@
     global-agent "^2.0.2"
     global-tunnel-ng "^2.7.1"
 
-"@esri/arcgis-to-geojson-utils@^1.3.0":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@esri/arcgis-to-geojson-utils/-/arcgis-to-geojson-utils-1.3.0.tgz#79ab65bf3e40c039dbdebceff4b3b0ec088b189c"
-  integrity sha512-8yPorlHeU63U6aT7RJbgSfXGKTZtnQz7Os8Qw96PW2lXJ+g1CRe5L/G8h5qtYHqt5VM4yCUGIhzHHYxdGzanLQ==
-
 "@graphile/lru@4.5.0":
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/@graphile/lru/-/lru-4.5.0.tgz#e8fe036d322dfe1715675aab171979981e28ac9e"
@@ -1406,10 +1401,10 @@
     "@types/yargs" "^15.0.0"
     chalk "^3.0.0"
 
-"@mbari/quasar-app-extension-qgeomap@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@mbari/quasar-app-extension-qgeomap/-/quasar-app-extension-qgeomap-0.0.1.tgz#e0c9eab57d30eb840861d2c6bbfb0371705c98d0"
-  integrity sha512-bpfh57oI8f8VyiC09lhf7K2yyMOagQyjqwBjC9YIlAZ9782Rt29bs539DOLpgWSvEiSvQksaxtwt0GqWOXC6wA==
+"@mbari/quasar-app-extension-qgeomap@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@mbari/quasar-app-extension-qgeomap/-/quasar-app-extension-qgeomap-0.0.2.tgz#323b174d806082fd62d4b79d26306d489180ca1f"
+  integrity sha512-RTrxZrAVMpRPWvIUoJqFF3chcFWdT33qSS8f/XyLaXqvxXg+K8/rFUYHMCHDAkFnX9nANabEacB0MgIZ12Ug/Q==
   dependencies:
     "@types/leaflet" "^1.2.11"
     esri-leaflet "^2.3.1"
@@ -1624,6 +1619,18 @@
   integrity sha512-XIB2XbzHTN6ieIjfIMV9hlVcfPU26s2vafYWQcZHWXHOxiaRZYEDKEwdl129Zyg50+foYV2jCgtrqSA6qNuNSA==
   dependencies:
     defer-to-connect "^1.0.1"
+
+"@terraformer/arcgis@^2.0.7":
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/@terraformer/arcgis/-/arcgis-2.0.7.tgz#617e6056a64b7328d4827702d64d0ccfc2e96d17"
+  integrity sha512-7jIQcnd8RnKsDt1IxmEjq9t7l5fnf0e5c+c1+1GjG4NR+TY0XkJcWtrBv0DWd65uAlDiQYMlEG8ls5dz1GQiuA==
+  dependencies:
+    "@terraformer/common" "^2.0.7"
+
+"@terraformer/common@^2.0.7":
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/@terraformer/common/-/common-2.0.7.tgz#bec626f331b9f0cc3aefb16f9f88e2d3684107ff"
+  integrity sha512-8bl+/JT0Rw6FYe2H3FfJS8uQwgzGl+UHs+8JX0TQLHgA4sMDEwObbMwo0iP3FVONwPXrPHEpC5YH7Grve0cl9A==
 
 "@types/accepts@*":
   version "1.3.5"
@@ -1872,9 +1879,9 @@
     "@types/node" "*"
 
 "@types/leaflet@^1.2.11":
-  version "1.5.7"
-  resolved "https://registry.yarnpkg.com/@types/leaflet/-/leaflet-1.5.7.tgz#81391f61ee870ab48f4dfe3f4379cd629202156b"
-  integrity sha512-FiPU4NQwH+jQ2wc3IjD7+9hgNZ95m4ry8qILO+eS6L4eUUVSXr+472+k4SRVEW+8j18QwqY7PFqudDQzfpRXTQ==
+  version "1.5.12"
+  resolved "https://registry.yarnpkg.com/@types/leaflet/-/leaflet-1.5.12.tgz#9953b7e47a53e0a70cdd7a903a43dc3c343cf623"
+  integrity sha512-61HRMIng+bWvnnAIqUWLBlrd/TQZc4gU+gN1JL4K47EDtwIrcMEhWgi7PdcpbG1YmpH4F0EfOimkvV82gJIl9w==
   dependencies:
     "@types/geojson" "*"
 
@@ -4934,12 +4941,11 @@ esrecurse@^4.1.0:
     estraverse "^4.1.0"
 
 esri-leaflet@^2.3.1:
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/esri-leaflet/-/esri-leaflet-2.3.2.tgz#b6265152a669b49eed0537210e15b66957ae92dd"
-  integrity sha512-9lCR/rHL6Lznqvat8cMAoZmMMUTV501WJWtG+8vSj/psayiJLNRTOUno0ibCDoXWHie5RH80241FiNdRNlX00g==
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/esri-leaflet/-/esri-leaflet-2.4.1.tgz#df9fde64dff259c3c930ce16b8fcf6516dba0832"
+  integrity sha512-0ukZIhA9dVx8yYe/ahp2yZm7GmUYTxPktXXHBVPBZoe9I00fkhLsEk2dIt1xa7XsCk/gH+Breb9L5lNALC+Niw==
   dependencies:
-    "@esri/arcgis-to-geojson-utils" "^1.3.0"
-    leaflet-virtual-grid "^1.0.7"
+    "@terraformer/arcgis" "^2.0.7"
     tiny-binary-search "^1.0.3"
 
 estraverse@^4.1.0, estraverse@^4.1.1, estraverse@^4.2.0:
@@ -7441,19 +7447,12 @@ leaflet-path-drag@^1.1.0:
   resolved "https://registry.yarnpkg.com/leaflet-path-drag/-/leaflet-path-drag-1.1.0.tgz#586e464b51ee3b712e74b4a92dc10a259f0eb9ff"
   integrity sha512-wd2uNgn3yuMl7HI0YG0z6qhxnRbvCQHE8ncpERfUZ6gTPbM5Xctwzyi+gE8cMnIDlv22GO3slSBupD9GW7jIEQ==
 
-leaflet-virtual-grid@^1.0.7:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/leaflet-virtual-grid/-/leaflet-virtual-grid-1.0.7.tgz#0dbb0dacd506b6e6d291314da5022d348729f8ad"
-  integrity sha512-sJxWYPcIKwMTewE+z8OFzfZHsbZcniQgTcreVdIQnxSRf+1XpMp+c4QKAWRKTBRmWOhEGyQO0Z90CLANJ9jRUQ==
-  dependencies:
-    leaflet "^1.0.0"
-
 leaflet.gridlayer.googlemutant@^0.8.0:
   version "0.8.0"
   resolved "https://registry.yarnpkg.com/leaflet.gridlayer.googlemutant/-/leaflet.gridlayer.googlemutant-0.8.0.tgz#9636630cb669577f5bc55ff171dd0a3cc44ece1e"
   integrity sha512-Ain+jgDKRhlM6qNDDj2QFJa9vXUqV096N0PmpHO3DoNLS4I7EynTQCJXN+9qY4C51ZpV4Q4CI+apNv5XiP5aUA==
 
-leaflet@^1.0.0, leaflet@^1.5.1:
+leaflet@^1.5.1:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-1.6.0.tgz#aecbb044b949ec29469eeb31c77a88e2f448f308"
   integrity sha512-CPkhyqWUKZKFJ6K8umN5/D2wrJ2+/8UIpXppY7QDnUZW5bZL5+SEI2J7GBpwh4LIupOKqbNSQXgqmrEJopHVNQ==
@@ -12179,9 +12178,9 @@ vue2-leaflet-googlemutant@^2.0.0:
   integrity sha512-kFUBMJGPoFDs+ECWlayPiQOM+Yhvu8ew38quhd7Kz/RaT5KmbaR4uO21/81yfDwYe2HtIeagidj/kQWGtcfTzw==
 
 vue2-leaflet@^2.2.1:
-  version "2.4.2"
-  resolved "https://registry.yarnpkg.com/vue2-leaflet/-/vue2-leaflet-2.4.2.tgz#f3b718c915b5391ec8469b96bacb282a543cda24"
-  integrity sha512-lRBkmgjyWOmp9o3t83rpPUYmDpo0g9PBFVsb5aSC5OhrnyPLmWcDRjjVCEmDQaGi4V+34tjrF9b+wkoBLwiRew==
+  version "2.5.2"
+  resolved "https://registry.yarnpkg.com/vue2-leaflet/-/vue2-leaflet-2.5.2.tgz#b89c056fe741c7ce7cb9df5aca90809092e5eb8d"
+  integrity sha512-9eN0TxqCkyXbaI7waO3u+n0OAezkxjb811tstG6gRLAZy/ocXlNLC3JqTWE0FwBUlqBbMpyzsIk6LrEhs8oVBQ==
 
 vue@2.6.11, vue@^2.6.10:
   version "2.6.11"

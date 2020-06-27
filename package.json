@@ -45,7 +45,7 @@
     "graphql": "14.5.8"
   },
   "devDependencies": {
-    "@mbari/quasar-app-extension-qgeomap": "^0.0.1",
+    "@mbari/quasar-app-extension-qgeomap": "^0.0.2",
     "@quasar/app": "1.9.6",
     "@quasar/quasar-app-extension-testing": "^1.0.0",
     "@quasar/quasar-app-extension-testing-unit-jest": "^1.1.0-beta.2",
