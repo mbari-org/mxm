@@ -26,8 +26,8 @@ app.use(postgraphile(
 ))
 
 // to serve the Quasar based GUI:
-const staticDir = './dist/spa'
-console.log(`(staticDir: ${staticDir})`)
+const staticDir = '../webapp/dist/spa'
+console.log(`staticDir: ${staticDir}`)
 app.use(serveStatic(staticDir))
 
 const port = process.env.PORT || 3000

@@ -8,7 +8,7 @@ import { Pool } from 'pg'
 import mxmPlugin from './mxm-plugin'
 
 const connectionString = process.env.PG_CONN_STRING || 'postgres://mxm@localhost:25432/mxm'
-console.log(`connectionString=${connectionString.replace(/:.*@/, ':**@')}`)
+console.log(`connectionString='${connectionString.replace(/:([^/]+)@/, ':•••@')}'`)
 
 const pgPool = new Pool({
   connectionString,
