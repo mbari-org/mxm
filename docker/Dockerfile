@@ -7,10 +7,10 @@ LABEL maintainer="carueda@mbari.org"
 LABEL description="Mission Execution Mediation Service"
 
 COPY . /mxm
-RUN yarn global add @quasar/cli              \
- && cd /mxm                                  \
- && yarn                                     \
- && quasar build                             \
+RUN yarn global add @quasar/cli \
+ && cd /mxm       \
+ && yarn          \
+ && quasar build  \
  # remove statics/config, which will be mapped to a host directory:
  && rm -rf /mxm/dist/spa/statics/config
 

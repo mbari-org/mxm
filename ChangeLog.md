@@ -1,5 +1,8 @@
 2020-06
 
+- remove those initial typescript settings as they were triggering issues, which got
+  worse as they were preventing the docker image build from completing! ;(
+
 - use qgeomap 0.0.2:
 
         quasar ext remove @mbari/qgeomap
