@@ -1,10 +1,10 @@
-src/statics/config/config.json
+webapp/src/statics/config/config.json
+webapp/test/jest/coverage
+webapp/.quasar
 docker/config/config.json
-test/jest/coverage
-.quasar
+docker/db_data*/
 .DS_Store
 .thumbs.db
-docker/db_data*/
 node_modules
 /dist
 /src-cordova/platforms

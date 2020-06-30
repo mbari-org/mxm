@@ -1,5 +1,8 @@
 2020-06
 
+- code reorganization
+    - move ui to webapp/
+
 - remove those initial typescript settings as they were triggering issues, which got
   worse as they were preventing the docker image build from completing! ;(
 
