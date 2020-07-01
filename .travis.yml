@@ -13,6 +13,7 @@ cache:
     - node_modules
 
 script:
+  - yarn global add jest
   - (cd server && npm run test:unit)
   - (cd webapp && npm run test:unit)
 #  - npm run coveralls
