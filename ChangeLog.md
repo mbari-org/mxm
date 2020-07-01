@@ -2,6 +2,7 @@
 
 0.8.1
 
+- move server sources to server/src
 - webapp: `yarn upgrade` and fix deprecation exposed by `jest`
 
 - 0.8.0 with general code reorganization

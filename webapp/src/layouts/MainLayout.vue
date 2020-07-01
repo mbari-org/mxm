@@ -20,6 +20,7 @@
             <div class="row q-gutter-x-md">
               <div>Prototype {{ $version.mxm }}</div>
               <a v-if="$mxmConfig.learnMoreUrl"
+                 style="font-size:small"
                  class="text-white"
                  :href="$mxmConfig.learnMoreUrl"
                  target="mxm_learnmore" rel="noopener"
@@ -30,7 +31,7 @@
             <a href="https://github.com/mbari-org/mxm"
                target="_blank" rel="noopener"
                style="text-decoration:none"
-               class="text-white"
+               class="text-white q-ml-md"
             >
               <q-icon name="fab fa-github" />
             </a>

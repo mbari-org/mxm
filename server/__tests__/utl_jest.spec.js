@@ -1,6 +1,6 @@
 import {
   cleanPath,
-} from '../utl.js'
+} from '../src/utl.js'
 
 // const utl = require('../utl.js')
 // const cleanPath = utl.cleanPath

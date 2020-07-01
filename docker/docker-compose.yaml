@@ -3,9 +3,9 @@ services:
   mxm:
     container_name: mxm
 
-    # NOTE: sometimes pushed with "latest" as default for convenience, especially during prototyping.
+    # NOTE: sometimes image pushed with "latest" as default for convenience, especially during prototyping.
     # General recommendation is to use explicit version on actual deployment.
-    image: mbari/mxm:0.8.0
+    image: mbari/mxm:0.8.1
 
     volumes:
       - ${MXM_CONFIG_DIR}:/mxm/webapp/dist/spa/statics/config

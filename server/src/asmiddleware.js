@@ -1,5 +1,5 @@
 // Basic test of postgraphile as middleware.
-//   $ node -r esm src/server/asmiddleware.js
+//   $ node -r esm src/asmiddleware.js
 
 import express from 'express'
 import cors from 'cors'
