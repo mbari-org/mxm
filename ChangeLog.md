@@ -1,3 +1,10 @@
+2020-07
+
+0.8.2
+
+- removal of unneeded stuff in docker image for the webapp.
+  Image size is now 274MB instead of 898MB
+
 2020-06
 
 0.8.1
