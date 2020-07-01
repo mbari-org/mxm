@@ -2,6 +2,9 @@ import {
   cleanPath,
 } from '../utl.js'
 
+// const utl = require('../utl.js')
+// const cleanPath = utl.cleanPath
+
 describe('cleanPath', () => {
 
   test('root directory /', () => {

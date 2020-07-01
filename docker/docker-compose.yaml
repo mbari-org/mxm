@@ -5,10 +5,10 @@ services:
 
     # NOTE: sometimes pushed with "latest" as default for convenience, especially during prototyping.
     # General recommendation is to use explicit version on actual deployment.
-    image: mbari/mxm:latest
+    image: mbari/mxm:0.8.0
 
     volumes:
-      - ${MXM_CONFIG_DIR}:/mxm/dist/spa/statics/config
+      - ${MXM_CONFIG_DIR}:/mxm/webapp/dist/spa/statics/config
     ports:
     - "38080:3000"
 
@@ -30,5 +30,5 @@ services:
 
     environment:
       # POSTGRES_USER: will trigger the creation of the "mxm" user
-      # and "mxm" database upon initial run of the container:
+      # and the "mxm" database upon initial run of the container:
       POSTGRES_USER: mxm

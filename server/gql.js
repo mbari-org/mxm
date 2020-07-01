@@ -3,7 +3,8 @@
 
 import fs from "fs"
 
-const readGql = baseName => fs.readFileSync(`src/graphql/${baseName}.gql`, {encoding: 'utf8'})
+const readGql = baseName => fs.readFileSync(
+    `../webapp/src/graphql/${baseName}.gql`, {encoding: 'utf8'})
 
 const Gql = {
   providerBasic:               () => readGql('providerBasic'),

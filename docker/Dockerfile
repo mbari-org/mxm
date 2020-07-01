@@ -7,13 +7,21 @@ LABEL maintainer="carueda@mbari.org"
 LABEL description="Mission Execution Mediation Service"
 
 COPY . /mxm
-RUN yarn global add @quasar/cli \
- && cd /mxm       \
+RUN \
+ # Server:
+ cd /mxm/server/  \
  && yarn          \
- && quasar build  \
- # remove statics/config, which will be mapped to a host directory:
- && rm -rf /mxm/dist/spa/statics/config
+ #
+ # Webapp:
+ && yarn global add @quasar/cli \
+ && cd /mxm/webapp/             \
+ && yarn                        \
+ && quasar build --modern       \
+ #
+ # remove statics/config, which will be mounted from
+ # a host directory at deployment time:
+ && rm -rf /mxm/webapp/dist/spa/statics/config
 
 EXPOSE 3000
-WORKDIR /mxm/
+WORKDIR /mxm/server/
 ENTRYPOINT ["bin/esm.js"]
