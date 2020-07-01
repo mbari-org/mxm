@@ -1,7 +1,19 @@
 2020-06
 
-- code reorganization
+- 0.8.0 with general code reorganization
     - move ui to webapp/
+    - move server to server/
+    - update docker image generation
+    - All seems to be functional as before
+      but some cleanup may be pending, in particular re unneeded dependencies
+      in either compomponet
+      
+    - Note: As before this reorganization, local launch of postgraphile either directly
+      (`npx postgraphile -c "$PG_CONN_STRING"`) or via `bin/esm.sh`
+      is failing to connect to the database, both a local one or a dockerized one.
+      Not sure when this started to happen.
+      Interestingly (and furtunately), the dockerized version works just fine
+      TODO revisit this.
 
 - remove those initial typescript settings as they were triggering issues, which got
   worse as they were preventing the docker image build from completing! ;(

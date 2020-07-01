@@ -1,15 +1,15 @@
 # Building and publishing the images
 
-The user-visible MXM version is the one set in `../package.json`.
+The user-visible MXM version is the one set in `../webapp/package.json`.
 
 ## `mbari/mxm`
 
 The MXM images are automatically built and published on Docker Hub:
 
-| Tag                | upon pushing   |
-|:-------------      |:-------------  |
+| Tag                | upon pushing           |
+|:-------------      |:-------------          |
 | `mbari/mxm:latest` | to the *master* branch |
-| `mbari/mxm:x.y.z`  | tag *vx.y.z* |
+| `mbari/mxm:x.y.z`  | tag *vx.y.z*           |
 
 To build it manually:
 
@@ -23,15 +23,38 @@ The MXM Postgres image is manually created and published as needed.
     docker build -f Dockerfile-postgres -t mbari/mxm-postgres:x.y.z .
     docker push mbari/mxm-postgres:x.y.z
 
-
 # Launch
 
-With image versions as needed in `docker/docker-compose.yml`:
+- Some configuration to be given in a `config.json` file under directory
+  indicated by environment variable `MXM_CONFIG_DIR`, by default `config/`. 
+  The setting in the file are as follows:
+  
+        {
+          "graphqlUri": "/mxm-graphql",
+          "learnMoreUrl": "https://docs.google.com/document/d/....",
+          "googleApiKey": "..."
+        }
+  
+    - `graphqlUri`:  Location of the GraphQL endpoint. The value above is
+      OK for a typical docker based installation.
+    - `learnMoreUrl`: Link to documentation.
+    - `googleApiKey`:  Optional to include Google based features.
 
-    cd docker && source setenv.sh && docker-compose up -d
+- Do any relavant adjustments in `setenv.sh`.
+  Basically just to indicate location of your `config.json` file.
 
-Then open the MXM UI at http://localhost:38080/.
-(Again, this will be functional depending on the indicated GraphQL
-endpoint in `config.json`, proxy-passes in place on the server, etc.)
+- Do any adjustments in `docker-compose.yml`, in particular regarding image versions.
 
-The GraphQL UI is at: http://localhost:38080/mxm-graphiql
+- Then:
+
+        source setenv.sh
+        docker-compose up -d
+        docker logs -f --tail=20 mxm
+
+The MXM UI will be available at http://localhost:38080/
+
+The GraphQL UI at: http://localhost:38080/mxm-graphiql
+
+In general, the system be functional depending on the indicated GraphQL
+endpoint in `config.json`, proxy-passes in place on the server if you are
+exposing it externally, etc.
