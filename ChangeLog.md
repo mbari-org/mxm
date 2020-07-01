@@ -2,6 +2,8 @@
 
 0.8.2
 
+- add `npm prune --production` for the server.
+  Image size is now 214MB
 - removal of unneeded stuff in docker image for the webapp.
   Image size is now 274MB instead of 898MB
 

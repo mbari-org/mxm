@@ -23,7 +23,8 @@ LABEL description="Mission Execution Mediation Service"
 RUN mkdir /mxm/
 COPY ./server /mxm/server
 RUN cd /mxm/server/  \
- && yarn
+ && yarn \
+ && npm prune --production
 
 # "install" the built webapp:
 COPY --from=webapp-builder /mxm-webapp.tgz /
