@@ -13,5 +13,6 @@ cache:
     - node_modules
 
 script:
-  - npm run test:unit
+  - (cd server && npm run test:unit)
+  - (cd webapp && npm run test:unit)
 #  - npm run coveralls
