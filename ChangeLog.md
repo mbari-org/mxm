@@ -1,5 +1,9 @@
 2020-06
 
+0.8.1
+
+- webapp: `yarn upgrade` and fix deprecation exposed by `jest`
+
 - 0.8.0 with general code reorganization
     - move ui to webapp/
     - move server to server/

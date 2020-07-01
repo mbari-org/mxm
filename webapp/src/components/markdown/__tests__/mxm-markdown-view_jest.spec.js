@@ -4,7 +4,7 @@ import MxmMarkdownView from '../mxm-markdown-view'
 describe('MxmMarkdownView', () => {
   test('is a Vue instance', () => {
     const wrapper = mount(MxmMarkdownView)
-    expect(wrapper.isVueInstance()).toBeTruthy()
+    expect(wrapper.vm).toBeTruthy()
   })
 
   test('renders correctly', () => {
