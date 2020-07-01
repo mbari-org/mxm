@@ -61,10 +61,10 @@ particular file `src/statics/config/config.json` is not used.
 Instead, the location of the `config.json` file (which is still required)
 is indicated as a setting prior to running the container.
 
-## misc
+## Misc
 
 Assuming the MXM GraphQL endpoint is running at `localhost:38080/mxm-graphql`,
-some client requests (using [curlie](https://curlie.io/):
+some client requests (using [curlie](https://curlie.io/)):
 
 ```
 curlie post localhost:38080/mxm-graphql query='{

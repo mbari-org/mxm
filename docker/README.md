@@ -1,5 +1,8 @@
 # Building and publishing the images
 
+**NOTE**: These notes combine building and using the images.
+General user-oriented instructions is a TODO. 
+
 The user-visible MXM version is the one set in `../webapp/package.json`.
 
 ## `mbari/mxm`
@@ -40,7 +43,7 @@ The MXM Postgres image is manually created and published as needed.
     - `learnMoreUrl`: Link to documentation.
     - `googleApiKey`:  Optional to include Google based features.
 
-- Do any relavant adjustments in `setenv.sh`.
+- Do any relevant adjustments in `setenv.sh`.
   Basically just to indicate location of your `config.json` file.
 
 - Do any adjustments in `docker-compose.yml`, in particular regarding image versions.
@@ -55,6 +58,6 @@ The MXM UI will be available at http://localhost:38080/
 
 The GraphQL UI at: http://localhost:38080/mxm-graphiql
 
-In general, the system be functional depending on the indicated GraphQL
+In general, the system will be functional depending on the indicated GraphQL
 endpoint in `config.json`, proxy-passes in place on the server if you are
-exposing it externally, etc.
+exposing the system externally, etc.
