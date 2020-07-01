@@ -22,46 +22,52 @@ The MXM system consists of the following components:
 - MXM service and webapp from image `mbari/mxm`
 - MXM postgres database from image `mbari/mxm-postgres`
 
+## Install
+
+See [`docker/README.md`](docker/README.md).
 
 ## Development
 
-- If not already, install dependencies:
+Dependencies:
 
-      yarn
+    (cd server && yarn)
+    yarn global add @quasar/cli
+    (cd webapp && yarn)
+    
+### Webapp
 
-- Have an MXM GraphQL endpoint running somewhere.
-  See `docker/README.md`.
+    cd webapp/
 
-- If not already
+Have an MXM GraphQL endpoint running somewhere.
+(See [`docker/README.md`](docker/README.md).)
+
+If not already
 
       cp config.json.template src/statics/config/config.json
 
-- Adjust `src/statics/config/config.json` as appropriate, in particular, the `graphqlUri` property.
+Adjust `src/statics/config/config.json` as appropriate,
+in particular, the `graphqlUri` property.
 
-      quasar dev
+      quasar dev --modern
 
 this will open http://localhost:8080/
 
-## Build
+### Build
 
-      quasar build
+      quasar build --modern
 
 Note that a build is typically intended for a docker release, so in this case the
 particular file `src/statics/config/config.json` is not used.
 Instead, the location of the `config.json` file (which is still required)
 is indicated as a setting prior to running the container.
 
-### Install
-
-See `docker/README.md`
-
 ## misc
 
 Assuming the MXM GraphQL endpoint is running at `localhost:38080/mxm-graphql`,
-some client requests:
+some client requests (using [curlie](https://curlie.io/):
 
 ```
-http post localhost:38080/mxm-graphql query='{
+curlie post localhost:38080/mxm-graphql query='{
   allProvidersList {
     providerId
     httpEndpoint
@@ -75,7 +81,7 @@ http post localhost:38080/mxm-graphql query='{
 ```
 
 ```
-http post 'http://localhost:38080/mxm-graphql' <<<'
+curlie post 'http://localhost:38080/mxm-graphql' <<<'
   {
    "operationName": "createProvider",
    "variables": {
