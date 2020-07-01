@@ -212,7 +212,9 @@
       async reloadProvider() {
         this.provider = null
         this.$q.loading.show({
-          message: `Reloading ${this.params.providerId} ...`
+          message: `Reloading ${this.params.providerId} ...`,
+          messageColor: 'black',
+          customClass: 'text-bold',
         })
         try {
           // TODO actual reload against provider.

@@ -213,7 +213,9 @@
 
       async reloadMissionTpls() {
         this.$q.loading.show({
-          message: `Reloading template directory ${this.directory} ...`
+          message: `Reloading template directory ${this.directory} ...`,
+          messageColor: 'black',
+          customClass: 'text-bold',
         })
         try {
           // TODO get updated info from the mutation itself
