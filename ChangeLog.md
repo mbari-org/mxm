@@ -1,5 +1,28 @@
 2020-07
 
+0.8.3
+
+- adjustments to have direct server program `server/src/server.js` running again.
+
+    I can now run it again either against my local Postgres server:
+
+        PG_CONN_STRING=postgres://postgres@localhost:5432/mxm
+
+    or against the dockerized postgres server (also used for a regular deployment):
+
+        PG_CONN_STRING=postgres://mxm@localhost:25432/mxm
+
+    In one terminal:
+
+        (cd server && bin/esm.js)
+
+    In another terminal:
+
+        vi webapp/src/statics/config/config.json
+        # to indicate: "graphqlUri": "http://localhost:3000/mxm-graphql"
+
+        (cd webapp && quasar dev --modern)
+
 0.8.2
 
 - add `npm prune --production` for the server.
@@ -21,7 +44,7 @@
     - All seems to be functional as before
       but some cleanup may be pending, in particular re unneeded dependencies
       in either compomponet
-      
+
     - Note: As before this reorganization, local launch of postgraphile either directly
       (`npx postgraphile -c "$PG_CONN_STRING"`) or via `bin/esm.sh`
       is failing to connect to the database, both a local one or a dockerized one.

@@ -7,7 +7,7 @@ import {
 
 import createProviderManager from './createProviderManager'
 
-const plugin1 = makeWrapResolversPlugin({
+const plugin = makeWrapResolversPlugin({
   Mutation: {
     createProvider: createProviderResolverWrapper(),
     updateProvider: updateProviderResolverWrapper(),
@@ -15,6 +15,8 @@ const plugin1 = makeWrapResolversPlugin({
     updateMission: updateMissionResolverWrapper(),
   },
 })
+
+export default plugin
 
 function createProviderResolverWrapper () {
   return async (resolve, source, args, context, resolveInfo) => {

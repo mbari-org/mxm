@@ -25,7 +25,8 @@ app.use(postgraphile(
   postgraphileOptions
 ))
 
-// to serve the Quasar based GUI:
+// The dir below to serve the Quasar based GUI under a regular complete deployment
+// (for development, instead of this, `quasar dev` is typically used in some other terminal session)
 const staticDir = '../webapp/dist/spa'
 console.log(`staticDir: ${staticDir}`)
 app.use(serveStatic(staticDir))

@@ -2570,6 +2570,22 @@ graphile-build-pg@4.5.3:
     pg-sql2 "4.5.0"
     postgres-interval "^1.2.0"
 
+graphile-build-pg@^4.7.0:
+  version "4.7.0"
+  resolved "https://registry.yarnpkg.com/graphile-build-pg/-/graphile-build-pg-4.7.0.tgz#6ee86e0623bad433c61812119ac22aa420788841"
+  integrity sha512-dwGV+wUoPbly9RP9WgShs6yPv8A4N/xhdHGFu9sxYn49qkwJaAEdFehgsdCl12ZvJYpe/eDyK/6jR5PQOhJDbw==
+  dependencies:
+    "@graphile/lru" "4.5.0"
+    chalk "^2.4.2"
+    debug "^4.1.1"
+    graphile-build "4.7.0"
+    graphql-iso-date "^3.6.0"
+    jsonwebtoken "^8.5.1"
+    lodash ">=4 <5"
+    lru-cache ">=4 <5"
+    pg-sql2 "4.7.0"
+    postgres-interval "^1.2.0"
+
 graphile-build@4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/graphile-build/-/graphile-build-4.5.0.tgz#f7c627c146e051f454c4f19116231e9d8b653e04"
@@ -2579,6 +2595,21 @@ graphile-build@4.5.0:
     chalk "^2.4.2"
     debug "^4.1.1"
     graphql-parse-resolve-info "4.5.0"
+    iterall "^1.2.2"
+    lodash ">=4 <5"
+    lru-cache "^5.0.0"
+    pluralize "^7.0.0"
+    semver "^6.0.0"
+
+graphile-build@4.7.0:
+  version "4.7.0"
+  resolved "https://registry.yarnpkg.com/graphile-build/-/graphile-build-4.7.0.tgz#138ebd706f6418dcec08b7301c769267bf242a24"
+  integrity sha512-zoh5KItIj40bZnHLEh1G6zAN6C0hmJkKVYsQUEZUeX4Ex80YoX9eFO8rI7LwMumPASJf4nmjlziksLY1+1cn6g==
+  dependencies:
+    "@graphile/lru" "4.5.0"
+    chalk "^2.4.2"
+    debug "^4.1.1"
+    graphql-parse-resolve-info "4.7.0"
     iterall "^1.2.2"
     lodash ">=4 <5"
     lru-cache "^5.0.0"
@@ -2602,6 +2633,13 @@ graphql-parse-resolve-info@4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/graphql-parse-resolve-info/-/graphql-parse-resolve-info-4.5.0.tgz#cb9bf800c9ce81eebecd86ec62182a7b645d1fad"
   integrity sha512-51eKipZcj9AQWKLtstAmqys3GmOHUoUwFN/ALe1s4k2his0sP4ASri/ZdqcweLRnno4cDPqp2dcWnJ/Pe2a2rQ==
+  dependencies:
+    debug "^4.1.1"
+
+graphql-parse-resolve-info@4.7.0:
+  version "4.7.0"
+  resolved "https://registry.yarnpkg.com/graphql-parse-resolve-info/-/graphql-parse-resolve-info-4.7.0.tgz#0f769684f5430f9d14964fb7dea56fbfaf54953f"
+  integrity sha512-vrfvITs1vQCmzasAnfpzjTnImfo1gSwBijJEo6PF+0ZP3cLgJsmsNBvc9VJaiXxdjShS6sWI4V7HTrlz+UjGGw==
   dependencies:
     debug "^4.1.1"
 
@@ -4164,10 +4202,29 @@ pg-pool@^2.0.10:
   resolved "https://registry.yarnpkg.com/pg-pool/-/pg-pool-2.0.10.tgz#842ee23b04e86824ce9d786430f8365082d81c4a"
   integrity sha512-qdwzY92bHf3nwzIUcj+zJ0Qo5lpG/YxchahxIN8+ZVmXqkahKXsnl2aiJPHLYN9o5mB/leG+Xh6XKxtP7e0sjg==
 
+pg-pool@^3.1.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/pg-pool/-/pg-pool-3.2.1.tgz#5f4afc0f58063659aeefa952d36af49fa28b30e0"
+  integrity sha512-BQDPWUeKenVrMMDN9opfns/kZo4lxmSWhIqo+cSAF7+lfi9ZclQbr9vfnlNaPr8wYF3UYjm5X0yPAhbcgqNOdA==
+
+pg-protocol@^1.2.2:
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/pg-protocol/-/pg-protocol-1.2.4.tgz#3139cac0e51347f1e21e03954b1bb9fe2c20962e"
+  integrity sha512-/8L/G+vW/VhWjTGXpGh8XVkXOFx1ZDY+Yuz//Ab8CfjInzFkreI+fDG3WjCeSra7fIZwAFxzbGptNbm8xSXenw==
+
 pg-sql2@4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/pg-sql2/-/pg-sql2-4.5.0.tgz#d1f5f039c5717f8266e340508b1e29e760f5e2ce"
   integrity sha512-kmqhJgKbOWsVzKjhzsfglZagyrV5fXkrHeY33WdeSsxhegZI1Evpa/lQzG1uQj2ZfLPIePV7RyoaZH8eVHRd3A==
+  dependencies:
+    "@graphile/lru" "4.5.0"
+    "@types/pg" ">=6 <8"
+    debug ">=3 <5"
+
+pg-sql2@4.7.0:
+  version "4.7.0"
+  resolved "https://registry.yarnpkg.com/pg-sql2/-/pg-sql2-4.7.0.tgz#2e4964bc0d94b8a81e4bc13651379a6436f8e370"
+  integrity sha512-/9YtclLJW7nIehd4RPxCECz9+mOAmQ5tkDRLbefzCxgctkKj31tsF6Xu1+Rwnnv7/hKyzH+ShzOJrxPRF8jEAw==
   dependencies:
     "@graphile/lru" "4.5.0"
     "@types/pg" ">=6 <8"
@@ -4184,7 +4241,21 @@ pg-types@^2.1.0:
     postgres-date "~1.0.4"
     postgres-interval "^1.1.0"
 
-"pg@>=6.1.0 <8", pg@^7.18.1:
+pg@8.0.3:
+  version "8.0.3"
+  resolved "https://registry.yarnpkg.com/pg/-/pg-8.0.3.tgz#b220ee468a1819e1c7e9ca9878f8ae50ba8e1952"
+  integrity sha512-fvcNXn4o/iq4jKq15Ix/e58q3jPSmzOp6/8C3CaHoSR/bsxdg+1FXfDRePdtE/zBb3++TytvOrS1hNef3WC/Kg==
+  dependencies:
+    buffer-writer "2.0.0"
+    packet-reader "1.0.0"
+    pg-connection-string "0.1.3"
+    pg-pool "^3.1.1"
+    pg-protocol "^1.2.2"
+    pg-types "^2.1.0"
+    pgpass "1.x"
+    semver "4.3.2"
+
+"pg@>=6.1.0 <8":
   version "7.18.2"
   resolved "https://registry.yarnpkg.com/pg/-/pg-7.18.2.tgz#4e219f05a00aff4db6aab1ba02f28ffa4513b0bb"
   integrity sha512-Mvt0dGYMwvEADNKy5PMQGlzPudKcKKzJds/VbOeZJpb6f/pI3mmoXX0JksPgI3l3JPP/2Apq7F36O63J7mgveA==
