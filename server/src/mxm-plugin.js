@@ -1,9 +1,8 @@
 // MXM plugin to intercept mutations involving MXM providers.
-// Status: very preliminary.
+// Status: Preliminary.
 
 import {
   makeWrapResolversPlugin,
-  makePluginByCombiningPlugins,
 } from 'graphile-utils'
 
 import createProviderManager from './createProviderManager'
@@ -12,35 +11,12 @@ const plugin1 = makeWrapResolversPlugin({
   Mutation: {
     createProvider: createProviderResolverWrapper(),
     updateProvider: updateProviderResolverWrapper(),
-
     updateMissionTpl: updateMissionTplResolverWrapper(),
-
     updateMission: updateMissionResolverWrapper(),
   },
 })
 
-const plugin2 = makeWrapResolversPlugin(
-  context => {
-    return { scope: context.scope }
-    // if (context.scope.isRootMutation) {
-    //   return { scope: context.scope }
-    // }
-    // return null
-  },
-  ({ scope }) => async (resolver, user, args, context, _resolveInfo) => {
-    console.log(`PRE '${scope.fieldName}' starting with arguments:`, args)
-    const result = await resolver()
-    console.log(`POST '${scope.fieldName}' result:`, result)
-    return result
-  }
-)
-
-export default makePluginByCombiningPlugins(
-  plugin1,
-  // plugin2
-)
-
-function createProviderResolverWrapper() {
+function createProviderResolverWrapper () {
   return async (resolve, source, args, context, resolveInfo) => {
     // You can do something before the resolver executes
     console.log('entering createProviderResolverWrapper')
@@ -48,7 +24,7 @@ function createProviderResolverWrapper() {
 
     const providerManager = createProviderManager(context)
     const providerId = args.input.provider.providerId
-    const {httpEndpoint, apiType} = args.input.provider
+    const { httpEndpoint, apiType } = args.input.provider
     providerManager.setMxmProviderClient(providerId, httpEndpoint, apiType)
 
     await providerManager.preInsertProvider(args.input.provider)
@@ -67,7 +43,7 @@ function createProviderResolverWrapper() {
   }
 }
 
-function updateProviderResolverWrapper() {
+function updateProviderResolverWrapper () {
   return async (resolve, source, args, context, resolveInfo) => {
     console.log('entering updateProviderResolverWrapper')
     console.log('args=', args);
@@ -81,7 +57,7 @@ function updateProviderResolverWrapper() {
   }
 }
 
-function updateMissionTplResolverWrapper() {
+function updateMissionTplResolverWrapper () {
   return async (resolve, source, args, context, resolveInfo) => {
     console.log('entering updateMissionTplResolverWrapper')
     console.log('args=', args)
@@ -104,7 +80,7 @@ function updateMissionTplResolverWrapper() {
   }
 }
 
-function updateMissionResolverWrapper() {
+function updateMissionResolverWrapper () {
   return async (resolve, source, args, context, resolveInfo) => {
     console.log('entering updateMissionResolverWrapper')
     console.log('args=', args);

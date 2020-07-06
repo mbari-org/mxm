@@ -18,25 +18,23 @@ import isEmpty from "lodash/isEmpty"
 
 const debug = false
 
-function createProviderManager(context) {
+function createProviderManager (context) {
   let mxmProviderClient = null
 
   return {
     setMxmProviderClient,
     preInsertProvider,
     postInsertProvider,
-
     preUpdateMissionTpl,
-
     preUpdateMission,
   }
 
-  function setMxmProviderClient(providerId, httpEndpoint, apiType) {
+  function setMxmProviderClient (providerId, httpEndpoint, apiType) {
     console.assert(providerId && httpEndpoint && apiType)
-    mxmProviderClient = createMxmProviderClient({providerId, httpEndpoint, apiType})
+    mxmProviderClient = createMxmProviderClient({ providerId, httpEndpoint, apiType })
   }
 
-  async function preInsertProvider(provider) {
+  async function preInsertProvider (provider) {
     if (!mxmProviderClient.isSupportedInterface()) {
       console.warn('preInsertProvider: Not supported interface to provider')
       return
@@ -46,7 +44,7 @@ function createProviderManager(context) {
       const info = await mxmProviderClient.getGeneralInfo()
       if (debug) console.log('GOT general info=', info)
 
-      if (info.providerDescription)  {
+      if (info.providerDescription) {
         provider.description = info.providerDescription
       }
 
@@ -58,12 +56,12 @@ function createProviderManager(context) {
       provider.canReportMissionStatus = capabilities.canReportMissionStatus || false
       provider.descriptionFormat = capabilities.descriptionFormat
     }
-    catch(error) {
+    catch (error) {
       console.error('getGeneralInfo: error=', error)
     }
   }
 
-  async function postInsertProvider(provider) {
+  async function postInsertProvider (provider) {
     if (!mxmProviderClient.isSupportedInterface()) {
       console.warn('postInsertProvider: Not supported interface to provider')
       return
@@ -82,13 +80,13 @@ function createProviderManager(context) {
     // MissionTpls:
     await getAndCreateMissionTplsForDirectory('/')
 
-    async function createAssetClasses(assetClasses) {
+    async function createAssetClasses (assetClasses) {
       return await runInSequence(
-          assetClasses.map(assetClass => () => createAssetClass(assetClass))
+        assetClasses.map(assetClass => () => createAssetClass(assetClass))
       )
     }
 
-    async function createAssetClass(assetClass) {
+    async function createAssetClass (assetClass) {
       if (debug) console.log('createAssetClass ', assetClass)
 
       const query = Gql.assetClassInsert()
@@ -105,13 +103,13 @@ function createProviderManager(context) {
       await createAssets(assetClass, assets)
     }
 
-    async function createAssets(assetClass, assets) {
+    async function createAssets (assetClass, assets) {
       return await runInSequence(
-          assets.map(asset => () => createAsset(assetClass, asset))
+        assets.map(asset => () => createAsset(assetClass, asset))
       )
     }
 
-    async function createAsset(assetClass, asset) {
+    async function createAsset (assetClass, asset) {
       if (debug) console.log('createAsset ', asset)
 
       const query = Gql.assetInsert()
@@ -127,19 +125,19 @@ function createProviderManager(context) {
       if (debug) console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
     }
 
-    async function getAndCreateUnits() {
+    async function getAndCreateUnits () {
       const units = await mxmProviderClient.getUnits()
       await createUnits(units)
     }
 
-    async function createUnits(units) {
+    async function createUnits (units) {
       const sortedUnits = orderBy(units, u => u.baseUnit ? 1 : 0)
       return await runInSequence(
-          sortedUnits.map(unit => () => createUnit(unit))
+        sortedUnits.map(unit => () => createUnit(unit))
       )
     }
 
-    async function createUnit(unit) {
+    async function createUnit (unit) {
       const query = Gql.unitInsert()
 
       const variables = {
@@ -159,7 +157,7 @@ function createProviderManager(context) {
   }
 
   // capture entries at the given directory:
-  async function getAndCreateMissionTplsForDirectory(directory) {
+  async function getAndCreateMissionTplsForDirectory (directory) {
     console.log(`getAndCreateMissionTplsForDirectory: directory=${directory}`)
     console.assert(directory.endsWith('/'))
 
@@ -175,11 +173,11 @@ function createProviderManager(context) {
     // and for each of the listing:
     const filenames = missionTplListing.filenames || []
     return await runInSequence(
-        filenames.map(filename => () => getAndCreateMissionTpl(`${directory}/${filename}`))
+      filenames.map(filename => () => getAndCreateMissionTpl(`${directory}/${filename}`))
     )
   }
 
-  async function getAndCreateMissionTpl(missionTplId, retrievedAt = null) {
+  async function getAndCreateMissionTpl (missionTplId, retrievedAt = null) {
     missionTplId = cleanPath(missionTplId)
     const isDirectory = missionTplId.endsWith('/')
 
@@ -198,7 +196,7 @@ function createProviderManager(context) {
     await createMissionTpl(missionTpl, retrievedAt)
   }
 
-  async function createMissionTpl(missionTpl, retrievedAt = null) {
+  async function createMissionTpl (missionTpl, retrievedAt = null) {
     const providerId = mxmProviderClient.providerId
 
     const query = Gql.missionTplInsert()
@@ -228,13 +226,13 @@ function createProviderManager(context) {
     }
   }
 
-  async function createAssociatedAssetClasses(missionTpl, assetClassNames) {
+  async function createAssociatedAssetClasses (missionTpl, assetClassNames) {
     return await runInSequence(
-        assetClassNames.map(assetClassName => () => createAssociatedAssetClass(missionTpl, assetClassName))
+      assetClassNames.map(assetClassName => () => createAssociatedAssetClass(missionTpl, assetClassName))
     )
   }
 
-  async function createAssociatedAssetClass(missionTpl, assetClassName) {
+  async function createAssociatedAssetClass (missionTpl, assetClassName) {
     const providerId = mxmProviderClient.providerId
 
     const query = Gql.missionTplAssetClassInsert()
@@ -249,13 +247,13 @@ function createProviderManager(context) {
     if (debug) console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
   }
 
-  async function createParameters(missionTpl, parameters) {
+  async function createParameters (missionTpl, parameters) {
     await runInSequence(
-        parameters.map(parameter => () => createParameter(missionTpl, parameter))
+      parameters.map(parameter => () => createParameter(missionTpl, parameter))
     )
   }
 
-  async function createParameter(missionTpl, parameter) {
+  async function createParameter (missionTpl, parameter) {
     // console.log(`<<< createParameter: parameter.paramName=${parameter.paramName}`)
     const providerId = mxmProviderClient.providerId
 
@@ -288,8 +286,8 @@ function createProviderManager(context) {
   /**
    * Performs a reload of the mission template from the provider.
    */
-  async function preUpdateMissionTpl(input) {
-    const {id, missionTplPatch} = input
+  async function preUpdateMissionTpl (input) {
+    const { id, missionTplPatch } = input
     console.assert(isEmpty(missionTplPatch))
     if (debug) console.log(`preUpdateMissionTpl: id=${id}`)
 
@@ -298,7 +296,7 @@ function createProviderManager(context) {
     console.log('missionTpl=', missionTpl)
     const missionTplId = missionTpl.missionTplId
 
-    const {providerId, httpEndpoint, apiType} = missionTpl.providerByProviderId
+    const { providerId, httpEndpoint, apiType } = missionTpl.providerByProviderId
     setMxmProviderClient(providerId, httpEndpoint, apiType)
 
     // delete it:
@@ -319,8 +317,8 @@ function createProviderManager(context) {
     }
   }
 
-  async function preUpdateMission(input) {
-    const {id, missionPatch} = input
+  async function preUpdateMission (input) {
+    const { id, missionPatch } = input
     /*if (debug)*/ console.log(`preUpdateMission: id=${id} missionPatch=`, missionPatch)
 
     // get the current state of the mission:
@@ -330,7 +328,7 @@ function createProviderManager(context) {
 
     // set up provider client:
     const provider = mission.missionTplByProviderIdAndMissionTplId.providerByProviderId
-    const {httpEndpoint, apiType} = provider
+    const { httpEndpoint, apiType } = provider
     setMxmProviderClient(providerId, httpEndpoint, apiType)
     if (!mxmProviderClient.isSupportedInterface()) {
       console.warn('preUpdateMission: Not supported interface to provider')
@@ -376,11 +374,11 @@ function createProviderManager(context) {
     }
   }
 
-  async function submitMission(provider, mission) {
+  async function submitMission (provider, mission) {
     // TODO ....
     let args = mission.argumentsByProviderIdAndMissionTplIdAndMissionIdList
 
-    args = reduce(args, (obj, {paramName, paramValue, type, paramUnits}) => {
+    args = reduce(args, (obj, { paramName, paramValue, type, paramUnits }) => {
       obj[paramName] = {
         value: convertValue(paramValue, type),
         units: paramUnits,
@@ -389,10 +387,10 @@ function createProviderManager(context) {
     }, {})
 
     const data = {
-      missionTplId:   mission.missionTplId,
-      missionId:      mission.missionId,
-      assetId:        mission.assetId,
-      description:    mission.description,
+      missionTplId: mission.missionTplId,
+      missionId: mission.missionId,
+      assetId: mission.assetId,
+      description: mission.description,
       arguments: args,
     }
 
@@ -409,13 +407,13 @@ function createProviderManager(context) {
         throw new Error('Provider reported no status for mission submission')
       }
     }
-    catch(error) {
+    catch (error) {
       console.error('submitMission: postMission throw error=', error)
       throw error
     }
   }
 
-  async function retrieveMissionStatus(mission) {
+  async function retrieveMissionStatus (mission) {
     const res = await mxmProviderClient.getMissionById(mission.missionId)
     console.debug('mxmProviderClient.getMissionById: res=', res)
     if (res.status) {
@@ -432,21 +430,21 @@ function createProviderManager(context) {
  * @param promises  List of promises or functions that generate the promise.
  * @return list of results.
  */
-function runInSequence(promises) {
+function runInSequence (promises) {
   return promises.reduce(
-      (acum, promise) => acum.then(results => {
-        if (typeof promise === 'function') {
-          promise = promise()
-        }
-        return promise.then(result => [...results, result])
+    (acum, promise) => acum.then(results => {
+      if (typeof promise === 'function') {
+        promise = promise()
       }
+      return promise.then(result => [...results, result])
+    }
     ),
     Promise.resolve([])
   )
 }
 
 // TODO convertValue still pretty ad hoc
-function convertValue(value, type) {
+function convertValue (value, type) {
   switch (type) {
     case 'float': return parseFloat(value)
     case 'int': return parseInt(value)
