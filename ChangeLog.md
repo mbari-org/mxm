@@ -1,5 +1,8 @@
 2020-07
 
+- update mxmVal test snapshots and adjust ci to use them
+  instead of always generating them!
+
 0.8.3
 
 - adjustments to have direct server program `server/src/server.js` running again.
