@@ -29,7 +29,7 @@
     "esm": "^3.2.25",
     "graphql": "14.5.8",
     "graphql-tag": "^2.10.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.16",
     "quasar": "^1.12.8",
     "vue-apollo": "3.0.3",
     "vue-markdown": "^2.2.4"
