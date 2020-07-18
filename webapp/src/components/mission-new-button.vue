@@ -9,15 +9,16 @@
 
     <utl-dialog
       :dialog-opened="dialogOpened"
-      :title="`Register new mission (for '${providerId}')`"
+      :title="`New mission (for '${providerId}')`"
       :ok-to-submit="!!okToSubmit"
       :ok-to-dismiss="!!okToDismiss"
+      submit-label="OK"
       @submit="submit"
       @dialogClosing="dialogOpened = false"
     >
-      <p style="color:gray;font-size:small">
-        The mission will be registered with 'DRAFT' status.
-        You can then edit any arguments and submit it for execution.
+      <p style="font-size:small" class="text-grey-9">
+        The mission will initially be registered with 'DRAFT' status.
+        You can then edit any parameters and submit it for execution.
       </p>
 
       <div
