@@ -17,3 +17,6 @@ script:
   - (cd server && yarn && npm run test:unit)
   - (cd webapp && yarn && npm run test:unit)
 #  - npm run coveralls
+
+notifications:
+  slack: mbari:8pk8atilpwNYAjspmOjRmZ3N
