@@ -4,31 +4,31 @@
       <q-card class="q-mb-md">
         <q-card-section>
           <div class="row no-wrap q-gutter-x-lg">
-            <div class="column">
+            <div class="column q-gutter-y-sm">
               <div class="row no-wrap items-center q-gutter-x-sm">
                 <div>Mission:</div>
-                <q-chip square class="text-bold">{{ mission.missionId }}</q-chip>
-                <div class="row no-wrap items-center text-grey">
+                <div class="text-bold">{{ mission.missionId }}</div>
+                <div class="row no-wrap items-center text-grey q-gutter-x-sm">
                   <div>Status:</div>
-                  <q-chip dense>{{ mission.missionStatus }}</q-chip>
+                  <div class="text-bold">{{ mission.missionStatus }}</div>
                 </div>
               </div>
               <div class="row no-wrap items-center q-gutter-x-sm" style="font-size:smaller">
                 <div class="text-gray">
                   Template:
                 </div>
-                <q-chip dense>
+                <div>
                   <router-link
                     :to="$utl.routeLoc([mission.providerId, 'mt', mission.missionTplId])"
                   >
                     {{ mission.missionTplId }}
                   </router-link>
-                </q-chip>
+                </div>
 
                 <div class="text-gray">
                   Asset:
                 </div>
-                <q-chip dense>
+                <div>
                   <router-link
                     :to="$utl.routeLoc([params.providerId, 'a', mission.assetId])"
                   >
@@ -37,7 +37,7 @@
                       {{ mission.assetByProviderIdAndAssetId.className }}
                     </q-tooltip>
                   </router-link>
-                </q-chip>
+                </div>
               </div>
             </div>
             <mxm-markdown
