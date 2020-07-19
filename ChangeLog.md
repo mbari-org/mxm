@@ -1,5 +1,7 @@
 2020-07
 
+- add some development notes
+
 - minor style adjs while reviewing
 
 - update mxmVal test snapshots and adjust ci to use them
