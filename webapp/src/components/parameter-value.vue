@@ -10,6 +10,7 @@
       @hide="cancel"
       @escape-key="cancel"
       :cover="false" self="top left"
+      persistent
     >
       <div class="q-ma-md">
         <parameter-value-input
@@ -137,6 +138,7 @@
 
     watch: {
       paramValue(val) {
+        // console.log('WATCH paramValue', val)
         this.paramValueModel = val
       },
     },

@@ -1,5 +1,10 @@
 2020-07
 
+- menu in parameter-value was getting unexpectedly closed upon just accepting
+  the edits in the qgeomap editor BUT ths hould be when the user actually 
+  click the "Set" button in the menu. 
+  This seems fixed by adding `persistent` to the menu.
+  
 - add some development notes
 
 - minor style adjs while reviewing
