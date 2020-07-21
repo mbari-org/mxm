@@ -1,32 +1,16 @@
 <template>
   <div>
-    <q-layout
-      view="lhh LpR lff"
-      container
-      :style="sizeInfo.containerStyle"
-      class="shadow-2 rounded-borders"
-    >
-      <q-header reveal class="bg-primary glossy">
-        <q-toolbar>
-          <q-btn flat round dense icon="menu" />
-          <q-toolbar-title>{{ label }}</q-toolbar-title>
-          <q-btn flat round dense icon="menu" />
-        </q-toolbar>
-      </q-header>
-
-      <div style="height:50px">filler</div>
-      <qgeomap
-        ref="qgeomap"
-        debug-feature="right"
-        :google-api-key="$mxmConfig.googleApiKey"
-        :editable="editable"
-        @startEditing="_startEditing"
-        @editsApplied="_editsApplied"
-        @warning="_showWarning"
-        include-table
-        :style="sizeInfo.qgeomapStyle"
-      />
-    </q-layout>
+    <qgeomap
+      ref="qgeomap"
+      debug-feature="right"
+      :google-api-key="$mxmConfig.googleApiKey"
+      :editable="editable"
+      :label="label"
+      @startEditing="_startEditing"
+      @editsApplied="_editsApplied"
+      @warning="_showWarning"
+      include-table
+    />
 
 <!--    <span style="word-break:break-all;font-size:0.7em">{{valueString}}</span>-->
   </div>
@@ -68,16 +52,6 @@
     computed: {
       entry_id() {
         return this.paramName
-      },
-
-      sizeInfo() {
-        return this.editable ? {
-          containerStyle: 'height:600px;width:700px',
-          qgeomapStyle: 'height:600px;width:700px',
-        } : {
-          containerStyle: 'max-width:400px',
-          qgeomapStyle: 'height:350px;width:350px',
-        }
       },
     },
 

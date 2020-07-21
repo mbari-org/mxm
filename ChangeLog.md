@@ -1,6 +1,6 @@
 2020-07
 
-- trying q-layout in geojson-input
+- q-layout now in qgeomap
 
 - menu in parameter-value was getting unexpectedly closed upon just accepting
   the edits in the qgeomap editor BUT ths hould be when the user actually 

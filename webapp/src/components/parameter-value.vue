@@ -9,8 +9,9 @@
       @cancel="cancel"
       @hide="cancel"
       @escape-key="cancel"
-      :cover="false" self="top left"
-      persistent
+      :cover="false"
+      self="top left"
+      :persistent="editable"
     >
       <div class="q-ma-md">
         <parameter-value-input
