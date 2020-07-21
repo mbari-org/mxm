@@ -1,17 +1,33 @@
 <template>
-  <div :style="sizeInfo.containerStyle">
-    <div v-if="label" class="text-bold">{{ label }}</div>
-    <qgeomap
-      ref="qgeomap"
-      debug-feature="right"
-      :google-api-key="$mxmConfig.googleApiKey"
-      :editable="editable"
-      @startEditing="_startEditing"
-      @editsApplied="_editsApplied"
-      @warning="_showWarning"
-      include-table
-      :style="sizeInfo.qgeomapStyle"
-    />
+  <div>
+    <q-layout
+      view="lhh LpR lff"
+      container
+      :style="sizeInfo.containerStyle"
+      class="shadow-2 rounded-borders"
+    >
+      <q-header reveal class="bg-primary glossy">
+        <q-toolbar>
+          <q-btn flat round dense icon="menu" />
+          <q-toolbar-title>{{ label }}</q-toolbar-title>
+          <q-btn flat round dense icon="menu" />
+        </q-toolbar>
+      </q-header>
+
+      <div style="height:50px">filler</div>
+      <qgeomap
+        ref="qgeomap"
+        debug-feature="right"
+        :google-api-key="$mxmConfig.googleApiKey"
+        :editable="editable"
+        @startEditing="_startEditing"
+        @editsApplied="_editsApplied"
+        @warning="_showWarning"
+        include-table
+        :style="sizeInfo.qgeomapStyle"
+      />
+    </q-layout>
+
 <!--    <span style="word-break:break-all;font-size:0.7em">{{valueString}}</span>-->
   </div>
 </template>
@@ -56,8 +72,8 @@
 
       sizeInfo() {
         return this.editable ? {
-          containerStyle: 'max-width:500px',
-          qgeomapStyle: 'height:500px;width:500px',
+          containerStyle: 'height:600px;width:700px',
+          qgeomapStyle: 'height:600px;width:700px',
         } : {
           containerStyle: 'max-width:400px',
           qgeomapStyle: 'height:350px;width:350px',
