@@ -11,4 +11,4 @@ with the local source code of the extension, instead of the published package:
     yarn unlink @mbari/quasar-app-extension-qgeomap
     yarn add --dev link:../../qgeomap
  
-which of course assumes the indicated path for qgeomap's root directory.
+which of course assumes the indicated path is qgeomap's root directory.
