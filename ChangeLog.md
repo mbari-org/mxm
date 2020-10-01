@@ -1,5 +1,6 @@
 2020-10
 
+- add store/store-flag.d.ts as it seems it should be under version control(?)
 - slack notif to channel `#mxm-dev`
 
 2020-07
