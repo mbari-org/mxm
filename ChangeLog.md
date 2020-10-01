@@ -1,3 +1,7 @@
+2020-10
+
+- slack notif to channel `#mxm-dev`
+
 2020-07
 
 - q-layout now in qgeomap
