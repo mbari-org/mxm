@@ -1,13 +1,13 @@
 # Building and publishing the images
 
-**NOTE**: These notes combine building and using the images.
-General user-oriented instructions is a TODO. 
+**NOTE**: These notes combine both building and using the images.
+General user-oriented instructions is a TODO.
 
 The user-visible MXM version is the one set in `../webapp/package.json`.
 
 ## `mbari/mxm`
 
-The MXM images are automatically built and published on Docker Hub:
+The MXM images are automatically built and published at Docker Hub:
 
 | Tag                | upon pushing           |
 |:-------------      |:-------------          |
@@ -28,16 +28,16 @@ The MXM Postgres image is manually created and published as needed.
 
 # Launch
 
-- Some configuration to be given in a `config.json` file under directory
-  indicated by environment variable `MXM_CONFIG_DIR`, by default `config/`. 
-  The setting in the file are as follows:
-  
+- Some configuration is to be given in a `config.json` file under directory
+  indicated by environment variable `MXM_CONFIG_DIR`, by default `config/`.
+  The settings in `config.json` are as follows:
+
         {
           "graphqlUri": "/mxm-graphql",
           "learnMoreUrl": "https://docs.google.com/document/d/....",
           "googleApiKey": "..."
         }
-  
+
     - `graphqlUri`:  Location of the GraphQL endpoint. The value above is
       OK for a typical docker based installation.
     - `learnMoreUrl`: Link to documentation.

@@ -1,5 +1,6 @@
 2021-06
 
+- doc edits; update dockerHub build to use `main` branch for latest image
 - use tethystest:8080 for default new provider
 
 2020-10

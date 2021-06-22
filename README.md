@@ -19,8 +19,8 @@ of available mission definitions, parameterization, scheduling, and execution st
 
 The MXM system consists of the following components:
 
-- MXM service and webapp from image `mbari/mxm`
-- MXM postgres database from image `mbari/mxm-postgres`
+- MXM service and webapp (docker image: `mbari/mxm`)
+- MXM postgres database (docker image: `mbari/mxm-postgres`)
 
 ## Install
 
@@ -33,7 +33,7 @@ Dependencies:
     (cd server && yarn)
     yarn global add @quasar/cli
     (cd webapp && yarn)
-    
+
 ### Webapp
 
     cd webapp/
@@ -57,9 +57,10 @@ this will open http://localhost:8080/
       quasar build --modern
 
 Note that a build is typically intended for a docker release, so in this case the
-particular file `src/statics/config/config.json` is not used.
+particular file `src/statics/config/config.json` is NOT used.
 Instead, the location of the `config.json` file (which is still required)
 is indicated as a setting prior to running the container.
+See [`docker/README.md`](docker/README.md).
 
 ## Misc
 
