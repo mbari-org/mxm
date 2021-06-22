@@ -1,3 +1,7 @@
+2021-06
+
+- use tethystest:8080 for default new provider
+
 2020-10
 
 - add store/store-flag.d.ts as it seems it should be under version control(?)
@@ -8,10 +12,10 @@
 - q-layout now in qgeomap
 
 - menu in parameter-value was getting unexpectedly closed upon just accepting
-  the edits in the qgeomap editor BUT ths hould be when the user actually 
-  click the "Set" button in the menu. 
+  the edits in the qgeomap editor BUT ths hould be when the user actually
+  click the "Set" button in the menu.
   This seems fixed by adding `persistent` to the menu.
-  
+
 - add some development notes
 
 - minor style adjs while reviewing

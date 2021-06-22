@@ -115,8 +115,8 @@
 
         this.apiType = 'REST0'
 
-        this.providerId = 'TethysDash@tethyssim'
-        this.httpEndpoint = 'http://tethyssim.shore.mbari.org:8080/TethysDash/api/mxm'
+        this.providerId = 'TethysDash@tethystest'
+        this.httpEndpoint = 'http://tethystest.shore.mbari.org:8080/TethysDash/api/mxm'
 
         // this.providerId = 'TFT'
         // this.httpEndpoint = 'http://tsauv.shore.mbari.org/tft-mxm'
