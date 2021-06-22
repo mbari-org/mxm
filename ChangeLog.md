@@ -3,6 +3,7 @@
 - doc edits; update dockerHub build to use `main` branch for latest image
   Argh, DockerHub is buggy: it's failing to save the new build rule (with branch:main)
   but also any save, like just removing the current branch:master ;(
+  https://github.com/docker/hub-feedback/issues/2007
   Bump and tag version (v0.8.3) mainly just to trigger the usual tag rule.
 - use tethystest:8080 for default new provider
 
