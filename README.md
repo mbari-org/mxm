@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/mbari-org/mxm.svg?branch=master)](https://travis-ci.org/mbari-org/mxm)
+[![Build Status](https://travis-ci.org/mbari-org/mxm.svg?branch=main)](https://travis-ci.org/mbari-org/mxm)
 [![](https://img.shields.io/docker/cloud/build/mbari/mxm)](https://hub.docker.com/r/mbari/mxm)
 [![](https://img.shields.io/docker/cloud/automated/mbari/mxm)](https://hub.docker.com/r/mbari/mxm)
 

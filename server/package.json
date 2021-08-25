@@ -6,7 +6,6 @@
   "cordovaId": "org.cordova.quasar.app",
   "capacitorId": "",
   "author": "Carlos Rueda <carueda@mbari.org>",
-  "private": true,
   "scripts": {
     "start": "bin/esm.js",
     "mon": "nodemon bin/esm.js",

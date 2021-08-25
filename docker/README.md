@@ -11,8 +11,8 @@ The MXM images are automatically built and published at Docker Hub:
 
 | Tag                | upon pushing           |
 |:-------------      |:-------------          |
-| `mbari/mxm:latest` | to the *master* branch |
-| `mbari/mxm:x.y.z`  | tag *vx.y.z*           |
+| `mbari/mxm:latest` | to the *main* branch |
+| `mbari/mxm:X.Y.Z`  | tag *vX.Y.Z*           |
 
 To build it manually:
 

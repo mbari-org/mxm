@@ -6,7 +6,6 @@
   "cordovaId": "org.cordova.quasar.app",
   "capacitorId": "",
   "author": "Carlos Rueda <carueda@mbari.org>",
-  "private": true,
   "scripts": {
     "test": "echo \"See package.json => scripts for available tests.\" && exit 0",
     "test:unit": "jest",
