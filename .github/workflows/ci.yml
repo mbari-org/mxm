@@ -19,7 +19,10 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '12'
-          # cache: 'yarn' # Error: Dependencies lock file is not found in /home/runner/work/mxm/mxm. Supported file patterns: yarn.lock
+          cache: 'yarn'
+          cache-dependency-path: |
+            server/yarn.lock
+            webapp/yarn.lock
       - name: Install jest
         run: yarn global add jest
       - name: Build and test server
