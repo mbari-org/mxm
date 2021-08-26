@@ -1,3 +1,7 @@
+2021-08
+
+- migrate to github actions for ci
+
 2021-06  0.8.3
 
 - doc edits; update dockerHub build to use `main` branch for latest image
