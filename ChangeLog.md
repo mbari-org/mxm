@@ -1,5 +1,6 @@
 2021-11
 
+- providers dropdown as dev convenience to select from known providers
 - notes running all locally
 - add docker release workflow
   So, removed the broken build at Docker Hub as it's proved problematic to update the configuration.

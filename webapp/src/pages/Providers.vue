@@ -12,6 +12,9 @@
       <div slot="top-left" slot-scope="props" class="row items-center">
         <div class="col-auto text-h5">
           Providers
+          <span class="text-grey">
+            (Mission execution systems)
+          </span>
         </div>
       </div>
 
@@ -83,7 +86,7 @@
           {
             field: 'httpEndpoint',
             name: 'httpEndpoint',
-            label: 'Endpoint',
+            label: 'MXM Endpoint',
             align: 'left',
             sortable: true
           },

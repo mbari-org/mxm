@@ -11,18 +11,37 @@
       :dialog-opened="dialogOpened"
       title="Register new provider"
       :ok-to-submit="!!okToSubmit && !progress"
-      :ok-to-dismiss="!!okToDismiss && !progress"
+      :ok-to-dismiss="!progress"
       @submit="submit"
       @dialogClosing="dialogOpened = false"
     >
       <div
         class="column q-gutter-sm"
       >
+        <q-btn-dropdown
+          class="q-ml-xl"
+          stack-label label="Select..."
+          color="primary"
+          dense no-caps
+        >
+          <q-list>
+            <q-item
+              v-for="(pp, index) in possibleProviders" :key="index"
+              clickable v-close-popup
+              @click="providerSelected(pp)"
+            >
+              <q-item-section>
+                <q-item-label>{{ pp.providerId }}</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
         <div>
           Provider name:
           <q-input
             ref="providerName"
             dense hide-bottom-space
+            no-error-icon
             :error="!providerId.length || !!providerNameInvalid"
             :error-message="providerNameInvalid"
             @input="providerNameInvalid = null"
@@ -38,6 +57,7 @@
           HTTP Endpoint:
           <q-input
             dense hide-bottom-space
+            no-error-icon
             :error="!httpEndpoint.length"
             class="bg-light-blue-1"
             v-model.trim="httpEndpoint"
@@ -69,7 +89,6 @@
 </template>
 
 <script>
-  import providerBasicGql from '../graphql/providerBasic.gql'
   import providerInsertGql from '../graphql/providerInsert.gql'
 
   import apiTypeSelect from '../components/api-type-select'
@@ -96,12 +115,39 @@
     }),
 
     computed: {
-      okToSubmit() {
-        return this.providerId && this.httpEndpoint && this.apiType
+      // development convenience:
+      possibleProviders() {
+        return [
+          {
+            providerId: 'TethysDash@okeanids',
+            httpEndpoint: 'https://okeanids.mbari.org/TethysDash/api/mxm',
+            apiType: 'REST0',
+          },
+          {
+            providerId: 'TethysDash@tethystest:8080',
+            httpEndpoint: 'http://tethystest.shore.mbari.org:8080/TethysDash/api/mxm',
+            apiType: 'REST0',
+          },
+          {
+            providerId: 'TethysDash@tethystest',
+            httpEndpoint: 'http://tethystest.shore.mbari.org/TethysDash/api/mxm',
+            apiType: 'REST0',
+          },
+          {
+            providerId: 'TFT@tsauv',
+            httpEndpoint: 'http://tsauv.shore.mbari.org/tft-mxm',
+            apiType: 'REST0',
+          },
+          {
+            providerId: 'TFT@localhost',
+            httpEndpoint: 'http://localhost:8040',
+            apiType: 'REST0',
+          },
+        ]
       },
 
-      okToDismiss() {
-        return !this.providerId
+      okToSubmit() {
+        return this.providerId && this.httpEndpoint && this.apiType
       },
     },
 
@@ -111,19 +157,18 @@
         this.progress = null
         this.progressLabel = null
 
-        // some init for devel convenience:
-
-        this.apiType = 'REST0'
-
-        this.providerId = 'TethysDash@tethystest'
-        this.httpEndpoint = 'http://tethystest.shore.mbari.org:8080/TethysDash/api/mxm'
-
-        // this.providerId = 'TFT'
-        // this.httpEndpoint = 'http://tsauv.shore.mbari.org/tft-mxm'
-        // //     OR:
-        // // this.httpEndpoint = 'http://localhost:8040'
+        this.apiType = ''
+        this.providerId = ''
+        this.httpEndpoint = ''
 
         this.dialogOpened = true
+      },
+
+      providerSelected(pp) {
+        console.debug('providerSelected', pp)
+        this.providerId = pp.providerId
+        this.httpEndpoint = pp.httpEndpoint
+        this.apiType = pp.apiType
       },
 
       async submit() {
