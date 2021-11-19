@@ -1,5 +1,6 @@
 2021-08
 
+- add docker release workflow
 - migrate to github actions for ci
 
 2021-06  0.8.3
