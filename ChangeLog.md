@@ -1,8 +1,12 @@
-2021-08
+2021-11
 
+- notes running all locally
 - add docker release workflow
   So, removed the broken build at Docker Hub as it's proved problematic to update the configuration.
   There's currently also some limitation regarding linked accounts for the organization.
+
+2021-08
+
 - migrate to github actions for ci
 
 2021-06  0.8.3
