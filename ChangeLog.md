@@ -1,6 +1,8 @@
 2021-08
 
 - add docker release workflow
+  So, removed the broken build at Docker Hub as it's proved problematic to update the configuration.
+  There's currently also some limitation regarding linked accounts for the organization.
 - migrate to github actions for ci
 
 2021-06  0.8.3
