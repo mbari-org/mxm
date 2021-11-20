@@ -1,5 +1,6 @@
 2021-11
 
+- webapp: `quasar upgrade -i` then -> " All Quasar packages are up to date."
 - dependency cleanup
 - providers dropdown as dev convenience to select from known providers
 - notes running all locally
