@@ -6,7 +6,7 @@ docker/db_data*/
 .DS_Store
 .thumbs.db
 node_modules
-/dist
+dist/
 /src-cordova/platforms
 /src-cordova/plugins
 /src-cordova/www
