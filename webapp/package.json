@@ -6,6 +6,7 @@
   "cordovaId": "org.cordova.quasar.app",
   "capacitorId": "",
   "author": "Carlos Rueda <carueda@mbari.org>",
+  "license": "Apache-2.0",
   "scripts": {
     "test": "echo \"See package.json => scripts for available tests.\" && exit 0",
     "test:unit": "jest",
@@ -23,7 +24,7 @@
     "apollo-client": "^2.6.4",
     "apollo-link": "^1.2.13",
     "apollo-link-http": "^1.5.16",
-    "axios": "^0.21.2",
+    "axios": "0.24.0",
     "cors": "^2.8.5",
     "esm": "^3.2.25",
     "graphql": "14.5.8",

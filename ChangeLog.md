@@ -1,5 +1,6 @@
 2021-11
 
+- dependency cleanup
 - providers dropdown as dev convenience to select from known providers
 - notes running all locally
 - add docker release workflow
