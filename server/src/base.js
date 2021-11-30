@@ -18,7 +18,8 @@ const pgPool = new Pool({
 })
 
 // a simple test of querying db directly:
-if (false) (async function() {
+const simpleDirectDBQuery = true
+if (simpleDirectDBQuery) (async function() {
   const client = await pgPool.connect()
   const q = 'select * from public.providers'
   const res = await client.query(q)

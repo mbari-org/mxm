@@ -1,5 +1,7 @@
 2021-11
 
+- enable that initial db query (providers) at start of service
+ (which helps as quick verification)
 - webapp: `quasar upgrade -i` then -> " All Quasar packages are up to date."
 - dependency cleanup
 - providers dropdown as dev convenience to select from known providers
