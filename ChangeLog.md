@@ -1,3 +1,8 @@
+2022-06
+
+- some revision here along with the provider API implementation in TethysDash
+  given its recent addition of TethysL mission handling.
+
 2021-11
 
 - enable that initial db query (providers) at start of service

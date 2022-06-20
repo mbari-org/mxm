@@ -1316,10 +1316,10 @@
     babel-plugin-dynamic-import-node "^2.3.0"
     babel-plugin-module-resolver "^4.0.0"
 
-"@quasar/extras@^1.12.0":
-  version "1.12.0"
-  resolved "https://registry.yarnpkg.com/@quasar/extras/-/extras-1.12.0.tgz#677fb0fe15a4d62a422d34b09e89911e768866ac"
-  integrity sha512-X4oBMf5xcwk8+z2SrVU3AJ2dbFWZ4+LkjZCcXf4sgfY652CatzX+uaZl5UJtQEnl62PwwFTSPXPGy8t0uWF3sA==
+"@quasar/extras@^1.14.0":
+  version "1.14.0"
+  resolved "https://registry.yarnpkg.com/@quasar/extras/-/extras-1.14.0.tgz#cbdb2c8ea8f9ef551adea28592bf9f9f6c1c5165"
+  integrity sha512-4qVLqiKHV8tpvj/VgyxI5FlWCwQvWQzq15xlLeCDpzLOGeJruUXs+QCAB5gFgdDHPbU2ax2YgAxyGoQSCS7ACw==
 
 "@quasar/fastclick@1.1.4":
   version "1.1.4"
@@ -9044,10 +9044,10 @@ qs@~6.5.2:
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.2.tgz#cb3ae806e8740444584ef154ce8ee98d403f3e36"
   integrity sha512-N5ZAX4/LxJmF+7wN74pUD6qAh9/wnvdQcjq9TZjevvXzSUo7bfmw91saqMjzGS2xq91/odN2dW/WOl7qQHNDGA==
 
-quasar@^1.16.0:
-  version "1.16.0"
-  resolved "https://registry.yarnpkg.com/quasar/-/quasar-1.16.0.tgz#b3eeba6c03860279fa6d423aeb0b83c884517481"
-  integrity sha512-w+XajlXYi1dRYHHD/oRydTv1G3G2edtZ+tWJjnPk4vYUlllUiVsredqrBwqoOogn8qRhpLVS6Og6pona+zIg5A==
+quasar@^1.19.2:
+  version "1.19.2"
+  resolved "https://registry.yarnpkg.com/quasar/-/quasar-1.19.2.tgz#009d3502dde283c0a1ecc3c817306b7974974f92"
+  integrity sha512-TxsYNC2vGyGODb54ZKE28XW575JfuIDWN28hAXXPwpwJAUGQ86FtKIFq12tNhW9viAqyI8AOr8t9I2+0GVXsdQ==
 
 query-string@^4.1.0:
   version "4.3.4"

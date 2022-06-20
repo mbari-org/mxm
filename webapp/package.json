@@ -19,7 +19,7 @@
     "test:unit:ui": "majestic"
   },
   "dependencies": {
-    "@quasar/extras": "^1.12.0",
+    "@quasar/extras": "^1.14.0",
     "apollo-cache-inmemory": "1.6.6",
     "apollo-client": "2.6.10",
     "apollo-link": "1.2.14",
@@ -28,7 +28,7 @@
     "graphql": "14.5.8",
     "graphql-tag": "^2.10.1",
     "lodash": "^4.17.21",
-    "quasar": "^1.16.0",
+    "quasar": "^1.19.2",
     "vue-apollo": "3.0.4",
     "vue-markdown": "^2.2.4"
   },
