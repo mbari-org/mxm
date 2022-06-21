@@ -1,5 +1,12 @@
 2022-06
 
+- some overall testing, all satisfactory:
+    - against the TSAUV MXM provider (on tsauv), but only in terms of queries for definitions
+      as well as creation of a mission (but not submission)
+      (BTW, bitbucket/mbari/tft code also updated)
+    - against TethysDash@okeanids, including submission of a sci2.tl mission against sim
+      (only involving database related updates -- not actual simulator involved)
+
 - bump versions (to 0.8.6) after the various PR merges from dependabot
 - webapp: to facilitate adjustments, decided to copy the qgeomap extension code here directly
   (as of commit 37b847d4fa4915e0956be437d5dc4989051f62cb).
@@ -17,7 +24,7 @@
 - notes running all locally
 - add docker release workflow
   So, removed the broken build at Docker Hub as it's proved problematic to update the configuration.
-  There's currently also some limitation regarding linked accounts for the organization.
+  There's currently also some limitation regarding linked accountgls for the organization.
 
 2021-08
 
