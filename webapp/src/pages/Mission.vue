@@ -508,7 +508,7 @@
           return 'rounded-borders q-pa-xs bg-red-1 text-bold'
         }
         else if ((row.paramValue || '') !== (row.defaultValue || '')) {
-          return 'rounded-borders q-pa-xs q-pt-lg bg-green-11'
+          return 'rounded-borders q-pa-xs bg-green-11'
         }
         else {
           return 'q-pa-xs q-pt-lg'

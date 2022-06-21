@@ -17,11 +17,17 @@
 </template>
 
 <script>
+  import qgeomap from 'components/qgeomap/qgeomap'
+
   import map from 'lodash/map'
 
   const debug = true
 
   export default {
+    components: {
+      qgeomap,
+    },
+
     props: {
       label: {
         type: String,

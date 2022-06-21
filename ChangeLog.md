@@ -1,5 +1,8 @@
 2022-06
 
+- webapp: to facilitate adjustments, decided to copy the qgeomap extension code here directly
+  (as of commit 37b847d4fa4915e0956be437d5dc4989051f62cb).
+  (in part also because dealing with the npm registry is a bit of an unnecessary hassle, at least at this point.)
 - some revision here along with the provider API implementation in TethysDash
   given its recent addition of TethysL mission handling.
 
