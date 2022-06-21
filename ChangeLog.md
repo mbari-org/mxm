@@ -1,5 +1,6 @@
 2022-06
 
+- bump versions (to 0.8.6) after the various PR merges from dependabot
 - webapp: to facilitate adjustments, decided to copy the qgeomap extension code here directly
   (as of commit 37b847d4fa4915e0956be437d5dc4989051f62cb).
   (in part also because dealing with the npm registry is a bit of an unnecessary hassle, at least at this point.)

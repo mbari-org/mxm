@@ -1,6 +1,6 @@
 {
   "name": "mxm",
-  "version": "0.8.3",
+  "version": "0.8.6",
   "description": "MXM Server",
   "productName": "MXM",
   "cordovaId": "org.cordova.quasar.app",
