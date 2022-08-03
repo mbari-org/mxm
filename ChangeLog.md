@@ -1,3 +1,8 @@
+2022-08
+
+- adjustments; library updates; also added justfile, initially to better
+  organize dispatch of server and webapp components for local development
+
 2022-06
 
 - some overall testing, all satisfactory:

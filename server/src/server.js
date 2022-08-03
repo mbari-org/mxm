@@ -3,15 +3,11 @@
 
 import express from 'express'
 import cors from 'cors'
-import path from 'path'
 import serveStatic from 'serve-static'
 
-import {
-  pgPool,
-  postgraphileOptions,
-} from './base'
+import {pgPool, postgraphileOptions,} from './base'
 
-import { postgraphile } from "postgraphile"
+import {postgraphile} from "postgraphile"
 
 const app = express()
 

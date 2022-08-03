@@ -1,3 +1,4 @@
+.env
 webapp/src/statics/config/config.json
 webapp/test/jest/coverage
 webapp/.quasar
