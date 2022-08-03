@@ -36,7 +36,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-      - uses: 8398a7/action-slack@v3
+      - uses: act10ns/slack@v1
         with:
           status: ${{ job.status }}
           fields: repo,message,commit,ref,workflow

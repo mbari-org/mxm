@@ -30,7 +30,7 @@ jobs:
       - name: Build and test webapp
         run: (cd webapp && yarn && npm run test:unit)
 
-      - uses: 8398a7/action-slack@v3
+      - uses: act10ns/slack@v1
         with:
           status: ${{ job.status }}
           fields: repo,message,commit,ref,workflow
