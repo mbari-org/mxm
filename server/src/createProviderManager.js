@@ -215,7 +215,9 @@ function createProviderManager (context) {
       })
       return
     }
-    /*if (debug)*/ console.log(`PERFORMED query='${query}', variables=${variables} => result=`, result)
+    /*if (debug)*/ console.log(`PERFORMED query='${query}',`,
+      `variables=`, JSON.stringify(variables, null, '  '),
+      `=> result=`, JSON.stringify(result, null, '  '))
 
     if (!missionTpl.missionTplId.endsWith('/')) {
       const assetClassNames = missionTpl.assetClassNames || []

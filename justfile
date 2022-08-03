@@ -23,7 +23,20 @@ server-run:
 	echo "PG_CONN_STRING=${PG_CONN_STRING}"
 	(cd server && bin/esm.js)
 
+# Runs server unit tests
+server-unit-tests:
+	#!/usr/bin/env bash
+	(cd server && yarn test:unit)
+
 # Runs the webapp
 webapp-run:
 	#!/usr/bin/env bash
 	(cd webapp && quasar dev --modern)
+
+# Runs webapp unit tests
+webapp-unit-tests:
+	#!/usr/bin/env bash
+	(cd webapp && yarn test:unit)
+
+# Runs server and webapp unit tests
+unit-tests: server-unit-tests webapp-unit-tests
