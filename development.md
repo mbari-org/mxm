@@ -37,8 +37,12 @@ Then:
 
 which should open <http://localhost:8080/>
 
+NOTE: If one builds the webapp: `just webapp-build`,
+then `just server-run` will also serve it
+at <http://localhost:3000/>
+(using 'serve-static' with reference to `webapp/dist/spa`).
 
-## Along with `qgeomap`
+#### Along with `qgeomap`
 
 NOTE: Later on, I decided to copy the `qgeomap` extension code here directly for convenience.
 What follows were instructions relevant when using `qgeomap` as an extension.

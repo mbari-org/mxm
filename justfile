@@ -38,5 +38,10 @@ webapp-unit-tests:
 	#!/usr/bin/env bash
 	(cd webapp && yarn test:unit)
 
+# Build webapp
+webapp-build:
+	#!/usr/bin/env bash
+	(cd webapp && quasar build)
+
 # Runs server and webapp unit tests
 unit-tests: server-unit-tests webapp-unit-tests
