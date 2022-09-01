@@ -1,0 +1,66 @@
+name: Push Docker image
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  push_to_registry:
+    name: Push Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Set up Jave (for backend)
+        uses: graalvm/setup-graalvm@v1
+        with:
+          version: 'latest'
+          java-version: '17'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node (for frontend)
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          cache: 'yarn'
+          cache-dependency-path: |
+            mxm-ui/yarn.lock
+
+      - name: Build, test, and package
+        run: ./mvnw clean test package
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: mbari/mxm
+          tags: |
+            type=semver,pattern={{version}}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: mxm-server
+          file: mxm-server/src/main/docker/Dockerfile.jvm
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+#      - uses: act10ns/slack@v1
+#        with:
+#          status: ${{ job.status }}
+#          fields: repo,message,commit,ref,workflow
+#          # fields: repo,message,commit,author,action,eventName,ref,workflow,job,took # selectable (default: repo,message)
+#        env:
+#          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
+#        if: always() # Pick up events even if the job fails or is canceled.
