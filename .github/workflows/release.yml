@@ -31,6 +31,7 @@ jobs:
             mxm-ui/yarn.lock
 
       - name: Build, test, and package
+        working-directory: mxm-server
         run: ./mvnw clean test package
 
       - name: Log in to Docker Hub
