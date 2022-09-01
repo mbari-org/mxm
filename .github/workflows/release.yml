@@ -22,17 +22,20 @@ jobs:
           java-version: '17'
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup Node (for frontend)
+      - name: Setup Node for ui
         uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '14'
           cache: 'yarn'
           cache-dependency-path: |
             mxm-ui/yarn.lock
+      - name: Build and test ui
+        working-directory: mxm-ui
+        run: (yarn global add jest && yarn && npm run test:unit)
 
-      - name: Build, test, and package
+      - name: Build, test, and package server, including ui
         working-directory: mxm-server
-        run: ./mvnw clean test package
+        run: ./mvnw -e clean test package
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v1
