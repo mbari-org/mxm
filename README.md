@@ -25,8 +25,10 @@ The MXM ecosystem consists of the following components:
 
 ## This repo
 
-This is a parent repo mainly intended to aggregage the various MXM components,
-provide general information and pointers, and facilitate issue tracking at a general level.
+This is a parent repo that aggregates the various MXM components,
+builds and releases the integrated dockerized image,
+provides general information and pointers,
+and facilitates issue tracking at a general level.
 This overall organizational scheme is subject to change as the project progresses.
 
 ### Some Links
