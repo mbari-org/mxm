@@ -1,0 +1,12 @@
+# Content initially generated with `yarn graphql-code-generator init`.
+# Then, some explorations, while running `graphql-codegen --config codegen.yml` ...
+overwrite: true
+schema: "http://localhost:8080/graphql"
+documents: ./src/**/queries.ts
+generates:
+  src/generated/graphql.ts:
+    plugins:
+      - "typescript"
+  src/generated/graphql.schema.json:
+    plugins:
+      - "introspection"
