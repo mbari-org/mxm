@@ -127,10 +127,7 @@ function cancelEdits() {
         </div>
       </q-card-section>
 
-      <q-toolbar
-        v-if="editing"
-        :class="`${footerClass} toolbarClass`"
-      >
+      <q-toolbar v-if="editing" :class="`${footerClass} toolbarClass`">
         <q-toolbar-title />
         <q-btn
           dense

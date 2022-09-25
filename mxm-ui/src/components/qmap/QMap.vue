@@ -5,7 +5,7 @@ import 'leaflet-mouse-position/src/L.Control.MousePosition'
 import 'leaflet.polylinemeasure'
 import 'leaflet.polylinemeasure/Leaflet.PolylineMeasure.css'
 
-import { defineEmits, onMounted, onUnmounted, ref, watch } from 'vue'
+import { defineEmits, inject, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useQMapStore } from './QMapStore'
 import QMapButtons from './QMapButtons.vue'
 import { useOptsStore } from 'stores/opts'
@@ -24,6 +24,8 @@ const props = withDefaults(defineProps<Props>(), {
   editable: false,
   editing: false,
 })
+
+const googl = inject('googl')
 
 const qmapStore = useQMapStore()
 
@@ -170,6 +172,8 @@ onMounted(() => {
     )
 
     baseLayers['Empty'] = L.tileLayer('', { opacity: 0 })
+
+    googl.addBaseLayersTo(baseLayers)
 
     L.control.layers(baseLayers).addTo(lmap)
 

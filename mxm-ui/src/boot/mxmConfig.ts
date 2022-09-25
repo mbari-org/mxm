@@ -17,13 +17,14 @@ interface MxmConfig {
   swaggerUi?: string
   repoUrl?: string
   learnMoreUrl?: string
+  googleApiKey?: string
 }
 
 const CONFIG_JSON_PATH = 'mxmConfig.json'
 
 /// MXM_SERVER_URL only used in local dev/test mode, that is, when directly running via `quasar dev`.
 /// The specific target server is adjusted as convenient.
-const MXM_SERVER_URL = 'http://localhost:8080/'       // already running server locally
+const MXM_SERVER_URL = 'http://localhost:8080/' // already running server locally
 // const MXM_SERVER_URL = 'http://mxm.shore.mbari.org/'
 
 declare module '@vue/runtime-core' {
