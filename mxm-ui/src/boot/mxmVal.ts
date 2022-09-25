@@ -383,7 +383,7 @@ function emptyFeature() {
   } as GeoJSON
 }
 
-function isGeojsonType(valueType) {
+function isGeojsonType(valueType: string) {
   switch (valueType) {
     case 'Point':
     case 'MultiPoint':
@@ -406,6 +406,6 @@ function isGeojsonType(valueType) {
   }
 }
 
-function isNumericType(valueType) {
+function isNumericType(valueType: string) {
   return valueType === 'float' || valueType === 'integer'
 }
