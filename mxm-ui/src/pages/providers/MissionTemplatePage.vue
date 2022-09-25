@@ -7,6 +7,7 @@ import { useQuasar } from 'quasar'
 import { MISSION_TEMPLATE, UPDATE_MISSION_TEMPLATE } from './queries'
 import { useMutation, useQuery } from '@vue/apollo-composable'
 import MxmMarkdown from 'components/utl/markdown/MxmMarkdown.vue'
+import ParameterValue from 'components/paramInput/ParameterValue.vue'
 
 import ElapsedTime from 'components/utl/ElapsedTime.vue'
 
@@ -267,7 +268,12 @@ const tableConf = computed(() => {
                     overflow-x: auto;
                   "
                 >
-                  {{ props.row.defaultValue }}
+                  <ParameterValue
+                    :label="`${props.row.paramName} default value:`"
+                    :param-name="props.row.paramName"
+                    :param-type="props.row.type"
+                    :param-value="props.row.defaultValue"
+                  />
                 </div>
               </q-td>
 
