@@ -21,9 +21,10 @@ interface MxmConfig {
 
 const CONFIG_JSON_PATH = 'mxmConfig.json'
 
-// Only used in local dev/test mode, that is, when directly running via `quasar dev`,
-const MXM_SERVER_URL = 'http://localhost:8080/'
-// Otherwise, the UI is served from the mxm server itself.
+/// MXM_SERVER_URL only used in local dev/test mode, that is, when directly running via `quasar dev`.
+/// The specific target server is adjusted as convenient.
+const MXM_SERVER_URL = 'http://localhost:8080/'       // already running server locally
+// const MXM_SERVER_URL = 'http://mxm.shore.mbari.org/'
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
@@ -59,10 +60,7 @@ const loadConfig = new Promise<MxmConfig>((resolve, reject) => {
 
 export default boot(async ({ app }) => {
   app.config.globalProperties.mxmUiVersion = mxmUiVersion
-
-  const config = await loadConfig
-  if (debug) console.debug('got config=', config)
-  app.config.globalProperties.mxmConfig = config
+  app.config.globalProperties.mxmConfig = await loadConfig
 })
 
 export { loadConfig }
