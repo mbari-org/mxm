@@ -3,19 +3,28 @@ import { GeoJSON } from 'geojson'
 
 const debug = window.location.search.match(/.*debug=(-|.*\bmxmval\b).*/)
 
-declare module '@vue/runtime-core' {
-  interface MxmValProperties {
-    mxmVal: any
-  }
+interface MaxVal {
+  checkValue: typeof checkValue
+  toGeojson: typeof toGeojson
+  fromGeojson: typeof fromGeojson
+  isGeojsonType: typeof isGeojsonType
+  isNumericType: typeof isNumericType
+  emptyFeature: typeof emptyFeature
 }
 
-const mxmVal = {
+const mxmVal: MaxVal = {
   checkValue,
   toGeojson,
   fromGeojson,
   isGeojsonType,
   isNumericType,
   emptyFeature,
+}
+
+declare module '@vue/runtime-core' {
+  interface ComponentCustomProperties {
+    mxmVal: MaxVal
+  }
 }
 
 export default boot(({ app }) => {

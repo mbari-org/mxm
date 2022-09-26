@@ -5,14 +5,18 @@ import 'leaflet.gridlayer.googlemutant/Leaflet.GoogleMutant'
 
 const debug = window.location.search.match(/.*debug=.*\bgoogl\b.*/)
 
-declare module '@vue/runtime-core' {
-  interface GooglProperties {
-    googl: any
-  }
+interface Googl {
+  addBaseLayersTo: (layerMap: { [layerName: string]: L.Layer }) => void
 }
 
-const googl = {
+const googl: Googl = {
   addBaseLayersTo,
+}
+
+declare module 'vue' {
+  interface ComponentCustomProperties {
+    googl: Googl
+  }
 }
 
 export default boot(async ({ app }) => {

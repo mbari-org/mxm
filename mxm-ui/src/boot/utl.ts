@@ -1,8 +1,18 @@
 import { boot } from 'quasar/wrappers'
-import { ref } from 'vue'
+import { ref, Ref } from 'vue'
+
+interface Utl {
+  routeLoc: typeof routeLoc
+  push: (loc: any) => void
+  replace: (loc: any) => void
+  ticker: Ref<Date>
+  getAgo: typeof getAgo
+  cloneDeep: (obj: object) => object
+}
+
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
-    utl: any
+    utl: Utl
   }
 }
 

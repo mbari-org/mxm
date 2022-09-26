@@ -1,5 +1,6 @@
 2022-09
 
+- some boot file typing
 - re-enabled google base layers
   - as in other apps using googlemutant=0.8.0 due to new 0.13 not working right away
 - dispatch DMapDialog in MissionTemplate page
