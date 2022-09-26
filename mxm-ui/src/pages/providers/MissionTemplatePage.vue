@@ -55,7 +55,7 @@ async function updateMissionTplBasic() {
     const data = await updateMissionTemplate(variables)
     if (debug) console.debug('updateMissionTemplate: mutation data=', data)
     $q.notify({
-      message: 'Mission template directory updated',
+      message: 'Mission template updated',
       timeout: 1000,
       position: 'top',
       color: 'info',
