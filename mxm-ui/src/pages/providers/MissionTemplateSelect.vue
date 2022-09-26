@@ -8,7 +8,9 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const emit = defineEmits(['selectedMissionTemplate'])
+const emit = defineEmits<{
+  (e: 'selectedMissionTemplate', v: any): void
+}>()
 
 const theOptions = ref([])
 

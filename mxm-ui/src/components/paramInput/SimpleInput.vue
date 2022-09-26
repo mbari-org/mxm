@@ -17,7 +17,10 @@ const props = withDefaults(defineProps<Props>(), {
 
 const paramValueModel = ref(props.paramValue)
 
-const emit = defineEmits(['valueInput', 'valueError'])
+const emit = defineEmits<{
+  (e: 'valueInput', v: string): void
+  (e: 'valueError', v: string): void
+}>()
 
 function validate(str: string): true | string {
   if (props.paramRequired && !str?.trim()) {

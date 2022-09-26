@@ -15,7 +15,9 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {})
 
-const emit = defineEmits(['qDrawerUpdated'])
+const emit = defineEmits<{
+  (e: 'qDrawerUpdated', v?: GeoJsonObject): void
+}>()
 
 const elm = ref(null as HTMLElement | null)
 

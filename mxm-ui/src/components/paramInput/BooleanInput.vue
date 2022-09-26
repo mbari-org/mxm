@@ -12,7 +12,9 @@ withDefaults(defineProps<Props>(), {
   editable: false,
 })
 
-const emit = defineEmits(['valueInput'])
+const emit = defineEmits<{
+  (e: 'valueInput', id: string): void
+}>()
 
 function valueInput(val: string) {
   emit('valueInput', val)

@@ -36,7 +36,9 @@ withDefaults(defineProps<Props>(), {
   editTitle: 'Description',
 })
 
-const emit = defineEmits(['saveDescription'])
+const emit = defineEmits<{
+  (e: 'saveDescription', v: string): void
+}>()
 </script>
 
 <template>

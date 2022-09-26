@@ -23,7 +23,9 @@ const props = withDefaults(defineProps<Props>(), {
   emptyMessage: '(No description)',
 })
 
-const emit = defineEmits(['edit'])
+const emit = defineEmits<{
+  (e: 'edit'): void
+}>()
 
 const useMarkdown = ref(props.startMarkdown)
 

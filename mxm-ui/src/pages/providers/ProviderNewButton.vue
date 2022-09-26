@@ -13,7 +13,9 @@ const $q = useQuasar()
 const { mutate: pingProvider } = useMutation(PING_PROVIDER)
 const { mutate: createProvider } = useMutation(CREATE_PROVIDER)
 
-const emit = defineEmits(['providerCreated'])
+const emit = defineEmits<{
+  (e: 'providerCreated', v: object): void
+}>()
 
 const progress = ref(false)
 const dialogOpened = ref(false)

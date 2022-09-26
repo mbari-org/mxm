@@ -25,7 +25,10 @@ const props = withDefaults(defineProps<Props>(), {
   editable: false,
 })
 
-const emit = defineEmits(['valueInput', 'valueError'])
+const emit = defineEmits<{
+  (e: 'valueInput', v: string): void
+  (e: 'valueError', v: string): void
+}>()
 
 const paramValueModel = ref(props.paramValue)
 const paramValueError = ref(null as string | null)

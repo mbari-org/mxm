@@ -13,14 +13,15 @@ withDefaults(defineProps<Props>(), {
   selectionForEditing: false,
 })
 
-const emit = defineEmits([
-  'doZoom',
-  'zoomToAll',
-  'zoomToAllSelected',
-  'startEditing',
-  'applyEdits',
-  'cancelEdits',
-])
+const emit = defineEmits<{
+  (e: 'doZoom', out: boolean): void
+  (e: 'zoomToAll'): void
+  (e: 'zoomToAllSelected'): void
+  (e: 'startEditing'): void
+  (e: 'applyEdits'): void
+  (e: 'cancelEdits'): void
+}>()
+
 </script>
 
 <template>

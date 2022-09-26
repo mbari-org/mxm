@@ -32,7 +32,10 @@ const geoJsonValue = computed(() => {
 
 const paramValueModel = ref(geoJsonValue.value)
 
-const emit = defineEmits(['valueInput', 'valueError'])
+const emit = defineEmits<{
+  (e: 'valueInput', v: string): void
+  (e: 'valueError', v: string): void
+}>()
 
 function string2GeoJSON(str: string): GeoJSON | string {
   try {

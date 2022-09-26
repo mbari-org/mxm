@@ -24,7 +24,11 @@ const props = withDefaults(defineProps<Props>(), {
 
 const style = computed(() => props.sizeStyle)
 
-const emit = defineEmits(['dialogClosing', 'submit'])
+const emit = defineEmits<{
+  (e: 'dialogClosing'): void
+  (e: 'submit'): void
+}>()
+
 </script>
 
 <template>

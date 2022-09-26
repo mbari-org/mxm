@@ -20,7 +20,10 @@ const options = computed(() =>
   }))
 )
 
-const emit = defineEmits(['selectedApiType'])
+const emit = defineEmits<{
+  (e: 'selectedApiType', v: any): void
+}>()
+
 </script>
 
 <template>

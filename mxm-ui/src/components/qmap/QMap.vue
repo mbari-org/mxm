@@ -32,7 +32,10 @@ const qmapStore = useQMapStore()
 const center = ref({ lat: 36.8, lng: -121.9 } as L.LatLng)
 const zoom = ref(10)
 
-const emit = defineEmits(['startEditing', 'applyEdits'])
+const emit = defineEmits<{
+  (e: 'startEditing'): void
+  (e: 'applyEdits'): void
+}>()
 
 function doZoom(out: boolean) {
   if (debug) console.debug('doZoom: out=', out)
@@ -241,7 +244,7 @@ onUnmounted(() => {
       @zoomToAll="zoomToAll"
       @zoomToAllSelected="zoomToAllSelected"
       @startEditing="emit('startEditing')"
-      @applyEdits="emit('applyEdits', undefined)"
+      @applyEdits="emit('applyEdits')"
       @cancelEdits="_cancelEdits"
       v-bind="$attrs"
     />

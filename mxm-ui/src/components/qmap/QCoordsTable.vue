@@ -16,7 +16,11 @@ const props = withDefaults(defineProps<Props>(), {
   closable: false,
 })
 
-const emit = defineEmits(['closing', 'coordinateEdited', 'setCenter'])
+const emit = defineEmits<{
+  (e: 'closing'): void
+  (e: 'coordinateEdited', index: number): void
+  (e: 'setCenter', v: L.LatLng): void
+}>()
 
 interface Row {
   index: number

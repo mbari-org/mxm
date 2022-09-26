@@ -49,7 +49,10 @@ const style = computed(() => {
   }
 })
 
-const emit = defineEmits(['applyEdits', 'cancelEdits'])
+const emit = defineEmits<{
+  (e: 'applyEdits', v?: GeoJSON): void
+  (e: 'cancelEdits'): void
+}>()
 
 const editing = ref(props.editable)
 

@@ -14,7 +14,9 @@ const props = withDefaults(defineProps<Props>(), {
   editable: false,
 })
 
-const emit = defineEmits(['input'])
+const emit = defineEmits<{
+  (e: 'input', v?: string): void
+}>()
 
 const unitInfo = computed(() =>
   props.value ? props.unitsByName[props.value] : undefined

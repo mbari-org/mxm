@@ -41,7 +41,9 @@ function openEdit() {
   editOpened.value = true
 }
 
-const emit = defineEmits(['saveDescription'])
+const emit = defineEmits<{
+  (e: 'saveDescription', v?: string): void
+}>()
 
 function saveEdit() {
   editOpened.value = false

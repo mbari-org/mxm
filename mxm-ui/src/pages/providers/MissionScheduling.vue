@@ -13,7 +13,9 @@ const props = withDefaults(defineProps<Props>(), {
   editable: false,
 })
 
-const emit = defineEmits(['schedInfo'])
+const emit = defineEmits<{
+  (e: 'schedInfo', v: object): void
+}>()
 
 const DATE_MASK = 'YYYY-MM-DD HH:mm'
 
