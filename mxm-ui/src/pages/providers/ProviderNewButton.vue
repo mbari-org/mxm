@@ -159,6 +159,16 @@ const submit = async () => {
 
 const possibleProviders = [
   {
+    providerId: 'provider-example@mxm',
+    httpEndpoint: 'http://mxm.shore.mbari.org/mxm-provider-api',
+    apiType: 'REST0',
+  },
+  {
+    providerId: 'provider-example_8777',
+    httpEndpoint: 'http://localhost:8777/mxm-provider-api',
+    apiType: 'REST0',
+  },
+  {
     providerId: 'TethysDash@okeanids',
     httpEndpoint: 'https://okeanids.mbari.org/TethysDash/api/mxm',
     apiType: 'REST0',

@@ -41,7 +41,7 @@ body.body--dark .markdownBg {
   border-color: #4f4f4f;
 }
 
-body.body--dark .markdownBg a {
+body.body--dark .myMarkdown a {
   /* better display of links */
   color: aquamarine;
 }

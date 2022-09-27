@@ -47,7 +47,7 @@ const styleMarkdown = computed(() => {
 <template>
   <div v-if="text || !hideEmpty" @click="() => editClick && emit('edit')">
     <div style="width: 100%" class="row no-wrap items-start">
-      <div style="vertical-align: top">
+      <div class="myMarkdown" style="vertical-align: top">
         <div :class="{ 'rounded-borders markdownBg': !simple }">
           <markdown
             v-if="useMarkdown"

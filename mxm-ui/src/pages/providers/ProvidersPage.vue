@@ -208,8 +208,10 @@ async function doDeleteProvider(providerId: string) {
       <template v-slot:top>
         <div class="full-width row justify-between">
           <div class="col-auto text-h5">
-            Providers
-            <span class="text-grey"> (Mission execution systems) </span>
+            Registered mission execution systems
+            <span class="text-grey">
+            (aka Providers)
+          </span>
           </div>
 
           <ProviderNewButton @providerCreated="providerCreated" />
