@@ -29,9 +29,9 @@ commit-main-and-push:
 	git push origin main
 
 # Create new tag and push it
-tag-and-push:
-	git tag v${MXM_VERSION}
-	git push origin v${MXM_VERSION}
+tag-and-push force='':
+	git tag  {{force}} v${MXM_VERSION}
+	git push {{force}} origin v${MXM_VERSION}
 
 # Show latest few tags
 tags:
