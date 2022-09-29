@@ -161,42 +161,42 @@ const possibleProviders = [
   {
     providerId: 'provider-example@mxm',
     httpEndpoint: 'http://mxm.shore.mbari.org/mxm-provider-api',
-    apiType: 'REST0',
+    apiType: 'REST',
   },
   {
     providerId: 'provider-example_8777',
     httpEndpoint: 'http://localhost:8777/mxm-provider-api',
-    apiType: 'REST0',
+    apiType: 'REST',
   },
   {
     providerId: 'TethysDash@okeanids',
     httpEndpoint: 'https://okeanids.mbari.org/TethysDash/api/mxm',
-    apiType: 'REST0',
+    apiType: 'REST',
   },
   {
     providerId: 'TethysDash@tethystest:8080',
     httpEndpoint: 'http://tethystest.shore.mbari.org:8080/TethysDash/api/mxm',
-    apiType: 'REST0',
+    apiType: 'REST',
   },
   {
     providerId: 'TethysDash@tethystest',
     httpEndpoint: 'http://tethystest.shore.mbari.org/TethysDash/api/mxm',
-    apiType: 'REST0',
+    apiType: 'REST',
   },
   {
     providerId: 'TethysDash@localhost:18080',
     httpEndpoint: 'http://localhost:18080/TethysDash/api/mxm',
-    apiType: 'REST0',
+    apiType: 'REST',
   },
   {
     providerId: 'TFT@tsauv',
     httpEndpoint: 'http://tsauv.shore.mbari.org/tft-mxm',
-    apiType: 'REST0',
+    apiType: 'REST',
   },
   {
     providerId: 'TFT@localhost',
     httpEndpoint: 'http://localhost:8040',
-    apiType: 'REST0',
+    apiType: 'REST',
   },
 ]
 </script>
