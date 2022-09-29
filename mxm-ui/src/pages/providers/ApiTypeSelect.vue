@@ -30,7 +30,7 @@ const emit = defineEmits<{
   <div>
     <q-select
       dense
-      style="width: 24em"
+      style="width: 12em"
       class="fieldBg"
       :options="options"
       placeholder="Select"

@@ -214,7 +214,7 @@ const possibleProviders = [
     >
       <UtlDialog
         :dialog-opened="dialogOpened"
-        title="Register new provider"
+        title="Register a new provider"
         :ok-to-submit="!!okToSubmit && !progress"
         :ok-to-dismiss="!progress"
         @submit="submit"
@@ -222,10 +222,10 @@ const possibleProviders = [
       >
         <div class="column q-gutter-sm">
           <q-btn-dropdown
-            class="q-ml-xl"
+            class="q-ml-lg"
             stack-label
             label="Select..."
-            color="primary"
+            color="accent"
             dense
             no-caps
           >
@@ -243,6 +243,14 @@ const possibleProviders = [
               </q-item>
             </q-list>
           </q-btn-dropdown>
+
+          <p>
+            Indicate the provider you want to register,
+            which must expose an MXM Provider API.
+            <br /><br />
+            Note: this dialog and the dropdown above are mainly for development purposes.
+            A possible future mechanism is for the provider to register itself.
+          </p>
 
           <div>
             Provider name:
@@ -262,8 +270,8 @@ const possibleProviders = [
           </div>
 
           <div>
-            HTTP Endpoint: pingOk={{ pingOk }}
-            <div class="row items-center">
+            HTTP Endpoint:
+            <div class="row items-center q-gutter-x-xs">
               <q-input
                 dense
                 hide-bottom-space
@@ -285,10 +293,10 @@ const possibleProviders = [
               />
               <q-btn
                 v-else
-                label="Test"
+                :disable="!httpEndpoint"
+                label="Test connection"
                 :color="pingFailed ? 'red' : 'secondary'"
                 dense
-                round
                 no-caps
                 size="sm"
                 @click="testConnectionToProvider"
