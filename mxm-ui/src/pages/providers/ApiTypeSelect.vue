@@ -23,23 +23,21 @@ const options = computed(() =>
 const emit = defineEmits<{
   (e: 'selectedApiType', v: any): void
 }>()
-
 </script>
 
 <template>
-  <div>
-    <q-select
-      dense
-      style="width: 12em"
-      class="fieldBg"
-      :options="options"
-      placeholder="Select"
-      :modelValue="selectedApiType"
-      @update:modelValue="
-        val => {
-          emit('selectedApiType', val)
-        }
-      "
-    />
-  </div>
+  <q-btn-toggle
+    dense
+    class="fieldBg"
+    style="width: 16em"
+    spread
+    :options="options"
+    placeholder="Select"
+    :modelValue="selectedApiType"
+    @update:modelValue="
+      val => {
+        emit('selectedApiType', val)
+      }
+    "
+  />
 </template>

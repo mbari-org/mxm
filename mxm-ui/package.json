@@ -9,7 +9,8 @@
     "start": "quasar dev --port 8086",
     "build": "quasar build",
     "lint": "eslint --ext .js,.ts,.vue ./",
-    "format": "prettier --write \"**/*.{js,ts,vue,scss,html,md,json}\" --ignore-path .gitignore",
+    "format": "prettier --write \"**/*.{js,ts,vue,scss,html,json}\" --ignore-path .gitignore",
+    "format-check": "prettier --check \"**/*.{js,ts,vue,scss,html,json}\" --ignore-path .gitignore",
     "test:unit": "jest",
     "test": "echo \"No test specified\" && exit 0"
   },

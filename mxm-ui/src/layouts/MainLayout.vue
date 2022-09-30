@@ -58,7 +58,7 @@ import SwitchDarkMode from 'components/utl/SwitchDarkMode.vue'
                 <a
                   v-if="mxmConfig.graphqlSchema"
                   class="text-white"
-                  style="text-decoration:none"
+                  style="text-decoration: none"
                   :href="mxmConfig.graphqlSchema"
                   target="mxm_graphqlSchema"
                   rel="noopener"
@@ -68,7 +68,7 @@ import SwitchDarkMode from 'components/utl/SwitchDarkMode.vue'
                 </a>
                 <a
                   v-if="mxmConfig.graphqlUi"
-                  style="font-size: small; text-decoration:none"
+                  style="font-size: small; text-decoration: none"
                   class="text-white"
                   :href="mxmConfig.graphqlUi"
                   target="mxm_graphqlUI"
@@ -90,7 +90,7 @@ import SwitchDarkMode from 'components/utl/SwitchDarkMode.vue'
                 <a
                   v-if="mxmConfig.openapiSchema"
                   class="text-white"
-                  style="text-decoration:none"
+                  style="text-decoration: none"
                   :href="mxmConfig.openapiSchema"
                   target="mxm_graphqlSchema"
                   rel="noopener"
@@ -100,7 +100,7 @@ import SwitchDarkMode from 'components/utl/SwitchDarkMode.vue'
                 </a>
                 <a
                   v-if="mxmConfig.swaggerUi"
-                  style="font-size: small; text-decoration:none"
+                  style="font-size: small; text-decoration: none"
                   class="text-white"
                   :href="mxmConfig.swaggerUi"
                   target="mxm_swaggerUI"

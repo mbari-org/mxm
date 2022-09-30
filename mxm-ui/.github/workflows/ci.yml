@@ -24,8 +24,8 @@ jobs:
             yarn.lock
       - name: Install jest
         run: yarn global add jest
-      - name: Build and test
-        run: (yarn && npm run test:unit)
+      - name: Check format, and test
+        run: (yarn && yarn run format-check && yarn run test:unit)
 
 #      - uses: act10ns/slack@v1
 #        with:

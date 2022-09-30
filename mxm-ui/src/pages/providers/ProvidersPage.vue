@@ -209,9 +209,7 @@ async function doDeleteProvider(providerId: string) {
         <div class="full-width row justify-between">
           <div class="col-auto text-h5">
             Registered mission execution systems
-            <span class="text-grey">
-            (aka Providers)
-          </span>
+            <span class="text-grey"> (aka Providers) </span>
           </div>
 
           <ProviderNewButton @providerCreated="providerCreated" />

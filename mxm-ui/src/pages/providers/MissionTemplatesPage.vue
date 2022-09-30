@@ -153,17 +153,29 @@ const tableConf = {
 
       <template v-slot:body="props">
         <q-tr :props="props">
-          <q-td key="missionTplId" :props="props" style="width:5px; vertical-align:top">
-            <div class="row no-wrap items-center q-gutter-x-xs" >
+          <q-td
+            key="missionTplId"
+            :props="props"
+            style="width: 5px; vertical-align: top"
+          >
+            <div class="row no-wrap items-center q-gutter-x-xs">
               <q-icon
                 class="q-mr-xs"
-                :name="`far ${props.row.missionTplId.endsWith('/') ? 'fa-folder' : 'fa-file-alt'}`"
+                :name="`far ${
+                  props.row.missionTplId.endsWith('/')
+                    ? 'fa-folder'
+                    : 'fa-file-alt'
+                }`"
                 size="12px"
               />
               <router-link
                 class="appLink"
                 :to="
-                  utl.routeLoc([params.providerId, 'mt', props.row.missionTplId])
+                  utl.routeLoc([
+                    params.providerId,
+                    'mt',
+                    props.row.missionTplId,
+                  ])
                 "
               >
                 {{ props.row.missionTplId }}

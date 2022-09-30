@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import MxmMarkdownView from 'components/utl/markdown/MxmMarkdownView.vue'
+import TestConnectionToProviderButton from './TestConnectionToProviderButton.vue'
 import { computed } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
 import { useUtlStore } from 'stores/utl'
@@ -46,8 +47,8 @@ utlStore.setRefreshFunction(refreshProvider, 'Refresh this provider')
     <div v-else-if="provider && provider.providerId">
       <q-card class="q-mb-md q-mt-lg">
         <q-card-section class="row q-gutter-md items-center">
-          <span>Provider:</span>
-          <span class="text-bold">{{ provider.providerId }}</span>
+          <div>Provider:</div>
+          <div class="text-h6">{{ provider.providerId }}</div>
         </q-card-section>
 
         <q-separator />
@@ -115,10 +116,15 @@ utlStore.setRefreshFunction(refreshProvider, 'Refresh this provider')
             <tbody>
               <tr>
                 <td>Endpoint:</td>
-                <td>
-                  <span class="text-bold">
+                <td class="row q-gutter-x-md items-center">
+                  <div class="text-bold">
                     {{ provider.httpEndpoint }}
-                  </span>
+                  </div>
+                  <TestConnectionToProviderButton
+                    :providerId="provider.providerId"
+                    :httpEndpoint="provider.httpEndpoint"
+                    :apiType="provider.apiType"
+                  />
                 </td>
               </tr>
               <tr>

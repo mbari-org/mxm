@@ -28,7 +28,6 @@ const emit = defineEmits<{
   (e: 'dialogClosing'): void
   (e: 'submit'): void
 }>()
-
 </script>
 
 <template>

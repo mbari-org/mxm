@@ -134,15 +134,27 @@ const tableConf = {
 
       <template v-slot:body="props">
         <q-tr :props="props">
-          <q-td key="updatedDate" :props="props" style="width: 5px; vertical-align:top">
+          <q-td
+            key="updatedDate"
+            :props="props"
+            style="width: 5px; vertical-align: top"
+          >
             {{ props.row.updatedDate }}
           </q-td>
 
-          <q-td key="missionStatus" :props="props" style="width: 5px; vertical-align:top">
+          <q-td
+            key="missionStatus"
+            :props="props"
+            style="width: 5px; vertical-align: top"
+          >
             <q-chip dense size="sm">{{ props.row.missionStatus }}</q-chip>
           </q-td>
 
-          <q-td key="missionTplId" :props="props" style="width: 5px; vertical-align:top">
+          <q-td
+            key="missionTplId"
+            :props="props"
+            style="width: 5px; vertical-align: top"
+          >
             <router-link
               class="appLink"
               :to="
@@ -168,7 +180,11 @@ const tableConf = {
             />
           </q-td>
 
-          <q-td key="assetId" :props="props" style="width: 5px; vertical-align:top">
+          <q-td
+            key="assetId"
+            :props="props"
+            style="width: 5px; vertical-align: top"
+          >
             <router-link
               class="appLink"
               :to="utl.routeLoc([params.providerId, 'a', props.row.assetId])"
@@ -177,7 +193,11 @@ const tableConf = {
             </router-link>
           </q-td>
 
-          <q-td key="missionId" :props="props" style="width: 5px; vertical-align:top">
+          <q-td
+            key="missionId"
+            :props="props"
+            style="width: 5px; vertical-align: top"
+          >
             <router-link
               class="appLink"
               :to="
@@ -194,7 +214,11 @@ const tableConf = {
             </router-link>
           </q-td>
 
-          <q-td key="providerMissionId" :props="props" style="width: 5px; vertical-align:top">
+          <q-td
+            key="providerMissionId"
+            :props="props"
+            style="width: 5px; vertical-align: top"
+          >
             <div v-if="props.row.providerMissionId">
               {{ props.row.providerMissionId }}
               <q-tooltip>Provider mission ID</q-tooltip>

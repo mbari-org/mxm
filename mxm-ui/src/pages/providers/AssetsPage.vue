@@ -98,7 +98,11 @@ const tableConf = {
 
       <template v-slot:body="props">
         <q-tr :props="props">
-          <q-td key="assetId" :props="props" style="width: 5px; vertical-align:top">
+          <q-td
+            key="assetId"
+            :props="props"
+            style="width: 5px; vertical-align: top"
+          >
             <router-link
               class="appLink"
               :to="utl.routeLoc([props.row.providerId, 'a', props.row.assetId])"

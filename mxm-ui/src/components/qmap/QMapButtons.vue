@@ -21,7 +21,6 @@ const emit = defineEmits<{
   (e: 'applyEdits'): void
   (e: 'cancelEdits'): void
 }>()
-
 </script>
 
 <template>

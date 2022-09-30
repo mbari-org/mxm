@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { PING_PROVIDER, CREATE_PROVIDER } from './queries'
+import { CREATE_PROVIDER } from './queries'
 import UtlDialog from 'components/utl/UtlDialog.vue'
 import ApiTypeSelect from './ApiTypeSelect.vue'
+import TestConnectionToProviderButton from './TestConnectionToProviderButton.vue'
 
 import { computed, ref } from 'vue'
 import { useMutation } from '@vue/apollo-composable'
@@ -10,7 +11,6 @@ import { useQuasar } from 'quasar'
 
 const $q = useQuasar()
 
-const { mutate: pingProvider } = useMutation(PING_PROVIDER)
 const { mutate: createProvider } = useMutation(CREATE_PROVIDER)
 
 const emit = defineEmits<{
@@ -21,11 +21,10 @@ const progress = ref(false)
 const dialogOpened = ref(false)
 const providerNameInvalid = ref(false)
 const progressLabel = ref('')
-const apiType = ref('')
-const pingOk = ref(false)
-const pingFailed = ref(false)
 const providerId = ref('')
 const httpEndpoint = ref('')
+const apiType = ref('')
+const pingOk = ref(false)
 
 const openDialog = () => {
   providerNameInvalid.value = false
@@ -46,56 +45,12 @@ const providerSelected = pp => {
   apiType.value = pp.apiType
 }
 
-async function testConnectionToProvider() {
-  console.debug('testConnectionToProvider')
-  pingOk.value = false
-  pingFailed.value = false
-
-  const variables = {
-    pl: {
-      providerId: providerId.value,
-      httpEndpoint: httpEndpoint.value,
-      apiType: apiType.value,
-    },
-  }
-
-  $q.loading.show({
-    message: 'Pinging provider...',
-  })
-  try {
-    const result = await pingProvider(variables)
-    console.debug('pingProvider: result=', result)
-    const datetime = result?.data?.pingProvider?.result?.datetime
-    if (datetime) {
-      pingOk.value = true
-      setTimeout(() => {
-        pingOk.value = false
-      }, 5000)
-    } else {
-      pingFailed.value = true
-      const message = 'Provider did not return expected ping response'
-      console.warn(message)
-      $q.notify({
-        color: 'negative',
-        message,
-        textColor: 'white',
-        timeout: 3000,
-        closeBtn: 'Close',
-      })
-    }
-  } catch (error) {
-    pingFailed.value = true
-    console.debug(typeof error.message)
-    console.warn(error.message)
-    $q.notify({
-      color: 'negative',
-      message: error.message,
-      textColor: 'white',
-      timeout: 3000,
-      closeBtn: 'Close',
-    })
-  } finally {
-    $q.loading.hide()
+async function pingResult(v: true | string) {
+  console.debug('pingResult: v=', v)
+  if (v === true) {
+    pingOk.value = true
+  } else {
+    pingOk.value = false
   }
 }
 
@@ -245,11 +200,12 @@ const possibleProviders = [
           </q-btn-dropdown>
 
           <p>
-            Indicate the provider you want to register,
-            which must expose an MXM Provider API.
+            Indicate the provider you want to register, which must expose an MXM
+            Provider API.
             <br /><br />
-            Note: this dialog and the dropdown above are mainly for development purposes.
-            A possible future mechanism is for the provider to register itself.
+            Note: this dialog and the dropdown above are mainly for development
+            purposes. A possible future mechanism is for the provider to
+            register itself.
           </p>
 
           <div>
@@ -282,24 +238,11 @@ const possibleProviders = [
                 type="text"
                 style="width: 28em"
               />
-              <q-btn
-                v-if="pingOk"
-                icon="check"
-                dense
-                round
-                no-caps
-                size="sm"
-                class="text-green-5"
-              />
-              <q-btn
-                v-else
-                :disable="!httpEndpoint"
-                label="Test connection"
-                :color="pingFailed ? 'red' : 'secondary'"
-                dense
-                no-caps
-                size="sm"
-                @click="testConnectionToProvider"
+              <TestConnectionToProviderButton
+                :providerId="providerId"
+                :httpEndpoint="httpEndpoint"
+                :apiType="apiType"
+                @pingResult="pingResult"
               />
             </div>
           </div>
@@ -308,11 +251,7 @@ const possibleProviders = [
             API Type:
             <ApiTypeSelect
               :selectedApiType="apiType"
-              @selectedApiType="
-                val => {
-                  apiType = val.value
-                }
-              "
+              @selectedApiType="val => (apiType = val)"
             />
           </div>
 
