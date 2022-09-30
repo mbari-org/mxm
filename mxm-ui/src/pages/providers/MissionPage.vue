@@ -191,9 +191,46 @@ const orderedArguments = computed(() => {
 })
 
 function submitMission() {
-  console.warn('submitMission() not implemented')
+  $q.dialog({
+    title: 'Confirm',
+    message: `Submit mission '${mission.value.missionId}' for execution?`,
+    color: 'info',
+    dark: $q.dark.isActive,
+    cancel: true
+  }).onOk(() => doIt())
+
+  // As the mission is always saved upon changes in draft status, the submission effect
+  // is accomplished by requesting the status to become 'SUBMITTED'.
+  const doIt = async () => {
+    const missionStatus = 'SUBMITTED'
+    try {
+      await updateMission({ missionStatus })
+      const  message = `Mission submitted. Status: ${mission.value.missionStatus}`
+      if (debug) console.debug(message)
+      $q.notify({
+        message,
+        timeout: 2000,
+        color: 'info',
+        position: 'top',
+      })
+    } catch (error) {
+      console.error('submitMission: postMission: error=', error)
+      $q.notify({
+        message: `Mission submission error: ${JSON.stringify(error)}`,
+        timeout: 0,
+        closeBtn: 'Close',
+        color: 'warning',
+      })
+    }
+  }
 }
 
+// TODO validateMission
+function validateMission() {
+  console.warn('validateMission() not implemented')
+}
+
+// TODO cancelMission
 function cancelMission() {
   console.warn('cancelMission() not implemented')
 }
@@ -254,6 +291,7 @@ async function deleteMission() {
     title: 'Confirm',
     message: `Are you sure you want to delete this mission '${missionId.value}'`,
     color: 'negative',
+    dark: $q.dark.isActive,
     ok: `Yes, delete '${missionId.value}'`,
     cancel: true,
     focus: 'cancel',
@@ -604,46 +642,48 @@ const tableConf = computed(() => {
         />
       </div>
 
-      <div class="row q-mb-sm q-gutter-x-lg">
-        <q-btn
-          v-if="provider.canValidate"
-          label="Validate"
-          icon="check"
-          push
-          color="secondary"
-          size="sm"
-          :disable="
-            mission.missionStatus !== 'DRAFT' || parametersWithErrorCount > 0
-          "
-          @click="validateMission"
-        >
-          <q-tooltip>Validate mission against external provider</q-tooltip>
-        </q-btn>
-        <q-btn
-          label="Submit"
-          icon="settings"
-          push
-          color="secondary"
-          size="sm"
-          :disable="disableRun"
-          @click="submitMission"
-        >
-          <q-tooltip>Request execution of this mission</q-tooltip>
-        </q-btn>
-        <q-btn
-          v-if="
-            mission.missionStatus === 'RUNNING' ||
-            mission.missionStatus === 'QUEUED'
-          "
-          label="Cancel"
-          icon="cancel"
-          push
-          color="secondary"
-          size="sm"
-          @click="cancelMission"
-        >
-          <q-tooltip>Request cancellation of submitted mission</q-tooltip>
-        </q-btn>
+      <div class="row q-mb-sm justify-between">
+        <div class="row q-gutter-x-lg">
+          <q-btn
+            v-if="provider.canValidate"
+            label="Validate"
+            icon="check"
+            push
+            color="secondary"
+            size="sm"
+            :disable="
+              mission.missionStatus !== 'DRAFT' || parametersWithErrorCount > 0
+            "
+            @click="validateMission"
+          >
+            <q-tooltip>Validate mission against external provider</q-tooltip>
+          </q-btn>
+          <q-btn
+            label="Submit"
+            icon="settings"
+            push
+            color="secondary"
+            size="sm"
+            :disable="disableRun"
+            @click="submitMission"
+          >
+            <q-tooltip>Request execution of this mission</q-tooltip>
+          </q-btn>
+          <q-btn
+            v-if="
+              mission.missionStatus === 'RUNNING' ||
+              mission.missionStatus === 'QUEUED'
+            "
+            label="Cancel"
+            icon="cancel"
+            push
+            color="secondary"
+            size="sm"
+            @click="cancelMission"
+          >
+            <q-tooltip>Request cancellation of submitted mission</q-tooltip>
+          </q-btn>
+        </div>
         <q-btn
           label="Delete"
           icon="delete"
@@ -672,11 +712,11 @@ const tableConf = computed(() => {
         :pagination="tableConf.pagination"
         :filter="filter"
         separator="cell"
-        :no-data-label="`No parameters defined in the mission template '${mission.missionTplId}'`"
+        :no-data-label="`No parameters defined in mission template: '${mission.missionTplId}'`"
       >
         <template v-slot:top>
           <div class="col full-width">
-            <div class="row q-gutter-lg no-wrap">
+            <div v-if="parameters.length" class="row q-gutter-lg no-wrap">
               <div class="row vertical-middle text-weight-light text-grey">
                 <div :class="{ 'text-green': parametersChanged.length }">
                   Overridden parameters: {{ parametersChanged.length }}

@@ -158,6 +158,7 @@ function confirmAndDeleteProvider(row) {
       `Are you sure you want to delete provider '${row.providerId}'` +
       ' and all associated entities?',
     color: 'negative',
+    dark: $q.dark.isActive,
     ok: `Yes, delete '${row.providerId}'`,
     cancel: true,
     focus: 'cancel',

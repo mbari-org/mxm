@@ -47,7 +47,7 @@ async function testConnectionToProvider() {
 
   try {
     const result = await pingProvider(variables)
-    console.debug('pingProvider: result=', result)
+    if (debug) console.debug('pingProvider: result=', result)
     const datetime = result?.data?.pingProvider?.result?.datetime
     if (datetime) {
       pingOk.value = true
