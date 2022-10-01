@@ -10,6 +10,7 @@ import {
   MISSION,
   MISSION_DELETE,
   MISSION_UPDATE,
+  MISSION_VALIDATE,
   UNITS,
   UPDATE_MISSION_TEMPLATE,
 } from './queries'
@@ -24,6 +25,7 @@ import ParameterValue from 'components/paramInput/ParameterValue.vue'
 
 const debug = window.location.search.match(/.*debug=(-|.*\bmission\b).*/)
 
+const { mutate: missionValidate } = useMutation(MISSION_VALIDATE)
 const { mutate: missionUpdate } = useMutation(MISSION_UPDATE)
 const { mutate: missionDelete } = useMutation(MISSION_DELETE)
 
@@ -193,10 +195,11 @@ const orderedArguments = computed(() => {
 function submitMission() {
   $q.dialog({
     title: 'Confirm',
-    message: `Submit mission '${mission.value.missionId}' for execution?`,
+    message: `Submit this <b>${missionTplId.value}</b> mission isntance for execution?`,
+    html: true,
     color: 'info',
     dark: $q.dark.isActive,
-    cancel: true
+    cancel: true,
   }).onOk(() => doIt())
 
   // As the mission is always saved upon changes in draft status, the submission effect
@@ -205,7 +208,7 @@ function submitMission() {
     const missionStatus = 'SUBMITTED'
     try {
       await updateMission({ missionStatus })
-      const  message = `Mission submitted. Status: ${mission.value.missionStatus}`
+      const message = `Mission submitted. Status: ${mission.value.missionStatus}`
       if (debug) console.debug(message)
       $q.notify({
         message,
@@ -225,9 +228,45 @@ function submitMission() {
   }
 }
 
-// TODO validateMission
-function validateMission() {
-  console.warn('validateMission() not implemented')
+async function validateMission() {
+  if (debug) console.debug('validateMission')
+  const variables = {
+    pl: {
+      missionId: missionId.value,
+      providerId: providerId.value,
+      missionTplId: missionTplId.value,
+    },
+  }
+  $q.loading.show({
+    message: 'Validating ...',
+    messageColor: 'black',
+    customClass: 'text-bold',
+  })
+  try {
+    const data = await missionValidate(variables)
+    /*if (debug)*/ console.debug('validateMission: mutation data=', data)
+    const { ok, error } = data?.data?.validateMission?.result ?? {}
+    if (ok) {
+      $q.notify({
+        message: `Mission validation: ${ok}`,
+        timeout: 1000,
+        position: 'top',
+        color: 'info',
+      })
+    } else if (error) {
+      $q.notify({
+        message: `Mission validation error: ${error}`,
+        position: 'top',
+        timeout: 0,
+        closeBtn: 'Close',
+        color: 'warning',
+      })
+    }
+  } catch (error) {
+    console.error('updateMission: mutation error=', error)
+  } finally {
+    $q.loading.hide()
+  }
 }
 
 // TODO cancelMission
@@ -287,12 +326,13 @@ async function updateDescription(description: string) {
 }
 
 async function deleteMission() {
+  const status = mission.value.missionStatus.toLowerCase()
   $q.dialog({
     title: 'Confirm',
-    message: `Are you sure you want to delete this mission '${missionId.value}'`,
-    color: 'negative',
+    message: `Delete this <em>${status}</em> mission <b>${missionTplId.value}</b>?`,
+    html: true,
     dark: $q.dark.isActive,
-    ok: `Yes, delete '${missionId.value}'`,
+    ok: 'Yes',
     cancel: true,
     focus: 'cancel',
   }).onOk(doDeleteMission)
@@ -541,10 +581,10 @@ const tableConf = computed(() => {
               <div class="row no-wrap items-center q-gutter-x-sm">
                 <div>Mission:</div>
                 <div class="text-bold">{{ mission.missionId }}</div>
-                <div class="row no-wrap items-center text-grey q-gutter-x-sm">
-                  <div>Status:</div>
+                <div class="row no-wrap items-center q-gutter-x-sm">
+                  <div class="text-grey">Status:</div>
                   <div class="text-bold">{{ mission.missionStatus }}</div>
-                  <div style="font-size: smaller">
+                  <div class="text-grey" style="font-size: smaller">
                     <ElapsedTime
                       :date="mission.updatedDate"
                       tooltip="Time of last status update"
@@ -572,6 +612,14 @@ const tableConf = computed(() => {
                   </router-link>
                 </div>
 
+                <div class="row text-grey" style="font-size: smaller">
+                  <ElapsedTime
+                    :date="mission?.missionTemplate?.retrievedAt"
+                    tooltip="Time of last template update"
+                  />
+                </div>
+              </div>
+              <div class="row items-center q-gutter-x-xs">
                 <div class="text-gray">Asset:</div>
                 <div>
                   <router-link
@@ -587,12 +635,7 @@ const tableConf = computed(() => {
                   </router-link>
                 </div>
               </div>
-              <div class="row text-grey" style="font-size: smaller">
-                <ElapsedTime
-                  :date="mission?.missionTemplate?.retrievedAt"
-                  tooltip="Time of last template update"
-                />
-              </div>
+
               <div
                 class="row no-wrap items-center q-gutter-x-sm"
                 style="font-size: smaller"

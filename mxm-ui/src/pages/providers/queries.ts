@@ -398,6 +398,17 @@ export const MISSION_INSERT = gql`
   }
 `
 
+export const MISSION_VALIDATE = gql`
+  mutation validateMission($pl: MissionInput!) {
+    validateMission(pl: $pl) {
+      result {
+        ok
+        error
+      }
+    }
+  }
+`
+
 export const MISSION_UPDATE = gql`
   mutation updateMission($pl: MissionInput!) {
     updateMission(pl: $pl) {
