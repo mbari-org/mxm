@@ -62,7 +62,11 @@ export default boot(async () => {
       },
 
       AssetClass: {
-        keyFields: ['providerId', 'className'],
+        keyFields: ['className'],
+      },
+
+      Asset: {
+        keyFields: ['assetId'],
       },
 
       Parameter: {
@@ -71,6 +75,10 @@ export default boot(async () => {
 
       Mission: {
         keyFields: ['providerId', 'missionTplId', 'missionId'],
+      },
+
+      Unit: {
+        keyFields: ['unitName'],
       },
 
       Query: {

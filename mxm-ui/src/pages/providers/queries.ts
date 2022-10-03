@@ -98,8 +98,6 @@ export const PROVIDER_SUMMARY = gql`
       descriptionFormat
       numActualMissionTemplates
       numAssetClasses
-      numAssets
-      numUnits
       numMissions
     }
   }
@@ -122,10 +120,8 @@ export const PROVIDER = gql`
         missionTplId
         description
         assetClasses {
-          providerId
           className
           assets {
-            providerId
             assetId
           }
         }
@@ -143,16 +139,10 @@ export const PROVIDER = gql`
         endDate
       }
       assetClasses {
-        providerId
         className
         assets {
-          providerId
           assetId
         }
-      }
-      units {
-        providerId
-        unitName
       }
     }
   }
@@ -200,14 +190,6 @@ export const MISSION_TEMPLATES_DIRECTORY = gql`
       }
       missionTplId
       description
-      assetClasses {
-        providerId
-        className
-        assets {
-          providerId
-          assetId
-        }
-      }
     }
   }
 `
@@ -238,7 +220,6 @@ export const MISSION_TEMPLATE = gql`
         canReportMissionStatus
       }
       assetClasses {
-        providerId
         className
         description
       }
@@ -286,97 +267,15 @@ export const PARAMETER = gql`
   }
 `
 
-export const DERIVED_UNITS = gql`
-  query derivedUnits($providerId: String!, $unitName: String!) {
-    unit(providerId: $providerId, unitName: $unitName) {
+export const PROVIDER_ASSET_CLASSES = gql`
+  query providerAssetClasses($providerId: String!) {
+    provider(providerId: $providerId) {
       providerId
-      unitName
-      abbreviation
-      baseUnit
-      derivedUnits {
-        providerId
-        unitName
-        abbreviation
-        baseUnit
-      }
-    }
-  }
-`
-
-export const ASSET_CLASSES = gql`
-  query assetClassesForProvider($providerId: String!) {
-    assetClassesForProvider(providerId: $providerId) {
-      providerId
-      provider {
-        providerId
-        descriptionFormat
-      }
-      className
-      description
-    }
-  }
-`
-
-export const ASSET_CLASS = gql`
-  query assetClass($providerId: String!, $className: String!) {
-    assetClass(providerId: $providerId, className: $className) {
-      providerId
-      className
-      description
-      provider {
-        providerId
-        descriptionFormat
-      }
-      assets {
-        providerId
-        assetId
+      descriptionFormat
+      assetClasses {
+        className
         description
       }
-    }
-  }
-`
-
-export const ASSETS = gql`
-  query assetForProvider($providerId: String!) {
-    assetsForProvider(providerId: $providerId) {
-      providerId
-      provider {
-        providerId
-        descriptionFormat
-      }
-      className
-      assetId
-      description
-    }
-  }
-`
-
-export const ASSET = gql`
-  query asset($providerId: String!, $assetId: String!) {
-    asset(providerId: $providerId, assetId: $assetId) {
-      providerId
-      assetId
-      className
-      description
-      assetClass {
-        providerId
-        className
-        provider {
-          providerId
-          descriptionFormat
-        }
-      }
-    }
-  }
-`
-
-export const UNITS = gql`
-  query unitsForProvider($providerId: String!) {
-    unitsForProvider(providerId: $providerId) {
-      providerId
-      unitName
-      abbreviation
-      baseUnit
     }
   }
 `
@@ -459,6 +358,7 @@ export const MISSION = gql`
       schedType
       schedDate
       asset {
+        assetId
         className
       }
       description

@@ -10,11 +10,9 @@ import { computed } from 'vue'
 const route = useRoute()
 
 const params = computed(() => route.params)
-const providerId = computed(() => params.value.providerId)
 const unitName = computed(() => params.value.unitName)
 
 const variables = computed(() => ({
-  providerId: providerId.value,
   unitName: unitName.value,
 }))
 
@@ -47,7 +45,7 @@ useUtlStore().setRefreshFunction(refetchUnit, 'Refresh unit')
             <div v-if="unit.baseUnit" class="text-bold">
               <router-link
                 class="appLink"
-                :to="utl.routeLoc([params.providerId, 'u', unit.baseUnit])"
+                :to="utl.routeLoc(['u', unit.baseUnit])"
               >
                 {{ unit.baseUnit }}
               </router-link>
@@ -60,7 +58,6 @@ useUtlStore().setRefreshFunction(refetchUnit, 'Refresh unit')
       <UnitsTable
         v-if="unit.derivedUnits"
         title="Derived Units"
-        :providerId="providerId"
         :units="unit.derivedUnits"
       />
     </div>

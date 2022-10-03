@@ -22,72 +22,87 @@ const elements: Element[] = computed(() => {
   // console.debug('params=', params.value)
   const providerId = params.value.providerId
   switch (route.name) {
+    case 'AllAssetClassesPage': {
+      return [{ label: 'All asset classes', parts: ['ac'] }]
+    }
+    case 'AssetClassPage': {
+      return [
+        { label: 'All asset classes', parts: ['ac'] },
+        { label: params.value.className },
+      ]
+    }
+    case 'AssetsPage': {
+      return [{ label: 'All assets', parts: ['a'] }]
+    }
+    case 'AssetPage': {
+      return [
+        { label: 'All assets', parts: ['a'] },
+        { label: params.value.assetId },
+      ]
+    }
+
+    ////////////////////////////////////////////
+
+    case 'UnitsPage': {
+      return [{ label: 'Units', parts: ['u'] }]
+    }
+    case 'UnitPage': {
+      return [
+        { label: 'Units', parts: ['u'] },
+        { label: params.value.unitName },
+      ]
+    }
+
+    ////////////////////////////////////////////
+
     case 'ProvidersPage': {
-      return []
+      return [{ label: 'Providers', parts: ['p'] }]
     }
     case 'ProviderPage': {
-      return [{ label: params.value.providerId }]
+      return [
+        { label: 'Providers', parts: ['p'] },
+        { label: params.value.providerId },
+      ]
     }
+
     case 'MissionTemplatesPageRoot':
     case 'MissionTemplatesPageWithId': {
       const missionTplId = params.value.missionTplId || '/'
       return [
-        { label: providerId, parts: [providerId] },
-        { label: 'MissionTemplates', parts: [providerId, 'mt'] },
+        { label: providerId, parts: ['p', providerId] },
+        { label: 'MissionTemplates', parts: ['p', providerId, 'mt'] },
         { label: missionTplId },
       ]
     }
     case 'ParameterPage': {
       const missionTplId = params.value.missionTplId || '/'
       return [
-        { label: providerId, parts: [providerId] },
-        { label: 'MissionTemplates', parts: [providerId, 'mt'] },
-        { label: missionTplId, parts: [providerId, 'mt', missionTplId] },
-        { label: 'Params', parts: [providerId, 'mt', missionTplId] },
+        { label: providerId, parts: ['p', providerId] },
+        { label: 'MissionTemplates', parts: ['p', providerId, 'mt'] },
+        { label: missionTplId, parts: ['p', providerId, 'mt', missionTplId] },
+        { label: 'Params', parts: ['p', providerId, 'mt', missionTplId] },
         { label: params.value.paramName },
       ]
     }
     case 'MissionsPage': {
-      return [{ label: providerId, parts: [providerId] }, { label: 'Missions' }]
+      return [
+        { label: providerId, parts: ['p', providerId] },
+        { label: 'Missions' },
+      ]
     }
     case 'MissionPage': {
       return [
-        { label: providerId, parts: [providerId] },
-        { label: 'Missions', parts: [providerId, 'm'] },
+        { label: 'Providers', parts: ['p'] },
+        { label: providerId, parts: ['p', providerId] },
+        { label: 'Missions', parts: ['p', providerId, 'm'] },
         { label: params.value.missionId },
       ]
     }
     case 'AssetClassesPage': {
       return [
-        { label: providerId, parts: [providerId] },
+        { label: 'Providers', parts: ['p'] },
+        { label: providerId, parts: ['p', providerId] },
         { label: 'AssetClasses' },
-      ]
-    }
-    case 'AssetClassPage': {
-      return [
-        { label: providerId, parts: [providerId] },
-        { label: 'AssetClasses', parts: [providerId, 'ac'] },
-        { label: params.value.className },
-      ]
-    }
-    case 'AssetsPage': {
-      return [{ label: providerId, parts: [providerId] }, { label: 'Assets' }]
-    }
-    case 'AssetPage': {
-      return [
-        { label: providerId, parts: [providerId] },
-        { label: 'Assets', parts: [providerId, 'a'] },
-        { label: params.value.assetId },
-      ]
-    }
-    case 'UnitsPage': {
-      return [{ label: providerId, parts: [providerId] }, { label: 'Units' }]
-    }
-    case 'UnitPage': {
-      return [
-        { label: providerId, parts: [providerId] },
-        { label: 'Units', parts: [providerId, 'u'] },
-        { label: params.value.unitName },
       ]
     }
   }

@@ -69,7 +69,7 @@ useUtlStore().setRefreshFunction(refetchParameter, 'Refresh this parameter')
               </div>
               <div
                 v-if="
-                  mxmVal.isNumericType(parameter.type) && parameter.withUnits
+                  mxmVal.isNumericType(parameter.type) && parameter.defaultUnits
                 "
                 class="text-grey"
               >
@@ -98,7 +98,9 @@ useUtlStore().setRefreshFunction(refetchParameter, 'Refresh this parameter')
             </div>
 
             <div
-              v-if="mxmVal.isNumericType(parameter.type) && parameter.withUnits"
+              v-if="
+                mxmVal.isNumericType(parameter.type) && parameter.defaultUnits
+              "
               class="row items-center no-wrap q-gutter-sm"
             >
               <div class="col-2">Default Units:</div>

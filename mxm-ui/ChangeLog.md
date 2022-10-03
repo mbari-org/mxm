@@ -1,3 +1,10 @@
+2022-10
+
+- reflect MXM model changes:
+  - unit is now a separate entity
+  - asset classes and assets are now separate entities
+  - routes adjusted accordingly
+
 2022-09
 
 - basic dispatch of validateMission

@@ -1,26 +1,14 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
 import { useUtlStore } from 'stores/utl'
 import { useQuery } from '@vue/apollo-composable'
 
-import { ASSETS } from './queries'
+import { ALL_ASSETS } from './queries'
 import { computed, ref } from 'vue'
 import MxmMarkdownView from 'components/utl/markdown/MxmMarkdownView.vue'
 
-const route = useRoute()
+const { result, loading, refetch: refetchAssets } = useQuery(ALL_ASSETS)
 
-const params = computed(() => route.params)
-const providerId = computed(() => params.value.providerId)
-
-const {
-  result,
-  loading,
-  refetch: refetchAssets,
-} = useQuery(ASSETS, {
-  providerId,
-})
-
-const assets = computed(() => result.value?.assetsForProvider ?? [])
+const assets = computed(() => result.value?.allAssets ?? [])
 
 useUtlStore().setRefreshFunction(refetchAssets, 'Refresh assets')
 
@@ -105,29 +93,20 @@ const tableConf = {
           >
             <router-link
               class="appLink"
-              :to="utl.routeLoc([props.row.providerId, 'a', props.row.assetId])"
+              :to="utl.routeLoc(['a', props.row.assetId])"
             >
               {{ props.row.assetId }}
             </router-link>
           </q-td>
 
           <q-td key="description" :props="props">
-            <MxmMarkdownView
-              simple
-              hide-empty
-              :text="props.row.description"
-              :start-markdown="
-                props.row.provider.descriptionFormat === 'markdown'
-              "
-            />
+            <MxmMarkdownView simple hide-empty :text="props.row.description" />
           </q-td>
 
           <q-td key="className" :props="props" style="width: 5px">
             <router-link
               class="appLink"
-              :to="
-                utl.routeLoc([props.row.providerId, 'ac', props.row.className])
-              "
+              :to="utl.routeLoc(['ac', props.row.className])"
             >
               {{ props.row.className }}
             </router-link>

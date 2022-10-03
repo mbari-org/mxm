@@ -172,6 +172,7 @@ const tableConf = {
                 class="appLink"
                 :to="
                   utl.routeLoc([
+                    'p',
                     params.providerId,
                     'mt',
                     props.row.missionTplId,

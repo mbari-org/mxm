@@ -416,5 +416,7 @@ function isGeojsonType(valueType: string) {
 }
 
 function isNumericType(valueType: string) {
-  return valueType === 'float' || valueType === 'integer'
+  return (
+    valueType === 'float' || valueType === 'integer' || valueType === 'number'
+  )
 }

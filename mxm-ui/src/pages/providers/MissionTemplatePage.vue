@@ -178,8 +178,8 @@ const tableConf = computed(() => {
                   dense
                 >
                   <router-link
-                    class="appLink q-pr-sm"
-                    :to="utl.routeLoc([params.providerId, 'ac', c.className])"
+                    class="appLink"
+                    :to="utl.routeLoc(['ac', c.className])"
                   >
                     {{ c.className }}
                   </router-link>
@@ -230,6 +230,7 @@ const tableConf = computed(() => {
                 @dblclick="
                   $router.push(
                     utl.routeLoc([
+                      'p',
                       providerId,
                       'mt',
                       missionTplId,

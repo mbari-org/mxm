@@ -11,9 +11,10 @@ import {
   MISSION_DELETE,
   MISSION_UPDATE,
   MISSION_VALIDATE,
-  UNITS,
   UPDATE_MISSION_TEMPLATE,
 } from './queries'
+
+import { UNITS } from '../units/queries'
 
 import { computed, inject, nextTick, ref, watch } from 'vue'
 import ElapsedTime from 'components/utl/ElapsedTime.vue'
@@ -58,9 +59,9 @@ const mission = computed(() => missionResult.value?.mission ?? {})
 const provider = computed(() => mission.value?.provider ?? {})
 const editable = computed(() => mission.value?.missionStatus === 'DRAFT')
 
-const { result: unitsResult } = useQuery(UNITS, { providerId })
+const { result: unitsResult } = useQuery(UNITS)
 
-const units = computed(() => unitsResult.value?.unitsForProvider ?? [])
+const units = computed(() => unitsResult.value?.allUnits ?? [])
 
 const unitsByName = computed(() =>
   Object.fromEntries(
@@ -354,7 +355,7 @@ async function deleteMission() {
         position: 'top',
         color: 'info',
       })
-      utl.replace([providerId.value])
+      utl.replace(['p', providerId.value])
     } catch (error) {
       console.error('deleteMission: mutation error=', error)
       $q.notify({
@@ -602,6 +603,7 @@ const tableConf = computed(() => {
                     class="appLink"
                     :to="
                       utl.routeLoc([
+                        'p',
                         mission.providerId,
                         'mt',
                         mission.missionTplId,
@@ -625,7 +627,12 @@ const tableConf = computed(() => {
                   <router-link
                     class="appLink"
                     :to="
-                      utl.routeLoc([params.providerId, 'a', mission.assetId])
+                      utl.routeLoc([
+                        'p',
+                        params.providerId,
+                        'a',
+                        mission.assetId,
+                      ])
                     "
                   >
                     {{ mission.assetId }}
@@ -813,6 +820,7 @@ const tableConf = computed(() => {
               @dblclick="
                 $router.push(
                   utl.routeLoc([
+                    'p',
                     providerId,
                     'mt',
                     missionTplId,

@@ -12,7 +12,6 @@ const debug = window.location.search.match(/.*debug=.*\basset\b.*/)
 const route = useRoute()
 
 const params = computed(() => route.params)
-const providerId = computed(() => params.value.providerId)
 const assetId = computed(() => params.value.assetId)
 
 const {
@@ -20,13 +19,10 @@ const {
   loading,
   refetch: refetchAsset,
 } = useQuery(ASSET, {
-  providerId,
   assetId,
 })
 
 const asset = computed(() => result.value?.asset ?? {})
-
-const provider = computed(() => asset.value?.provider ?? {})
 
 useUtlStore().setRefreshFunction(refetchAsset, 'Refresh asset')
 </script>
@@ -43,7 +39,7 @@ useUtlStore().setRefreshFunction(refetchAsset, 'Refresh asset')
               (class:
               <router-link
                 style="text-decoration: none"
-                :to="utl.routeLoc([params.providerId, 'ac', asset.className])"
+                :to="utl.routeLoc(['ac', asset.className])"
                 >{{ asset.className }}
               </router-link>
               )
@@ -54,10 +50,7 @@ useUtlStore().setRefreshFunction(refetchAsset, 'Refresh asset')
         <q-separator />
 
         <q-card-section>
-          <MxmMarkdown
-            :text="asset.description"
-            :start-markdown="provider.descriptionFormat === 'markdown'"
-          />
+          <MxmMarkdown :text="asset.description" />
         </q-card-section>
       </q-card>
     </div>

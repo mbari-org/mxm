@@ -222,7 +222,7 @@ async function doDeleteProvider(providerId: string) {
           <q-td key="providerId" :props="props">
             <router-link
               class="appLink"
-              :to="utl.routeLoc([props.row.providerId])"
+              :to="utl.routeLoc(['p', props.row.providerId])"
             >
               {{ props.row.providerId }}
             </router-link>

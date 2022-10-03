@@ -12,7 +12,6 @@ const debug = window.location.search.match(/.*debug=.*\bassetclass\b.*/)
 const route = useRoute()
 
 const params = computed(() => route.params)
-const providerId = computed(() => params.value.providerId)
 const className = computed(() => params.value.className)
 
 const {
@@ -20,12 +19,10 @@ const {
   loading,
   refetch: refetchAssetClass,
 } = useQuery(ASSET_CLASS, {
-  providerId,
   className,
 })
 
 const assetClass = computed(() => result.value?.assetClass ?? {})
-const provider = computed(() => assetClass.value?.provider ?? {})
 const assets = computed(() => assetClass.value?.assets ?? [])
 
 useUtlStore().setRefreshFunction(refetchAssetClass, 'Refresh asset class')
@@ -70,10 +67,7 @@ const tableConf = {
         </q-card-section>
         <q-separator />
         <q-card-section>
-          <MxmMarkdown
-            :text="assetClass.description"
-            :start-markdown="provider.descriptionFormat === 'markdown'"
-          />
+          <MxmMarkdown :text="assetClass.description" />
         </q-card-section>
       </q-card>
       <q-table
@@ -105,24 +99,21 @@ const tableConf = {
 
         <template v-slot:body="props">
           <q-tr :props="props">
-            <q-td key="assetId" :props="props" style="width: 5px">
+            <q-td
+              key="assetId"
+              :props="props"
+              style="width: 5px; vertical-align: top"
+            >
               <router-link
                 class="appLink"
-                :to="
-                  utl.routeLoc([props.row.providerId, 'a', props.row.assetId])
-                "
+                :to="utl.routeLoc(['a', props.row.assetId])"
               >
                 {{ props.row.assetId }}
               </router-link>
             </q-td>
 
             <q-td key="description" :props="props">
-              <MxmMarkdown
-                simple
-                hide-empty
-                :text="props.row.description"
-                :start-markdown="provider.descriptionFormat === 'markdown'"
-              />
+              <MxmMarkdown simple hide-empty :text="props.row.description" />
             </q-td>
           </q-tr>
         </template>

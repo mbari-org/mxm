@@ -28,10 +28,6 @@ const numActualMissionTemplates = computed(
 
 const numAssetClasses = computed(() => provider.value?.numAssetClasses ?? 0)
 
-const numAssets = computed(() => provider.value?.numAssets ?? 0)
-
-const numUnits = computed(() => provider.value?.numUnits ?? 0)
-
 const numMissions = computed(() => provider.value?.numMissions ?? 0)
 
 const utlStore = useUtlStore()
@@ -72,7 +68,7 @@ utlStore.setRefreshFunction(refreshProvider, 'Refresh this provider')
                 no-wrap
                 no-caps
                 dense
-                :to="utl.routeLoc([providerId, 'mt'])"
+                :to="utl.routeLoc(['p', providerId, 'mt'])"
               />
 
               <q-btn
@@ -80,24 +76,7 @@ utlStore.setRefreshFunction(refreshProvider, 'Refresh this provider')
                 no-wrap
                 no-caps
                 dense
-                :to="utl.routeLoc([providerId, 'ac'])"
-              />
-
-              <q-btn
-                :label="`Assets (${numAssets})`"
-                no-wrap
-                no-caps
-                dense
-                :to="utl.routeLoc([providerId, 'a'])"
-              />
-
-              <q-btn
-                v-if="provider.usesUnits"
-                :label="`Units (${numUnits})`"
-                no-wrap
-                no-caps
-                dense
-                :to="utl.routeLoc([providerId, 'u'])"
+                :to="utl.routeLoc(['p', providerId, 'ac'])"
               />
             </div>
             <div class="row q-gutter-md">
@@ -106,7 +85,7 @@ utlStore.setRefreshFunction(refreshProvider, 'Refresh this provider')
                 no-wrap
                 no-caps
                 dense
-                :to="utl.routeLoc([providerId, 'm'])"
+                :to="utl.routeLoc(['p', providerId, 'm'])"
               />
             </div>
           </div>
@@ -136,7 +115,7 @@ utlStore.setRefreshFunction(refreshProvider, 'Refresh this provider')
                 </td>
               </tr>
               <tr>
-                <td>Units of measure:</td>
+                <td>Uses units of measure:</td>
                 <td class="text-bold">
                   {{ provider.usesUnits ? 'Yes' : 'No ' }}
                 </td>

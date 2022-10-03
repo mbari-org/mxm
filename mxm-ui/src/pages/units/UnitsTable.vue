@@ -2,7 +2,6 @@
 import { ref } from 'vue'
 
 interface Props {
-  providerId: string
   units: object[]
   title?: string
 }
@@ -79,7 +78,7 @@ const tableConf = {
         <q-td key="unitName" :props="props" style="width: 5px">
           <router-link
             class="appLink"
-            :to="utl.routeLoc([providerId, 'u', props.row.unitName])"
+            :to="utl.routeLoc(['u', props.row.unitName])"
           >
             {{ props.row.unitName }}
           </router-link>
@@ -92,7 +91,7 @@ const tableConf = {
         <q-td key="baseUnit" :props="props" style="width: 5px">
           <router-link
             class="appLink"
-            :to="utl.routeLoc([providerId, 'u', props.row.baseUnit])"
+            :to="utl.routeLoc(['u', props.row.baseUnit])"
           >
             {{ props.row.baseUnit }}
           </router-link>

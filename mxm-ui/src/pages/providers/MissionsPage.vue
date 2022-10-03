@@ -159,6 +159,7 @@ const tableConf = {
               class="appLink"
               :to="
                 utl.routeLoc([
+                  'p',
                   params.providerId,
                   'mt',
                   props.row.missionTplId,
@@ -187,7 +188,9 @@ const tableConf = {
           >
             <router-link
               class="appLink"
-              :to="utl.routeLoc([params.providerId, 'a', props.row.assetId])"
+              :to="
+                utl.routeLoc(['p', params.providerId, 'a', props.row.assetId])
+              "
             >
               {{ props.row.assetId }}
             </router-link>
@@ -202,6 +205,7 @@ const tableConf = {
               class="appLink"
               :to="
                 utl.routeLoc([
+                  'p',
                   params.providerId,
                   'mt',
                   props.row.missionTplId,

@@ -1,27 +1,18 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
 import { useUtlStore } from 'stores/utl'
 import { useQuery } from '@vue/apollo-composable'
 
-import { PROVIDER_ASSET_CLASSES } from './queries'
+import { ALL_ASSET_CLASSES } from './queries'
 import { computed, ref } from 'vue'
 import MxmMarkdownView from 'components/utl/markdown/MxmMarkdownView.vue'
-
-const route = useRoute()
-
-const params = computed(() => route.params)
-const providerId = computed(() => params.value.providerId)
 
 const {
   result,
   loading,
   refetch: refetchAssetClasses,
-} = useQuery(PROVIDER_ASSET_CLASSES, {
-  providerId,
-})
+} = useQuery(ALL_ASSET_CLASSES)
 
-const provider = computed(() => result.value?.provider ?? {})
-const assetClasses = computed(() => provider.value?.assetClasses ?? [])
+const assetClasses = computed(() => result.value?.allAssetClasses ?? [])
 
 useUtlStore().setRefreshFunction(refetchAssetClasses, 'Refresh asset classes')
 
@@ -70,13 +61,11 @@ const tableConf = {
       :pagination="tableConf.pagination"
       :filter="filter"
       separator="cell"
-      no-data-label="This provider does not indicate any used asset classes"
+      no-data-label="No asset classes registered"
     >
       <template v-slot:top>
         <div class="full-width row items-center">
-          <div class="col-auto text-h5">
-            Asset classes used by this provider
-          </div>
+          <div class="col-auto text-h5">All registered asset classes</div>
 
           <div class="q-ml-md row">
             <q-input
@@ -107,12 +96,7 @@ const tableConf = {
           </q-td>
 
           <q-td key="description" :props="props">
-            <MxmMarkdownView
-              simple
-              hide-empty
-              :text="props.row.description"
-              :start-markdown="provider.descriptionFormat === 'markdown'"
-            />
+            <MxmMarkdownView simple hide-empty :text="props.row.description" />
           </q-td>
         </q-tr>
       </template>
