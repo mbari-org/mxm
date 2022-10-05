@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 
 import ProviderNewButton from './ProviderNewButton.vue'
+import MxmMarkdownView from 'components/utl/markdown/MxmMarkdownView.vue'
 import { useMutation, useQuery, useSubscription } from '@vue/apollo-composable'
 import { useUtlStore } from 'stores/utl'
 import {
@@ -219,7 +220,11 @@ async function doDeleteProvider(providerId: string) {
 
       <template v-slot:body="props">
         <q-tr :props="props">
-          <q-td key="providerId" :props="props">
+          <q-td
+            key="providerId"
+            :props="props"
+            style="width: 5px; vertical-align: top"
+          >
             <router-link
               class="appLink"
               :to="utl.routeLoc(['p', props.row.providerId])"
@@ -229,19 +234,27 @@ async function doDeleteProvider(providerId: string) {
           </q-td>
 
           <q-td key="description" :props="props">
-            {{ props.row.description }}
-            <q-tooltip> (format: {{ props.row.descriptionFormat }}) </q-tooltip>
+            <MxmMarkdownView
+              :text="props.row.description"
+              hide-empty
+              simple
+              :start-markdown="props.row.descriptionFormat === 'markdown'"
+            />
           </q-td>
 
-          <q-td key="httpEndpoint" :props="props">
+          <q-td key="httpEndpoint" :props="props" style="vertical-align: top">
             {{ props.row.httpEndpoint }}
           </q-td>
 
-          <q-td key="apiType" :props="props">
+          <q-td key="apiType" :props="props" style="vertical-align: top">
             {{ props.row.apiType }}
           </q-td>
 
-          <q-td key="actions" :props="props" style="width: 5px">
+          <q-td
+            key="actions"
+            :props="props"
+            style="width: 5px; vertical-align: top"
+          >
             <q-btn
               dense
               round
