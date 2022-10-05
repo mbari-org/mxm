@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { PING_PROVIDER } from './queries'
 
-import { ref } from 'vue'
+import { inject, ref } from 'vue'
 import { useMutation } from '@vue/apollo-composable'
 
 import { useQuasar } from 'quasar'
@@ -18,6 +18,8 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   label: 'Test connection',
 })
+
+const utl = inject('utl')
 
 const $q = useQuasar()
 
@@ -57,6 +59,7 @@ async function testConnectionToProvider() {
       }, 5000)
       emit('pingResult', true)
     } else {
+      // note: some redundancy here as mxm-server also checks for datetime
       pingFailed.value = true
       const message = 'Provider did not return expected ping response'
       console.warn(message)
@@ -70,16 +73,9 @@ async function testConnectionToProvider() {
       emit('pingResult', message)
     }
   } catch (error) {
+    utl.exceptionHelper($q, error)
     pingFailed.value = true
-    console.warn(error.message)
     const message = error.message
-    $q.notify({
-      color: 'negative',
-      message: error.message,
-      textColor: 'white',
-      timeout: 3000,
-      closeBtn: 'Close',
-    })
     emit('pingResult', message)
   } finally {
     pinging.value = false

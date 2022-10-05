@@ -11,7 +11,7 @@ import {
   MISSION_TEMPLATES_DIRECTORY,
   UPDATE_MISSION_TEMPLATE,
 } from './queries'
-import { computed } from 'vue'
+import { computed, inject } from 'vue'
 import { useQuasar } from 'quasar'
 
 const debug = window.location.search.match(/.*debug=(-|.*\bmissiontpl\b).*/)
@@ -48,6 +48,8 @@ const { mutate: updateMissionTemplate } = useMutation(UPDATE_MISSION_TEMPLATE)
 
 const loading = computed(() => loadingBasic.value || loadingDirectory.value)
 
+const utl = inject('utl')
+
 const $q = useQuasar()
 
 async function updateMissionTplBasic() {
@@ -67,7 +69,7 @@ async function updateMissionTplBasic() {
       color: 'info',
     })
   } catch (error) {
-    console.error('updateMissionTplBasic: mutation error=', error)
+    utl.exceptionHelper($q, error)
   }
 }
 

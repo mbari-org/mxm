@@ -1,5 +1,8 @@
 import { boot } from 'quasar/wrappers'
 import { ref, Ref } from 'vue'
+import { QVueGlobals } from 'quasar'
+
+const debug = window.location.search.match(/.*debug=.*\bexc\b.*/)
 
 interface Utl {
   routeLoc: typeof routeLoc
@@ -8,6 +11,7 @@ interface Utl {
   ticker: Ref<Date>
   getAgo: typeof getAgo
   cloneDeep: (obj: object) => object
+  exceptionHelper: typeof exceptionHelper
 }
 
 declare module '@vue/runtime-core' {
@@ -40,6 +44,8 @@ export default boot(({ app, router }) => {
     cloneDeep(obj: object) {
       return JSON.parse(JSON.stringify(obj))
     },
+
+    exceptionHelper,
   }
 
   app.provide('utl', utl)
@@ -94,4 +100,39 @@ function getAgoWithElapsedMs(elapsedMs: number, prefix: string) {
   }
   const years = Math.round(daysF / 365.0)
   return prefix + years + 'y'
+}
+
+function exceptionHelper($q: QVueGlobals, error: object) {
+  if (debug)
+    console.debug('exceptionHelper: error=', JSON.stringify(error, null, 2))
+
+  const escape = (text: string): string =>
+    text.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '\n<br/>')
+
+  const providerFailure = error?.message ?? ''
+  let message, caption
+  if (providerFailure.startsWith('MxmException:')) {
+    message = 'MXM server detected a problem'
+    caption = escape(providerFailure.substring('MxmException:'.length))
+  } else {
+    message = 'Unexpected failure'
+    const text = escape(error?.message ?? error?.toString() ?? 'Unknown error')
+    caption = `
+        Unexpected failure:
+        <br/><br/>
+        ${text}
+        <br/><br/>
+        Please try again later.
+        If the problem persists, please contact the MXM administrator.
+        `
+  }
+  $q.notify({
+    message,
+    caption,
+    html: true,
+    position: 'top',
+    timeout: 0,
+    closeBtn: 'Close',
+    type: 'warning',
+  })
 }

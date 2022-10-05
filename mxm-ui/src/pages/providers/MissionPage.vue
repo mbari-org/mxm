@@ -100,13 +100,14 @@ async function doMissionTemplateUpdate() {
     })
     refetchMission()
   } catch (error) {
-    console.error('updateMissionTemplate: mutation error=', error)
+    utl.exceptionHelper($q, error)
   } finally {
     $q.loading.hide()
   }
 }
 
 watch(mission, async mission => {
+  // TODO review this as it's now working apparently
   if (!updatingMissionTemplate && !mission?.missionTemplate?.retrievedAt) {
     await doMissionTemplateUpdate()
   }

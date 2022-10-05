@@ -1,5 +1,9 @@
 2022-10
 
+- improved error handling with support from mxm-server
+  - added utl.exceptionHelper to help with exception handling especially to be
+    used in requests to backend involving interaction with external provider.
+
 - reflect MXM model changes:
   - unit is now a separate entity
   - asset classes and assets are now separate entities
