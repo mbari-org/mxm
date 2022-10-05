@@ -7,10 +7,18 @@ import SwitchDarkMode from 'components/utl/SwitchDarkMode.vue'
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
       <q-toolbar class="glossy row justify-between q-pb-sm">
-        <q-img src="img/new_mbari_logo.png" width="54px" class="q-mr-lg" />
+        <q-img
+          v-if="$q.screen.gt.sm"
+          src="img/new_mbari_logo.png"
+          width="54px"
+          class="q-mr-lg"
+        />
 
-        <q-toolbar-title style="font-size: 1.1em">
-          MXM - Mission Execution Mediation Service
+        <q-toolbar-title class="row q-gutter-x-xs" style="font-size: 1.1em">
+          MXM
+          <div v-if="$q.screen.gt.sm">
+            - Mission Execution Mediation Service
+          </div>
         </q-toolbar-title>
 
         <div class="row q-gutter-x-md items-center">
@@ -23,16 +31,6 @@ import SwitchDarkMode from 'components/utl/SwitchDarkMode.vue'
                   Prototype: UI {{ mxmUiVersion }} / Server
                   {{ mxmConfig.mxmVersion }}
                 </div>
-                <a
-                  v-if="mxmConfig.learnMoreUrl"
-                  :href="mxmConfig.learnMoreUrl"
-                  style="font-size: small"
-                  class="text-white"
-                  target="mxm_learnMore"
-                  rel="noopener"
-                >
-                  Learn more
-                </a>
               </div>
               <a
                 v-if="mxmConfig.repoUrl"
@@ -46,6 +44,7 @@ import SwitchDarkMode from 'components/utl/SwitchDarkMode.vue'
               </a>
             </div>
             <div
+              v-if="$q.screen.gt.sm"
               class="row q-gutter-x-md items-center"
               style="font-size: smaller"
             >
