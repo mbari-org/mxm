@@ -264,7 +264,6 @@ const tableConf = computed(() => {
                 style="width: 12em; font-family: monospace; vertical-align: top"
               >
                 <div
-                  class="q-pa-xs"
                   style="
                     white-space: normal;
                     min-height: 1.5em;

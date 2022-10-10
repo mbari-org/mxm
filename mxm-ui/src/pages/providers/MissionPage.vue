@@ -863,7 +863,6 @@ unit={{ unitsByName[props.row.paramUnits] }}</pre
               class="paramValueCell"
             >
               <ParameterValue
-                class="q-pa-xs"
                 style="
                   font-family: monospace;
                   width: 12em;

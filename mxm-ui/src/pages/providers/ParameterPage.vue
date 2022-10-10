@@ -80,9 +80,8 @@ useUtlStore().setRefreshFunction(refetchParameter, 'Refresh this parameter')
             <div class="row items-start no-wrap q-gutter-x-sm">
               <div class="col-2">Default Value:</div>
               <div>
-                <div class="col-10 q-pa-xs fieldBg" style="min-width: 4em">
+                <div class="col-10 fieldBg" style="min-width: 4em">
                   <ParameterValue
-                    class="q-pa-xs"
                     style="
                       font-family: monospace;
                       min-width: 24em;
