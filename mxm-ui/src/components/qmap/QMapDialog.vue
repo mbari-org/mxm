@@ -5,6 +5,7 @@ import QMousePosMarker from 'components/qmap/QMousePosMarker.vue'
 import QGeoJson from 'components/qmap/QGeoJson.vue'
 import L from 'leaflet'
 import { GeoJSON } from 'geojson'
+import { QDialog } from 'quasar'
 
 const debug = window.location.search.match(/.*debug=.*qmapdialog.*/)
 
@@ -88,15 +89,30 @@ function cancelEdits() {
   editing.value = false
   emit('cancelEdits')
 }
+
+// If editable, the following to wait for two quick Escape keystrokes to cancel:
+const myDialog = ref(null as QDialog | null)
+let prevTimeEscapeKey = 0
+function onEscapeKey() {
+  const timeEscapeKey = Date.now()
+  const doCancel = !props.editable || timeEscapeKey - prevTimeEscapeKey < 500
+  prevTimeEscapeKey = timeEscapeKey
+  if (doCancel) {
+    cancelEdits()
+  } else {
+    myDialog.value?.shake()
+  }
+}
 </script>
 
 <template>
   <q-dialog
+    ref="myDialog"
     :modelValue="dialogOpened"
     :no-backdrop-dismiss="!okToDismiss"
     :no-esc-dismiss="!okToDismiss"
     :position="position"
-    :persistent="editing"
+    @keyup.esc.stop="onEscapeKey"
   >
     <q-card :style="style.card">
       <q-toolbar :class="`${headerClass} toolbarClass`">

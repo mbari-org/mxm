@@ -245,6 +245,9 @@ const tableConf = computed(() => {
                   :class="`${props.row.required ? 'text-bold' : ''}`"
                 >
                   {{ props.row.paramName }}
+                  <q-tooltip>
+                    <pre>{{ props.row }}</pre>
+                  </q-tooltip>
                 </div>
 
                 <div class="text-grey-7 q-mt-sm" style="font-size: 0.8em">

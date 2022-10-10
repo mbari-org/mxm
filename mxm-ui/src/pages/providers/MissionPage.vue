@@ -898,6 +898,7 @@ unit={{ unitsByName[props.row.paramUnits] }}</pre
               class="paramValueCell"
             >
               <UnitSelect
+                v-if="props.row.defaultUnits"
                 :units="units"
                 :unitsByName="unitsByName"
                 :value="props.row.paramUnits"

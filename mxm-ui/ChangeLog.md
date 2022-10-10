@@ -1,5 +1,6 @@
 2022-10
 
+- some adjustments
 - improved error handling with support from mxm-server
   - added utl.exceptionHelper to help with exception handling especially to be
     used in requests to backend involving interaction with external provider.
