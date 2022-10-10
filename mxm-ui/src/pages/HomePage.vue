@@ -18,7 +18,11 @@
         </div>
       </div>
 
-      <div class="q-mt-xl column items-center text-grey-8">
+      <div
+        :class="`q-mt-xl column items-center ${
+          $q.dark.isActive ? 'text-grey-4' : 'text-grey-9'
+        }`"
+      >
         <p>Welcome to MXM</p>
         <p>This is a prototype of the MXM System</p>
         <a
@@ -31,6 +35,13 @@
         >
           Learn more
         </a>
+        <div style="max-width: 23em" class="q-mt-lg">
+          <p>
+            Note: While functional, this interface is still mainly intended to
+            help with development and testing, not yet focused on stability or
+            usability for end users.
+          </p>
+        </div>
       </div>
     </div>
   </q-page>
