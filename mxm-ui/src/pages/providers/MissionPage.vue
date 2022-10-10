@@ -56,6 +56,7 @@ const {
 } = useQuery(MISSION, { providerId, missionTplId, missionId })
 
 const mission = computed(() => missionResult.value?.mission ?? {})
+const missionTemplate = computed(() => mission.value?.missionTemplate ?? {})
 const provider = computed(() => mission.value?.provider ?? {})
 const editable = computed(() => mission.value?.missionStatus === 'DRAFT')
 
@@ -106,12 +107,15 @@ async function doMissionTemplateUpdate() {
   }
 }
 
-watch(mission, async mission => {
-  // TODO review this as it's now working apparently
-  if (!updatingMissionTemplate && !mission?.missionTemplate?.retrievedAt) {
-    await doMissionTemplateUpdate()
-  }
-})
+watch(
+  mission,
+  async () => {
+    if (!updatingMissionTemplate.value && !missionTemplate.value?.retrievedAt) {
+      await doMissionTemplateUpdate()
+    }
+  },
+  { deep: true }
+)
 
 useUtlStore().setRefreshFunction(
   doMissionTemplateUpdate,

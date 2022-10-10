@@ -1,5 +1,6 @@
 2022-10
 
+- refresh mission template for mission dispatch if corresponding retrievedAt is missing
 - some adjustments
 - improved error handling with support from mxm-server
   - added utl.exceptionHelper to help with exception handling especially to be

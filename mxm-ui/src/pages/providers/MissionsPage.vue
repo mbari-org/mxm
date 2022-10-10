@@ -107,7 +107,7 @@ const tableConf = {
       :pagination="tableConf.pagination"
       :filter="filter"
       separator="cell"
-      no-data-label="No missions defined or exposed by this provider"
+      no-data-label="No missions defined or currently exposed by this provider"
     >
       <template v-slot:top>
         <div class="full-width row items-center">
