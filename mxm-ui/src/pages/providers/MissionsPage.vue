@@ -7,7 +7,7 @@ import MxmMarkdownView from 'components/utl/markdown/MxmMarkdownView.vue'
 import MissionNewButton from './MissionNewButton.vue'
 
 import { PROVIDER } from './queries'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 const route = useRoute()
 
@@ -25,6 +25,10 @@ const {
 const provider = computed(() => result.value?.provider ?? {})
 
 const missions = computed(() => provider.value?.missions ?? [])
+
+watch(params, () => {
+  refetchMissions()
+})
 
 useUtlStore().setRefreshFunction(refetchMissions, 'Refresh missions')
 

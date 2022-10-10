@@ -1,5 +1,6 @@
 2022-10
 
+- refresh only the mission itself if already submitted
 - refresh mission template for mission dispatch if corresponding retrievedAt is missing
 - some adjustments
 - improved error handling with support from mxm-server

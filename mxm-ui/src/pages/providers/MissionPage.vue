@@ -77,8 +77,13 @@ const unitsByName = computed(() =>
   )
 )
 
-async function doMissionTemplateUpdate() {
-  if (debug) console.debug('doMissionTemplateUpdate')
+async function doMissionStatusUpdate() {
+  if (debug) console.debug('doMissionStatusUpdate')
+  await updateMission({})
+}
+
+async function doMissionTemplateAndMissionUpdate() {
+  if (debug) console.debug('doMissionTemplateAndMissionUpdate')
   $q.loading.show({
     message: 'Reloading template',
     messageColor: 'black',
@@ -99,7 +104,8 @@ async function doMissionTemplateUpdate() {
       position: 'top',
       color: 'info',
     })
-    refetchMission()
+    // and refresh mission itself:
+    await doMissionStatusUpdate()
   } catch (error) {
     utl.exceptionHelper($q, error)
   } finally {
@@ -111,16 +117,21 @@ watch(
   mission,
   async () => {
     if (!updatingMissionTemplate.value && !missionTemplate.value?.retrievedAt) {
-      await doMissionTemplateUpdate()
+      await doMissionTemplateAndMissionUpdate()
     }
   },
   { deep: true }
 )
 
-useUtlStore().setRefreshFunction(
-  doMissionTemplateUpdate,
-  'Refresh this mission'
-)
+function refreshMission() {
+  if (mission.value?.missionStatus === 'DRAFT') {
+    doMissionTemplateAndMissionUpdate()
+  } else {
+    doMissionStatusUpdate()
+  }
+}
+
+useUtlStore().setRefreshFunction(refreshMission, 'Refresh this mission')
 
 const alreadySavedArgs = computed(() => mission.value?.arguments ?? [])
 
@@ -201,7 +212,7 @@ const orderedArguments = computed(() => {
 function submitMission() {
   $q.dialog({
     title: 'Confirm',
-    message: `Submit this <b>${missionTplId.value}</b> mission isntance for execution?`,
+    message: `Submit this <b>${missionTplId.value}</b> mission instance for execution?`,
     html: true,
     color: 'info',
     dark: $q.dark.isActive,
