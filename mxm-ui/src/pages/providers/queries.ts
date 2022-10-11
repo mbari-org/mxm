@@ -115,11 +115,7 @@ export const PROVIDER_MISSIONS = gql`
       usesUnits
       usesSched
       descriptionFormat
-      missionTemplates {
-        providerId
-        missionTplId
-        description
-      }
+      numActualMissionTemplates
       missions {
         providerId
         missionTplId
@@ -131,6 +127,33 @@ export const PROVIDER_MISSIONS = gql`
         description
         startDate
         endDate
+      }
+    }
+  }
+`
+
+export const PROVIDER_MISSION_TEMPLATES = gql`
+  query provider($providerId: String!) {
+    provider(providerId: $providerId) {
+      providerId
+      httpEndpoint
+      apiType
+      description
+      canValidate
+      canReportMissionStatus
+      usesUnits
+      usesSched
+      descriptionFormat
+      missionTemplates {
+        providerId
+        missionTplId
+        description
+        assetClasses {
+          className
+          assets {
+            assetId
+          }
+        }
       }
     }
   }

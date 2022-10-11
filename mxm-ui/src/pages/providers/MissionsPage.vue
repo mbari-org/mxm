@@ -129,9 +129,8 @@ const tableConf = {
           </div>
 
           <MissionNewButton
-            v-if="provider.missionTemplates"
+            v-if="provider.numActualMissionTemplates"
             :providerId="providerId"
-            :missionTpls="provider.missionTemplates"
           />
         </div>
       </template>

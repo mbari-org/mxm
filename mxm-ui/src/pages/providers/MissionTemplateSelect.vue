@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 
+const debug = window.location.search.match(/.*debug=.*\bmissiontpls\b.*/)
+
 interface Props {
+  loading: boolean
   missionTpls: object[]
   selectedMissionTemplate?: object
 }
@@ -19,7 +22,7 @@ const missionTplId = computed(
 )
 
 const options = computed(() => {
-  console.debug('missionTpls=', props.missionTpls)
+  if (debug) console.debug('missionTpls=', props.missionTpls)
   return props.missionTpls.map(e => ({
     label: e.missionTplId,
     value: e,
@@ -42,6 +45,7 @@ function filterFn(val, update) {
 
 <template>
   <q-select
+    :loading="loading"
     filled
     dense
     class="fieldBg col-auto"

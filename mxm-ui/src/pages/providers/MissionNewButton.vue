@@ -2,29 +2,40 @@
 import UtlDialog from 'components/utl/UtlDialog.vue'
 import MxmMarkdown from 'components/utl/markdown/MxmMarkdown.vue'
 
-import { MISSION_INSERT } from './queries'
+import { PROVIDER_MISSION_TEMPLATES, MISSION_INSERT } from './queries'
 
 import { computed, inject, ref } from 'vue'
 import { useQuasar } from 'quasar'
-import { useMutation } from '@vue/apollo-composable'
+import { useMutation, useQuery } from '@vue/apollo-composable'
 import MissionTemplateSelect from './MissionTemplateSelect.vue'
 import AssetSelect from './AssetSelect.vue'
 
+interface Props {
+  providerId: string
+}
+
+const props = defineProps<Props>()
+
+const providerId = computed(() => props.providerId)
+
 const utl = inject('utl')
+
+const { result, loading } = useQuery(PROVIDER_MISSION_TEMPLATES, {
+  providerId,
+})
+const provider = computed(() => result.value?.provider ?? {})
+
+const missionTpls = computed(() => provider.value?.missionTemplates ?? [])
+
+const actualMissionTpls = computed(() =>
+  missionTpls.value.filter(({ missionTplId }) => !missionTplId.endsWith('/'))
+)
 
 const { mutate: createMission } = useMutation(MISSION_INSERT)
 
 const $q = useQuasar()
 
-interface Props {
-  providerId: string
-  missionTpls: string[]
-}
-
-const props = defineProps<Props>()
-
 const dialogOpened = ref(false)
-const provider = ref(null)
 const selectedMissionTemplate = ref(null)
 const selectedAsset = ref(null)
 const missionId = ref('')
@@ -34,7 +45,6 @@ const startDate = ref(null)
 const endDate = ref(null)
 
 const openDialog = () => {
-  provider.value = null
   selectedMissionTemplate.value = null
   selectedAsset.value = null
   missionId.value = ''
@@ -45,10 +55,6 @@ const openDialog = () => {
   dialogOpened.value = true
   console.debug('openDialog: dialogOpened=', dialogOpened)
 }
-
-const actualMissionTpls = computed(() =>
-  props.missionTpls.filter(({ missionTplId }) => !missionTplId.endsWith('/'))
-)
 
 const okToSubmit = computed(
   () => selectedMissionTemplate.value && selectedAsset.value && missionId.value
@@ -127,13 +133,15 @@ function assetSelected(a) {
       >
         <p style="font-size: small">
           The mission will initially be registered with 'DRAFT' status. You can
-          then edit any parameters and submit it for execution.
+          then edit any parameters, indicate scheduling options, and submit it
+          for execution.
         </p>
 
         <div class="column q-gutter-sm">
           <div :class="{ 'text-red': !selectedMissionTemplate }">
             Mission Template:
             <MissionTemplateSelect
+              :loading="loading"
               :missionTpls="actualMissionTpls"
               :selectedMissionTemplate="selectedMissionTemplate"
               @selectedMissionTemplate="missionTemplateSelected"
