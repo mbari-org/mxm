@@ -3,9 +3,18 @@ services:
   watchtower:
     container_name: watchtower
     image: containrrr/watchtower
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+
+    environment:
+      ## IP according to `ifconfig` for docker0
+      DOCKER_HOST: "tcp://172.17.0.1:2375"
+
+      WATCHTOWER_NOTIFICATIONS: ${WATCHTOWER_NOTIFICATIONS}
+      WATCHTOWER_NOTIFICATION_SLACK_HOOK_URL: ${WATCHTOWER_NOTIFICATION_SLACK_HOOK_URL}
+
+    ## volumes:
+    ##  - /var/run/docker.sock:/var/run/docker.sock
+
     restart: unless-stopped
 
     # add --debug when needed
-    command: mxm --interval 30
+    command: --interval 30
