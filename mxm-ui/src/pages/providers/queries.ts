@@ -103,7 +103,7 @@ export const PROVIDER_SUMMARY = gql`
   }
 `
 
-export const PROVIDER = gql`
+export const PROVIDER_MISSIONS = gql`
   query provider($providerId: String!) {
     provider(providerId: $providerId) {
       providerId
@@ -119,12 +119,6 @@ export const PROVIDER = gql`
         providerId
         missionTplId
         description
-        assetClasses {
-          className
-          assets {
-            assetId
-          }
-        }
       }
       missions {
         providerId
@@ -137,12 +131,6 @@ export const PROVIDER = gql`
         description
         startDate
         endDate
-      }
-      assetClasses {
-        className
-        assets {
-          assetId
-        }
       }
     }
   }

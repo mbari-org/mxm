@@ -6,7 +6,7 @@ import { useQuery } from '@vue/apollo-composable'
 import MxmMarkdownView from 'components/utl/markdown/MxmMarkdownView.vue'
 import MissionNewButton from './MissionNewButton.vue'
 
-import { PROVIDER } from './queries'
+import { PROVIDER_MISSIONS } from './queries'
 import { computed, ref, watch } from 'vue'
 
 const route = useRoute()
@@ -18,7 +18,7 @@ const {
   result,
   loading,
   refetch: refetchMissions,
-} = useQuery(PROVIDER, {
+} = useQuery(PROVIDER_MISSIONS, {
   providerId,
 })
 

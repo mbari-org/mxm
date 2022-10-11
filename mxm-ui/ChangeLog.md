@@ -1,5 +1,8 @@
 2022-10
 
+- `MissionsPage`: no need for `assetClasses` in query.
+  - TODO: no need for `missionTemplates` either: just `numActualMissionTemplates`
+    to enable the `MissionNewButton`, which can then make such query itself.
 - refresh only the mission itself if already submitted
 - refresh mission template for mission dispatch if corresponding retrievedAt is missing
 - some adjustments
