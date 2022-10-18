@@ -1,5 +1,6 @@
 2022-10
 
+- fixed display of google base layer upon re-opening a QMap
 - `MissionsPage`: no need for `assetClasses` in query.
   - also no need for `missionTemplates` but just `numActualMissionTemplates`
     to enable the `MissionNewButton`, which now makes the query for the templates.

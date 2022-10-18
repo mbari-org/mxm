@@ -5,7 +5,7 @@ import 'leaflet-mouse-position/src/L.Control.MousePosition'
 import 'leaflet.polylinemeasure'
 import 'leaflet.polylinemeasure/Leaflet.PolylineMeasure.css'
 
-import { defineEmits, inject, onMounted, onUnmounted, ref, watch } from 'vue'
+import { inject, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useQMapStore } from './QMapStore'
 import QMapButtons from './QMapButtons.vue'
 import { useOptsStore } from 'stores/opts'

@@ -23,6 +23,13 @@ export const useQMapStore = defineStore('qmap', () => {
 
   function unsetLMap(lmapId: string) {
     if (debug) console.debug('unsetLMap: lmapId=', lmapId)
+    const lmap = lmaps.value[lmapId]
+    if (lmap) {
+      // this call added upon noticing that any selected google base layer was not
+      // "refreshed" properly (empty layer would be displayed) when re-opening a QMapDialog.
+      // But it is actually a good "cleanup" to do anyway.
+      lmap.remove()
+    }
     delete lmaps.value[lmapId]
   }
 
