@@ -195,7 +195,7 @@ async function doDeleteProvider(providerId: string) {
 </script>
 
 <template>
-  <q-page class="q-pa-md">
+  <q-page class="q-pa-sm">
     <div v-if="loading">Loading...</div>
     <q-table
       v-else

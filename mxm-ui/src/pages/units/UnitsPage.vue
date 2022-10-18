@@ -14,7 +14,7 @@ useUtlStore().setRefreshFunction(refetchUnits, 'Refresh units')
 </script>
 
 <template>
-  <q-page class="q-pa-md">
+  <q-page class="q-pa-sm">
     <div v-if="loading">Loading ...</div>
     <UnitsTable v-else :units="units" />
 

@@ -52,4 +52,10 @@ body.body--dark .myMarkdown a {
   border-style: solid;
   border-width: 1px;
 }
+
+/* for dark mode and when not explicitly indicating color for q-btn */
+body.body--dark .mxmBtn {
+  color: aquamarine;
+  background: #3d3d37;
+}
 </style>

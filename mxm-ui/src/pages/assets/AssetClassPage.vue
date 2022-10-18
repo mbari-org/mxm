@@ -56,7 +56,7 @@ const tableConf = {
 </script>
 
 <template>
-  <q-page class="q-pa-md">
+  <q-page class="q-pa-sm">
     <div v-if="assetClass.className">
       <q-card class="q-mb-md">
         <q-card-section>

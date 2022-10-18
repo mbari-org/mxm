@@ -28,7 +28,7 @@ useUtlStore().setRefreshFunction(refetchUnit, 'Refresh unit')
 </script>
 
 <template>
-  <q-page class="q-pa-md">
+  <q-page class="q-pa-sm">
     <div v-if="unit.unitName">
       <q-card class="q-mb-md">
         <q-card-section>

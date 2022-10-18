@@ -36,7 +36,7 @@ utlStore.setRefreshFunction(refreshProvider, 'Refresh this provider')
 </script>
 
 <template>
-  <q-page class="q-pa-md">
+  <q-page class="q-pa-sm">
     <div v-if="loading">
       <q-spinner />
     </div>
@@ -61,33 +61,45 @@ utlStore.setRefreshFunction(refreshProvider, 'Refresh this provider')
           </div>
           <q-separator />
 
-          <div class="column q-mb-md q-gutter-md">
-            <div class="row q-gutter-md">
-              <q-btn
-                :label="`Mission Templates (${numActualMissionTemplates})`"
-                no-wrap
-                no-caps
-                dense
-                :to="utl.routeLoc(['p', providerId, 'mt'])"
-              />
+          <div class="row q-my-md q-gutter-x-lg">
+            <q-btn
+              label="Mission Templates"
+              no-wrap
+              no-caps
+              dense
+              class="mxmBtn q-px-md"
+              :to="utl.routeLoc(['p', providerId, 'mt'])"
+            >
+              <q-badge color="orange" floating>
+                {{ numActualMissionTemplates }}
+              </q-badge>
+            </q-btn>
 
-              <q-btn
-                :label="`Asset Classes (${numAssetClasses})`"
-                no-wrap
-                no-caps
-                dense
-                :to="utl.routeLoc(['p', providerId, 'ac'])"
-              />
-            </div>
-            <div class="row q-gutter-md">
-              <q-btn
-                :label="`Missions (${numMissions})`"
-                no-wrap
-                no-caps
-                dense
-                :to="utl.routeLoc(['p', providerId, 'm'])"
-              />
-            </div>
+            <q-btn
+              label="Asset Classes"
+              no-wrap
+              no-caps
+              dense
+              class="mxmBtn q-px-md"
+              :to="utl.routeLoc(['p', providerId, 'ac'])"
+            >
+              <q-badge color="orange" floating>
+                {{ numAssetClasses }}
+              </q-badge>
+            </q-btn>
+
+            <q-btn
+              label="Missions"
+              no-wrap
+              no-caps
+              dense
+              class="mxmBtn q-px-md"
+              :to="utl.routeLoc(['p', providerId, 'm'])"
+            >
+              <q-badge color="orange" floating>
+                {{ numMissions }}
+              </q-badge>
+            </q-btn>
           </div>
 
           <q-separator />

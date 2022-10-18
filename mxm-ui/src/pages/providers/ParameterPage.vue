@@ -33,10 +33,10 @@ useUtlStore().setRefreshFunction(refetchParameter, 'Refresh this parameter')
 </script>
 
 <template>
-  <q-page class="q-pa-md">
+  <q-page class="q-pa-sm">
     <div v-if="parameter.paramName">
       <div class="q-mb-sm">
-        Mission Template:
+        Parameter in mission Template:
         <span class="text-bold">{{ params.missionTplId }}</span>
       </div>
 

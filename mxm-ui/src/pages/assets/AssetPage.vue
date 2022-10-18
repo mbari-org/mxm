@@ -28,7 +28,7 @@ useUtlStore().setRefreshFunction(refetchAsset, 'Refresh asset')
 </script>
 
 <template>
-  <q-page class="q-pa-md">
+  <q-page class="q-pa-sm">
     <div v-if="asset.assetId">
       <q-card class="q-mb-md">
         <q-card-section>

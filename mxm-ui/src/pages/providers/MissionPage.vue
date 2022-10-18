@@ -589,7 +589,7 @@ const tableConf = computed(() => {
 </script>
 
 <template>
-  <q-page class="q-pa-md">
+  <q-page class="q-pa-sm">
     <div v-if="!loading && mission.missionId">
       <q-card class="q-mb-md">
         <q-card-section>

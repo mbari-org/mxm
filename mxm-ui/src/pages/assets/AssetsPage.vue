@@ -49,7 +49,7 @@ const tableConf = {
 </script>
 
 <template>
-  <q-page class="q-pa-md">
+  <q-page class="q-pa-sm">
     <!--
     <pre>params = {{ route.params }}</pre>
     <pre>loading={{ loading }}</pre>
