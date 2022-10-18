@@ -103,8 +103,14 @@ useUtlStore().setRefreshFunction(refetchParameter, 'Refresh this parameter')
               class="row items-center no-wrap q-gutter-sm"
             >
               <div class="col-2">Default Units:</div>
-              <div class="fieldBg">
-                {{ parameter.defaultUnits }}
+              <div class="fieldBg q-px-xs">
+                <router-link
+                  v-if="parameter.defaultUnits"
+                  class="appLink"
+                  :to="utl.routeLoc(['u', parameter.defaultUnits])"
+                >
+                  {{ parameter.defaultUnits }}
+                </router-link>
               </div>
             </div>
 
