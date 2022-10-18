@@ -72,3 +72,7 @@ Note that 8080 is the configured port for the server.
 
 As usual with Quasar, the build is done with `quasar build`.
 However, per our general setup, the server side takes care of this as well.
+
+### Contributing
+
+Make sure all tests are passing and also run `yarn run format` before committing.
