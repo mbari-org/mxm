@@ -10,7 +10,8 @@ pull-submodules:
 
 # Show sub-module versions
 versions:
-	head -n4 mxm-ui/package.json mxm-server/src/main/resources/application.properties
+	@echo "mxm-server = $(cd mxm-server && just version)"
+	@echo "    mxm-ui = $(cd mxm-ui && just version)"
 
 # Prepare for git commit and tagging, push, ...
 prepare version:
