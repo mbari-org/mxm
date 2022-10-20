@@ -24,4 +24,4 @@ test:
 
 # Show version
 version:
-	@head -n 5 package.json | rg '"version": "([^"]*)"' -r '$1'
+	@head -n 5 package.json | rg '"version": "([^"]*)"' -or '$1'
