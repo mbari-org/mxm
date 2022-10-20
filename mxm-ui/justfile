@@ -21,3 +21,7 @@ format-check:
 # Run tests
 test:
 	yarn run test:unit
+
+# Show version
+version:
+	@head -n 5 package.json | rg '"version": "([^"]*)"' -r '$1'
