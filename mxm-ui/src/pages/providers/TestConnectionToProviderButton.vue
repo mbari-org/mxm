@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { PING_PROVIDER } from './queries'
 
-import { inject, ref } from 'vue'
+import { inject, ref, watch } from 'vue'
 import { useMutation } from '@vue/apollo-composable'
 
 import { useQuasar } from 'quasar'
@@ -33,11 +33,21 @@ const pinging = ref(false)
 const pingOk = ref(false)
 const pingFailed = ref(false)
 
-async function testConnectionToProvider() {
-  if (debug) console.debug('testConnectionToProvider: ', props.httpEndpoint)
-  pinging.value = true
+function reset() {
+  pinging.value = false
   pingOk.value = false
   pingFailed.value = false
+}
+
+watch(
+  () => props.httpEndpoint,
+  () => reset()
+)
+
+async function testConnectionToProvider() {
+  if (debug) console.debug('testConnectionToProvider: ', props.httpEndpoint)
+  reset()
+  pinging.value = true
 
   const variables = {
     pl: {
@@ -54,7 +64,7 @@ async function testConnectionToProvider() {
     if (datetime) {
       pingOk.value = true
       setTimeout(() => {
-        pingOk.value = false
+        reset()
         emit('pingResult', 'expired')
       }, 5000)
       emit('pingResult', true)
@@ -79,31 +89,29 @@ async function testConnectionToProvider() {
     emit('pingResult', message)
   } finally {
     pinging.value = false
+    setTimeout(reset, 5000)
   }
 }
 </script>
 
 <template>
-  <div>
-    <q-btn
-      v-if="pingOk"
-      icon="check"
-      dense
-      round
-      no-caps
-      size="sm"
-      class="text-green-5"
-    />
-    <q-btn
-      v-else
-      :disable="!httpEndpoint"
-      :label="label"
-      :color="pingFailed ? 'red' : 'secondary'"
-      :loading="pinging"
-      dense
-      no-caps
-      size="sm"
-      @click="testConnectionToProvider"
-    />
-  </div>
+  <q-btn
+    :icon="pingOk ? 'check' : 'settings_ethernet'"
+    :disable="!httpEndpoint"
+    :class="`myBtn ${pingOk ? 'text-green-5' : pingFailed ? 'text-red-5' : ''}`"
+    :loading="pinging"
+    @click="testConnectionToProvider"
+    dense
+    round
+    no-caps
+    size="sm"
+  >
+    <q-tooltip>{{ label }}</q-tooltip>
+  </q-btn>
 </template>
+
+<style scoped>
+body.body--dark .myBtn {
+  background: #3d3d37;
+}
+</style>

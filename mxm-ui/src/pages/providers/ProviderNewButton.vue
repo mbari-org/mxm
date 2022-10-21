@@ -168,6 +168,7 @@ const possibleProviders = [
       @click="openDialog"
     >
       <UtlDialog
+        size-style="width: 34em"
         :dialog-opened="dialogOpened"
         title="Register a new provider"
         :ok-to-submit="!!okToSubmit && !progress"
@@ -176,37 +177,42 @@ const possibleProviders = [
         @dialogClosing="dialogOpened = false"
       >
         <div class="column q-gutter-sm">
-          <q-btn-dropdown
-            class="q-ml-lg"
-            stack-label
-            label="Select..."
-            color="accent"
-            dense
-            no-caps
-          >
-            <q-list>
-              <q-item
-                v-for="(pp, index) in possibleProviders"
-                :key="index"
-                clickable
-                v-close-popup
-                @click="providerSelected(pp)"
-              >
-                <q-item-section>
-                  <q-item-label>{{ pp.providerId }}</q-item-label>
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </q-btn-dropdown>
+          <div class="column q-pb-md">
+            <div class="text-grey-7">
+              Note: This dialog and dropdown are mainly for development
+              purposes. A possible future mechanism is for the provider to
+              register itself.
+            </div>
 
-          <p>
+            <q-btn-dropdown
+              stack-label
+              label="Select..."
+              color="grey-7"
+              dense
+              no-caps
+            >
+              <q-list>
+                <q-item
+                  v-for="(pp, index) in possibleProviders"
+                  :key="index"
+                  clickable
+                  v-close-popup
+                  @click="providerSelected(pp)"
+                >
+                  <q-item-section>
+                    <q-item-label>{{ pp.providerId }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-btn-dropdown>
+
+            <q-separator class="q-mt-md" />
+          </div>
+
+          <div>
             Indicate the provider you want to register, which must expose an MXM
             Provider API.
-            <br /><br />
-            Note: this dialog and the dropdown above are mainly for development
-            purposes. A possible future mechanism is for the provider to
-            register itself.
-          </p>
+          </div>
 
           <div>
             Provider name:
@@ -250,6 +256,7 @@ const possibleProviders = [
           <div>
             API Type:
             <ApiTypeSelect
+              class="q-ml-md"
               :selectedApiType="apiType"
               @selectedApiType="val => (apiType = val)"
             />
