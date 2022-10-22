@@ -1,5 +1,6 @@
 2022-10
 
+- fix in refresh of provider page upon adding a new mission.
 - some style adjustments
 - fixed display of google base layer upon re-opening a QMap
 - `MissionsPage`: no need for `assetClasses` in query.

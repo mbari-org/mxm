@@ -15,7 +15,7 @@ const providerId = computed(() => params.value.providerId)
 const {
   result,
   loading,
-  refetch: refreshProvider,
+  refetch: refetchProvider,
 } = useQuery(PROVIDER_SUMMARY, {
   providerId,
 })
@@ -32,7 +32,9 @@ const numMissions = computed(() => provider.value?.numMissions ?? 0)
 
 const utlStore = useUtlStore()
 
-utlStore.setRefreshFunction(refreshProvider, 'Refresh this provider')
+refetchProvider()
+utlStore.setRefreshFunction(refetchProvider, 'Refresh this provider')
+
 </script>
 
 <template>
