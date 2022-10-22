@@ -36,7 +36,6 @@ const missionTplBasic = computed(() => resultBasic.value?.missionTemplate ?? {})
 const {
   result,
   loading: loadingDirectory,
-  refetch: refetchDirectory,
 } = useQuery(MISSION_TEMPLATES_DIRECTORY, {
   providerId,
   directory: missionTplId,
