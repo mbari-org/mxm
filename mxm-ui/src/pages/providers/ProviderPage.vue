@@ -71,9 +71,12 @@ utlStore.setRefreshFunction(refetchProvider, 'Refresh this provider')
               class="mxmBtn q-px-md"
               :to="utl.routeLoc(['p', providerId, 'mt'])"
             >
-              <q-badge color="orange" floating>
-                {{ numActualMissionTemplates }}
-              </q-badge>
+              <q-badge
+                :label="numActualMissionTemplates"
+                color="grey-5"
+                transparent
+                floating
+              />
             </q-btn>
 
             <q-btn
@@ -84,9 +87,12 @@ utlStore.setRefreshFunction(refetchProvider, 'Refresh this provider')
               class="mxmBtn q-px-md"
               :to="utl.routeLoc(['p', providerId, 'ac'])"
             >
-              <q-badge color="orange" floating>
-                {{ numAssetClasses }}
-              </q-badge>
+              <q-badge
+                :label="numAssetClasses"
+                color="grey-5"
+                transparent
+                floating
+              />
             </q-btn>
 
             <q-btn
@@ -97,9 +103,12 @@ utlStore.setRefreshFunction(refetchProvider, 'Refresh this provider')
               class="mxmBtn q-px-md"
               :to="utl.routeLoc(['p', providerId, 'm'])"
             >
-              <q-badge color="orange" floating>
-                {{ numMissions }}
-              </q-badge>
+              <q-badge
+                :label="numMissions"
+                color="grey-5"
+                transparent
+                floating
+              />
             </q-btn>
           </div>
 

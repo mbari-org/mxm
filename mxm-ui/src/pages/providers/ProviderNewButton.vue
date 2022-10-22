@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { CREATE_PROVIDER } from './queries'
+import { CREATE_PROVIDER, PROVIDER_PROGRESS } from './queries'
 import UtlDialog from 'components/utl/UtlDialog.vue'
 import ApiTypeSelect from './ApiTypeSelect.vue'
 import TestConnectionToProviderButton from './TestConnectionToProviderButton.vue'
 
-import { computed, ref } from 'vue'
-import { useMutation } from '@vue/apollo-composable'
+import { computed, nextTick, ref } from 'vue'
+import { useMutation, useSubscription } from '@vue/apollo-composable'
 
 import { useQuasar } from 'quasar'
 
@@ -13,23 +13,47 @@ const $q = useQuasar()
 
 const { mutate: createProvider } = useMutation(CREATE_PROVIDER)
 
+const providerId = ref('')
+
+// progress subscription disabled until we submit the form
+const progressSubscriptionEnabled = ref(false)
+const subscriptionOptions = computed(() => ({
+  enabled: progressSubscriptionEnabled.value,
+}))
+const { result: providerProgress } = useSubscription(
+  PROVIDER_PROGRESS,
+  { providerId },
+  subscriptionOptions
+)
+
+const progressInfo = computed(
+  () =>
+    progressSubscriptionEnabled.value &&
+    providerProgress.value?.providerProgress
+)
+
+function registeringShow(message: string) {
+  $q.loading.show({
+    message,
+  })
+}
+
+function registeringHide() {
+  $q.loading.hide()
+}
+
 const emit = defineEmits<{
   (e: 'providerCreated', v: object): void
 }>()
 
-const progress = ref(false)
 const dialogOpened = ref(false)
-const providerNameInvalid = ref(false)
-const progressLabel = ref('')
-const providerId = ref('')
+const providerNameInvalid = ref('')
 const httpEndpoint = ref('')
 const apiType = ref('')
 const pingOk = ref(false)
 
 const openDialog = () => {
-  providerNameInvalid.value = false
-  progress.value = false
-  progressLabel.value = ''
+  providerNameInvalid.value = ''
   apiType.value = ''
   pingOk.value = false
   providerId.value = ''
@@ -59,8 +83,6 @@ const okToSubmit = computed(
 )
 
 function closeDialogAndNotify(provider) {
-  progress.value = null
-  progressLabel.value = null
   dialogOpened.value = false
   $q.notify({
     message: `Provider created: ${provider.providerId}`,
@@ -82,9 +104,9 @@ const submit = async () => {
     },
   }
 
-  $q.loading.show({
-    message: 'Registering provider...',
-  })
+  registeringShow('Registering provider...')
+  progressSubscriptionEnabled.value = true
+
   try {
     const result = await createProvider(variables)
     console.debug('createProvider: result=', result)
@@ -108,7 +130,8 @@ const submit = async () => {
       })
     }
   } finally {
-    $q.loading.hide()
+    registeringHide()
+    progressSubscriptionEnabled.value = false
   }
 }
 
@@ -171,17 +194,15 @@ const possibleProviders = [
         size-style="width: 34em"
         :dialog-opened="dialogOpened"
         title="Register a new provider"
-        :ok-to-submit="!!okToSubmit && !progress"
-        :ok-to-dismiss="!progress"
+        :ok-to-submit="!!okToSubmit && !$q.loading.isActive"
+        :ok-to-dismiss="!$q.loading.isActive"
         @submit="submit"
         @dialogClosing="dialogOpened = false"
       >
         <div class="column q-gutter-sm">
           <div class="column q-pb-md">
             <div class="text-grey-7">
-              Note: This dialog and dropdown are mainly for development
-              purposes. A possible future mechanism is for the provider to
-              register itself.
+              This dropdown only for development purposes.
             </div>
 
             <q-btn-dropdown
@@ -222,6 +243,7 @@ const possibleProviders = [
               hide-bottom-space
               no-error-icon
               :error="!providerId.length || !!providerNameInvalid"
+              :error-message="providerNameInvalid"
               @input="providerNameInvalid = null"
               class="fieldBg"
               v-model.trim="providerId"
@@ -262,21 +284,8 @@ const possibleProviders = [
             />
           </div>
 
-          <div>
-            <q-linear-progress
-              v-if="progress"
-              size="25px"
-              :value="progress"
-              color="accent"
-            >
-              <div class="absolute-full flex flex-center">
-                <q-badge
-                  color="white"
-                  text-color="accent"
-                  :label="progressLabel"
-                />
-              </div>
-            </q-linear-progress>
+          <div v-if="progressInfo" class="full-width bg-grey-8 text-white">
+            {{ progressInfo.message }}
           </div>
         </div>
       </UtlDialog>

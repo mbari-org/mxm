@@ -1,5 +1,7 @@
 2022-10
 
+- provider registration now with subscription to reflect progress.
+  - todo: if percentComplete given, use something like q-linear-progress
 - fix in refresh of provider page upon adding a new mission.
 - some style adjustments
 - fixed display of google base layer upon re-opening a QMap

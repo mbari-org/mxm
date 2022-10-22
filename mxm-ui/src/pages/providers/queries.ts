@@ -23,7 +23,7 @@ export const PING_PROVIDER = gql`
 `
 
 export const CREATE_PROVIDER = gql`
-  mutation createProvider($pl: ProviderInput!) {
+  mutation createProvider($pl: ProviderCreateInput!) {
     createProvider(pl: $pl) {
       providerId
       httpEndpoint
@@ -159,14 +159,12 @@ export const PROVIDER_MISSION_TEMPLATES = gql`
   }
 `
 
-export const PROVIDER_UPDATED_BY_ID = gql`
-  subscription providerUpdatedById($providerId: String!) {
-    providerUpdatedById(providerId: $providerId) {
+export const PROVIDER_PROGRESS = gql`
+  subscription providerProgress($providerId: String!) {
+    providerProgress(providerId: $providerId) {
       providerId
-      httpEndpoint
-      apiType
-      description
-      descriptionFormat
+      message
+      percentComplete
     }
   }
 `
