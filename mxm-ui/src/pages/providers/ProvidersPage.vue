@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, inject } from 'vue'
 
 import ProviderNewButton from './ProviderNewButton.vue'
 import MxmMarkdownView from 'components/utl/markdown/MxmMarkdownView.vue'
@@ -16,6 +16,8 @@ import {
 import { useQuasar } from 'quasar'
 
 const debug = window.location.search.match(/.*debug=(-|.*\bprovider\b).*/)
+
+const utl = inject('utl')
 
 const $q = useQuasar()
 
@@ -103,10 +105,8 @@ const { result: providerDeletedSubscription } =
 useUtlStore().setRefreshFunction(refetchProviders, 'Refresh list of providers')
 
 function providerCreated(provider) {
-  /*if (debug)*/
-  console.warn('providerCreated provider=', provider)
-  // note: due to the subscribeToMore, this is not needed:
-  // refetchProviders()
+  if (debug) console.debug('providerCreated provider=', provider)
+  utl.push(['p', provider.providerId])
 }
 
 const tableConf = {
@@ -152,18 +152,18 @@ const tableConf = {
   },
 }
 
-function confirmAndDeleteProvider(row) {
+function confirmAndDeleteProvider(providerId: string) {
   $q.dialog({
     title: 'Confirm',
     message:
-      `Are you sure you want to delete provider '${row.providerId}'` +
+      `Are you sure you want to delete provider '${providerId}'` +
       ' and all associated entities?',
     color: 'negative',
     dark: $q.dark.isActive,
-    ok: `Yes, delete '${row.providerId}'`,
+    ok: `Yes, delete '${providerId}'`,
     cancel: true,
     focus: 'cancel',
-  }).onOk(() => doDeleteProvider(row.providerId))
+  }).onOk(() => doDeleteProvider(providerId))
 }
 
 async function doDeleteProvider(providerId: string) {
@@ -261,8 +261,8 @@ async function doDeleteProvider(providerId: string) {
               icon="delete"
               color="negative"
               size="xs"
-              @click.exact="confirmAndDeleteProvider(props.row)"
-              @click.shift.exact="doDeleteProvider(props.row)"
+              @click.exact="confirmAndDeleteProvider(props.row.providerId)"
+              @click.shift.exact="doDeleteProvider(props.row.providerId)"
             >
               <q-tooltip>Delete provider</q-tooltip>
             </q-btn>
