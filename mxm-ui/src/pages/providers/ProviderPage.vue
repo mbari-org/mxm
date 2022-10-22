@@ -34,7 +34,6 @@ const utlStore = useUtlStore()
 
 refetchProvider()
 utlStore.setRefreshFunction(refetchProvider, 'Refresh this provider')
-
 </script>
 
 <template>
