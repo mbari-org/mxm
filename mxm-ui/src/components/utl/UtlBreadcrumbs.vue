@@ -69,6 +69,7 @@ const elements: Element[] = computed(() => {
     case 'MissionTemplatesPageWithId': {
       const missionTplId = params.value.missionTplId || '/'
       return [
+        { label: 'Providers', parts: ['p'] },
         { label: providerId, parts: ['p', providerId] },
         { label: 'MissionTemplates', parts: ['p', providerId, 'mt'] },
         { label: missionTplId },
@@ -77,6 +78,7 @@ const elements: Element[] = computed(() => {
     case 'ParameterPage': {
       const missionTplId = params.value.missionTplId || '/'
       return [
+        { label: 'Providers', parts: ['p'] },
         { label: providerId, parts: ['p', providerId] },
         { label: 'MissionTemplates', parts: ['p', providerId, 'mt'] },
         { label: missionTplId, parts: ['p', providerId, 'mt', missionTplId] },
@@ -86,6 +88,7 @@ const elements: Element[] = computed(() => {
     }
     case 'MissionsPage': {
       return [
+        { label: 'Providers', parts: ['p'] },
         { label: providerId, parts: ['p', providerId] },
         { label: 'Missions' },
       ]
