@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
 import { useUtlStore } from 'stores/utl'
-import { useMutation, useQuery } from '@vue/apollo-composable'
+import { useMutation, useQuery, useSubscription } from '@vue/apollo-composable'
 
 import {
   ARGUMENT_DELETE,
   ARGUMENT_INSERT,
   ARGUMENT_UPDATE,
   MISSION,
+  MISSION_UPDATED_BY_ID,
   MISSION_DELETE,
   MISSION_UPDATE,
   MISSION_VALIDATE,
@@ -54,6 +55,9 @@ const {
   loading,
   refetch: refetchMission,
 } = useQuery(MISSION, { providerId, missionTplId, missionId })
+
+// reflect any async status updates
+useSubscription(MISSION_UPDATED_BY_ID, { providerId, missionTplId, missionId })
 
 const mission = computed(() => missionResult.value?.mission ?? {})
 const missionTemplate = computed(() => mission.value?.missionTemplate ?? {})

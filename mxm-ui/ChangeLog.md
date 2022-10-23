@@ -1,5 +1,6 @@
 2022-10
 
+- subscribe to and reflect mission updates
 - open provider page right after registration
 - provider registration now with subscription to reflect progress.
   - todo: if percentComplete given, use something like q-linear-progress

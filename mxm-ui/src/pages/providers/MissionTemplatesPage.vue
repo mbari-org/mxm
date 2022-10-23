@@ -33,13 +33,13 @@ const {
 
 const missionTplBasic = computed(() => resultBasic.value?.missionTemplate ?? {})
 
-const {
-  result,
-  loading: loadingDirectory,
-} = useQuery(MISSION_TEMPLATES_DIRECTORY, {
-  providerId,
-  directory: missionTplId,
-})
+const { result, loading: loadingDirectory } = useQuery(
+  MISSION_TEMPLATES_DIRECTORY,
+  {
+    providerId,
+    directory: missionTplId,
+  }
+)
 
 const templates = computed(() => result.value?.listMissionTplsDirectory ?? [])
 

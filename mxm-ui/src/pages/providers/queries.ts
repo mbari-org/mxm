@@ -443,3 +443,28 @@ export const ARGUMENT_DELETE = gql`
     }
   }
 `
+
+export const MISSION_UPDATED_BY_ID = gql`
+  subscription missionUpdatedById(
+    $providerId: String!
+    $missionTplId: String!
+    $missionId: String!
+  ) {
+    missionUpdatedById(
+      providerId: $providerId
+      missionTplId: $missionTplId
+      missionId: $missionId
+    ) {
+      providerId
+      missionTplId
+      missionId
+      missionStatus
+      updatedDate
+      providerMissionId
+      description
+      assetId
+      startDate
+      endDate
+    }
+  }
+`
