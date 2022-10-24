@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
 import { useUtlStore } from 'stores/utl'
-import { useQuery } from '@vue/apollo-composable'
+import { useQuery, useSubscription } from '@vue/apollo-composable'
 
 import MxmMarkdownView from 'components/utl/markdown/MxmMarkdownView.vue'
 import MissionNewButton from './MissionNewButton.vue'
 
-import { PROVIDER_MISSIONS } from './queries'
+import { PROVIDER_MISSIONS, MISSION_UPDATED } from './queries'
 import { computed, ref } from 'vue'
 
 const route = useRoute()
@@ -21,6 +21,8 @@ const {
 } = useQuery(PROVIDER_MISSIONS, {
   providerId,
 })
+
+useSubscription(MISSION_UPDATED)
 
 const provider = computed(() => result.value?.provider ?? {})
 

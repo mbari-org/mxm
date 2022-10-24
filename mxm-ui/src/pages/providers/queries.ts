@@ -458,13 +458,33 @@ export const MISSION_UPDATED_BY_ID = gql`
       providerId
       missionTplId
       missionId
-      missionStatus
-      updatedDate
       providerMissionId
-      description
+      missionStatus
       assetId
+      description
+      schedType
+      schedDate
       startDate
       endDate
+      updatedDate
+    }
+  }
+`
+export const MISSION_UPDATED = gql`
+  subscription missionUpdated {
+    missionUpdated {
+      providerId
+      missionTplId
+      missionId
+      providerMissionId
+      missionStatus
+      assetId
+      description
+      schedType
+      schedDate
+      startDate
+      endDate
+      updatedDate
     }
   }
 `

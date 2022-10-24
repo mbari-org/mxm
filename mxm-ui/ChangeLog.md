@@ -1,5 +1,7 @@
 2022-10
 
+- subscribe to and reflect mission updates in MissionsPage.
+  The subscription here could be for the particular provider but no big deal.
 - subscribe to and reflect mission updates
 - open provider page right after registration
 - provider registration now with subscription to reflect progress.
