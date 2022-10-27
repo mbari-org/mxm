@@ -126,15 +126,15 @@ function assetSelected(a) {
       <UtlDialog
         :dialog-opened="dialogOpened"
         :title="`New mission (for '${providerId}')`"
+        submitLabel="Create mission draft"
         :ok-to-submit="!!okToSubmit"
         :ok-to-dismiss="!!okToDismiss"
         @submit="submit"
         @dialogClosing="dialogOpened = false"
       >
         <p style="font-size: small">
-          The mission will initially be registered with 'DRAFT' status. You can
-          then edit any parameters, indicate scheduling options, and submit it
-          for execution.
+          The mission will initially be registered with the 'DRAFT' status. You
+          can then edit it as needed and then submit it for execution.
         </p>
 
         <div class="column q-gutter-sm">
