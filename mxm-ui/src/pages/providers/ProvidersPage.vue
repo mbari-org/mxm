@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, inject } from 'vue'
-
+import TestConnectionToProviderButton from './TestConnectionToProviderButton.vue'
 import ProviderNewButton from './ProviderNewButton.vue'
 import MxmMarkdownView from 'components/utl/markdown/MxmMarkdownView.vue'
 import { useMutation, useQuery, useSubscription } from '@vue/apollo-composable'
@@ -128,7 +128,7 @@ const tableConf = {
     {
       name: 'httpEndpoint',
       field: 'httpEndpoint',
-      label: 'MXM Endpoint',
+      label: 'MXM Provider Endpoint',
       align: 'left',
       sortable: true,
     },
@@ -255,17 +255,24 @@ async function doDeleteProvider(providerId: string) {
             :props="props"
             style="width: 5px; vertical-align: top"
           >
-            <q-btn
-              dense
-              round
-              icon="delete"
-              color="negative"
-              size="xs"
-              @click.exact="confirmAndDeleteProvider(props.row.providerId)"
-              @click.shift.exact="doDeleteProvider(props.row.providerId)"
-            >
-              <q-tooltip>Delete provider</q-tooltip>
-            </q-btn>
+            <div class="row q-gutter-x-xs no-wrap items-center">
+              <TestConnectionToProviderButton
+                :providerId="props.row.providerId"
+                :httpEndpoint="props.row.httpEndpoint"
+                :apiType="props.row.apiType"
+              />
+              <q-btn
+                dense
+                round
+                icon="delete"
+                color="negative"
+                size="xs"
+                @click.exact="confirmAndDeleteProvider(props.row.providerId)"
+                @click.shift.exact="doDeleteProvider(props.row.providerId)"
+              >
+                <q-tooltip>Delete provider</q-tooltip>
+              </q-btn>
+            </div>
           </q-td>
         </q-tr>
       </template>
