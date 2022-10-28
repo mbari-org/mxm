@@ -7,7 +7,11 @@ The `watchtower/docker-compose.yml` file here is a copy of the one
 under `~mxmadmin/watchtower/` on `mxm`.
 
 Complementary to this, the `mbari/mxm` image in the MXM `docker-compose.yml` on `mxm`
-is set without explicit tag, so that the latest version on Docker Hub is always used.
+is defined, not with a specific complete version tag nor with `latest`, but with just
+`major-minor` so that the latest version with the given prefix on Docker Hub is always used:
+```yaml
+image: mbari/mxm:0.9
+```
 
 So, triggering the usual docker build workflow from here will subsequently trigger
 the automatic update of the deployed system on `mxm`.
