@@ -31,6 +31,8 @@ provides general information and pointers,
 and facilitates issue tracking at a general level.
 This overall organizational scheme is subject to change as the project progresses.
 
+See also [DEPLOYMENT.md](DEPLOYMENT.md) for deployment instructions.
+
 ### Some Links
 
 - [MXM Spec Doc](https://docs.google.com/document/d/1Fx8C92x4uB9dCx9SH7cpCscn8LqSZywyYm47y8TKDJY)
