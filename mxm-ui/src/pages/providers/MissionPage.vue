@@ -751,10 +751,10 @@ const tableConf = computed(() => {
 
           <q-btn
             v-if="
-              provider.canCancelMission && (
-              mission.missionStatus === 'SUBMITTED' ||
-              mission.missionStatus === 'QUEUED' ||
-              mission.missionStatus === 'RUNNING')
+              provider.canCancelMission &&
+              (mission.missionStatus === 'SUBMITTED' ||
+                mission.missionStatus === 'QUEUED' ||
+                mission.missionStatus === 'RUNNING')
             "
             label="Cancel"
             icon="cancel"
@@ -778,8 +778,8 @@ const tableConf = computed(() => {
         >
           <q-tooltip>
             <div style="max-width: 20em">
-              Delete this mission from the MXM registry.
-              There is no effect propagated to the provider.
+              Delete this mission from the MXM registry. There is no effect
+              propagated to the provider.
             </div>
           </q-tooltip>
         </q-btn>
