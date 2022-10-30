@@ -1,5 +1,6 @@
 2022-10
 
+- adjustments in mission page actions
 - "Create mission draft" label for mission creation
 - subscribe to and reflect mission updates in MissionsPage.
   The subscription here could be for the particular provider but no big deal.

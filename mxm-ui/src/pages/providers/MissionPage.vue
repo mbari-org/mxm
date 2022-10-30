@@ -64,6 +64,15 @@ const missionTemplate = computed(() => mission.value?.missionTemplate ?? {})
 const provider = computed(() => mission.value?.provider ?? {})
 const editable = computed(() => mission.value?.missionStatus === 'DRAFT')
 
+const canDeleteMission = computed(() => {
+  const m = mission.value ?? {}
+  return (
+    m.missionStatus === 'DRAFT' ||
+    m.missionStatus === 'COMPLETED' ||
+    m.missionStatus === 'TERMINATED'
+  )
+})
+
 const { result: unitsResult } = useQuery(UNITS)
 
 const units = computed(() => unitsResult.value?.allUnits ?? [])
@@ -715,20 +724,20 @@ const tableConf = computed(() => {
       <div class="row q-mb-sm justify-between">
         <div class="row q-gutter-x-lg">
           <q-btn
-            v-if="provider.canValidate"
+            v-if="provider.canValidate && mission.missionStatus === 'DRAFT'"
+            :disable="parametersWithErrorCount > 0"
             label="Validate"
             icon="check"
             push
             color="secondary"
             size="sm"
-            :disable="
-              mission.missionStatus !== 'DRAFT' || parametersWithErrorCount > 0
-            "
             @click="validateMission"
           >
             <q-tooltip>Validate mission against external provider</q-tooltip>
           </q-btn>
+
           <q-btn
+            v-if="mission.missionStatus === 'DRAFT'"
             label="Submit"
             icon="settings"
             push
@@ -739,10 +748,13 @@ const tableConf = computed(() => {
           >
             <q-tooltip>Request execution of this mission</q-tooltip>
           </q-btn>
+
           <q-btn
             v-if="
-              mission.missionStatus === 'RUNNING' ||
-              mission.missionStatus === 'QUEUED'
+              provider.canCancelMission && (
+              mission.missionStatus === 'SUBMITTED' ||
+              mission.missionStatus === 'QUEUED' ||
+              mission.missionStatus === 'RUNNING')
             "
             label="Cancel"
             icon="cancel"
@@ -754,20 +766,21 @@ const tableConf = computed(() => {
             <q-tooltip>Request cancellation of submitted mission</q-tooltip>
           </q-btn>
         </div>
+
         <q-btn
+          v-if="canDeleteMission"
           label="Delete"
           icon="delete"
           push
           color="secondary"
           size="sm"
-          :disable="
-            mission.missionStatus !== 'DRAFT' &&
-            mission.missionStatus !== 'TERMINATED'
-          "
           @click="deleteMission"
         >
           <q-tooltip>
-            Delete this mission (only allowed if in DRAFT or TERMINATED status)
+            <div style="max-width: 20em">
+              Delete this mission from the MXM registry.
+              There is no effect propagated to the provider.
+            </div>
           </q-tooltip>
         </q-btn>
       </div>
