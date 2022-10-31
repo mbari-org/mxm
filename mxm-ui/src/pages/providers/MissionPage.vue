@@ -691,6 +691,8 @@ const tableConf = computed(() => {
               :editable="editable"
               @saveDescription="updateDescription"
             />
+            <pre>missionStatus={{ mission.missionStatus }}</pre>
+            <pre>missionStatusUpdates={{ mission.missionStatusUpdates }}</pre>
           </div>
           <table class="mission-table" style="font-size: smaller">
             <tbody>

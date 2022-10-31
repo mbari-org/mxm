@@ -1,5 +1,6 @@
 2022-10
 
+- preps for new mission.missionStatusUpdates
 - adjustments in mission page actions
 - "Create mission draft" label for mission creation
 - subscribe to and reflect mission updates in MissionsPage.

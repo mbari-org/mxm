@@ -361,6 +361,10 @@ export const MISSION = gql`
       missionTplId
       missionId
       missionStatus
+      missionStatusUpdates {
+        updateDate
+        status
+      }
       updatedDate
       providerMissionId
       assetId
@@ -460,6 +464,10 @@ export const MISSION_UPDATED_BY_ID = gql`
       missionId
       providerMissionId
       missionStatus
+      missionStatusUpdates {
+        updateDate
+        status
+      }
       assetId
       description
       schedType
@@ -478,6 +486,10 @@ export const MISSION_UPDATED = gql`
       missionId
       providerMissionId
       missionStatus
+      missionStatusUpdates {
+        updateDate
+        status
+      }
       assetId
       description
       schedType
