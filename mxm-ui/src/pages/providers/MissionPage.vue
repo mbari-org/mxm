@@ -23,6 +23,7 @@ import ElapsedTime from 'components/utl/ElapsedTime.vue'
 import MxmMarkdown from 'components/utl/markdown/MxmMarkdown.vue'
 import MissionScheduling from './MissionScheduling.vue'
 import UnitSelect from 'pages/providers/UnitSelect.vue'
+import MissionStatusUpdates from 'pages/providers/MissionStatusUpdates.vue'
 import { useQuasar } from 'quasar'
 import ParameterValue from 'components/paramInput/ParameterValue.vue'
 
@@ -694,8 +695,10 @@ const tableConf = computed(() => {
               :editable="editable"
               @saveDescription="updateDescription"
             />
-            <pre>missionStatus={{ mission.missionStatus }}</pre>
-            <pre>missionStatusUpdates={{ mission.missionStatusUpdates }}</pre>
+            <MissionStatusUpdates
+              v-if="mission.missionStatus !== 'DRAFT'"
+              :missionStatusUpdates="mission.missionStatusUpdates"
+            />
           </div>
           <table class="mission-table" style="font-size: smaller">
             <tbody>
