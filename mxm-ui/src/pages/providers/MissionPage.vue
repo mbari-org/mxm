@@ -13,6 +13,7 @@ import {
   MISSION_UPDATE,
   MISSION_VALIDATE,
   UPDATE_MISSION_TEMPLATE,
+  MISSION_UPDATED,
 } from './queries'
 
 import { UNITS } from '../units/queries'
@@ -38,6 +39,8 @@ const { mutate: missionTemplateUpdate, loading: updatingMissionTemplate } =
 const { mutate: argumentInsert } = useMutation(ARGUMENT_INSERT)
 const { mutate: argumentUpdate } = useMutation(ARGUMENT_UPDATE)
 const { mutate: argumentDelete } = useMutation(ARGUMENT_DELETE)
+
+useSubscription(MISSION_UPDATED)
 
 const utl = inject('utl')
 

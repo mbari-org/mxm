@@ -75,6 +75,22 @@ export default boot(async () => {
 
       Mission: {
         keyFields: ['providerId', 'missionTplId', 'missionId'],
+        fields: {
+          missionStatusUpdates: {
+            merge(existing = [], incoming: any[]) {
+              const res = [...existing]
+              for (const update of incoming) {
+                const included = res.find(
+                  u => u.updateDate === update.updateDate
+                )
+                if (!included) {
+                  res.push(update)
+                }
+              }
+              return res
+            },
+          },
+        },
       },
 
       Unit: {
