@@ -28,8 +28,6 @@ export default boot(async ({ app }) => {
   }
 })
 
-let googleApiAvailable = false
-
 const baseLayerMap: Map<string, L.Layer> = new Map()
 
 function addBaseLayersTo(layerMap: { [layerName: string]: L.Layer }) {
@@ -56,6 +54,5 @@ function setupGoogleApi(googleApiKey: string) {
     )
 
     if (debug) console.debug('google api set up.')
-    googleApiAvailable = true
   }
 }

@@ -6,8 +6,8 @@ const debug = window.location.search.match(/.*debug=.*\bexc\b.*/)
 
 interface Utl {
   routeLoc: typeof routeLoc
-  push: (loc: any) => void
-  replace: (loc: any) => void
+  push: (loc: string[]) => void
+  replace: (loc: string[]) => void
   ticker: Ref<Date>
   getAgo: typeof getAgo
   cloneDeep: (obj: object) => object
@@ -30,11 +30,11 @@ export default boot(({ app, router }) => {
   const utl = {
     routeLoc,
 
-    push(loc: any) {
+    push(loc: string[]) {
       router.push(routeLoc(loc))
     },
 
-    replace(loc: any) {
+    replace(loc: string[]) {
       router.replace(routeLoc(loc))
     },
 
@@ -52,10 +52,8 @@ export default boot(({ app, router }) => {
   app.config.globalProperties.utl = utl
 })
 
-function routeLoc(loc: any) {
-  if (Array.isArray(loc)) {
-    return '/' + loc.map(encodeURIComponent).join('/')
-  } else return loc
+function routeLoc(loc: string[]) {
+  return '/' + loc.map(encodeURIComponent).join('/')
 }
 
 function getAgo(date: Date, baseDate: Date) {

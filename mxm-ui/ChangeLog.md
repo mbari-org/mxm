@@ -1,3 +1,7 @@
+2022-11
+
+- minor linting
+
 2022-10
 
 - reflect missionStatusUpdates
