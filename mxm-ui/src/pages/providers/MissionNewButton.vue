@@ -71,7 +71,7 @@ const submit = async () => {
     providerId: props.providerId,
     missionTplId,
     missionId: missionId.value,
-    missionStatus: 'DRAFT',
+    // note: missionStatus will be 'DRAFT' as enforced by the server
     schedType: schedType.value,
     assetId: selectedAsset.value.assetId,
     description: description.value,

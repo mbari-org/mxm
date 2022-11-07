@@ -78,16 +78,8 @@ export default boot(async () => {
         fields: {
           missionStatusUpdates: {
             merge(existing = [], incoming: any[]) {
-              const res = [...existing]
-              for (const update of incoming) {
-                const included = res.find(
-                  u => u.updateDate === update.updateDate
-                )
-                if (!included) {
-                  res.push(update)
-                }
-              }
-              return res
+              // note: the list is always fully provided, so no need to merge
+              return [...incoming]
             },
           },
         },

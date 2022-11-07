@@ -60,7 +60,8 @@ const tableConf = computed(() => {
               <div>{{ props.row.updateDate }}</div>
               <ElapsedTime
                 :date="props.row.updateDate"
-                class="text-grey" style="font-size: smaller"
+                class="text-grey"
+                style="font-size: smaller"
               />
             </div>
           </q-td>
