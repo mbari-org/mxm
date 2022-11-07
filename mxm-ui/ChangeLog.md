@@ -1,5 +1,6 @@
 2022-11
 
+- mission statuses: show date and elapsed time
 - minor linting
 
 2022-10

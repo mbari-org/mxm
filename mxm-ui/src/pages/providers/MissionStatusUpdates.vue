@@ -56,7 +56,13 @@ const tableConf = computed(() => {
             {{ props.row.status }}
           </q-td>
           <q-td key="updateDate" :props="props">
-            <ElapsedTime :date="props.row.updateDate" />
+            <div class="row q-gutter-x-sm">
+              <div>{{ props.row.updateDate }}</div>
+              <ElapsedTime
+                :date="props.row.updateDate"
+                class="text-grey" style="font-size: smaller"
+              />
+            </div>
           </q-td>
         </q-tr>
       </template>
