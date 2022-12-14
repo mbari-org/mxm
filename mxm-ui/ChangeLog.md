@@ -1,3 +1,7 @@
+2022-12
+
+- bump version to align with that of the server
+
 2022-11
 
 - mission statuses: show date and elapsed time
