@@ -1,5 +1,6 @@
 2022-12
 
+- upgrade quasar (2.10.2) and a few other dependencies
 - bump version and minor style adjustment
 
 2022-11
