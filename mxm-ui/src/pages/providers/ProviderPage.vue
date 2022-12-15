@@ -73,7 +73,7 @@ utlStore.setRefreshFunction(refetchProvider, 'Refresh this provider')
             >
               <q-badge
                 :label="numActualMissionTemplates"
-                color="grey-5"
+                :color="$q.dark.isActive ? 'secondary' : 'grey-7'"
                 transparent
                 floating
               />
@@ -89,7 +89,7 @@ utlStore.setRefreshFunction(refetchProvider, 'Refresh this provider')
             >
               <q-badge
                 :label="numAssetClasses"
-                color="grey-5"
+                :color="$q.dark.isActive ? 'secondary' : 'grey-7'"
                 transparent
                 floating
               />
@@ -105,7 +105,7 @@ utlStore.setRefreshFunction(refetchProvider, 'Refresh this provider')
             >
               <q-badge
                 :label="numMissions"
-                color="grey-5"
+                :color="$q.dark.isActive ? 'secondary' : 'grey-7'"
                 transparent
                 floating
               />

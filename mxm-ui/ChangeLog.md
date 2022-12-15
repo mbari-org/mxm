@@ -1,6 +1,6 @@
 2022-12
 
-- bump version to align with that of the server
+- bump version and minor style adjustment
 
 2022-11
 
