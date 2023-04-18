@@ -1,3 +1,7 @@
+2023-04
+
+- minor type related fixes
+
 2022-12
 
 - upgrade quasar (2.10.2) and a few other dependencies

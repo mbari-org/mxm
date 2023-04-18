@@ -110,7 +110,7 @@ onMounted(() => {
       })
 
       return {
-        addToMap: map => {
+        addToMap: (map: L.Map) => {
           mpos.addTo(map)
         },
 
@@ -202,7 +202,7 @@ onMounted(() => {
     function onMapViewChanged() {
       if (debug) console.debug('onMapViewChanged', arguments)
       const c = lmap.getCenter()
-      center.value = { lat: c.lat, lng: c.lng }
+      center.value = { lat: c.lat, lng: c.lng } as L.LatLng
       zoom.value = lmap.getZoom()
     }
 
