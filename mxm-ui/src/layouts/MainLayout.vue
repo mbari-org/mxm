@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import UtlBreadcrumbs from 'components/utl/UtlBreadcrumbs.vue'
-import SwitchDarkMode from 'components/utl/SwitchDarkMode.vue'
+import QDarkMode from 'components/utl/QDarkMode.vue'
 </script>
 
 <template>
@@ -22,7 +22,7 @@ import SwitchDarkMode from 'components/utl/SwitchDarkMode.vue'
         </q-toolbar-title>
 
         <div class="row q-gutter-x-md items-center">
-          <SwitchDarkMode />
+          <QDarkMode />
 
           <div v-if="mxmConfig" class="column">
             <div class="row justify-between">

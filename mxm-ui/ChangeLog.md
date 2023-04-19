@@ -1,5 +1,6 @@
 2023-04
 
+- use my enhanced QDarkMode component
 - minor type related fixes
 
 2022-12
