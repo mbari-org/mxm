@@ -1,23 +1,33 @@
 # Continuous Deployment
 
-To facilitate the automatic update of the MXM system on `mxm`,
-I've again enabled [watchtower](https://github.com/containrrr/watchtower/) there.
+Image build and pushing to Docker Hub are enabled via GitHub Actions.
+
+The automatic update of the running MXM containers on `mxm` is enabled with
+the use of [watchtower](https://github.com/containrrr/watchtower/).
+The triggering of this update can be done via the watchtower HTTP API
+that has been set up there:
+```bash
+AUTH="Authorization: Bearer ${WATCHTOWER_HTTP_API_TOKEN}"
+curl -H "$AUTH" "$MXM_WATCHTOWER_ENDPOINT"
+```
+But it is more convenient to perform this with the just recipe for that purpose:
+```bash
+just watchtower-mxm
+```
+(Env vars for this are captured in uncommitted file `setenv.sh`.)
 
 The `watchtower/docker-compose.yml` file here is a copy of the one
 under `~mxmadmin/watchtower/` on `mxm`.
+A `.env` file there defines relevant variables.
 
 Complementary to this, the `mbari/mxm` image in `~mxmadmin/MXM/docker-compose.yml`
-on the `mxm` machine is defined, not with a specific complete version tag
-nor with `latest`, but with just `major.minor` so that the latest version
-with the given prefix on Docker Hub is used:
+is defined with only `major.minor` as the version, so that the actual latest version
+with that prefix at Docker Hub is used when triggering the update.
 ```yaml
-image: mbari/mxm:0.9
+image: index.docker.io/mbari/mxm:0.9
 ```
 
-So, triggering the usual docker build workflow from here will subsequently trigger
-the automatic update of the deployed system on `mxm`.
-
-Note: For convenience, I'm also launching the `mxm-provider-example` container
+For convenience, I'm also launching the `mxm-provider-example` container
 via the same `docker-compose.yml` of the MXM system.
 (This container is also handled by watchtower.)
 
