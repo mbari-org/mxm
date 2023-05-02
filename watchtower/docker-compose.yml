@@ -1,20 +1,23 @@
-version: "3"
+version: '3'
+
 services:
   watchtower:
     container_name: watchtower
-    image: containrrr/watchtower
+    image: index.docker.io/containrrr/watchtower:1.5.1
+
+    command: --debug --http-api-update --label-enable
+
+    # volumes:
+    #  - /var/run/docker.sock:/var/run/docker.sock
 
     environment:
-      ## IP according to `ifconfig` for docker0
-      DOCKER_HOST: "tcp://172.17.0.1:2375"
+      - DOCKER_HOST
+      - WATCHTOWER_HTTP_API_TOKEN
+      - WATCHTOWER_NOTIFICATIONS
+      - WATCHTOWER_NOTIFICATION_SLACK_HOOK_URL
 
-      WATCHTOWER_NOTIFICATIONS: ${WATCHTOWER_NOTIFICATIONS}
-      WATCHTOWER_NOTIFICATION_SLACK_HOOK_URL: ${WATCHTOWER_NOTIFICATION_SLACK_HOOK_URL}
-
-    ## volumes:
-    ##  - /var/run/docker.sock:/var/run/docker.sock
-
+    labels:
+      - "com.centurylinklabs.watchtower.enable=false"
+    ports:
+      - '9901:8080'
     restart: unless-stopped
-
-    # add --debug when needed
-    command: --interval 30

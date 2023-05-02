@@ -37,3 +37,23 @@ tag-and-push force='':
 # Show latest few tags
 tags:
 	git tag -l | sort -V | tail
+
+# ---------------------------------
+# CD recipes.
+# Note: CD not triggered from release workflow because there's currently
+# no proxy to use our watchtower instance API from external locations.
+
+# Trigger container update on mxm
+watchtower-mxm:
+  #!/bin/bash
+  if [[ -f ./setenv.sh ]]; then
+    source ./setenv.sh
+  fi
+  if [[ -z "${WATCHTOWER_HTTP_API_TOKEN}" ]]; then
+    echo "Error: WATCHTOWER_HTTP_API_TOKEN not set."
+  elif [[ -z "${MXM_WATCHTOWER_ENDPOINT}" ]]; then
+    echo "Error: MXM_WATCHTOWER_ENDPOINT not set."
+  else
+    AUTH="Authorization: Bearer ${WATCHTOWER_HTTP_API_TOKEN}"
+    curl -H "$AUTH" "${MXM_WATCHTOWER_ENDPOINT}"
+  fi
