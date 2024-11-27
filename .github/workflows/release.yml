@@ -25,7 +25,7 @@ jobs:
       - name: Setup Node for ui
         uses: actions/setup-node@v4
         with:
-          node-version: '14'
+          node-version: '18'
           cache: 'yarn'
           cache-dependency-path: |
             mxm-ui/yarn.lock

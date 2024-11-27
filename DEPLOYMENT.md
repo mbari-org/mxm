@@ -16,11 +16,11 @@ just watchtower-mxm
 ```
 (Env vars for this are captured in uncommitted file `setenv.sh`.)
 
-The `watchtower/docker-compose.yml` file here is a copy of the one
+The `watchtower/compose.yml` file here is a copy of the one
 under `~mxmadmin/watchtower/` on `mxm`.
 A `.env` file there defines relevant variables.
 
-Complementary to this, the `mbari/mxm` image in `~mxmadmin/MXM/docker-compose.yml`
+Complementary to this, the `mbari/mxm` image in `~mxmadmin/MXM/compose.yml`
 is defined with only `major.minor` as the version, so that the actual latest version
 with that prefix at Docker Hub is used when triggering the update.
 ```yaml
@@ -28,7 +28,7 @@ image: index.docker.io/mbari/mxm:0.9
 ```
 
 For convenience, I'm also launching the `mxm-provider-example` container
-via the same `docker-compose.yml` of the MXM system.
+via the same `compose.yml` of the MXM system.
 (This container is also handled by watchtower.)
 
 Note: at the moment, for the `mxm-postgres` image, a more manual process is OK as the changes
