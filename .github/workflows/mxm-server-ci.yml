@@ -1,10 +1,18 @@
-name: Java CI
+name: mxm-server CI
 
-on: [push]
+on:
+  push:
+    paths: ['mxm-server/**']
+  pull_request:
+    paths: ['mxm-server/**']
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./mxm-server
 
     steps:
       - uses: actions/checkout@v4
