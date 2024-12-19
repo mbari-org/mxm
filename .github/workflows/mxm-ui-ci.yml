@@ -2,9 +2,9 @@ name: MXM UI tests
 
 on:
   push:
-    branches: [ main ]
+    paths: ['mxm-ui/**']
   pull_request:
-    branches: [ main ]
+    paths: ['mxm-ui/**']
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -12,6 +12,11 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./mxm-ui
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
