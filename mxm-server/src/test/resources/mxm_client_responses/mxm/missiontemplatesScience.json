@@ -1,0 +1,13 @@
+{
+  "result": {
+    "directory": "Science",
+    "entries": [
+      {
+        "missionTplId": "Science/mbts_sci2.tl",
+        "assetClassNames": [
+          "LRAUV"
+        ]
+      }
+    ]
+  }
+}

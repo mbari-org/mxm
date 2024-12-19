@@ -1,0 +1,13 @@
+{
+  "result": {
+    "directory": "_examples",
+    "entries": [
+      {
+        "missionTplId": "_examples/SysLogExample.tl",
+        "assetClassNames": [
+          "LRAUV"
+        ]
+      }
+    ]
+  }
+}
