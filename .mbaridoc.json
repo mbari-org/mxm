@@ -1,4 +1,5 @@
 {
   "destination": "mxm",
+  "docdir": "mxm-doc",
   "public": false
 }
