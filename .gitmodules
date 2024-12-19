@@ -1,3 +1,0 @@
-[submodule "mxm-server"]
-	path = mxm-server
-	url = git@github.com:mbari-org/mxm-server.git
