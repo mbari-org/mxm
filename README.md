@@ -1,3 +1,9 @@
+> [!note]
+> The `mxm-server`, `mxm-ui`, and `mxm-doc` modules were recently made direct subdirectories
+> to this repo. (Previously, they were submodules pointing to separate repos.)
+>
+> Some notes below and in other READMEs might be out-of-date.
+
 # Mission Execution Mediation Service
 
 **WIP**
